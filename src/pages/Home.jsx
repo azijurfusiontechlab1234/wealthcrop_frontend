@@ -15,8 +15,8 @@ const Home = () => {
       <InvestmentHighlights/>
       <AboutSection />
       <FeaturedSection />
-      <SipCalculator/>
-      <HomeChart/>
+      {/* <SipCalculator/> */}
+      {/* <HomeChart/> */}
       <FAQSection />
       <CTASection />
     </div>
