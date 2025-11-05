@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiBell, HiUserCircle } from "react-icons/hi";
 import logo from "../assets/logo.png";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [investOpen, setInvestOpen] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // ✅ Check token on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
-    <nav className="w-full bg-white shadow-sm border-b border-gray-100  left-0 z-50">
+    <nav className="w-full bg-white shadow-sm border-b border-gray-100 left-0 z-50">
       <div className="flex justify-between items-center px-6 md:px-12 py-3">
         {/* Left - Logo */}
         <div className="flex items-center space-x-2">
@@ -30,22 +37,13 @@ export default function Header() {
               opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
               transition-all duration-300 ease-out border border-gray-100"
             >
-              <Link
-                to="/mutualFund"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/mutualFund" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Mutual Fund
               </Link>
-              <Link
-                to="/stocks"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/stocks" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Stocks
               </Link>
-              <Link
-                to="/bonds"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/bonds" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Bonds
               </Link>
             </div>
@@ -61,23 +59,17 @@ export default function Header() {
               opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
               transition-all duration-300 ease-out border border-gray-100"
             >
-              <Link
-                to="/mutualFund"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/mutualFund" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Mutual Fund Calculator
               </Link>
-              <Link
-                to="/stocks"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/stocks" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Fixed Deposit Calculator
               </Link>
-              <Link
-                to="/bonds"
-                className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
-              >
+              <Link to="/bonds" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
                 Retirement Calculator
+              </Link>
+              <Link to="/sip_Cal" className="block px-4 py-2 text-blue-900 hover:bg-blue-50">
+                SIP Calculator
               </Link>
             </div>
           </div>
@@ -120,14 +112,26 @@ export default function Header() {
           </svg>
         </div>
 
-        {/* Login Button */}
-        <div className="hidden md:block">
-          <Link
-            to="/login"
-            className="bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition"
-          >
-            Login / Signup
-          </Link>
+        {/* ✅ Right Side (Login or Icons) */}
+        <div className="hidden md:flex items-center space-x-5">
+          {isLoggedIn ? (
+            <>
+              <button className="text-blue-900 hover:text-blue-700 transition relative">
+                <HiBell className="text-2xl" />
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
+              </button>
+              <Link to="/profile">
+                <HiUserCircle className="text-3xl text-blue-900 hover:text-blue-700 transition" />
+              </Link>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition"
+            >
+              Login / Signup
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -193,13 +197,22 @@ export default function Header() {
           )}
         </div>
 
-        {/* Login Button */}
-        <Link
-          to="/login"
-          className="block text-center bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition mt-4"
-        >
-          Login / Signup
-        </Link>
+        {/* ✅ Conditional Button / Icons for Mobile */}
+        {isLoggedIn ? (
+          <div className="flex items-center justify-center gap-5 mt-5 text-blue-900">
+            <HiBell className="text-2xl" />
+            <Link to="/profile">
+              <HiUserCircle className="text-3xl" />
+            </Link>
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="block text-center bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition mt-4"
+          >
+            Login / Signup
+          </Link>
+        )}
 
         {/* Search Input */}
         <div className="mt-3">

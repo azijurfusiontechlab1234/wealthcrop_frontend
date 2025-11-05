@@ -1,52 +1,50 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { formSchema } from "../utils/FormSchema";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toastError, toastSuccess } from "../utils/notifyCustom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+
 
 export default function Register() {
-    const [formData, setFormData] = useState({
-        name:'', mobile:'', email:'', password:''
+
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const {register, handleSubmit, formState:{errors, isDirty, isValid}} = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        name: "",
+        email: "",
+        mobile: "",
+        password: ""
+      }
     })
-    const [errors, setErrors] = useState('')
-    const handleChange = (e)=>{
-        setFormData({...formData, [e.target.name]: e.target.value})
-    }
 
-     const validate = () => {
-    let formErrors = {};
+   
 
-    if (!formData.username) {
-      formErrors.username = 'Username is required';
-    }
-    if (!formData.email) {
-      formErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      formErrors.email = 'Email is invalid';
-    }
-    if (!formData.mobile) {
-      formErrors.mobile = 'Mobile number is required';
-    } else if (formData.mobile.length !== 10) {
-      formErrors.mobile = 'Invalid mobile number';
-    }
-    if (!formData.password) {
-      formErrors.password = 'Password is required';
-    }
-    if (!formData.confirmPassword) {
-      formErrors.confirmPassword = 'Confirm password is required';
-    } else if (formData.password !== formData.confirmPassword) {
-      formErrors.confirmPassword = 'Passwords do not match';
-    }
+const submitForm = async (data) => {
+  console.log("Form Data:", data);
+  setLoading(true);
 
-    setErrors(formErrors);
+  try {
+    // Simulate API call (2-second delay)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    return Object.keys(formErrors).length === 0;
-  };
+    // Success toast after "API call"
+    toastSuccess("Form submitted successfully! 🚀");
+  } catch (error) {
+    toastError("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const handleSubmit = (e)=>{
-        e.preventDefault()
-        if(validate){
 
-            console.log("Register Data" ,formData);
-        }
-    }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -62,22 +60,23 @@ export default function Register() {
         </div>
 
         {/* Register Form */}
-        <form className="space-y-5" noValidate onSubmit={handleSubmit}>
+        <form className="space-y-5" noValidate onSubmit={handleSubmit(submitForm)}>
           {/* Username */}
           <div>
             <label className="block text-sm font-medium text-blue-950 mb-1">
               Username
             </label>
             <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
+            // name="name"
+            // value={formData.name}
+            // onChange={handleChange}
+              {...register("name")}
               type="text"
               placeholder="Enter your username"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
               focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
             />
-            {errors.username && <p className="text-danger">{errors.username}</p>}
+            {errors.name && <p className="text-red-600 text-sm mt-1 ">{errors.name.message}</p>}
           </div>
 
           {/* Email */}
@@ -86,14 +85,16 @@ export default function Register() {
               Email
             </label>
             <input
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+            // name="email"
+            // value={formData.email}
+            // onChange={handleChange}
               type="email"
+              {...register("email")}
               placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
               focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
             />
+            {errors.email && <p className="text-red-600 text-sm mt-1 ">{errors.email.message}</p>}
           </div>
 
           {/* Mobile Number */}
@@ -102,39 +103,60 @@ export default function Register() {
               Mobile Number
             </label>
             <input
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleChange}
+            // name="mobile"
+            // value={formData.mobile}
+            // onChange={handleChange}
               type="tel"
+              {...register("mobile")}
               placeholder="Enter your mobile number"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
               focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
             />
+            {errors.mobile && <p className="text-red-600 text-sm mt-1 ">{errors.mobile.message}</p>}
           </div>
 
           {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-blue-950 mb-1">
-              Password
-            </label>
-            <input
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-              type="password"
-              placeholder="Create a password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-            />
-          </div>
+          {/* Password Field */}
+{/* Password Field */}
+<div>
+  <label className="block text-sm font-medium text-blue-950 mb-1">
+    Password
+  </label>
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      {...register("password")}
+      placeholder="Create a password"
+      className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 text-sm 
+      focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+    />
+
+    {/* Eye Icon Button */}
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-700 focus:outline-none"
+    >
+      {showPassword ? <FaEye /> : <FaEyeSlash />}
+    </button>
+  </div>
+
+  {errors.password && (
+    <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+  )}
+</div>
+
+
 
           {/* Create Account Button */}
           <button
-            type="submit"
-            className="w-full bg-blue-950 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
-          >
-            Create Account
-          </button>
+  type="submit"
+  className="w-full bg-blue-950 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
+  disabled={loading}
+>
+  {loading ? "Submitting..." : "Create Account"}
+</button>
+
 
           {/* Google Sign Up */}
           <button

@@ -1,22 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { passwordLoginSchema, otpLoginSchema } from "../utils/FormSchema";
+import { toastError, toastSuccess } from "../utils/notifyCustom";
 
 function LoginPage() {
-  const [formData, setFormData] = useState({ mobile: "", password: "" });
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const otpRefs = useRef([]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // react-hook-form
+  const { register, handleSubmit, formState: { errors }, setValue, reset, trigger } = useForm({
+    resolver: loginMode === "password"
+      ? zodResolver(passwordLoginSchema)
+      : zodResolver(otpLoginSchema),
+    defaultValues: { mobile: "", password: "", otp: "" },
+  });
+
+  // Handle OTP input changes
+  const handleOtpChange = (value, index) => {
+    if (!/^\d?$/.test(value)) return; // only digits
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Move to next input
+    if (value && index < 5) otpRefs.current[index + 1].focus();
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (loginMode === "password") {
-      console.log("Login with password:", formData);
-    } else {
-      console.log("Send OTP to:", formData.mobile);
+  const handleOtpKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpRefs.current[index - 1].focus();
     }
   };
+
+  // Submit handler
+const onSubmit = (data) => {
+  if (loginMode === "password") {
+    console.log("Password Login:", data);
+    toastSuccess("Logged in successfully!");
+    localStorage.setItem("token","123456kjhhikk111")
+    reset();
+  } else {
+    if (!otpSent) {
+      // 📨 Step 1: Send OTP
+      setOtpSent(true);
+      setOtp(["", "", "", "", "", ""]);
+      toastError("OTP sent successfully! ✅");
+    } else {
+      // ✅ Step 2: Verify OTP
+      const enteredOtp = otp.join("");
+      if (!enteredOtp || enteredOtp.length !== 6) {
+        toastError("Please enter the 6-digit OTP");
+        return;
+      }
+
+      console.log("OTP entered:", enteredOtp);
+      toastSuccess("OTP verified successfully!");
+      setOtp(["", "", "", "", "", ""]);
+      setValue("otp", "");
+    }
+  }
+};
+
+
+  // Reset form on mode change
+  useEffect(() => {
+    reset();
+    setOtp(["", "", "", "", "", ""]);
+    setOtpSent(false);
+  }, [loginMode, reset]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -29,7 +86,7 @@ function LoginPage() {
           </p>
         </div>
 
-        {/* Tabs (Password / OTP) */}
+        {/* Tabs */}
         <div className="flex mb-6 border border-gray-200 rounded-lg overflow-hidden">
           <button
             onClick={() => setLoginMode("password")}
@@ -53,99 +110,102 @@ function LoginPage() {
           </button>
         </div>
 
-        {/* Conditional Form */}
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          {/* Mobile Number */}
+        {/* Form */}
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+          {/* Mobile */}
           <div>
             <label className="block text-sm font-medium text-blue-950 mb-1">
               Mobile Number
             </label>
             <input
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
+              {...register("mobile")}
               type="tel"
               placeholder="Enter your mobile number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+              required
             />
+            {errors.mobile && (
+              <p className="text-red-600 text-sm mt-1">{errors.mobile.message}</p>
+            )}
           </div>
 
-          {/* Password Field (only for password login) */}
+          {/* Password */}
           {loginMode === "password" && (
-            <div>
-              <label className="block text-sm font-medium text-blue-950 mb-1">
-                Password
-              </label>
-              <input
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                type="password"
-                placeholder="Enter your password"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-                focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-              />
-            </div>
+            <>
+              <div>
+                <label className="block text-sm font-medium text-blue-950 mb-1">
+                  Password
+                </label>
+                <input
+                  {...register("password")}
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                  required
+                />
+                {errors.password && (
+                  <p className="text-red-600 text-sm mt-1">{errors.password.message}</p>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <label className="flex items-center space-x-2 text-gray-600">
+                  <input type="checkbox" className="rounded accent-blue-700" />
+                  <span>Remember me</span>
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-blue-800 hover:text-blue-950 font-medium"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+            </>
           )}
 
-          {/* Remember / Forgot (only for password login) */}
-          {loginMode === "password" && (
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center space-x-2 text-gray-600">
-                <input type="checkbox" className="rounded accent-blue-700" />
-                <span>Remember me</span>
-              </label>
-              <Link
-                to="/forgot-password"
-                className="text-blue-800 hover:text-blue-950 font-medium"
+          {/* OTP Inputs */}
+          <AnimatePresence>
+            {loginMode === "otp" && otpSent && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="flex justify-center gap-2 mt-3"
               >
-                Forgot Password?
-              </Link>
-            </div>
-          )}
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength="1"
+                    value={digit}
+                    onChange={(e) => handleOtpChange(e.target.value, index)}
+                    onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                    ref={(el) => (otpRefs.current[index] = el)}
+                    className="w-10 h-10 text-center border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                  />
+                ))}
+                {errors.otp && (
+                  <p className="text-red-600 text-sm mt-1 col-span-6">
+                    {errors.otp.message}
+                  </p>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-950 text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
           >
-            {loginMode === "password" ? "Login" : "Send OTP"}
+            {loginMode === "password"
+              ? "Login"
+              : otpSent
+              ? "Verify OTP"
+              : "Send OTP"}
           </button>
-
-          {/* Divider */}
-          <div className="flex items-center my-3">
-            <div className="flex-1 h-px bg-gray-200"></div>
-            <span className="px-2 text-gray-400 text-sm">or</span>
-            <div className="flex-1 h-px bg-gray-200"></div>
-          </div>
-
-          {/* Google & Mobile Options */}
-          <div className="flex flex-col items-center justify-between gap-3 mt-3">
-            {/* Google */}
-            <button
-              type="button"
-              className="w-full border border-gray-300 text-blue-950 rounded-lg py-2 font-medium 
-              hover:bg-gray-50 flex items-center justify-center gap-2 transition"
-            >
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-5 h-5"
-              />
-              Sign in with Google
-            </button>
-
-            {/* Login with Mobile */}
-            {/* <button
-              type="button"
-              onClick={() => setLoginMode("otp")}
-              className="w-full sm:w-1/2 border border-gray-300 text-blue-950 rounded-lg py-2 font-medium 
-              hover:bg-gray-50 flex items-center justify-center gap-2 transition"
-            >
-              📱 Login with Mobile
-            </button> */}
-          </div>
         </form>
 
         {/* Footer */}
