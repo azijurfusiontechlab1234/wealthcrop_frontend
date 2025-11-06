@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HiMenu, HiX, HiBell, HiUserCircle } from "react-icons/hi";
 import logo from "../assets/logo.png";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [investOpen, setInvestOpen] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const dispatch = useDispatch()
+  const {token} = useSelector((state)=>state.auth)
 
   // ✅ Check token on mount
   useEffect(() => {
@@ -114,7 +118,7 @@ export default function Header() {
 
         {/* ✅ Right Side (Login or Icons) */}
         <div className="hidden md:flex items-center space-x-5">
-          {isLoggedIn ? (
+          {token ? (
             <>
               <button className="text-blue-900 hover:text-blue-700 transition relative">
                 <HiBell className="text-2xl" />
@@ -198,7 +202,7 @@ export default function Header() {
         </div>
 
         {/* ✅ Conditional Button / Icons for Mobile */}
-        {isLoggedIn ? (
+        {token ? (
           <div className="flex items-center justify-center gap-5 mt-5 text-blue-900">
             <HiBell className="text-2xl" />
             <Link to="/profile">

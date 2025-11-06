@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { passwordLoginSchema, otpLoginSchema } from "../utils/FormSchema";
 import { toastError, toastSuccess } from "../utils/notifyCustom";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
 
 function LoginPage() {
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpRefs = useRef([]);
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   // react-hook-form
   const { register, handleSubmit, formState: { errors }, setValue, reset, trigger } = useForm({
@@ -43,8 +48,15 @@ const onSubmit = (data) => {
   if (loginMode === "password") {
     console.log("Password Login:", data);
     toastSuccess("Logged in successfully!");
-    localStorage.setItem("token","123456kjhhikk111")
-    reset();
+    dispatch(login("123456kjhhikk111"))
+    // ✅ Dispatch event to update App state
+    window.dispatchEvent(new Event("storage"));
+
+    // ✅ Instantly redirect without reload
+    navigate("/");
+    window.location.reload()
+reset();
+
   } else {
     if (!otpSent) {
       // 📨 Step 1: Send OTP
