@@ -1,18 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/authSlice";
-import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/authenticationSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+const location = useLocation();
+console.log("Current route:", location.pathname);
   // Get token from Redux store
   const token = useSelector((state) => state.auth.token);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/"); // redirect to home
+    window.location.reload()
   };
 
   return (

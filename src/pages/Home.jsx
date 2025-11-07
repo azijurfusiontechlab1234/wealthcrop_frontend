@@ -10,28 +10,24 @@ import SipCalculator from "../components/home/SipCalculator";
 import Dashboard from "../components/DashBoard";
 
 const Home = () => {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  // const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(localStorage.getItem("token"));
-    };
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     setToken(localStorage.getItem("token"));
+  //   };
 
-    // Listen for changes to the localStorage
-    window.addEventListener("storage", handleStorageChange);
+  //   // Listen for changes to the localStorage
+  //   window.addEventListener("storage", handleStorageChange);
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []); // Empty dependency array, so it runs only once when the component mounts
+  //   return () => {
+  //     window.removeEventListener("storage", handleStorageChange);
+  //   };
+  // }, []); // Empty dependency array, so it runs only once when the component mounts
 
-  const isTokenValid = token && token.trim() !="";
+  // const isTokenValid = token && token.trim() !="";
 return (
   <div className="w-full">
-    {isTokenValid ? (
-      <Dashboard />
-    ) : (
-      <>
         <HeroSection />
         <InvestmentHighlights />
         <AboutSection />
@@ -40,8 +36,6 @@ return (
         {/* <HomeChart/> */}
         <FAQSection />
         <CTASection />
-      </>
-    )}
   </div>
 );
 

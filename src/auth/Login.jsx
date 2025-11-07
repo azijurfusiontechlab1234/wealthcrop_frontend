@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { passwordLoginSchema, otpLoginSchema } from "../utils/FormSchema";
 import { toastError, toastSuccess } from "../utils/notifyCustom";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/authSlice";
+import { login } from "../redux/authenticationSlice";
 
 function LoginPage() {
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
