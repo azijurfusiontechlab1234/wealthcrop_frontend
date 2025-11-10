@@ -46,7 +46,7 @@ function App() {
 </div>
 
 {/* ✅ Mobile screens */}
-<div className="block lg:hidden fixed top-0 left-0 w-full z-50">
+<div className="block md:hidden fixed top-0 left-0 w-full z-50">
   {token ? (
     <Header2 />
   ) : (
@@ -57,7 +57,7 @@ function App() {
       
 
       {/* ✅ Page Content */}
-      <main className="pt-10 pb-10 min-h-[calc(100vh-200px)] bg-gray-50">
+      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-gray-50">
         <Routes>
           {/* 👇 Conditional rendering on same "/" route */}
           <Route element={<ProtectRoute user={token} />}>

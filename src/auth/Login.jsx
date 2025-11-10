@@ -8,10 +8,12 @@ import { passwordLoginSchema, otpLoginSchema } from "../utils/FormSchema";
 import { toastError, toastSuccess } from "../utils/notifyCustom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authenticationSlice";
+import { postApi } from "../api/api";
 
 function LoginPage() {
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
   const [otpSent, setOtpSent] = useState(false);
+  const [saveOTP, setSaveOTP] = useState("")
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpRefs = useRef([]);
 
@@ -44,7 +46,7 @@ function LoginPage() {
   };
 
   // Submit handler
-const onSubmit = (data) => {
+  const onSubmit = async (data) => {
   if (loginMode === "password") {
     console.log("Password Login:", data);
     toastSuccess("Logged in successfully!");
@@ -58,12 +60,30 @@ const onSubmit = (data) => {
 reset();
 
   } else {
-    if (!otpSent) {
-      // 📨 Step 1: Send OTP
+if (!otpSent) {
+  const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_SEND_OTP}`;
+
+  try {
+    // 📨 Step 1: Send OTP API call
+    const res = await postApi(url, { mob_number: data.mobile }); // change payload key if API expects something else
+
+    if (res.status === 200 || res.data.success) {
+      setSaveOTP(res.data.otp)
+      console.log("otp",res.data.otp);
+      
       setOtpSent(true);
       setOtp(["", "", "", "", "", ""]);
-      toastError("OTP sent successfully! ✅");
+      toastSuccess(res.data.message);
     } else {
+      toastError(res.data.message || "Failed to send OTP ❌");
+    }
+  } catch (error) {
+    console.error("OTP Send Error:", error);
+    toastError(error.response?.data?.message || "Server error while sending OTP ❌");
+  }
+}
+ else {
+      const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_VERIFY_OTP}`;
       // ✅ Step 2: Verify OTP
       const enteredOtp = otp.join("");
       if (!enteredOtp || enteredOtp.length !== 6) {

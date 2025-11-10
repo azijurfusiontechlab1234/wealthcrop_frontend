@@ -13,4 +13,18 @@ export const getApi = async (url) => {
   }
 };
 
+export const postApi = async (url, data) => {
+  try {
+    const res = await axios.post(url, data, {
+      headers: {
+        "Content-Type" : "application/json",
+      },
+    })
+
+    return res;
+  } catch (error) {
+    return error;
+  }
+}
+
 
