@@ -41,7 +41,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       {/* ✅ Fixed Header */}
       {/* ✅ Large screens (always show OldHeader) */}
-<div className="hidden lg:block sticky top-0 left-0 w-full z-50">
+<div className="hidden md:block sticky top-0 left-0 w-full z-50">
   <OldHeader />
 </div>
 
