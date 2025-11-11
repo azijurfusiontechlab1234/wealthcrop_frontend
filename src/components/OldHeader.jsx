@@ -17,7 +17,6 @@ export default function OldHeader() {
   const location = useLocation();
 
 
-console.log("Current route:", location.pathname);
   // ✅ Close mobile menu on route change
   useEffect(() => {
     setMenuOpen(false);

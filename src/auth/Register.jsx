@@ -1,189 +1,337 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { formSchema } from "../utils/FormSchema";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { toastError, toastSuccess } from "../utils/notifyCustom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toastSuccess, toastError } from "../utils/notifyCustom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-
+import { motion, AnimatePresence } from "framer-motion";
+import { postApi } from "../api/api";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authenticationSlice";
 
 export default function Register() {
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [pinOpen, setPinOpen] = useState(false);
 
-    const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
+    },
+  });
 
-    const {register, handleSubmit, formState:{errors, isDirty, isValid}} = useForm({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-        mobile: "",
-        password: ""
-      }
-    })
-
-   
-
-const submitForm = async (data) => {
-  console.log("Form Data:", data);
-  setLoading(true);
-
-  try {
-    // Simulate API call (2-second delay)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Success toast after "API call"
-    toastSuccess("Form submitted successfully! 🚀");
-  } catch (error) {
-    toastError("Something went wrong. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+  const submitForm = async (data) => {
+    console.log("Form Data:", data);
+    setLoading(true);
+    try {
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      toastSuccess("Form submitted successfully! 🚀");
+      setPinOpen(true);
+    } catch (error) {
+      toastError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-semibold text-blue-950">
-            Create your account ✨
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Start investing smarter with Wealthcrop
-          </p>
-        </div>
+        <AnimatePresence mode="wait">
+          {!pinOpen ? (
+            <motion.div
+              key="registerForm"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Header */}
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-semibold text-blue-950">
+                  Create your account ✨
+                </h1>
+                <p className="text-gray-500 text-sm mt-1">
+                  Start investing smarter with Wealthcrop
+                </p>
+              </div>
 
-        {/* Register Form */}
-        <form className="space-y-5" noValidate onSubmit={handleSubmit(submitForm)}>
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-medium text-blue-950 mb-1">
-              Username
-            </label>
-            <input
-            // name="name"
-            // value={formData.name}
-            // onChange={handleChange}
-              {...register("name")}
-              type="text"
-              placeholder="Enter your username"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-            />
-            {errors.name && <p className="text-red-600 text-sm mt-1 ">{errors.name.message}</p>}
-          </div>
+              {/* Register Form */}
+              <form
+                className="space-y-5"
+                noValidate
+                onSubmit={handleSubmit(submitForm)}
+              >
+                {/* Username */}
+                <div>
+                  <label className="block text-sm font-medium text-blue-950 mb-1">
+                    Username
+                  </label>
+                  <input
+                    {...register("name")}
+                    type="text"
+                    placeholder="Enter your username"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
+                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                  />
+                  {errors.name && (
+                    <p className="text-red-600 text-sm mt-1 ">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-blue-950 mb-1">
-              Email
-            </label>
-            <input
-            // name="email"
-            // value={formData.email}
-            // onChange={handleChange}
-              type="email"
-              {...register("email")}
-              placeholder="Enter your email"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-            />
-            {errors.email && <p className="text-red-600 text-sm mt-1 ">{errors.email.message}</p>}
-          </div>
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium text-blue-950 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    placeholder="Enter your email"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
+                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                  />
+                  {errors.email && (
+                    <p className="text-red-600 text-sm mt-1 ">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
 
-          {/* Mobile Number */}
-          <div>
-            <label className="block text-sm font-medium text-blue-950 mb-1">
-              Mobile Number
-            </label>
-            <input
-            // name="mobile"
-            // value={formData.mobile}
-            // onChange={handleChange}
-              type="tel"
-              {...register("mobile")}
-              placeholder="Enter your mobile number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-            />
-            {errors.mobile && <p className="text-red-600 text-sm mt-1 ">{errors.mobile.message}</p>}
-          </div>
+                {/* Mobile Number */}
+                <div>
+                  <label className="block text-sm font-medium text-blue-950 mb-1">
+                    Mobile Number
+                  </label>
+                  <input
+                    type="tel"
+                    {...register("mobile")}
+                    placeholder="Enter your mobile number"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
+                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                  />
+                  {errors.mobile && (
+                    <p className="text-red-600 text-sm mt-1 ">
+                      {errors.mobile.message}
+                    </p>
+                  )}
+                </div>
 
-          {/* Password */}
-          {/* Password Field */}
-{/* Password Field */}
-<div>
-  <label className="block text-sm font-medium text-blue-950 mb-1">
-    Password
-  </label>
-  <div className="relative">
-    <input
-      type={showPassword ? "text" : "password"}
-      {...register("password")}
-      placeholder="Create a password"
-      className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 text-sm 
-      focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-    />
+                {/* Password */}
+                <div>
+                  <label className="block text-sm font-medium text-blue-950 mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Create a password"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 text-sm 
+                      focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+                    />
 
-    {/* Eye Icon Button */}
-    <button
-      type="button"
-      onClick={() => setShowPassword(!showPassword)}
-      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-700 focus:outline-none"
-    >
-      {showPassword ? <FaEye /> : <FaEyeSlash />}
-    </button>
-  </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-700"
+                    >
+                      {showPassword ? <FaEye /> : <FaEyeSlash />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
 
-  {errors.password && (
-    <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-  )}
-</div>
+                {/* Create Account Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-blue-950 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Create Account"}
+                </button>
 
+                {/* Google Sign Up */}
+                <button
+                  type="button"
+                  className="w-full border border-gray-300 text-blue-950 rounded-lg py-2 font-medium 
+                  hover:bg-gray-50 flex items-center justify-center gap-2 transition cursor-pointer"
+                >
+                  <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    alt="Google"
+                    className="w-5 h-5"
+                  />
+                  Sign up with Google
+                </button>
+              </form>
 
-
-          {/* Create Account Button */}
-          <button
-  type="submit"
-  className="w-full bg-blue-950 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
-  disabled={loading}
->
-  {loading ? "Submitting..." : "Create Account"}
-</button>
-
-
-          {/* Google Sign Up */}
-          <button
-            type="button"
-            className="w-full border border-gray-300 text-blue-950 rounded-lg py-2 font-medium 
-            hover:bg-gray-50 flex items-center justify-center gap-2 transition cursor-pointer"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            Sign up with Google
-          </button>
-        </form>
-
-        {/* Footer */}
-        <div className="text-center text-sm text-gray-600 mt-5">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-800 hover:text-blue-950 font-medium"
-          >
-            Login
-          </Link>
-        </div>
+              {/* Footer */}
+              <div className="text-center text-sm text-gray-600 mt-5">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="text-blue-800 hover:text-blue-950 font-medium"
+                >
+                  Login
+                </Link>
+              </div>
+            </motion.div>
+          ) : (
+            <SetPin key="setPin" />
+          )}
+        </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+// -------------------------
+// 🔐 SET PIN COMPONENT (with confirm PIN)
+// -------------------------
+function SetPin() {
+  const [pin, setPin] = useState(["", "", "", ""]);
+  const [confirmPin, setConfirmPin] = useState(["", "", "", ""]);
+  const [error, setError] = useState("");
+  const pinRefs = useRef([]);
+  const confirmRefs = useRef([]);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const handlePinChange = (value, index, type) => {
+    if (!/^\d?$/.test(value)) return;
+
+    if (type === "pin") {
+      const newPin = [...pin];
+      newPin[index] = value;
+      setPin(newPin);
+      if (value && index < 3) pinRefs.current[index + 1].focus();
+    } else {
+      const newConfirm = [...confirmPin];
+      newConfirm[index] = value;
+      setConfirmPin(newConfirm);
+      if (value && index < 3) confirmRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (e, index, type) => {
+    const refArr = type === "pin" ? pin : confirmPin;
+    const focusArr = type === "pin" ? pinRefs : confirmRefs;
+    if (e.key === "Backspace" && !refArr[index] && index > 0) {
+      focusArr.current[index - 1].focus();
+    }
+  };
+
+  const handleSavePin = async () => {
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_SET_PIN}`
+    const url2 = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CONFIRM_PIN}`
+    const rawPin = pin.join("")
+    // try {
+    //   if (pin.join("") !== confirmPin.join("")) {
+    //     setError("Pins do not match. Please try again.");
+    //     return;
+    //   }
+    //   const res = postApi(url, {pin : Number(rawPin)})
+    //   if(res.status === 200 || res.data.success){
+
+    //     setError("");
+    //     toastSuccess(res.data.message);
+    //     navigate("/")
+    //   }
+    // } catch (error) {
+    //   toastError(error.response.data.message)
+    // }
+    setError("");
+        toastSuccess("Pin set successfully!");
+        dispatch(login("temporary-token-pin-user"))
+        navigate("/")
+ 
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      className="text-center"
+    >
+      <h2 className="text-xl font-semibold text-blue-950 mb-4">
+        Set your 4-digit PIN 🔒
+      </h2>
+      <p className="text-gray-500 text-sm mb-6">
+        You’ll use this PIN to access your account securely
+      </p>
+
+      {/* Enter PIN */}
+      <label className="text-sm font-medium text-blue-950 block mb-2">
+        Enter PIN
+      </label>
+      <div className="flex justify-center gap-3 mb-5">
+        {pin.map((digit, index) => (
+          <input
+            key={index}
+            type="password"
+            inputMode="numeric"
+            maxLength="1"
+            value={digit}
+            onChange={(e) => handlePinChange(e.target.value, index, "pin")}
+            onKeyDown={(e) => handleKeyDown(e, index, "pin")}
+            ref={(el) => (pinRefs.current[index] = el)}
+            className="w-12 h-12 text-center border border-gray-300 rounded-lg text-lg 
+              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+          />
+        ))}
+      </div>
+
+      {/* Confirm PIN */}
+      <label className="text-sm font-medium text-blue-950 block mb-2">
+        Confirm PIN
+      </label>
+      <div className="flex justify-center gap-3 mb-4">
+        {confirmPin.map((digit, index) => (
+          <input
+            key={index}
+            type="text"
+            inputMode="numeric"
+            maxLength="1"
+            value={digit}
+            onChange={(e) =>
+              handlePinChange(e.target.value, index, "confirm")
+            }
+            onKeyDown={(e) => handleKeyDown(e, index, "confirm")}
+            ref={(el) => (confirmRefs.current[index] = el)}
+            className="w-12 h-12 text-center border border-gray-300 rounded-lg text-lg 
+              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+          />
+        ))}
+      </div>
+
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+      <button
+        className="w-full bg-blue-950 text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
+        onClick={handleSavePin}
+      >
+        Save PIN
+      </button>
+    </motion.div>
   );
 }

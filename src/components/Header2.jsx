@@ -39,7 +39,7 @@ export default function Header2() {
           className="flex items-center justify-center border border-gray-200 rounded-full py-2 pl-10 pr-10 bg-gray-50 text-gray-500 cursor-pointer"
         >
           <Search className="w-4 h-4 mr-2 text-gray-400" />
-          <span className="text-sm">Search Groww...</span>
+          <span className="text-sm">Search Wealthcrop...</span>
         </div>
         <img
           src={icon}

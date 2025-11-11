@@ -633,7 +633,7 @@ const Dashboard = () => {
 
       {/* For mobile view */}
 
-      <div className="p-5 space-y-8">
+      <div className="p-5 space-y-8 lg:hidden">
         {/* ===== Market Indices ===== */}
         <div>
           <div className="flex items-center justify-between mb-3">

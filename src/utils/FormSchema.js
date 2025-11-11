@@ -46,4 +46,13 @@ export const otpLoginSchema = z.object({
       message: "OTP must be 6 digits",
     }),
 });
+export const pinSetSchema = z.object({
+  pin: z
+    .string()
+    .optional()
+    .or(z.literal("")) // allow empty before sending
+    .refine((val) => val === "" || /^\d{4}$/.test(val), {
+      message: "PIN must be 4 digits",
+    }),
+});
 

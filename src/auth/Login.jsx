@@ -47,7 +47,7 @@ function LoginPage() {
 
   // Submit handler
   const onSubmit = async (data) => {
-  if (loginMode === "password") {
+  if (loginMode === "password") { 
     console.log("Password Login:", data);
     toastSuccess("Logged in successfully!");
     dispatch(login("123456kjhhikk111"))
@@ -83,10 +83,17 @@ if (!otpSent) {
   }
 }
  else {
-      const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_VERIFY_OTP}`;
+      
       // ✅ Step 2: Verify OTP
       const enteredOtp = otp.join("");
-      if (!enteredOtp || enteredOtp.length !== 6) {
+      console.log(enteredOtp);
+      const otpMatch = enteredOtp === String(saveOTP);
+if (!otpMatch) {
+  toastError("Incorrect OTP");
+  return;
+}
+      
+      if (!enteredOtp || enteredOtp.length !== 6 ) {
         toastError("Please enter the 6-digit OTP");
         return;
       }
@@ -95,6 +102,8 @@ if (!otpSent) {
       toastSuccess("OTP verified successfully!");
       setOtp(["", "", "", "", "", ""]);
       setValue("otp", "");
+      dispatch(login("temporary-token-otp-user"))
+      navigate("/");
     }
   }
 };

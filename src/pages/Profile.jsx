@@ -7,7 +7,6 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 const location = useLocation();
-console.log("Current route:", location.pathname);
   // Get token from Redux store
   const token = useSelector((state) => state.auth.token);
 
