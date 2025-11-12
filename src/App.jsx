@@ -20,13 +20,23 @@ import FODashboard from "./components/F&ODashboard";
 import MFDashboard from "./components/MFDashboard";
 import Header2 from "./components/Header2";
 import { useSelector } from "react-redux";
+import BasicDetails from "./pages/profile/BasicDetails";
+import ChangePassword from "./pages/profile/ChangePassword";
+import ChangePin from "./pages/profile/ChangePin";
+import ReportActivity from "./pages/profile/ReportActivity";
+import AccountForm from "./pages/profile/AccountForm";
+import Explore from "./pages/stocks/Explore";
+import Holdings from "./pages/stocks/Holdings";
+import Positions from "./pages/stocks/Positions";
+import Orders from "./pages/stocks/Orders";
+import Watchlist from "./pages/stocks/Watchlist";
 
 const queryClient = new QueryClient();
 
 function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
-   const { token } = useSelector((state) => state.auth); 
+  const { token } = useSelector((state) => state.auth);
 
   // useEffect(() => {
   //   // Listen for token changes (manual refresh of state)
@@ -41,45 +51,58 @@ function App() {
     <QueryClientProvider client={queryClient}>
       {/* ✅ Fixed Header */}
       {/* ✅ Large screens (always show OldHeader) */}
-<div className="hidden md:block sticky top-0 left-0 w-full z-50">
-  <OldHeader />
-</div>
+      <div className="hidden md:block sticky top-0 left-0 w-full z-50">
+        <OldHeader />
+      </div>
 
-{/* ✅ Mobile screens */}
-<div className="block md:hidden fixed top-0 left-0 w-full z-50">
-  {token ? (
-    <Header2 />
-  ) : (
-    <OldHeader  />
-  )}
-</div>
-
-      
+      {/* ✅ Mobile screens */}
+      <div className="block lg:hidden fixed top-0 left-0 w-full z-50">
+        {token ? <Header2 /> : <OldHeader />}
+      </div>
 
       {/* ✅ Page Content */}
       <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-gray-50">
         <Routes>
-          {/* 👇 Conditional rendering on same "/" route */}
-          <Route element={<ProtectRoute user={token} />}>
-            <Route path="/user/stocks" element={<Dashboard />} />
-            <Route path="/user/f&o" element={<FODashboard />} />
-            <Route path="/user/mutual_fund" element={<MFDashboard />} />
-             {/* <Route path="/profile" element={<Profile />} /> */}
-          </Route>
-          <Route
-            path="/"
-            element={token ? <Navigate to="/user/stocks" /> : <Home />}
-          />
-          <Route path="/investments" element={<Investment />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-         <Route
-  path="/profile"
-  element={token ? <Profile /> : <Navigate to="/login" />}
-/>
-          <Route path="/sip_Cal" element={<SipCalculator />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
-        </Routes>
+  {/* Protected routes */}
+  <Route element={<ProtectRoute user={token} />}>
+    
+    {/* Stocks */}
+    <Route path="/user/stocks" element={<Dashboard />}>
+      <Route index element={<Navigate to="explore" replace />} />
+      <Route path="explore" element={<Explore />} />
+      <Route path="holdings" element={<Holdings />} />
+      <Route path="positions" element={<Positions />} />
+      <Route path="orders" element={<Orders />} />
+      <Route path="watchlist" element={<Watchlist />} />
+    </Route>
+
+    {/* F&O and Mutual Fund */}
+    <Route path="/user/f&o" element={<FODashboard />} />
+    <Route path="/user/mutual_fund" element={<MFDashboard />} />
+
+    {/* Profile */}
+    <Route path="/profile" element={<Profile />}>
+      <Route index element={<Navigate to="basic" replace />} />
+      <Route path="basic" element={<BasicDetails />} />
+      <Route path="change-password" element={<ChangePassword />} />
+      <Route path="change-pin" element={<ChangePin />} />
+      <Route path="report-activity" element={<ReportActivity />} />
+      <Route path="account-forms" element={<AccountForm />} />
+    </Route>
+  </Route>
+
+  {/* Public routes */}
+  <Route
+    path="/"
+    element={token ? <Navigate to="/user/stocks" /> : <Home />}
+  />
+  <Route path="/investments" element={<Investment />} />
+  <Route path="/portfolio" element={<Portfolio />} />
+  <Route path="/sip_Cal" element={<SipCalculator />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/signup" element={<Register />} />
+</Routes>
+
       </main>
 
       <Footer />

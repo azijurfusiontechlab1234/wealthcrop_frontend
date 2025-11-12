@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa6";
-import topInvest from "../assets/top investment/topinvest.svg"
+import topInvest from "../../assets/top investment/topinvest.svg"
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { CandlestickChart, Bookmark } from "lucide-react";
@@ -9,7 +9,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import axios from "axios";
 
 
-const MFDashboard = () => {
+const Explore = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeTab, setActiveTab] = useState("Gainers");
   const [hoveredRow, setHoveredRow] = useState(null);
@@ -44,6 +44,14 @@ const MFDashboard = () => {
   { name: "Orders", link: "orders" },
   { name: "Watchlist", link: "watchlist" },
 ];
+
+  const markets = [
+    { name: "NIFTY", value: "25,597.65", change: "0.00 (0.00%)" },
+    { name: "SENSEX", value: "83,459.15", change: "0.00 (0.00%)" },
+    { name: "BANKNIFTY", value: "57,827.05", change: "0.00 (0.00%)" },
+    { name: "MIDCPNIFTY", value: "13,375.25", change: "-130.75 (0.97%)" },
+    { name: "FINNIFTY", value: "27,195.00", change: "0.00 (0.00%)" },
+  ];
 
   //!for mobile view
     const marketIndices = [
@@ -99,7 +107,7 @@ const MFDashboard = () => {
 
   useEffect(() => {
   const handleScroll = () => {
-    setIsSticky(window.scrollY > 80);
+    setIsSticky(window.scrollY > 100);
   };
 
   window.addEventListener("scroll", handleScroll);
@@ -137,50 +145,9 @@ const MFDashboard = () => {
   return (
     <>
       <div className="min-h-screen bg-white text-blue-950 hidden lg:block">
-        {/* Sticky header */}
-        {/* Wrapper to reserve space */}
-<div className={isSticky ? "pt-20" : ""}>
-  <div
-    className={`bg-white transition-all duration-300 border-b ease-in-out hidden lg:block
-      ${isSticky
-        ? "fixed top-0 left-0 w-full shadow-sm z-50"
-        : "relative"}
-    `}
-    style={{ height: "84px" }}
-  >
-    <div className="flex flex-col lg:flex-row justify-between items-center px-10 py-6 gap-4">
-      {/* Tabs */}
-      <nav className="flex gap-8 text-md font-medium overflow-x-auto ">
-        {topTabs.map((tab) => (
-          <NavLink
-            key={tab.name}
-            to={tab.link}
-            end
-            className={({ isActive }) =>
-              `relative text-gray-600 hover:text-blue-800 transition pb-1
-              after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 
-              after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300
-              ${isActive ? "text-blue-800 after:scale-x-100" : ""}`
-            }
-          >
-            {tab.name}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search..."
-        className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-1 focus:ring-blue-800 outline-none"
-      />
-    </div>
-  </div>
-</div>
-
-
+     
         {/* PAGE CONTENT */}
-        <div className="mt-15 px-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="mt-10 px-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* left side content */}
           <div className="lg:col-span-2 ">
             {/* Row 1 */}
@@ -986,4 +953,4 @@ const MarketTable = () => {
   );
 };
 
-export default MFDashboard;
+export default Explore;
