@@ -163,7 +163,7 @@ const Explore = () => {
                   {stocks.map((stock, index) => (
                     <div
                       key={stock.name}
-                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 w-44 h-48 cursor-pointer"
+                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
                     >
@@ -332,7 +332,7 @@ const Explore = () => {
                   {stocks.map((stock, index) => (
                     <div
                       key={stock.name}
-                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 w-44 h-48 cursor-pointer"
+                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
                     >
@@ -418,7 +418,7 @@ const Explore = () => {
                   {stocks.map((stock, index) => (
                     <div
                       key={stock.name}
-                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 w-44 h-48 cursor-pointer"
+                      className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
                     >

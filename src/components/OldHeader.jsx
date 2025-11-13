@@ -1,10 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HiMenu, HiX, HiBell, HiUserCircle } from "react-icons/hi";
 import { IoArrowBack } from "react-icons/io5";
 import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import SearchPopup from "./SearchPopup";
+import { logout } from "../redux/authenticationSlice";
+import {
+  User,
+  Mail,
+  IndianRupee,
+  FileText,
+  Headphones,
+  BarChart3,
+  LogOut,
+  Settings,
+  Sun,
+  ChevronRight,
+} from "lucide-react";
 
 export default function OldHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,6 +28,7 @@ export default function OldHeader() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const location = useLocation();
+  const navigate = useNavigate()
 
 
   // ✅ Close mobile menu on route change
@@ -35,6 +49,16 @@ export default function OldHeader() {
     window.addEventListener("storage", checkToken);
     return () => window.removeEventListener("storage", checkToken);
   }, [token, dispatch]);
+
+   const handleLogout = () => {
+    dispatch(logout());
+    navigate("/"); // redirect to home
+    window.location.reload()
+  };
+
+  const handleSetting = () =>{
+    navigate("/profile")
+  }
 
   return (
     <>
@@ -169,9 +193,96 @@ export default function OldHeader() {
                   <HiBell className="text-2xl" />
                   <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                 </button>
-                <Link to="/profile">
-                  <HiUserCircle className="text-3xl text-blue-900 hover:text-blue-700 transition" />
-                </Link>
+                
+              {/* <HiBell className="text-2xl" /> */}
+              <div className="relative group">
+      {/* Profile Icon Button */}
+      <button className="text-blue-900 hover:text-blue-700 transition cursor-pointer mt-1.5">
+        <User className="text-3xl" />
+      </button>
+
+      {/* Dropdown */}
+        <div
+      className="absolute -right-2.5 top-full mt-1 w-80 bg-white rounded-xl shadow-xl border border-gray-100
+      opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
+      transition-all duration-300 ease-out z-50"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
+        <div>
+          <h3 className="font-semibold text-gray-900">Fusion Techlab</h3>
+          <p className="text-sm text-gray-500">fusionbusiness001@gmail.com</p>
+        </div>
+        <Settings
+          onClick={handleSetting}
+          size={18}
+          className="text-gray-500 mt-1 cursor-pointer"
+        />
+      </div>
+
+      {/* 🔹 Balance (clickable) */}
+      <Link
+        to="/user/balance"
+        className="flex items-center justify-between px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition"
+      >
+        <div className="flex items-center gap-2">
+          <IndianRupee size={18} className="text-gray-600" />
+          <div>
+            <p className="text-gray-900 font-medium">₹0.00</p>
+            <p className="text-xs text-gray-500">Stocks, F&O balance</p>
+          </div>
+        </div>
+        <ChevronRight size={18} className="text-gray-400" />
+      </Link>
+
+      {/* 🔹 Links */}
+      <div className="py-2 space-y-1">
+        <Link
+          to="/user/order/stocks"
+          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+        >
+          <div className="flex items-center gap-3">
+            <FileText size={18} />
+            <span>All Orders</span>
+          </div>
+          <ChevronRight size={18} className="text-gray-400" />
+        </Link>
+
+        <Link
+          to="/support"
+          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+        >
+          <div className="flex items-center gap-3">
+            <Headphones size={18} />
+            <span>24 × 7 Customer Support</span>
+          </div>
+          <ChevronRight size={18} className="text-gray-400" />
+        </Link>
+
+        <Link
+          to="/reports"
+          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+        >
+          <div className="flex items-center gap-3">
+            <BarChart3 size={18} />
+            <span>Reports</span>
+          </div>
+          <ChevronRight size={18} className="text-gray-400" />
+        </Link>
+      </div>
+
+      {/* 🔹 Footer */}
+      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-blue-700 font-medium border-b border-dashed"
+        >
+          <LogOut size={18} />
+          <span>Log out</span>
+        </button>
+      </div>
+    </div>
+    </div>
               </>
             ) : (
               <Link

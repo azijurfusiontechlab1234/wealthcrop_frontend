@@ -30,6 +30,15 @@ import Holdings from "./pages/stocks/Holdings";
 import Positions from "./pages/stocks/Positions";
 import Orders from "./pages/stocks/Orders";
 import Watchlist from "./pages/stocks/Watchlist";
+import NomineeDetails from "./pages/profile/NomineeDetails";
+import UserOrder from "./pages/profile/order/UserOrder";
+import Stocks from "./pages/profile/order/Stocks";
+import FutureandOptions from "./pages/profile/order/FutureandOptions";
+import MutualFundOrder from "./pages/profile/order/MutualFundOrder";
+import Support from "./pages/Support";
+import Reports from "./pages/Reports";
+import Balance from "./pages/Balance";
+import AddMoney from "./pages/AddMoney";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +46,14 @@ function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
   const { token } = useSelector((state) => state.auth);
+
+    const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsLg(window.innerWidth >= 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // useEffect(() => {
   //   // Listen for token changes (manual refresh of state)
@@ -61,7 +78,7 @@ function App() {
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-gray-50">
+      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-white overflow-x-auto">
         <Routes>
   {/* Protected routes */}
   <Route element={<ProtectRoute user={token} />}>
@@ -80,15 +97,35 @@ function App() {
     <Route path="/user/f&o" element={<FODashboard />} />
     <Route path="/user/mutual_fund" element={<MFDashboard />} />
 
+    {/* Profile Order */}
+    {/* <Route path="/user/order" element={<UserOrder />} >
+    <Route index element={<Navigate to="stocks" replace />} />
+    <Route path="stocks" element={<Stocks/>} />
+    <Route path="futures-and-options" element={<FutureandOptions/>} />
+    <Route path="mutual-funds" element={<MutualFundOrder/>} />
+    </Route> */}
+
     {/* Profile */}
-    <Route path="/profile" element={<Profile />}>
+    
+    {
+      isLg ? (
+          <Route path="/profile" element={<Profile />}>
       <Route index element={<Navigate to="basic" replace />} />
       <Route path="basic" element={<BasicDetails />} />
       <Route path="change-password" element={<ChangePassword />} />
       <Route path="change-pin" element={<ChangePin />} />
       <Route path="report-activity" element={<ReportActivity />} />
+      <Route path="nominee_details" element={<NomineeDetails />} />
       <Route path="account-forms" element={<AccountForm />} />
     </Route>
+      ) : (
+        <>
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/profile/basic" element={<BasicDetails />} />
+        </>
+      )
+    }
+    
   </Route>
 
   {/* Public routes */}
@@ -101,6 +138,10 @@ function App() {
   <Route path="/sip_Cal" element={<SipCalculator />} />
   <Route path="/login" element={<Login />} />
   <Route path="/signup" element={<Register />} />
+  <Route path="/support" element={<Support />} />
+  <Route path="/reports" element={<Reports />} /> 
+  <Route path="/user/balance" element={<Balance />} /> 
+  <Route path="/user/balance/inr" element={<AddMoney />} /> 
 </Routes>
 
       </main>

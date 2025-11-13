@@ -1,7 +1,3 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import invest from "../assets/top investment/topinvest.svg";
-import { FaAngleRight } from "react-icons/fa6";
 import { Search, ArrowLeft } from "lucide-react";
 import { HiMenu, HiX, HiBell, HiUserCircle } from "react-icons/hi";
 import {
@@ -16,19 +12,12 @@ import {
   Sun,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaAngleRight } from "react-icons/fa6";
 import { logout } from "../redux/authenticationSlice";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 
-const Profile = () => {
-  const options = [
-    { name: "Basic Details", path: "basic" },
-    { name: "Change Password", path: "change-password" },
-    { name: "Change PIN", path: "change-pin" },
-    { name: "Report suspicious activity", path: "report-activity" },
-    { name: "Nominee Details", path: "nominee_details" },
-    { name: "Account Related Forms", path: "account-forms" },
-  ];
+export default function ProfileSettingPopup({ onClose }) {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -41,60 +30,14 @@ const Profile = () => {
     };
   
     const handleSetting = () =>{
-      navigate("/profile/basic")
+      navigate("/profile")
     }
-    const onClose = () =>{
-      navigate(-1)
-    }
+
 
   return (
-    <>
-    
-    <div className=" hidden lg:block mt-10 bg-white px-16 py-8">
-      {/* Main container using flex with percentage widths */}
-      <div className="flex gap-6 items-start w-full">
-        
-        {/* LEFT SIDEBAR (40%) */}
-        <div className="w-[30%] border border-gray-300 rounded-lg flex flex-col">
-          {/* Profile picture section */}
-          <div className="w-full h-52 flex justify-center items-center">
-            <img src={invest} alt="Profile" className="w-44" />
-          </div>
-
-          {/* Divider */}
-          <div className="w-full h-0.5 bg-gray-300"></div>
-
-          {/* Sidebar options */}
-          <div className="w-full text-left mt-2 flex flex-col">
-            {options.map((option, index) => (
-              <NavLink
-                key={index}
-                to={option.path}
-                end
-                className={({ isActive }) =>
-                  `flex items-center justify-between w-full px-4 py-4 text-blue-950 font-semibold transition-colors duration-200 hover:bg-gray-100 ${
-                    isActive ? "bg-gray-200 hover:bg-gray-200" : ""
-                  }`
-                }
-              >
-                <span>{option.name}</span>
-                <FaAngleRight />
-              </NavLink>
-            ))}
-          </div>
-        </div>
-
-        {/* RIGHT CONTENT AREA (60%) */}
-        <div className="w-[70%] border border-gray-300 rounded-lg bg-white">
-          <Outlet />
-        </div>
-      </div>
-    </div>
-
-      {/*For mobile and tab*/}
-      <div
+    <div
       className="
-        fixed inset-0 flex items-center justify-center lg:hidden
+        fixed inset-0 flex items-center justify-center
         bg-black/40 
         z-99999
         animate-fadeInn
@@ -150,7 +93,7 @@ const Profile = () => {
         {/* Links */}
         <div className="py-2 space-y-2">
           <Link
-            to="/user/order/stocks"
+            to="/orders"
             className="flex items-center gap-3 px-4 py-2 text-gray-800 hover:bg-gray-50"
           >
             <FileText size={18} />
@@ -194,8 +137,5 @@ const Profile = () => {
        
       </div>
     </div>
-    </>
   );
-};
-
-export default Profile;
+}

@@ -2,12 +2,19 @@ import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import icon from "../assets/favicon.png";
 import SearchPopup from "./SearchPopup";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import ProfileSettingPopup from "./ProfileSettingPopup";
 
 export default function Header2() {
   const [activeTab, setActiveTab] = useState("Explore");
   const [showSearch, setShowSearch] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const navigate = useNavigate();
+
+   // ✅ Close popup on route change
+  useEffect(() => {
+    if (showProfile) setShowProfile(false);
+  }, [location.pathname]);
 
   // ✅ Function to check window width
   const handleResize = () => {
@@ -41,11 +48,14 @@ export default function Header2() {
           <Search className="w-4 h-4 mr-2 text-gray-400" />
           <span className="text-sm">Search Wealthcrop...</span>
         </div>
-        <img
+        <div
+        onClick={()=> navigate("/profile")}>
+          <img
           src={icon}
           alt="right logo"
           className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6"
         />
+        </div>
       </div>
 
       {/* 🔹 Tabs Section */}
@@ -70,6 +80,7 @@ export default function Header2() {
       </div>
 
       {showSearch && <SearchPopup onClose={() => setShowSearch(false)} />}
+      {/* {showProfile && <ProfileSettingPopup onClose={() => setShowProfile(false)} />} */}
     </div>
   );
 }
