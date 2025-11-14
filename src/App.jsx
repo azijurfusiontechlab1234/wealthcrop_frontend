@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -39,12 +39,18 @@ import Support from "./pages/Support";
 import Reports from "./pages/Reports";
 import Balance from "./pages/Balance";
 import AddMoney from "./pages/AddMoney";
+import BottomHeader from "./components/BottomHeader";
+import ExploreMF from "./pages/mutual_fund/ExploreMF";
+import WatchlistMF from "./pages/mutual_fund/WatchlistMF";
+import DashBoardMF from "./pages/mutual_fund/DashBoardMF";
+import SIPs from "./pages/mutual_fund/SIPs";
 
 const queryClient = new QueryClient();
 
 function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
+  const [activeCategory, setActiveCategory] = useState("stocks");
   const { token } = useSelector((state) => state.auth);
 
     const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
@@ -54,6 +60,16 @@ function App() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+  if (window.innerWidth < 1024) {
+    setActiveCategory("stocks"); // default
+    navigate("/user/stocks/explore");
+  }
+}, []);
+
 
   // useEffect(() => {
   //   // Listen for token changes (manual refresh of state)
@@ -74,7 +90,7 @@ function App() {
 
       {/* ✅ Mobile screens */}
       <div className="block lg:hidden fixed top-0 left-0 w-full z-50">
-        {token ? <Header2 /> : <OldHeader />}
+        {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
       </div>
 
       {/* ✅ Page Content */}
@@ -93,9 +109,18 @@ function App() {
       <Route path="watchlist" element={<Watchlist />} />
     </Route>
 
+    {/* MutualFund */}
+    <Route path="/user/mutual_fund" element={<MFDashboard />}>
+      <Route index element={<Navigate to="explore" replace />} />
+      <Route path="explore" element={<ExploreMF />} />
+      <Route path="investments" element={<DashBoardMF />} />
+      <Route path="sip" element={<SIPs />} />
+      <Route path="watchlist" element={<WatchlistMF />} />
+    </Route>
+
     {/* F&O and Mutual Fund */}
     <Route path="/user/f&o" element={<FODashboard />} />
-    <Route path="/user/mutual_fund" element={<MFDashboard />} />
+    {/* <Route path="/user/mutual_fund" element={<MFDashboard />} /> */}
 
     {/* Profile Order */}
     {/* <Route path="/user/order" element={<UserOrder />} >
@@ -147,6 +172,10 @@ function App() {
       </main>
 
       <Footer />
+
+      <div className='fixed lg:hidden bottom-6 bg-gray-600 w-full'>
+                <BottomHeader activeCategory={activeCategory} setActiveCategory={setActiveCategory}  />
+            </div>
 
       <ToastContainer
         position="top-right"

@@ -114,19 +114,20 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-       <div className="min-h-screen bg-white text-blue-950 hidden lg:block">
+  <>
+    {/* DESKTOP VIEW */}
+    <div className="min-h-screen bg-white text-blue-950 hidden lg:block">
+      
       {/* Sticky header */}
       <div
-        className={`bg-white transition-top duration-300 border-b ease-in-out hidden lg:block ${
+        className={`bg-white transition-top duration-300 border-b ease-in-out ${
           isSticky
-            ? "fixed top-0 left-0 w-full shadow-sm z-50 transition duration-500"
+            ? "fixed top-0 left-0 w-full shadow-sm z-50"
             : "relative"
         }`}
       >
         {/* Tabs + Search */}
         <div className="flex flex-col lg:flex-row justify-between items-center px-10 py-3 gap-4">
-          {/* Tabs */}
           <nav className="flex gap-8 text-sm font-medium overflow-x-auto">
             {topTabs.map((tab) => (
               <NavLink
@@ -145,7 +146,6 @@ const Dashboard = () => {
             ))}
           </nav>
 
-          {/* Search bar */}
           <input
             type="text"
             placeholder="Search..."
@@ -166,252 +166,24 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-       <div className="">
-        {/* 👇 This renders Explore, Holdings, etc. */}
+
+      {/* DESKTOP OUTLET */}
+      <div className="mt-2">
         <Outlet />
       </div>
     </div>
 
-      {/* For mobile view */}
 
-      <div className="p-5 space-y-8 lg:hidden">
-        {/* ===== Market Indices ===== */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-gray-800 font-semibold">Market Indices</h2>
-            <button className="text-xs bg-green-100 uppercase text-green-700 px-3 py-1 rounded-full font-medium">
-              Screener
-            </button>
-          </div>
+    {/* MOBILE VIEW */}
+    <div className="lg:hidden px-3 py-2 mb-8">
+      {/* You can add mobile tabs or keep empty */}
 
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-            {marketIndices.map((item, i) => (
-              <div
-                key={i}
-                className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-3 flex flex-col justify-between"
-              >
-                <h3 className="text-sm font-medium text-gray-700">
-                  {item.name}
-                </h3>
-                <p className="text-lg font-semibold text-gray-900">
-                  {item.value}
-                </p>
-                <span
-                  className={`text-xs font-medium ${
-                    item.isPositive ? "text-green-600" : "text-red-500"
-                  }`}
-                >
-                  {item.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* MOBILE OUTLET → REQUIRED */}
+      <Outlet />
+    </div>
+  </>
+);
 
-        {/* ===== Top Gainers ===== */}
-        <div className="overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-gray-800 font-semibold">
-              Top Gainers{" "}
-              <span className="text-xs text-gray-500">NIFTY100</span>
-            </h2>
-            <button className="text-xs text-green-700 font-medium">
-              See More
-            </button>
-          </div>
-
-          {/* Wrapper with slight right padding to reveal next card */}
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pr-6 snap-x snap-mandatory scroll-smooth">
-            {topGainers.map((item, i) => (
-              <div
-                key={i}
-                className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
-              >
-                <img
-                  src={item.logo}
-                  alt={item.name}
-                  className="w-10 h-10 object-contain mb-2 rounded-md"
-                />
-                <h3 className="text-sm font-medium text-gray-800">
-                  {item.name}
-                </h3>
-                <p className="text-gray-900 font-semibold text-base mt-1">
-                  {item.price}
-                </p>
-                <span className="text-green-600 text-sm mt-1">
-                  {item.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Stocks in news */}
-        <div className="overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-gray-800 font-semibold">
-              Stocks in News{" "}
-              <span className="text-xs text-gray-500">NIFTY100</span>
-            </h2>
-            <button className="text-xs text-green-700 font-medium bg-green-100 rounded-full px-3 py-1">
-              NEWS
-            </button>
-          </div>
-
-          {/* Wrapper with slight right padding to reveal next card */}
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pr-6 snap-x snap-mandatory scroll-smooth">
-            {topGainers.map((item, i) => (
-              <div
-                key={i}
-                className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
-              >
-                <img
-                  src={item.logo}
-                  alt={item.name}
-                  className="w-10 h-10 object-contain mb-2 rounded-md"
-                />
-                <h3 className="text-sm font-medium text-gray-800">
-                  {item.name}
-                </h3>
-                <p className="text-gray-900 font-semibold text-base mt-1">
-                  {item.price}
-                </p>
-                <span className="text-green-600 text-sm mt-1">
-                  {item.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Top Loosers */}
-        <div className="overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-gray-800 font-semibold">
-              Top Loosers{" "}
-              <span className="text-xs text-gray-500">NIFTY100</span>
-            </h2>
-            <button className="text-xs text-green-700 font-medium">
-              See More
-            </button>
-          </div>
-
-          {/* Wrapper with slight right padding to reveal next card */}
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pr-6 snap-x snap-mandatory scroll-smooth">
-            {topGainers.map((item, i) => (
-              <div
-                key={i}
-                className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
-              >
-                <img
-                  src={item.logo}
-                  alt={item.name}
-                  className="w-10 h-10 object-contain mb-2 rounded-md"
-                />
-                <h3 className="text-sm font-medium text-gray-800">
-                  {item.name}
-                </h3>
-                <p className="text-gray-900 font-semibold text-base mt-1">
-                  {item.price}
-                </p>
-                <span className="text-green-600 text-sm mt-1">
-                  {item.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Product and Tools */}
-        <div className="mt-15">
-          <h2 className="font-semibold text-lg mb-4">Products & Tools</h2>
-          <div className="space-y-5">
-            {[
-              {
-                name: "IPO",
-                count: 6,
-                img: "https://cdn-icons-png.flaticon.com/512/481/481949.png",
-              },
-              {
-                name: "Bonds",
-                count: 1,
-                img: "https://cdn-icons-png.flaticon.com/512/2716/2716999.png",
-              },
-              {
-                name: "ETFs",
-                count: 2,
-                img: "https://cdn-icons-png.flaticon.com/512/7099/7099964.png",
-              },
-              {
-                name: "Fixed Deposit",
-                count: 3,
-                img: "https://cdn-icons-png.flaticon.com/512/4228/4228704.png",
-              },
-            ].map((tool) => (
-              <a
-                href="#"
-                key={tool.name}
-                className="bg-white rounded-xl p-5 shadow hover:shadow-md transition flex justify-between items-center"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                    <img
-                      src={tool.img}
-                      alt={tool.name}
-                      className="w-6 h-6 object-contain"
-                    />
-                  </div>
-                  <span className="font-medium text-gray-800">{tool.name}</span>
-                </div>
-                <span className="text-xs text-green-700 font-semibold">
-                  {tool.count} open
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Most Valuable */}
-        <div className="overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-gray-800 font-semibold">
-              Most Valuable{" "}
-              <span className="text-xs text-gray-500">NIFTY100</span>
-            </h2>
-            {/* <button className="text-xs text-green-700 font-medium">
-              See More
-            </button> */}
-          </div>
-
-          {/* Wrapper with slight right padding to reveal next card */}
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pr-6 snap-x snap-mandatory scroll-smooth">
-            {topGainers.map((item, i) => (
-              <div
-                key={i}
-                className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
-              >
-                <img
-                  src={item.logo}
-                  alt={item.name}
-                  className="w-10 h-10 object-contain mb-2 rounded-md"
-                />
-                <h3 className="text-sm font-medium text-gray-800">
-                  {item.name}
-                </h3>
-                <p className="text-gray-900 font-semibold text-base mt-1">
-                  {item.price}
-                </p>
-                <span className="text-green-600 text-sm mt-1">
-                  {item.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-      </div>
-    </>
-  );
 };
 
 
