@@ -103,7 +103,7 @@ function App() {
     <Route path="/user/stocks" element={<Dashboard />}>
       <Route index element={<Navigate to="explore" replace />} />
       <Route path="explore" element={<Explore />} />
-      <Route path="holdings" element={<Holdings />} />
+      {/* <Route path="holdings" element={<Holdings />} /> */}
       <Route path="positions" element={<Positions />} />
       <Route path="orders" element={<Orders />} />
       <Route path="watchlist" element={<Watchlist />} />
