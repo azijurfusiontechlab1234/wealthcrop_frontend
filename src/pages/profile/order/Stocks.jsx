@@ -67,9 +67,9 @@ const Stocks = () => {
                 <br /> Start exploring and discover new opportunities.
               </p>
 
-              <button className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
+              <NavLink to="/" className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
                 Try it out
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>

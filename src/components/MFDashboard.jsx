@@ -136,11 +136,11 @@ const MFDashboard = () => {
         <div className="flex justify-between items-center px-10 py-2 text-xs text-gray-600">
           <div className="flex gap-16">
             {markets.map((m) => (
-              <span key={m.name}>
+              <NavLink key={m.name} to="/user/mutual_fund/explore">
                 <span className="font-semibold text-gray-800">{m.name}</span>{" "}
                 {m.value}{" "}
                 <span className="text-gray-500">{m.change}</span>
-              </span>
+              </NavLink>
             ))}
           </div>
         </div>

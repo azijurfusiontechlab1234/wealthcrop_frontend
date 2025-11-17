@@ -123,12 +123,12 @@ function App() {
     {/* <Route path="/user/mutual_fund" element={<MFDashboard />} /> */}
 
     {/* Profile Order */}
-    {/* <Route path="/user/order" element={<UserOrder />} >
+    <Route path="/user/order" element={<UserOrder />} >
     <Route index element={<Navigate to="stocks" replace />} />
     <Route path="stocks" element={<Stocks/>} />
     <Route path="futures-and-options" element={<FutureandOptions/>} />
     <Route path="mutual-funds" element={<MutualFundOrder/>} />
-    </Route> */}
+    </Route>
 
     {/* Profile */}
     
