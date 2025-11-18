@@ -6,8 +6,18 @@ import sbi from "../../assets/mutualFund/sbi.webp";
 import parag from "../../assets/mutualFund/ppfas.webp";
 import motilal from "../../assets/mutualFund/motilal.webp";
 import bandhan from "../../assets/mutualFund/idfc.webp";
+import { useNavigate } from "react-router-dom";
 
 const ExploreMF = () => {
+
+  const navigate = useNavigate()
+
+ const showFundPage = (fundName) => {
+  const cleanName = fundName.replace(/\s+/g, "");
+  navigate(`/mutual_fund/${cleanName}`);
+};
+
+
   const popularFunds = [
     { name: "SBI Gold Fund", return: "+32.9%", years: "3Y", img: sbi },
     { name: "Parag Parikh Flexi Cap Fund", return: "+21.6%", years: "3Y", img: parag },
@@ -64,7 +74,8 @@ const ExploreMF = () => {
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {popularFunds.map((fund, index) => (
-              <div key={index} className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition">
+              <div key={index} className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition"
+              onClick={()=> showFundPage(fund.name)}>
                 <div className="flex gap-3 flex-col text-left">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name}</p>
@@ -100,7 +111,8 @@ const ExploreMF = () => {
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {growwFunds.map((fund, index) => (
-              <div key={index} className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition">
+              <div key={index} onClick={()=> showFundPage(fund.name)}
+               className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition">
                 <div className="flex flex-col text-left gap-3">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name}</p>
@@ -118,7 +130,8 @@ const ExploreMF = () => {
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {trending.map((fund, index) => (
-              <div key={index} className="rounded-xl p-4 bg-white hover:bg-gray-50 hover:shadow border border-gray-200 transition">
+              <div key={index} onClick={()=> showFundPage(fund.name)}
+               className="rounded-xl p-4 bg-white hover:bg-gray-50 hover:shadow border border-gray-200 transition">
                 <div className="flex flex-col text-left gap-3">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name}</p>

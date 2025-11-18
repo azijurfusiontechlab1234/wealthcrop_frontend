@@ -66,7 +66,7 @@ const DashBoardMF = () => {
               Your Mutual Funds
                  <button
             onClick={handleExternal}
-            className="bg-teal-600 text-white font-medium py-2 px-3 rounded-md cursor-pointer"
+            className="bg-teal-600 text-white font-medium text-xs sm:text-lg sm:py-2 sm:px-3 rounded-md cursor-pointer"
           >
             Import External Funds
           </button>

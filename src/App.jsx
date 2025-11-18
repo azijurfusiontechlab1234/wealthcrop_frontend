@@ -44,6 +44,7 @@ import ExploreMF from "./pages/mutual_fund/ExploreMF";
 import WatchlistMF from "./pages/mutual_fund/WatchlistMF";
 import DashBoardMF from "./pages/mutual_fund/DashBoardMF";
 import SIPs from "./pages/mutual_fund/SIPs";
+import FundDetails from "./pages/mutual_fund/FundDetails";
 
 const queryClient = new QueryClient();
 
@@ -103,7 +104,7 @@ function App() {
     <Route path="/user/stocks" element={<Dashboard />}>
       <Route index element={<Navigate to="explore" replace />} />
       <Route path="explore" element={<Explore />} />
-      {/* <Route path="holdings" element={<Holdings />} /> */}
+      <Route path="holdings" element={<Holdings />} />
       <Route path="positions" element={<Positions />} />
       <Route path="orders" element={<Orders />} />
       <Route path="watchlist" element={<Watchlist />} />
@@ -117,6 +118,7 @@ function App() {
       <Route path="sip" element={<SIPs />} />
       <Route path="watchlist" element={<WatchlistMF />} />
     </Route>
+     {/* <Route path="/mutual_fund/:name" element={<FundDetails />} /> */}
 
     {/* F&O and Mutual Fund */}
     <Route path="/user/f&o" element={<FODashboard />} />
