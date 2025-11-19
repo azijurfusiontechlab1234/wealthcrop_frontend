@@ -17,21 +17,20 @@ export default function Header2({ activeCategory }) {
     : "Dashboard";
 
   // ⭐ FIXED: Redirect only when category changes AND user is not already in correct explore route
- useEffect(() => {
-  if (activeCategory === "stocks") {
-    // redirect only if the user is NOT in the stocks category at all
-    if (!location.pathname.startsWith("/user/stocks")) {
-      navigate("/user/stocks/explore");
-    }
-  }
+useEffect(() => {
+  // Only do redirect on mobile
+  if (window.innerWidth >= 1024) return;
 
-  if (activeCategory === "funds") {
-    // redirect only if the user is NOT in the funds category at all
-    if (!location.pathname.startsWith("/user/mutual_fund")) {
-      navigate("/user/mutual_fund/explore");
+  // Only redirect if first render and user is at root or unknown path
+  if (location.pathname === "/" || location.pathname === "") {
+    if (activeCategory === "stocks") {
+      navigate("/user/stocks/explore", { replace: true });
+    } else if (activeCategory === "funds") {
+      navigate("/user/mutual_fund/explore", { replace: true });
     }
   }
-}, [activeCategory]);
+}, []); // Empty dependency → runs only on mount
+
 
 
   // Tab switching

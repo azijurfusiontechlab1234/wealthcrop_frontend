@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -50,9 +50,15 @@ const queryClient = new QueryClient();
 
 function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+useEffect(() => {
+  setToken(localStorage.getItem("token"));
+}, []);
+
 
   const [activeCategory, setActiveCategory] = useState("stocks");
-  const { token } = useSelector((state) => state.auth);
+  // const { token } = useSelector((state) => state.auth);
 
     const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
 
@@ -64,12 +70,23 @@ function App() {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
+//   useEffect(() => {
+//   if (window.innerWidth < 1024) {
+//     setActiveCategory("stocks"); // default
+//     navigate("/user/stocks/explore");
+//   }
+// }, []);
+
+  const location = useLocation();
+
+ useEffect(() => {
   if (window.innerWidth < 1024) {
-    setActiveCategory("stocks"); // default
-    navigate("/user/stocks/explore");
+    if (location.pathname === "/") {
+      navigate("/user/stocks/explore", { replace: true });
+    }
   }
 }, []);
+
 
 
   // useEffect(() => {
@@ -98,7 +115,7 @@ function App() {
       <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-white overflow-x-auto">
         <Routes>
   {/* Protected routes */}
-  <Route element={<ProtectRoute user={token} />}>
+  <Route element={<ProtectRoute  />}>
     
     {/* Stocks */}
     <Route path="/user/stocks" element={<Dashboard />}>
@@ -118,7 +135,7 @@ function App() {
       <Route path="sip" element={<SIPs />} />
       <Route path="watchlist" element={<WatchlistMF />} />
     </Route>
-     {/* <Route path="/mutual_fund/:name" element={<FundDetails />} /> */}
+     <Route path="/mutual_fund/:name" element={<FundDetails />} />
 
     {/* F&O and Mutual Fund */}
     <Route path="/user/f&o" element={<FODashboard />} />
@@ -152,7 +169,14 @@ function App() {
         </>
       )
     }
-    
+      <Route path="/support" element={<Support />} />
+  <Route path="/reports" element={<Reports />} /> 
+  <Route path="/user/balance" element={<Balance />} /> 
+  <Route path="/user/balance/inr" element={<AddMoney />} /> 
+    <Route path="/investments" element={<Investment />} />
+  <Route path="/portfolio" element={<Portfolio />} />
+  <Route path="/sip_Cal" element={<SipCalculator />} />
+  
   </Route>
 
   {/* Public routes */}
@@ -160,22 +184,17 @@ function App() {
     path="/"
     element={token ? <Navigate to="/user/stocks" /> : <Home />}
   />
-  <Route path="/investments" element={<Investment />} />
-  <Route path="/portfolio" element={<Portfolio />} />
-  <Route path="/sip_Cal" element={<SipCalculator />} />
+
   <Route path="/login" element={<Login />} />
   <Route path="/signup" element={<Register />} />
-  <Route path="/support" element={<Support />} />
-  <Route path="/reports" element={<Reports />} /> 
-  <Route path="/user/balance" element={<Balance />} /> 
-  <Route path="/user/balance/inr" element={<AddMoney />} /> 
+
 </Routes>
 
       </main>
 
       <Footer />
 
-      <div className='fixed lg:hidden bottom-6 bg-gray-600 w-full'>
+      <div className='lg:hidden'>
                 <BottomHeader activeCategory={activeCategory} setActiveCategory={setActiveCategory}  />
             </div>
 

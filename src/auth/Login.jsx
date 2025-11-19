@@ -50,6 +50,7 @@ function LoginPage() {
   if (loginMode === "password") { 
     console.log("Password Login:", data);
     toastSuccess("Logged in successfully!");
+    localStorage.setItem("token","123456kjhhikk111")
     dispatch(login("123456kjhhikk111"))
     // ✅ Dispatch event to update App state
     window.dispatchEvent(new Event("storage"));
