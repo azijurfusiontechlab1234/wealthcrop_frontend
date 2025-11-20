@@ -176,7 +176,7 @@ function MutualFundCarousel() {
   // if no funds yet, show placeholder bar (keeps height)
   if (!funds.length) {
     return (
-      <div className="left-0 w-full bg-white overflow-hidden border-y" style={{ height: "40px" }}>
+      <div className="left-0 w-full bg-white overflow-hidden" style={{ height: "40px" }}>
         <div className="h-full flex items-center px-4 text-gray-400">Loading…</div>
       </div>
     );
