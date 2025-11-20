@@ -58,6 +58,17 @@ html, body {
   animation: slideUp 0.3s ease-out;
 }
 
+/* For marque top header */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+
 
 
 /* For Toast */

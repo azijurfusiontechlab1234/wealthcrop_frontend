@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa6";
 import topInvest from "../../assets/top investment/topinvest.svg"
 import { motion, AnimatePresence } from "framer-motion";
@@ -142,6 +142,13 @@ const Explore = () => {
     // axios.post('/api/bookmark', { company: stocks[index].name })
   };
 
+  const navigate = useNavigate()
+
+   const showStockPage = (stockName) => {
+  const cleanName = stockName.replace(/\s+/g, "");
+  navigate(`/stocks/${cleanName}`);
+};
+
   return (
     <>
       <div className="min-h-screen bg-white text-blue-950 hidden lg:block">
@@ -166,6 +173,7 @@ const Explore = () => {
                       className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
+                      onClick={()=> showStockPage(stock.name)}
                     >
                       {/* 🔖 Bookmark Icon (appears on hover) */}
                       {hoveredRow === index && (
@@ -335,6 +343,7 @@ const Explore = () => {
                       className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
+                      onClick={()=> showStockPage(stock.name)}
                     >
                       {/* 🔖 Bookmark Icon (appears on hover) */}
                       {hoveredRow === index && (
@@ -421,6 +430,7 @@ const Explore = () => {
                       className="relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between p-5 h-48 cursor-pointer"
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
+                      onClick={()=> showStockPage(stock.name)}
                     >
                       {/* 🔖 Bookmark Icon (appears on hover) */}
                       {hoveredRow === index && (
@@ -649,6 +659,7 @@ const Explore = () => {
             {topGainers.map((item, i) => (
               <div
                 key={i}
+                onClick={()=> showStockPage(item.name)}
                 className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
               >
                 <img
@@ -687,6 +698,7 @@ const Explore = () => {
             {topGainers.map((item, i) => (
               <div
                 key={i}
+                onClick={()=> showStockPage(item.name)}
                 className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
               >
                 <img
@@ -725,6 +737,7 @@ const Explore = () => {
             {topGainers.map((item, i) => (
               <div
                 key={i}
+                onClick={()=> showStockPage(item.name)}
                 className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
               >
                 <img
@@ -812,6 +825,7 @@ const Explore = () => {
             {topGainers.map((item, i) => (
               <div
                 key={i}
+                onClick={()=> showStockPage(item.name)}
                 className="min-w-[130px] bg-white shadow border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center snap-start"
               >
                 <img
@@ -881,7 +895,7 @@ const MarketTable = () => {
             >
               <td className="px-6 py-3">
                 <a
-                  href="#"
+                  href={`/stocks/${row.company}`}
                   className="text-blue-900 hover:underline font-medium"
                 >
                   {row.company}

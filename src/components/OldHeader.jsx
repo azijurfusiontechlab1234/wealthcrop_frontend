@@ -18,6 +18,7 @@ import {
   Sun,
   ChevronRight,
 } from "lucide-react";
+import MutualFundCarousel from "../carousel/MutualFundCarousel";
 
 export default function OldHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,7 +64,11 @@ export default function OldHeader() {
   return (
     <>
       <nav className="w-full bg-white shadow-sm border-b border-gray-100 fixed top-0 left-0 z-50">
-        <div className="flex justify-between items-center px-6 md:px-12 py-3">
+        {/* ⭐ Always on top of everything */}
+  
+      <MutualFundCarousel />
+  
+        <div className="flex justify-between items-center px-6 md:px-12 pb-1">
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link to="/">

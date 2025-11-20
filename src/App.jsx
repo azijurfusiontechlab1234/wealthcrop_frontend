@@ -45,20 +45,27 @@ import WatchlistMF from "./pages/mutual_fund/WatchlistMF";
 import DashBoardMF from "./pages/mutual_fund/DashBoardMF";
 import SIPs from "./pages/mutual_fund/SIPs";
 import FundDetails from "./pages/mutual_fund/FundDetails";
+import StockDetails from "./components/StockDetails";
+import MutualFundCarousel from "./carousel/MutualFundCarousel";
 
 const queryClient = new QueryClient();
 
 function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
-  const [token, setToken] = useState(localStorage.getItem("token"));
+//   const [token, setToken] = useState(localStorage.getItem("token"));
 
-useEffect(() => {
-  setToken(localStorage.getItem("token"));
-}, []);
+// useEffect(() => {
+//   setToken(localStorage.getItem("token"));
+// }, []);
 
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const [activeCategory, setActiveCategory] = useState("stocks");
-  // const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
     const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
 
@@ -100,6 +107,10 @@ useEffect(() => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* ⭐ Always on top of everything */}
+    {/* <div className="fixed top-0 left-0 w-full z-[60]">
+      <MutualFundCarousel />
+    </div> */}
       {/* ✅ Fixed Header */}
       {/* ✅ Large screens (always show OldHeader) */}
       <div className="hidden md:block sticky top-0 left-0 w-full z-50">
@@ -112,10 +123,10 @@ useEffect(() => {
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-white overflow-x-auto">
+      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-white overflow-hidden">
         <Routes>
   {/* Protected routes */}
-  <Route element={<ProtectRoute  />}>
+  <Route element={<ProtectRoute user={token} />}>
     
     {/* Stocks */}
     <Route path="/user/stocks" element={<Dashboard />}>
@@ -126,6 +137,7 @@ useEffect(() => {
       <Route path="orders" element={<Orders />} />
       <Route path="watchlist" element={<Watchlist />} />
     </Route>
+    <Route path="/stocks/:name" element={<StockDetails />} />
 
     {/* MutualFund */}
     <Route path="/user/mutual_fund" element={<MFDashboard />}>
@@ -195,7 +207,10 @@ useEffect(() => {
       <Footer />
 
       <div className='lg:hidden'>
-                <BottomHeader activeCategory={activeCategory} setActiveCategory={setActiveCategory}  />
+        {
+          
+          token && <BottomHeader activeCategory={activeCategory} setActiveCategory={setActiveCategory}  />
+        }
             </div>
 
       <ToastContainer

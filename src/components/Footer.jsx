@@ -11,7 +11,7 @@ import logo from "../assets/logo.png"; // update path as needed
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-10 py-8 text-blue-950 hidden lg:block">
+    <footer className="bg-white border-t border-gray-200 mt-10 py-8 text-blue-950 hidden lg:block overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 
         {/* Left - Logo + Download Section */}
