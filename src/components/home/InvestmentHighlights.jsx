@@ -29,24 +29,35 @@ const InvestmentHighlights = () => {
       </motion.h2>
 
       {/* Marquee Row 1 */}
-      <motion.div
-        initial={{ x: "100%" }}
-        animate={{ x: "-100%" }}
-        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-        className="flex gap-10 whitespace-nowrap text-lg font-medium text-red-600 mb-8"
+<div className="overflow-hidden w-full sm:w-[80vw] mx-auto mb-8 
+                bg-linear-to-r from-blue-50 to-blue-100 
+                py-4 px-6 rounded-xl shadow-inner">
+
+  <motion.div
+    // initial={{ x: "100%" }}
+    animate={{ x: "-100%" }}
+    transition={{ repeat: Infinity, duration: 45, ease: "linear" }}
+    className="flex gap-10 whitespace-nowrap text-lg font-semibold"
+  >
+    {investmentTerms.map((term, i) => (
+      <span
+        key={i}
+        className="px-6 py-3 bg-white rounded-full shadow 
+                   text-blue-700 font-semibold 
+                   hover:bg-blue-100 transition"
       >
-        {investmentTerms.map((term, i) => (
-          <span
-            key={i}
-            className="px-6 py-2 bg-white rounded-full shadow hover:shadow-md hover:bg-sky-100 transition"
-          >
-            {term}
-          </span>
-        ))}
-      </motion.div>
+        {term}
+      </span>
+    ))}
+  </motion.div>
+
+</div>
+
+
+
 
       {/* Marquee Row 2 (Opposite direction) */}
-      <motion.div
+      {/* <motion.div
         initial={{ x: "-100%" }}
         animate={{ x: "100%" }}
         transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
@@ -60,7 +71,7 @@ const InvestmentHighlights = () => {
             {term}
           </span>
         ))}
-      </motion.div>
+      </motion.div> */}
 
       {/* Description */}
       <motion.p

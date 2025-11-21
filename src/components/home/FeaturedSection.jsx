@@ -78,33 +78,36 @@ const FeaturedSection = () => {
       </div>
 
       {/* --- Moving Investment Keywords --- */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: false, amount: 0.3 }} // 👈 replay on scroll re-entry
-        className="mt-20 py-10 bg-linear-to-r from-sky-50 to-gray-50 rounded-2xl shadow-inner"
-      >
-        <h3 className="text-center text-2xl font-semibold text-blue-950 mb-6">
-          Explore Top Investment Options
-        </h3>
+     {/* <section className="mt-20 py-10 bg-gradient-to-r from-sky-50 to-gray-50 rounded-2xl shadow-inner">
+  <h3 className="text-center text-2xl font-semibold text-blue-950 mb-6">
+    Explore Top Investment Options
+  </h3>
 
-        <div className="relative w-full overflow-hidden">
-          <motion.div
-            key={Math.random()} // 👈 ensures rerun on render
-            initial={{ x: "100%" }}
-            animate={{ x: "-100%" }}
-            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-            className="whitespace-nowrap"
-          >
-            <p className="inline-block text-lg md:text-xl font-medium text-blue-950 tracking-wide">
-              💹 Bonds &nbsp; • &nbsp; SIPs &nbsp; • &nbsp; Stocks &nbsp; • &nbsp; Mutual Funds &nbsp; • &nbsp;
-              Fixed Deposits &nbsp; • &nbsp; ETFs &nbsp; • &nbsp; Equity &nbsp; • &nbsp; Gold Funds &nbsp; • &nbsp;
-              Index Funds &nbsp; • &nbsp; Real Estate Trusts &nbsp; • &nbsp; Retirement Plans &nbsp; • &nbsp; Hybrid Funds
-            </p>
-          </motion.div>
-        </div>
-      </motion.section>
+  <div className="flex flex-wrap justify-center gap-4 px-4">
+    {[
+      "Bonds",
+      "SIPs",
+      "Stocks",
+      "Mutual Funds",
+      "Fixed Deposits",
+      "ETFs",
+      "Equity",
+      "Gold Funds",
+      "Index Funds",
+      "REITs",
+      "Retirement Plans",
+      "Hybrid Funds",
+    ].map((item, index) => (
+      <span
+        key={index}
+        className="px-5 py-2 bg-white shadow-sm rounded-full text-blue-900 font-medium border hover:bg-blue-50 transition-all cursor-default"
+      >
+        {item}
+      </span>
+    ))}
+  </div>
+</section> */}
+
     </section>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaChartLine, FaBullseye, FaClock, FaPercent, FaMoneyBillWave } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Line, LineChart } from "recharts";
 
 const SipCalculator = () => {
@@ -9,6 +10,11 @@ const SipCalculator = () => {
   const [inflation, setInflation] = useState(3);
   const [result, setResult] = useState({});
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate()
+  const handleRedirect = ()=>{
+    navigate("/user/mutual_fund/")
+  }
 
   // 💹 SIP formula
   const calculateSIP = () => {
@@ -85,7 +91,7 @@ const SipCalculator = () => {
           <p>Estimated Growth: <strong>₹{result.estimatedGrowth?.toLocaleString()}</strong></p>
         </div>
 
-        <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition">
+        <button onClick={handleRedirect} className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition">
           💰 Invest Now
         </button>
       </div>

@@ -34,32 +34,87 @@ const faqs = [
   },
 ];
 
+const handleWhatsapp = () => {
+  const phone = "91XXXXXXXXXX"; // your number
+  const message = "Hello, I need some help regarding your app!";
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+  window.open(url, "_blank");
+};
+
+
 
 const FAQSection = () => {
   const [open, setOpen] = useState(null);
 
   return (
     <section className="py-16 px-6 bg-gray-50">
-      <h2 className="text-3xl font-semibold text-center text-blue-950 mb-8">
-        Frequently Asked Questions
-      </h2>
-      <div className="max-w-2xl mx-auto space-y-4">
-        {faqs.map((item, i) => (
-          <div key={i} className="bg-white rounded-xl shadow p-4 border border-gray-100">
-            <button
-              className="w-full flex justify-between items-center text-left text-blue-950 font-medium"
-              onClick={() => setOpen(open === i ? null : i)}
-            >
-              {item.question}
-              {open === i ? <FaChevronUp /> : <FaChevronDown />}
-            </button>
-            {open === i && (
-              <p className="text-gray-600 mt-2 border-t pt-2">{item.answer}</p>
-            )}
-          </div>
-        ))}
+
+  <h2 className="text-3xl font-semibold lg:pl-25 text-center lg:text-left text-blue-950 mb-12">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+    {/* LEFT — FAQ LIST */}
+    <div className="lg:col-span-2 space-y-4">
+      {faqs.map((item, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-xl shadow p-4 border border-gray-100"
+        >
+          <button
+            className="w-full flex justify-between items-center text-left text-blue-950 font-medium"
+            onClick={() => setOpen(open === i ? null : i)}
+          >
+            {item.question}
+            {open === i ? <FaChevronUp /> : <FaChevronDown />}
+          </button>
+
+          {open === i && (
+            <p className="text-gray-600 mt-2 border-t pt-2">
+              {item.answer}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+
+    {/* RIGHT — SIDE INFO CARD */}
+    <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100 h-fit">
+      <h3 className="text-xl font-semibold text-blue-950 mb-4">
+        Need More Help?
+      </h3>
+
+      <p className="text-gray-600 mb-4">
+        If your questions are not covered in the FAQ section, you can reach out
+        to our support team anytime.
+      </p>
+
+      <div className="space-y-3">
+        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
+          Contact Support
+        </button>
+        <button className="w-full bg-gray-200 hover:bg-gray-300 text-blue-950 py-2 rounded-lg font-medium">
+          Live Chat
+        </button>
+        <button onClick={handleWhatsapp} className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium">
+          WhatsApp Help
+        </button>
       </div>
-    </section>
+
+      <hr className="my-6" />
+
+      {/* <p className="text-gray-600 text-sm">Download our mobile app for easier support and tracking.</p>
+
+      <div className="flex gap-4 mt-4">
+        <div className="w-20 h-20 bg-gray-100 rounded-lg"></div>
+        <div className="w-20 h-20 bg-gray-100 rounded-lg"></div>
+      </div> */}
+    </div>
+  </div>
+</section>
+
   );
 };
 

@@ -47,6 +47,7 @@ import SIPs from "./pages/mutual_fund/SIPs";
 import FundDetails from "./pages/mutual_fund/FundDetails";
 import StockDetails from "./components/StockDetails";
 import MutualFundCarousel from "./carousel/MutualFundCarousel";
+import DraggableQRCodeCard from "./components/DraggableQRCodeCard";
 
 const queryClient = new QueryClient();
 
@@ -113,6 +114,7 @@ function App() {
     </div> */}
       {/* ✅ Fixed Header */}
       {/* ✅ Large screens (always show OldHeader) */}
+      <DraggableQRCodeCard value="https://example.com" size={100} />
       <div className="hidden md:block sticky top-0 left-0 w-full z-50">
         <OldHeader />
       </div>

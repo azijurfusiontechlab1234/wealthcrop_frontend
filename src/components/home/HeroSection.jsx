@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import invest from '../../assets/invest.svg'
+import invest from "../../assets/invest.svg";
+import { MdOutlinePlayCircle } from "react-icons/md";
 
 const HeroSection = () => {
   return (
@@ -9,8 +10,7 @@ const HeroSection = () => {
       {/* --- Top Hero Text --- */}
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Grow Your Wealth with{" "}
-          <span className="text-red-600">Wealthcrop</span>
+          Grow Your Wealth with <span className="text-red-600">Wealthcrop</span>
         </h1>
         <p className="text-lg text-blue-900 max-w-2xl mx-auto mb-8">
           Invest confidently with India’s most user-friendly mutual fund and
@@ -42,9 +42,7 @@ const HeroSection = () => {
           viewport={{ once: false, amount: 0.3 }}
           className="space-y-5"
         >
-          <h2 className="text-3xl font-bold text-blue-950">
-            What We Provide?
-          </h2>
+          <h2 className="text-3xl font-bold text-blue-950">What We Provide?</h2>
           <p className="text-lg text-blue-900 leading-relaxed">
             Wealthcrop helps you build financial freedom with curated mutual
             funds, smart insights, and expert-backed investment plans — designed
@@ -56,12 +54,25 @@ const HeroSection = () => {
             <li>Secure, SEBI-registered platform</li>
             <li>24×7 investor support</li>
           </ul>
-          <Link
-            to="/about"
-            className="inline-block bg-blue-950 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-900 transition"
-          >
-            Learn More
-          </Link>
+
+          <div className="flex gap-5">
+            <Link
+              to="/about"
+              className="inline-block bg-blue-950 text-white font-semibold px-8 py-3 rounded-lg shadow hover:bg-blue-900 transition"
+            >
+              Learn More
+            </Link>
+            <a
+  href="https://www.youtube.com"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+>
+  <MdOutlinePlayCircle size={24} />
+  Watch Video
+</a>
+
+          </div>
         </motion.div>
 
         {/* Right Section */}
@@ -73,7 +84,7 @@ const HeroSection = () => {
           className="flex justify-center"
         >
           <img
-          src={invest}
+            src={invest}
             alt="Investment growth illustration"
             className="w-96 md:w-96 rounded-2xl shadow-md hover:scale-105 transition-transform duration-500"
           />

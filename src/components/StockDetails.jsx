@@ -308,6 +308,7 @@ const StockDetails = () => {
 
 {/* Financials Bar */}
   <div className="p-6 border rounded-xl bg-white shadow-sm w-full max-w-4xl mx-auto">
+    <h1>Financials</h1>
       {/* Tabs */}
       <div className="flex space-x-6 border-b pb-2">
         {["revenue", "profit", "networth"].map((tab) => (
