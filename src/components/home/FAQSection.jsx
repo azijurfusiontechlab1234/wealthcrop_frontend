@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const faqs = [
   {
@@ -34,7 +35,13 @@ const faqs = [
   },
 ];
 
-const handleWhatsapp = () => {
+
+
+
+const FAQSection = () => {
+  const [open, setOpen] = useState(null);
+
+  const handleWhatsapp = () => {
   const phone = "91XXXXXXXXXX"; // your number
   const message = "Hello, I need some help regarding your app!";
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -42,10 +49,11 @@ const handleWhatsapp = () => {
   window.open(url, "_blank");
 };
 
+const navigate = useNavigate()
+const handleRedirect = (url)=>{
+  navigate(url)
+}
 
-
-const FAQSection = () => {
-  const [open, setOpen] = useState(null);
 
   return (
     <section className="py-16 px-6 bg-gray-50">
@@ -92,10 +100,10 @@ const FAQSection = () => {
       </p>
 
       <div className="space-y-3">
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
+        <button onClick={()=>handleRedirect("/support")} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
           Contact Support
         </button>
-        <button className="w-full bg-gray-200 hover:bg-gray-300 text-blue-950 py-2 rounded-lg font-medium">
+        <button onClick={()=>handleRedirect("/support")} className="w-full bg-gray-200 hover:bg-gray-300 text-blue-950 py-2 rounded-lg font-medium">
           Live Chat
         </button>
         <button onClick={handleWhatsapp} className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium">

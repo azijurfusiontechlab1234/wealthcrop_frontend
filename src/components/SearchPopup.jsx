@@ -1,6 +1,23 @@
+import { useRef, useEffect } from "react";
 import { Search, ArrowLeft } from "lucide-react";
 
 export default function SearchPopup({ onClose }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
     <div
       className="
@@ -12,6 +29,7 @@ export default function SearchPopup({ onClose }) {
     >
       {/* Popup box */}
       <div
+        ref={containerRef}
         className="
           bg-white shadow-lg overflow-y-auto
           transition-all duration-300
@@ -20,7 +38,7 @@ export default function SearchPopup({ onClose }) {
           sm:animate-slideUp
         "
       >
-        {/* 🔹 Top Row: Back + Search Input */}
+        {/* Top Row: Back + Search Input */}
         <div className="flex items-center gap-3 mb-5 sticky top-0 bg-white py-3 px-5 border-b border-gray-100 z-10">
           <button
             onClick={onClose}
@@ -40,7 +58,7 @@ export default function SearchPopup({ onClose }) {
           </div>
         </div>
 
-        {/* 🔹 Tags */}
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-6 px-5">
           {["All", "Stocks", "F&O", "MF", "ETF", "FAQs"].map((tag) => (
             <button
@@ -52,7 +70,7 @@ export default function SearchPopup({ onClose }) {
           ))}
         </div>
 
-        {/* 🔹 Trending Searches */}
+        {/* Trending Searches */}
         <div className="px-5">
           <h3 className="text-xs font-semibold text-gray-500 mb-2">
             Trending searches
@@ -77,7 +95,7 @@ export default function SearchPopup({ onClose }) {
           </div>
         </div>
 
-        {/* 🔹 Try Searching For */}
+        {/* Try Searching For */}
         <div className="px-5 mb-10">
           <h3 className="text-xs font-semibold text-gray-500 mb-2">
             Try searching for

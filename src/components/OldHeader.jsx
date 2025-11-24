@@ -110,8 +110,15 @@ export default function OldHeader() {
                 >
                   F&O
                 </Link>
+                <Link
+                  to="/nfo"
+                  className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
+                >
+                  NFO
+                </Link>
               </div>
             </div>
+
 
             {/* Tools */}
             <div className="relative group">

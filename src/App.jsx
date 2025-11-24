@@ -48,6 +48,7 @@ import FundDetails from "./pages/mutual_fund/FundDetails";
 import StockDetails from "./components/StockDetails";
 import MutualFundCarousel from "./carousel/MutualFundCarousel";
 import DraggableQRCodeCard from "./components/DraggableQRCodeCard";
+import NFO from "./pages/NFO";
 
 const queryClient = new QueryClient();
 
@@ -139,7 +140,7 @@ function App() {
       <Route path="orders" element={<Orders />} />
       <Route path="watchlist" element={<Watchlist />} />
     </Route>
-    <Route path="/stocks/:name" element={<StockDetails />} />
+    
 
     {/* MutualFund */}
     <Route path="/user/mutual_fund" element={<MFDashboard />}>
@@ -149,7 +150,7 @@ function App() {
       <Route path="sip" element={<SIPs />} />
       <Route path="watchlist" element={<WatchlistMF />} />
     </Route>
-     <Route path="/mutual_fund/:name" element={<FundDetails />} />
+    
 
     {/* F&O and Mutual Fund */}
     <Route path="/user/f&o" element={<FODashboard />} />
@@ -199,8 +200,11 @@ function App() {
     element={token ? <Navigate to="/user/stocks" /> : <Home />}
   />
 
-  <Route path="/login" element={<Login />} />
-  <Route path="/signup" element={<Register />} />
+   <Route path="/login" element={<Login />} />
+   <Route path="/signup" element={<Register />} />
+   <Route path="/nfo" element={<NFO />} />
+   <Route path="/mutual_fund/:name" element={<FundDetails />} />
+   <Route path="/stocks/:name" element={<StockDetails />} />
 
 </Routes>
 
