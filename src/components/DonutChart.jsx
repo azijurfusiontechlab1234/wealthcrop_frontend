@@ -11,7 +11,7 @@ const DonutChart = ({data, hoverIndex, setHoverIndex}) => {
 
   return (
     <div className="relative w-88 h-58 flex items-center justify-center">
-        <svg width="200" height="200" viewBox="0 0 200 200">
+        <svg width="180" height="170" viewBox="0 0 200 200">
           <g transform="rotate(-90 100 100)">
             {data.map((item, index) => {
               const angle = (item.value / total) * 360;

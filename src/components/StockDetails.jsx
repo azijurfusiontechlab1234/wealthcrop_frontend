@@ -15,6 +15,7 @@ import {
 import { FiShare2 } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
 import { MdOutlineInfo } from "react-icons/md";
+import logo from "../assets/mutualFund/sbi.webp"
 
 /**
  * NOTE: use your uploaded image path here (developer provided).
@@ -199,14 +200,14 @@ const [activeInfo, setActiveInfo] = useState(null);
   const maxQty = Math.max(...bids.map((b) => b.qty), ...asks.map((a) => a.qty));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-10 px-4">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* HEADER */}
         <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <img src={LOGO_PATH} alt="logo" className="w-16 h-16 rounded-xl object-cover shadow" />
+                <img src={logo} alt="logo" className="w-16 h-16 rounded-xl object-cover shadow" />
                 <div>
                   <h1 className="text-2xl font-bold text-slate-900">{baseStock.name}</h1>
                   <div className="flex items-center gap-3 mt-1">
@@ -280,7 +281,7 @@ const [activeInfo, setActiveInfo] = useState(null);
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-sm text-slate-500">Timeframe:</span>
-                {["7D","30D","6M","1Y"].map((tf) => (
+                {["7D","30D","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
                   <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-3 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
                 ))}
               </div>
@@ -340,8 +341,8 @@ const [activeInfo, setActiveInfo] = useState(null);
               <h3 className="text-lg font-semibold text-slate-900">Financials</h3>
               <div className="flex items-center gap-3">
                 <div className="flex gap-2">
-                  <button onClick={() => setFinPeriod("quarterly")} className={`px-3 py-1 rounded-md ${finPeriod==="quarterly" ? "bg-slate-900 text-white" : "bg-white border border-slate-200"}`}>Quarterly</button>
-                  <button onClick={() => setFinPeriod("yearly")} className={`px-3 py-1 rounded-md ${finPeriod==="yearly" ? "bg-slate-900 text-white" : "bg-white border border-slate-200"}`}>Yearly</button>
+                  <button onClick={() => setFinPeriod("quarterly")} className={`px-3 py-1 rounded-md ${finPeriod==="quarterly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"}`}>Quarterly</button>
+                  <button onClick={() => setFinPeriod("yearly")} className={`px-3 py-1 rounded-md ${finPeriod==="yearly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"}`}>Yearly</button>
                 </div>
 
                 <div className="flex gap-2">
