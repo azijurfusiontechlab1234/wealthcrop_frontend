@@ -65,9 +65,9 @@ export default function OldHeader() {
     <>
       <nav className="w-full bg-white shadow-sm border-b border-gray-100 fixed top-0 left-0 z-50">
         {/* ⭐ Always on top of everything */}
-  
-      <MutualFundCarousel />
-  
+
+        <MutualFundCarousel />
+
         <div className="flex justify-between items-center px-6 md:px-12 pb-1">
           {/* Logo */}
           <div className="flex items-center space-x-2">
@@ -119,7 +119,6 @@ export default function OldHeader() {
               </div>
             </div>
 
-
             {/* Tools */}
             <div className="relative group">
               <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
@@ -137,7 +136,7 @@ export default function OldHeader() {
                   Mutual Fund Calculator
                 </Link>
                 <Link
-                  to="/stocks"
+                  to="/fd_calculator"
                   className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
                 >
                   Fixed Deposit Calculator
@@ -205,96 +204,102 @@ export default function OldHeader() {
                   <HiBell className="text-2xl" />
                   <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                 </button>
-                
-              {/* <HiBell className="text-2xl" /> */}
-              <div className="relative group">
-      {/* Profile Icon Button */}
-      <button className="text-blue-900 hover:text-blue-700 transition cursor-pointer mt-1.5">
-        <User className="text-3xl" />
-      </button>
 
-      {/* Dropdown */}
-        <div
-      className="absolute -right-2.5 top-full mt-1 w-80 bg-white rounded-xl shadow-xl border border-gray-100
+                {/* <HiBell className="text-2xl" /> */}
+                <div className="relative group">
+                  {/* Profile Icon Button */}
+                  <button className="text-blue-900 hover:text-blue-700 transition cursor-pointer mt-1.5">
+                    <User className="text-3xl" />
+                  </button>
+
+                  {/* Dropdown */}
+                  <div
+                    className="absolute -right-2.5 top-full mt-1 w-80 bg-white rounded-xl shadow-xl border border-gray-100
       opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
       transition-all duration-300 ease-out z-50"
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
-        <div>
-          <h3 className="font-semibold text-gray-900">Fusion Techlab</h3>
-          <p className="text-sm text-gray-500">fusionbusiness001@gmail.com</p>
-        </div>
-        <Settings
-          onClick={handleSetting}
-          size={18}
-          className="text-gray-500 mt-1 cursor-pointer"
-        />
-      </div>
+                  >
+                    {/* Header */}
+                    <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          Fusion Techlab
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          fusionbusiness001@gmail.com
+                        </p>
+                      </div>
+                      <Settings
+                        onClick={handleSetting}
+                        size={18}
+                        className="text-gray-500 mt-1 cursor-pointer"
+                      />
+                    </div>
 
-      {/* 🔹 Balance (clickable) */}
-      <Link
-        to="/user/balance"
-        className="flex items-center justify-between px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition"
-      >
-        <div className="flex items-center gap-2">
-          <IndianRupee size={18} className="text-gray-600" />
-          <div>
-            <p className="text-gray-900 font-medium">₹0.00</p>
-            <p className="text-xs text-gray-500">Stocks, F&O balance</p>
-          </div>
-        </div>
-        <ChevronRight size={18} className="text-gray-400" />
-      </Link>
+                    {/* 🔹 Balance (clickable) */}
+                    <Link
+                      to="/user/balance"
+                      className="flex items-center justify-between px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition"
+                    >
+                      <div className="flex items-center gap-2">
+                        <IndianRupee size={18} className="text-gray-600" />
+                        <div>
+                          <p className="text-gray-900 font-medium">₹0.00</p>
+                          <p className="text-xs text-gray-500">
+                            Stocks, F&O balance
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight size={18} className="text-gray-400" />
+                    </Link>
 
-      {/* 🔹 Links */}
-      <div className="py-2 space-y-1">
-        <Link
-          to="/user/order/stocks"
-          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
-        >
-          <div className="flex items-center gap-3">
-            <FileText size={18} />
-            <span>All Orders</span>
-          </div>
-          <ChevronRight size={18} className="text-gray-400" />
-        </Link>
+                    {/* 🔹 Links */}
+                    <div className="py-2 space-y-1">
+                      <Link
+                        to="/user/order/stocks"
+                        className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText size={18} />
+                          <span>All Orders</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400" />
+                      </Link>
 
-        <Link
-          to="/support"
-          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
-        >
-          <div className="flex items-center gap-3">
-            <Headphones size={18} />
-            <span>24 × 7 Customer Support</span>
-          </div>
-          <ChevronRight size={18} className="text-gray-400" />
-        </Link>
+                      <Link
+                        to="/support"
+                        className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Headphones size={18} />
+                          <span>24 × 7 Customer Support</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400" />
+                      </Link>
 
-        <Link
-          to="/reports"
-          className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
-        >
-          <div className="flex items-center gap-3">
-            <BarChart3 size={18} />
-            <span>Reports</span>
-          </div>
-          <ChevronRight size={18} className="text-gray-400" />
-        </Link>
-      </div>
+                      <Link
+                        to="/reports"
+                        className="flex items-center justify-between px-4 py-2 text-gray-800 hover:bg-gray-50 transition"
+                      >
+                        <div className="flex items-center gap-3">
+                          <BarChart3 size={18} />
+                          <span>Reports</span>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-400" />
+                      </Link>
+                    </div>
 
-      {/* 🔹 Footer */}
-      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-blue-700 font-medium border-b border-dashed"
-        >
-          <LogOut size={18} />
-          <span>Log out</span>
-        </button>
-      </div>
-    </div>
-    </div>
+                    {/* 🔹 Footer */}
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-blue-700 font-medium border-b border-dashed"
+                      >
+                        <LogOut size={18} />
+                        <span>Log out</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </>
             ) : (
               <Link

@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { FaChartLine, FaBullseye, FaClock, FaPercent, FaMoneyBillWave } from "react-icons/fa";
+import {
+  FaChartLine,
+  FaBullseye,
+  FaClock,
+  FaPercent,
+  FaMoneyBillWave,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Line, LineChart } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Line,
+} from "recharts";
 
 const SipCalculator = () => {
   const [goalAmount, setGoalAmount] = useState(1000000);
@@ -11,16 +26,16 @@ const SipCalculator = () => {
   const [result, setResult] = useState({});
   const [data, setData] = useState([]);
 
-  const navigate = useNavigate()
-  const handleRedirect = ()=>{
-    navigate("/user/mutual_fund/")
-  }
+  const navigate = useNavigate();
+   const handleRedirect = (url) => {
+     navigate(url);
+   };
 
-  // 💹 SIP formula
+  // SIP Calculation
   const calculateSIP = () => {
     const n = years * 12;
     const r = cagr / 100 / 12;
-    const monthlySIP = (goalAmount * (r)) / (Math.pow(1 + r, n) - 1);
+    const monthlySIP = (goalAmount * r) / (Math.pow(1 + r, n) - 1);
 
     let corpus = 0;
     let principal = 0;
@@ -50,119 +65,202 @@ const SipCalculator = () => {
   useEffect(() => {
     calculateSIP();
   }, [goalAmount, years, cagr, inflation]);
+  
 
   return (
-    <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8 mt-10 grid md:grid-cols-2 gap-8">
-      {/* Left side */}
-      <div>
-        <h2 className="text-xl font-semibold text-blue-950 flex items-center gap-2 mb-4">
-          <FaChartLine className="text-red-600" />
-          SIP Crorepati Goal Planner
-        </h2>
+    <div className="w-full bg-gradient-to-r from-blue-100 to-green-100 pb-10">
+      {/* 🔷 FULL WIDTH HEADER */}
+      <div className="text-center py-12 px-6">
+        <h1 className="text-4xl font-extrabold text-blue-800 drop-shadow">
+          SIP Calculator – Grow Your Wealth Smartly
+        </h1>
 
-        <div className="bg-gray-50 rounded-2xl p-4 mb-6 space-y-2 text-blue-950">
-          <p className="flex items-center gap-2">
-            <FaBullseye className="text-red-600" /> Goal Amount:{" "}
-            <strong>₹{goalAmount.toLocaleString()}</strong>
-          </p>
-          <p className="flex items-center gap-2">
-            <FaClock className="text-blue-950" /> Time Horizon:{" "}
-            <strong>{years} Years</strong>
-          </p>
-          <p className="flex items-center gap-2">
-            <FaPercent className="text-red-600" /> Expected CAGR:{" "}
-            <strong>{cagr}%</strong>
-          </p>
-          <p className="flex items-center gap-2">
-            <FaMoneyBillWave className="text-green-600" /> Inflation Rate:{" "}
-            <strong>{inflation}%</strong>
-          </p>
-        </div>
-
-        <div className="bg-green-50 rounded-2xl border-l-4 border-green-500 p-4 mb-6">
-          <p>
-            To reach <strong>₹{result.futureValue?.toLocaleString()}</strong> in{" "}
-            <strong>{years} years</strong>,
-          </p>
-          <p>
-            Invest <strong>₹{result.monthlySIP?.toLocaleString()}</strong> monthly.
-          </p>
-          <p>Total Invested: <strong>₹{result.totalInvested?.toLocaleString()}</strong></p>
-          <p>Estimated Growth: <strong>₹{result.estimatedGrowth?.toLocaleString()}</strong></p>
-        </div>
-
-        <button onClick={handleRedirect} className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition">
-          💰 Invest Now
-        </button>
+        <p className="max-w-3xl mx-auto mt-4 text-gray-700 text-lg leading-relaxed">
+          Use this SIP Calculator to estimate monthly investments required to
+          reach your financial goal. Understand expected returns, total invested
+          amount, and long-term wealth creation through Systematic Investment
+          Plans.
+        </p>
       </div>
 
-      {/* Right side */}
-      <div className="space-y-4">
-        {/* Sliders */}
+      {/* 🔷 MAIN CALCULATOR CONTAINER */}
+      <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-lg p-8 mt-6 grid md:grid-cols-2 gap-8">
+        {/* LEFT SIDE */}
         <div>
-          <label className="text-sm font-medium text-blue-950">Goal Amount (₹)</label>
-          <input
-            type="range"
-            min="500000"
-            max="20000000"
-            step="50000"
-            value={goalAmount}
-            onChange={(e) => setGoalAmount(Number(e.target.value))}
-            className="w-full accent-blue-700"
-          />
+          <h2 className="text-xl font-semibold text-blue-950 flex items-center gap-2 mb-4">
+            <FaChartLine className="text-red-600" /> SIP Crorepati Goal Planner
+          </h2>
+
+          <div className="bg-gray-50 rounded-2xl p-4 mb-6 space-y-2 text-blue-950">
+            <p className="flex items-center gap-2">
+              <FaBullseye className="text-red-600" /> Goal Amount:{" "}
+              <strong>₹{goalAmount.toLocaleString()}</strong>
+            </p>
+            <p className="flex items-center gap-2">
+              <FaClock className="text-blue-950" /> Time Horizon:{" "}
+              <strong>{years} Years</strong>
+            </p>
+            <p className="flex items-center gap-2">
+              <FaPercent className="text-red-600" /> Expected CAGR:{" "}
+              <strong>{cagr}%</strong>
+            </p>
+            <p className="flex items-center gap-2">
+              <FaMoneyBillWave className="text-green-600" /> Inflation Rate:{" "}
+              <strong>{inflation}%</strong>
+            </p>
+          </div>
+
+          {/* Result Info */}
+          <div className="bg-green-50 rounded-2xl border-l-4 border-green-500 p-4 mb-6">
+            <p>
+              To reach <strong>₹{result.futureValue?.toLocaleString()}</strong>{" "}
+              in <strong>{years} years</strong>,
+            </p>
+            <p>
+              Invest <strong>₹{result.monthlySIP?.toLocaleString()}</strong>{" "}
+              monthly.
+            </p>
+            <p>
+              Total Invested:{" "}
+              <strong>₹{result.totalInvested?.toLocaleString()}</strong>
+            </p>
+            <p>
+              Estimated Growth:{" "}
+              <strong>₹{result.estimatedGrowth?.toLocaleString()}</strong>
+            </p>
+          </div>
+
+          <button
+            onClick={handleRedirect}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition"
+          >
+            💰 Invest Now
+          </button>
         </div>
 
-        <div>
-          <label className="text-sm font-medium text-blue-950">Time Horizon (Years)</label>
-          <input
-            type="range"
-            min="1"
-            max="30"
-            value={years}
-            onChange={(e) => setYears(Number(e.target.value))}
-            className="w-full accent-blue-700"
-          />
-        </div>
+        {/* RIGHT SIDE */}
+        <div className="space-y-4">
+          {/* Sliders */}
+          <div>
+            <label className="text-sm font-medium text-blue-950">
+              Goal Amount (₹)
+            </label>
+            <input
+              type="range"
+              min="500000"
+              max="20000000"
+              step="50000"
+              value={goalAmount}
+              onChange={(e) => setGoalAmount(Number(e.target.value))}
+              className="w-full accent-blue-700"
+            />
+          </div>
 
-        <div>
-          <label className="text-sm font-medium text-blue-950">Expected CAGR (%)</label>
-          <input
-            type="range"
-            min="5"
-            max="20"
-            step="0.5"
-            value={cagr}
-            onChange={(e) => setCagr(Number(e.target.value))}
-            className="w-full accent-blue-700"
-          />
-        </div>
+          <div>
+            <label className="text-sm font-medium text-blue-950">
+              Time Horizon (Years)
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value={years}
+              onChange={(e) => setYears(Number(e.target.value))}
+              className="w-full accent-blue-700"
+            />
+          </div>
 
-        <div>
-          <label className="text-sm font-medium text-blue-950">Inflation Rate (%)</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            step="0.5"
-            value={inflation}
-            onChange={(e) => setInflation(Number(e.target.value))}
-            className="w-full accent-blue-700"
-          />
-        </div>
+          <div>
+            <label className="text-sm font-medium text-blue-950">
+              Expected CAGR (%)
+            </label>
+            <input
+              type="range"
+              min="5"
+              max="20"
+              step="0.5"
+              value={cagr}
+              onChange={(e) => setCagr(Number(e.target.value))}
+              className="w-full accent-blue-700"
+            />
+          </div>
 
-        {/* Chart */}
-        <div className="mt-4 bg-gray-50 rounded-2xl p-4 shadow-inner">
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={data}>
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip formatter={(val) => `₹${val.toLocaleString()}`} />
-              <Legend />
-              <Bar dataKey="principal" fill="#3b82f6" name="Principal Invested (₹)" />
-              <Bar dataKey="total" fill="#86efac" name="Total Corpus (₹)" />
-              <Line type="monotone" dataKey="total" stroke="#16a34a" strokeWidth={2} dot={false} />
-            </BarChart>
-          </ResponsiveContainer>
+          <div>
+            <label className="text-sm font-medium text-blue-950">
+              Inflation Rate (%)
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              step="0.5"
+              value={inflation}
+              onChange={(e) => setInflation(Number(e.target.value))}
+              className="w-full accent-blue-700"
+            />
+          </div>
+
+          {/* Chart */}
+          <div className="mt-4 bg-gray-50 rounded-2xl p-4 shadow-inner">
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={data}>
+                <XAxis dataKey="year" />
+                <YAxis />
+                <Tooltip formatter={(val) => `₹${val.toLocaleString()}`} />
+                <Legend />
+                <Bar
+                  dataKey="principal"
+                  fill="#3b82f6"
+                  name="Principal Invested (₹)"
+                />
+                <Bar dataKey="total" fill="#86efac" name="Total Corpus (₹)" />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#16a34a"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* 🔷 RELATED CALCULATORS SECTION */}
+      <div className="max-w-5xl mx-auto mt-10 p-6">
+        <h2 className="text-xl font-bold text-blue-900 mb-4">
+          Related Calculators
+        </h2>
+
+        <div className="flex gap-4 flex-wrap">
+          <button
+            onClick={() => handleRedirect("/sip_cal")}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow"
+          >
+            SIP Return Calculator
+          </button>
+
+          <button
+            onClick={() => handleRedirect("/sip_cal")}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
+          >
+            Lumpsum Calculator
+          </button>
+
+          <button
+            onClick={() => handleRedirect("/fd_calculator")}
+            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow"
+          >
+            FD Calculator
+          </button>
+
+          <button
+            onClick={() => handleRedirect("/sip_cal")}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"
+          >
+            NPS Calculator
+          </button>
         </div>
       </div>
     </div>
