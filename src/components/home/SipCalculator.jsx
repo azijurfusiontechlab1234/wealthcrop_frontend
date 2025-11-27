@@ -26,12 +26,14 @@ const SipCalculator = () => {
   const [result, setResult] = useState({});
   const [data, setData] = useState([]);
 
-  const navigate = useNavigate();
-   const handleRedirect = (url) => {
-     navigate(url);
-   };
+  const [openFAQ, setOpenFAQ] = useState(null);
 
-  // SIP Calculation
+  const navigate = useNavigate();
+  const handleRedirect = (url) => {
+    navigate(url);
+  };
+
+  // 🔷 SIP Calculation Formula
   const calculateSIP = () => {
     const n = years * 12;
     const r = cagr / 100 / 12;
@@ -65,11 +67,38 @@ const SipCalculator = () => {
   useEffect(() => {
     calculateSIP();
   }, [goalAmount, years, cagr, inflation]);
-  
+
+  // 🔶 FAQs Data
+  const faqs = [
+    {
+      q: "What is SIP?",
+      a: "SIP (Systematic Investment Plan) is a disciplined investment method to invest in mutual funds at regular intervals like monthly or weekly.",
+    },
+    {
+      q: "Is SIP better than Lump Sum Investment?",
+      a: "SIP is suitable for regular income earners and reduces market timing risk, whereas lump sum is preferred when you have large capital ready to invest.",
+    },
+    {
+      q: "What is the minimum amount to start SIP?",
+      a: "You can start SIP from as low as ₹100 per month depending on the mutual fund scheme.",
+    },
+    {
+      q: "Is SIP safe?",
+      a: "SIP invests in mutual funds which are market-linked. Risk reduces over long term due to rupee cost averaging.",
+    },
+    {
+      q: "Can I pause or stop SIP anytime?",
+      a: "Yes, SIP can be paused or stopped anytime without penalties.",
+    },
+    {
+      q: "Are SIP returns guaranteed?",
+      a: "No. SIP returns depend on market performance. However, long-term investments tend to give better returns historically.",
+    },
+  ];
 
   return (
     <div className="w-full bg-gradient-to-r from-blue-100 to-green-100 pb-10">
-      {/* 🔷 FULL WIDTH HEADER */}
+      {/* 🔷 HEADER */}
       <div className="text-center py-12 px-6">
         <h1 className="text-4xl font-extrabold text-blue-800 drop-shadow">
           SIP Calculator – Grow Your Wealth Smartly
@@ -77,13 +106,12 @@ const SipCalculator = () => {
 
         <p className="max-w-3xl mx-auto mt-4 text-gray-700 text-lg leading-relaxed">
           Use this SIP Calculator to estimate monthly investments required to
-          reach your financial goal. Understand expected returns, total invested
-          amount, and long-term wealth creation through Systematic Investment
-          Plans.
+          reach your financial goal. Understand expected returns, invested
+          amount, and long-term wealth creation through SIPs.
         </p>
       </div>
 
-      {/* 🔷 MAIN CALCULATOR CONTAINER */}
+      {/* 🔷 MAIN BOX */}
       <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-lg p-8 mt-6 grid md:grid-cols-2 gap-8">
         {/* LEFT SIDE */}
         <div>
@@ -110,7 +138,7 @@ const SipCalculator = () => {
             </p>
           </div>
 
-          {/* Result Info */}
+          {/* Result */}
           <div className="bg-green-50 rounded-2xl border-l-4 border-green-500 p-4 mb-6">
             <p>
               To reach <strong>₹{result.futureValue?.toLocaleString()}</strong>{" "}
@@ -131,7 +159,7 @@ const SipCalculator = () => {
           </div>
 
           <button
-            onClick={handleRedirect}
+            onClick={() => handleRedirect("/sip_cal")}
             className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition"
           >
             💰 Invest Now
@@ -208,11 +236,7 @@ const SipCalculator = () => {
                 <YAxis />
                 <Tooltip formatter={(val) => `₹${val.toLocaleString()}`} />
                 <Legend />
-                <Bar
-                  dataKey="principal"
-                  fill="#3b82f6"
-                  name="Principal Invested (₹)"
-                />
+                <Bar dataKey="principal" fill="#3b82f6" name="Principal (₹)" />
                 <Bar dataKey="total" fill="#86efac" name="Total Corpus (₹)" />
                 <Line
                   type="monotone"
@@ -227,7 +251,30 @@ const SipCalculator = () => {
         </div>
       </div>
 
-      {/* 🔷 RELATED CALCULATORS SECTION */}
+      {/* 🔷 FAQ SECTION */}
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-gradient-to-r from-blue-200 to-green-100">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Frequently Asked Questions (SIP)
+        </h2>
+
+        {faqs.map((item, index) => (
+          <div key={index} className="border-b py-3">
+            <button
+              onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+              className="w-full flex justify-between items-center text-left text-gray-700 font-medium"
+            >
+              {item.q}
+              <span>{openFAQ === index ? "−" : "+"}</span>
+            </button>
+
+            {openFAQ === index && (
+              <p className="mt-2 text-gray-600">{item.a}</p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* 🔷 RELATED LINKS */}
       <div className="max-w-5xl mx-auto mt-10 p-6">
         <h2 className="text-xl font-bold text-blue-900 mb-4">
           Related Calculators
@@ -240,21 +287,18 @@ const SipCalculator = () => {
           >
             SIP Return Calculator
           </button>
-
           <button
             onClick={() => handleRedirect("/sip_cal")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Lumpsum Calculator
           </button>
-
           <button
             onClick={() => handleRedirect("/fd_calculator")}
             className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow"
           >
             FD Calculator
           </button>
-
           <button
             onClick={() => handleRedirect("/sip_cal")}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"

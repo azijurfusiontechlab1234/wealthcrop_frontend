@@ -50,6 +50,7 @@ import MutualFundCarousel from "./carousel/MutualFundCarousel";
 import DraggableQRCodeCard from "./components/DraggableQRCodeCard";
 import NFO from "./pages/NFO";
 import FDCalculator from "./components/home/FDCalculator";
+import RetirementCalculator from "./components/home/RetirementCalculator";
 
 const queryClient = new QueryClient();
 
@@ -201,6 +202,7 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/sip_Cal" element={<SipCalculator />} />
           <Route path="/fd_calculator" element={<FDCalculator />} />
+          <Route path="/retirement_calculator" element={<RetirementCalculator />} />
           <Route path="/nfo" element={<NFO />} />
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />

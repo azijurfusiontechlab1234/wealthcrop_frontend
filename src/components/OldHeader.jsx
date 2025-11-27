@@ -142,7 +142,7 @@ export default function OldHeader() {
                   Fixed Deposit Calculator
                 </Link>
                 <Link
-                  to="/bonds"
+                  to="/retirement_calculator"
                   className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
                 >
                   Retirement Calculator

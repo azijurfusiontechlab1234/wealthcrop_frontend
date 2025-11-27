@@ -49,7 +49,7 @@ const FDCalculator = () => {
   return (
     <div className="min-h-screen bg-gray-50 bg-gradient-to-r from-blue-100 to-green-100">
       {/* 🔷 FIXED DEPOSIT CALCULATOR HEADER */}
-      <div className="bg-gradient-to-r from-blue-100 to-green-100 py-14 px-6 text-center">
+      <div className="bg-gradient-to-r from-blue-100 to-green-100 py-8 px-6 text-center">
         <h1 className="text-4xl font-extrabold text-blue-700 drop-shadow">
           Fixed Deposit Calculator
         </h1>
@@ -64,7 +64,7 @@ const FDCalculator = () => {
       </div>
 
       {/* 🔷 FD CALCULATOR MAIN BOX */}
-      <div className="flex justify-center items-center p-6">
+      <div className="flex justify-center items-center p-4">
         <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden grid md:grid-cols-2 border border-gray-200">
           {/* LEFT SIDE */}
           <div className="p-8 bg-gradient-to-br from-blue-50 to-white">
@@ -178,10 +178,10 @@ const FDCalculator = () => {
 
         <div className="flex gap-4 flex-wrap">
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/retirement_calculator")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
-            Compound Interest Calculator
+            Retirement Calculator
           </button>
 
           <button
