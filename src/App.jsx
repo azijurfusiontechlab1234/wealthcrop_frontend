@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -8,7 +14,7 @@ import Portfolio from "./pages/Portfolio";
 import Profile from "./pages/Profile";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import SipCalculator from "./components/home/SipCalculator";
+import SipCalculator from "./pages/calculators/SipCalculator";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
@@ -49,18 +55,23 @@ import StockDetails from "./components/StockDetails";
 import MutualFundCarousel from "./carousel/MutualFundCarousel";
 import DraggableQRCodeCard from "./components/DraggableQRCodeCard";
 import NFO from "./pages/NFO";
-import FDCalculator from "./components/home/FDCalculator";
-import RetirementCalculator from "./components/home/RetirementCalculator";
+import FDCalculator from "./pages/calculators/FDCalculator";
+import RetirementCalculator from "./pages/calculators/RetirementCalculator";
+import CalculatorsPage from "./pages/calculators/CalculatorsPage";
+import { calculatorRoutes } from "./utils/CalculatorRoutes";
+import ScrollToTopButton from "./utils/ScrollToTopButton";
+import IndicesDetails from "./pages/IndicesDetails";
+
 
 const queryClient = new QueryClient();
 
 function App() {
   // const [token, setToken] = useState(localStorage.getItem("token"));
-//   const [token, setToken] = useState(localStorage.getItem("token"));
+  //   const [token, setToken] = useState(localStorage.getItem("token"));
 
-// useEffect(() => {
-//   setToken(localStorage.getItem("token"));
-// }, []);
+  // useEffect(() => {
+  //   setToken(localStorage.getItem("token"));
+  // }, []);
 
   const { pathname } = useLocation();
 
@@ -71,7 +82,7 @@ function App() {
   const [activeCategory, setActiveCategory] = useState("stocks");
   const { token } = useSelector((state) => state.auth);
 
-    const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
+  const [isLg, setIsLg] = useState(window.innerWidth >= 1024);
 
   useEffect(() => {
     const handleResize = () => setIsLg(window.innerWidth >= 1024);
@@ -79,26 +90,24 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-//   useEffect(() => {
-//   if (window.innerWidth < 1024) {
-//     setActiveCategory("stocks"); // default
-//     navigate("/user/stocks/explore");
-//   }
-// }, []);
+  //   useEffect(() => {
+  //   if (window.innerWidth < 1024) {
+  //     setActiveCategory("stocks"); // default
+  //     navigate("/user/stocks/explore");
+  //   }
+  // }, []);
 
   const location = useLocation();
 
- useEffect(() => {
-  if (window.innerWidth < 1024) {
-    if (location.pathname === "/") {
-      navigate("/user/stocks/explore", { replace: true });
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      if (location.pathname === "/") {
+        navigate("/user/stocks/explore", { replace: true });
+      }
     }
-  }
-}, []);
-
-
+  }, []);
 
   // useEffect(() => {
   //   // Listen for token changes (manual refresh of state)
@@ -117,6 +126,7 @@ function App() {
     </div> */}
       {/* ✅ Fixed Header */}
       {/* ✅ Large screens (always show OldHeader) */}
+      <ScrollToTopButton/>
       <DraggableQRCodeCard value="https://example.com" size={100} />
       <div className="hidden md:block sticky top-0 left-0 w-full z-50">
         <OldHeader />
@@ -128,7 +138,7 @@ function App() {
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-10 min-h-[calc(100vh-200px)] bg-white overflow-hidden">
+      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-2 min-h-[calc(100vh-200px)] bg-white overflow-hidden">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>
@@ -200,12 +210,21 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
-          <Route path="/sip_Cal" element={<SipCalculator />} />
-          <Route path="/fd_calculator" element={<FDCalculator />} />
-          <Route path="/retirement_calculator" element={<RetirementCalculator />} />
           <Route path="/nfo" element={<NFO />} />
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />
+          <Route path="/indices/:name" element={<IndicesDetails />} />
+
+          {/* Calculators */}
+          <Route path="/calculators" element={<CalculatorsPage />} />
+
+          {calculatorRoutes.map((route, i) => (
+            <Route
+              key={i}
+              path={`/calculator/${route.path}`}
+              element={route.element}
+            />
+          ))}
         </Routes>
       </main>
 

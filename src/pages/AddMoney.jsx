@@ -31,7 +31,7 @@ const AddMoney = () => {
         </div>
 
         {/* 🔸 Right Side Form */}
-        <div className="w-full md:w-1/2 p-6 md:p-10">
+        <div className="w-full md:w-1/2 p-6 md:p-10st">
           <div className="text-center mb-6">
             <div className="flex justify-center items-center gap-2 mb-2">
               <Wallet size={26} className="text-green-600" />

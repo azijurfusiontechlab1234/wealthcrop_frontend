@@ -1,0 +1,26 @@
+import ApyCalculator from "../pages/calculators/ApyCalculator";
+import CagrCalculator from "../pages/calculators/CagrCalculator";
+import FDCalculator from "../pages/calculators/FDCalculator";
+import HraCalculator from "../pages/calculators/HraCalculator";
+import InflationCalculator from "../pages/calculators/InflationCalculator";
+import LumpsumCalculator from "../pages/calculators/LumpsumCalculator";
+import PpfCalculator from "../pages/calculators/PpfCalculator";
+import RetirementCalculator from "../pages/calculators/RetirementCalculator";
+import SipCalculator from "../pages/calculators/SipCalculator";
+import SwpCalculator from "../pages/calculators/SwpCalculator";
+import NPSCalculator from "../pages/calculators/NPSCalculator";
+
+
+export const calculatorRoutes = [
+  { path: "sip-calculator", element: <SipCalculator /> },
+  { path: "lumpsum-calculator", element: <LumpsumCalculator /> },
+  { path: "fd-calculator", element: <FDCalculator /> },
+  { path: "nps-calculator", element: <NPSCalculator /> },
+  { path: "retirement-calculator", element: <RetirementCalculator /> },
+  { path: "cagr-calculator", element: <CagrCalculator /> },
+  { path: "swp-calculator", element: <SwpCalculator /> },
+  { path: "ppf-calculator", element: <PpfCalculator /> },
+  { path: "apy-calculator", element: <ApyCalculator /> },
+  { path: "inflation-calculator", element: <InflationCalculator /> },
+  { path: "hra-calculator", element: <HraCalculator /> },
+];

@@ -31,6 +31,30 @@ export default function OldHeader() {
   const location = useLocation();
   const navigate = useNavigate()
 
+  // To Scroll open
+const [isScroll, setIsScroll] = useState(false);
+const [lastScroll, setLastScroll] = useState(0);
+
+useEffect(() => {
+  const handleScroll = () => {
+    const currentScroll = window.scrollY;
+
+    if (currentScroll > lastScroll && currentScroll > 50) {
+      // scrolling DOWN → hide header
+      setIsScroll(true);
+    } else {
+      // scrolling UP → show header
+      setIsScroll(false);
+    }
+
+    setLastScroll(currentScroll);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [lastScroll]);
+
+
 
   // ✅ Close mobile menu on route change
   useEffect(() => {
@@ -63,7 +87,8 @@ export default function OldHeader() {
 
   return (
     <>
-      <nav className="w-full bg-white shadow-sm border-b border-gray-100 fixed top-0 left-0 z-50">
+      <nav className={`w-full bg-white shadow-sm border-b border-gray-100 fixed top-0 left-0 z-50 transition-all duration-300
+       ${isScroll ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100" }`}>
         {/* ⭐ Always on top of everything */}
 
         <MutualFundCarousel />
@@ -136,19 +161,19 @@ export default function OldHeader() {
                   Mutual Fund Calculator
                 </Link>
                 <Link
-                  to="/fd_calculator"
+                  to="/calculator/fd-calculator"
                   className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
                 >
                   Fixed Deposit Calculator
                 </Link>
                 <Link
-                  to="/retirement_calculator"
+                  to="/calculator/retirement-calculator"
                   className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
                 >
                   Retirement Calculator
                 </Link>
                 <Link
-                  to="/sip_Cal"
+                  to="/calculator/sip-calculator"
                   className="block px-4 py-2 text-blue-900 hover:bg-blue-50"
                 >
                   SIP Calculator

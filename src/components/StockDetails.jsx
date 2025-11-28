@@ -16,6 +16,7 @@ import { FiShare2 } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
 import { MdOutlineInfo } from "react-icons/md";
 import logo from "../assets/mutualFund/sbi.webp"
+import { useParams } from "react-router-dom";
 
 /**
  * NOTE: use your uploaded image path here (developer provided).
@@ -26,6 +27,7 @@ const LOGO_PATH = "/mnt/data/489847be-2715-4255-af96-6c64dad8bb92.png";
 
 export default function StockDetailsPremiumFull() {
   // ---------------- MOCK STOCK DATA ----------------
+  const {name} = useParams()
   const baseStock = {
     name: "AetherTech Solutions Ltd.",
     symbol: "AETHER",
@@ -209,7 +211,7 @@ const [activeInfo, setActiveInfo] = useState(null);
               <div className="flex items-center gap-4">
                 <img src={logo} alt="logo" className="w-16 h-16 rounded-xl object-cover shadow" />
                 <div>
-                  <h1 className="text-2xl font-bold text-slate-900">{baseStock.name}</h1>
+                  <h1 className="text-2xl font-bold text-slate-900 capitalize">{name}</h1>
                   <div className="flex items-center gap-3 mt-1">
                     <span className="text-sm text-slate-500">{baseStock.symbol}</span>
                     <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">Technology</span>

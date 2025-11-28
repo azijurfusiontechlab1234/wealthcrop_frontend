@@ -47,9 +47,9 @@ const FDCalculator = () => {
      };
 
   return (
-    <div className="min-h-screen bg-gray-50 bg-gradient-to-r from-blue-100 to-green-100">
+    <div className="min-h-screen bg-gray-50 bg-linear-to-r from-blue-100 to-green-100">
       {/* 🔷 FIXED DEPOSIT CALCULATOR HEADER */}
-      <div className="bg-gradient-to-r from-blue-100 to-green-100 py-8 px-6 text-center">
+      <div className="bg-linear-to-r from-blue-100 to-green-100 py-8 px-6 text-center">
         <h1 className="text-4xl font-extrabold text-blue-700 drop-shadow">
           Fixed Deposit Calculator
         </h1>
@@ -67,7 +67,7 @@ const FDCalculator = () => {
       <div className="flex justify-center items-center p-4">
         <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden grid md:grid-cols-2 border border-gray-200">
           {/* LEFT SIDE */}
-          <div className="p-8 bg-gradient-to-br from-blue-50 to-white">
+          <div className="p-8 bg-linear-to-br from-blue-50 to-white">
             <h2 className="text-2xl font-bold text-blue-600 mb-6">
               Enter Your FD Details
             </h2>
@@ -122,7 +122,7 @@ const FDCalculator = () => {
           </div>
 
           {/* RIGHT SIDE */}
-          <div className="p-8 bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex flex-col justify-center">
+          <div className="p-8 bg-linear-to-br from-blue-600 to-indigo-600 text-white flex flex-col justify-center">
             <h3 className="text-xl font-bold mb-4">📊 FD Result Summary</h3>
 
             {result ? (
@@ -148,7 +148,7 @@ const FDCalculator = () => {
       </div>
 
       {/* 🔷 FAQ SECTION */}
-      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-gradient-to-r from-blue-200 to-green-100">
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-linear-to-r from-blue-200 to-green-100">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Frequently Asked Questions
         </h2>
@@ -178,28 +178,28 @@ const FDCalculator = () => {
 
         <div className="flex gap-4 flex-wrap">
           <button
-            onClick={() => handleRedirect("/retirement_calculator")}
+            onClick={() => handleRedirect("/calculator/retirement_calculator")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Retirement Calculator
           </button>
 
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/sip-calculator")}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Simple Interest Calculator
           </button>
 
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/sip-calculator")}
             className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow"
           >
             SIP Calculator
           </button>
 
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/sip-calculator")}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Gratuity Calculator

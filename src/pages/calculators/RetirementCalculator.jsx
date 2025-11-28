@@ -54,10 +54,10 @@ const RetirementCalculator = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 bg-gradient-to-r from-blue-100 to-green-100">
+    <div className="min-h-screen  bg-linear-to-r from-blue-100 to-green-100">
       {/* HEADER */}
-      <div className="bg-gradient-to-r from-blue-100 to-green-100 py-14 px-6 text-center">
-        <h1 className="text-4xl font-extrabold text-blue-700 drop-shadow">
+      <div className="bg-linear-to-r from-blue-100 to-green-100 py-14 px-6 text-center">
+        <h1 className="text-4xl font-extrabold text-purple-600 drop-shadow">
           Retirement Calculator 🧓💰
         </h1>
 
@@ -72,7 +72,7 @@ const RetirementCalculator = () => {
       <div className="flex justify-center items-center p-6">
         <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden grid md:grid-cols-2 border border-gray-200">
           {/* LEFT SIDE INPUTS */}
-          <div className="p-8 bg-gradient-to-br from-blue-50 to-white">
+          <div className="p-8 bg-linear-to-br from-blue-50 to-white">
             <h2 className="text-2xl font-bold text-purple-700 mb-6">
               Enter Your Details
             </h2>
@@ -140,7 +140,7 @@ const RetirementCalculator = () => {
           </div>
 
           {/* RIGHT SIDE RESULT */}
-          <div className="p-8 bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex flex-col justify-center">
+          <div className="p-8 bg-linear-to-br from-purple-600 to-indigo-600 text-white flex flex-col justify-center">
             <h3 className="text-xl font-bold mb-4">📊 Retirement Summary</h3>
 
             {result ? (
@@ -168,7 +168,7 @@ const RetirementCalculator = () => {
       </div>
 
       {/* FAQ SECTION */}
-      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-gradient-to-r from-blue-200 to-green-100">
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-linear-to-r from-blue-200 to-green-100">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Frequently Asked Questions
         </h2>
@@ -198,31 +198,31 @@ const RetirementCalculator = () => {
 
         <div className="flex gap-4 flex-wrap">
           <button
-            onClick={() => navigate("/sip_cal")}
+            onClick={() => navigate("/calculator/sip-calculator")}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow"
           >
             SIP Calculator
           </button>
 
           <button
-            onClick={() => navigate("/fd_calculator")}
+            onClick={() => navigate("/calculator/fd-calculator")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
             FD Calculator
           </button>
 
           <button
-            onClick={() => navigate("/mutual_fund")}
+            onClick={() => navigate("/calculator/nps-calculator")}
             className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow"
           >
-            Mutual Fund Calculator
+            NPS Calculator
           </button>
 
           <button
-            onClick={() => navigate("/nps_calculator")}
+            onClick={() => navigate("/calculator/hra-calculator")}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"
           >
-            NPS Calculator
+            HRA Calculator
           </button>
         </div>
       </div>

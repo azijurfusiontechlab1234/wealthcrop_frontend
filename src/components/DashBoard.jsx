@@ -127,8 +127,8 @@ const Dashboard = () => {
         }`}
       >
         {/* Tabs + Search */}
-        <div className="flex flex-col lg:flex-row justify-between items-center px-10 py-3 gap-4">
-          <nav className="flex gap-8 text-sm font-medium overflow-x-auto">
+        <div className="flex flex-col lg:flex-row justify-between items-center px-10 py-5 gap-4">
+          <nav className="flex gap-8 text-md font-medium overflow-x-auto">
             {topTabs.map((tab) => (
               <NavLink
                 key={tab.name}
@@ -158,7 +158,7 @@ const Dashboard = () => {
           <div className="flex gap-16">
             {markets.map((m) => (
               <NavLink key={m.name}
-              to="/">
+              to={`/indices/${m.name}`}>
                 <span className="font-semibold text-gray-800">{m.name}</span>{" "}
                 {m.value}{" "}
                 <span className="text-gray-500">{m.change}</span>

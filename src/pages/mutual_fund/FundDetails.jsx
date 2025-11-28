@@ -168,7 +168,7 @@ const [activeInfo, setActiveInfo] = useState(null);
                 className="w-16 h-16 rounded-xl object-cover shadow"
               />
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">{name}</h1>
+                <h1 className="text-2xl font-bold text-slate-900 capitalize">{name}</h1>
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-sm text-slate-500">
                     {fund.category}

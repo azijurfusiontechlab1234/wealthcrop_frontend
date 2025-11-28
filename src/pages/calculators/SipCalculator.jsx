@@ -282,25 +282,25 @@ const SipCalculator = () => {
 
         <div className="flex gap-4 flex-wrap">
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/retirement-calculator")}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow"
           >
-            SIP Return Calculator
+            Retirement Calculator
           </button>
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/sip-calculator")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Lumpsum Calculator
           </button>
           <button
-            onClick={() => handleRedirect("/fd_calculator")}
+            onClick={() => handleRedirect("/calculator/fd-calculator")}
             className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg shadow"
           >
             FD Calculator
           </button>
           <button
-            onClick={() => handleRedirect("/sip_cal")}
+            onClick={() => handleRedirect("/calculator/nps-cal")}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"
           >
             NPS Calculator
