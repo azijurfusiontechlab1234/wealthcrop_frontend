@@ -9,7 +9,6 @@ import {
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Investment from "./pages/Investment";
 import Portfolio from "./pages/Portfolio";
 import Profile from "./pages/Profile";
 import Login from "./auth/Login";
@@ -61,6 +60,7 @@ import CalculatorsPage from "./pages/calculators/CalculatorsPage";
 import { calculatorRoutes } from "./utils/CalculatorRoutes";
 import ScrollToTopButton from "./utils/ScrollToTopButton";
 import IndicesDetails from "./pages/IndicesDetails";
+import InvestmentOptions from "./pages/InvestmentOptions";
 
 
 const queryClient = new QueryClient();
@@ -198,7 +198,7 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/user/balance" element={<Balance />} />
             <Route path="/user/balance/inr" element={<AddMoney />} />
-            <Route path="/investments" element={<Investment />} />
+            <Route path="/investments" element={<InvestmentOptions />} />
             <Route path="/portfolio" element={<Portfolio />} />
           </Route>
 

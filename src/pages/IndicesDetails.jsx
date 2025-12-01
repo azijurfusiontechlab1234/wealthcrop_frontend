@@ -52,6 +52,7 @@ export default function IndicesDetails() {
   const [isTicking] = useState(true);
   const [saved, setSaved] = useState(false);
   const [page, setPage] = useState(1);
+  const [selectedTimeframe, setSelectedTimeframe] = useState("30D");
 
   useEffect(() => {
     if (!isTicking) return;
@@ -248,6 +249,16 @@ export default function IndicesDetails() {
         {/* CHART */}
         <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Price Chart</h2>
+
+          <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-slate-500">Timeframe:</span>
+                {["7D","30D","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
+                  <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-3 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
+                ))}
+              </div>
+              <div className="text-sm text-slate-500">Updated: {new Date().toLocaleTimeString()}</div>
+            </div>
 
           <div style={{ width: "100%", height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">

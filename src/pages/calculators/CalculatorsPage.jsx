@@ -13,6 +13,9 @@ import {
   ArrowRight,
   Banknote,
   HandCoins,
+  IndianRupee,
+  CreditCard,
+  WalletMinimal
 } from "lucide-react";
 
 const calculators = [
@@ -59,6 +62,12 @@ const calculators = [
     bg: "from-teal-100 to-cyan-200",
   },
   {
+    name: "EMI Calculator",
+    path: "/calculator/emi-calculator",
+    icon: WalletMinimal,
+    bg: "from-red-100 to-red-200",
+  },
+  {
     name: "PPF Calculator",
     path: "/calculator/ppf-calculator",
     icon: Percent,
@@ -82,7 +91,9 @@ const calculators = [
     icon: Calculator,
     bg: "from-sky-100 to-blue-200",
   },
+  
 ];
+
 
 const CalculatorsPage = () => {
   return (

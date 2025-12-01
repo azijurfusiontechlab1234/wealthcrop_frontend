@@ -156,7 +156,7 @@ const Footer = () => {
   </Link>
 
   <Link 
-    to="/contact" 
+    to="/support" 
     className="text-blue-900 hover:text-blue-600 transition-all duration-150 hover:underline underline-offset-4"
   >
     Contact

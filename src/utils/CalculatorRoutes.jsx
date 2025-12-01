@@ -9,6 +9,7 @@ import RetirementCalculator from "../pages/calculators/RetirementCalculator";
 import SipCalculator from "../pages/calculators/SipCalculator";
 import SwpCalculator from "../pages/calculators/SwpCalculator";
 import NPSCalculator from "../pages/calculators/NPSCalculator";
+import EmiCalculator from "../pages/calculators/EmiCalculator";
 
 
 export const calculatorRoutes = [
@@ -19,6 +20,7 @@ export const calculatorRoutes = [
   { path: "retirement-calculator", element: <RetirementCalculator /> },
   { path: "cagr-calculator", element: <CagrCalculator /> },
   { path: "swp-calculator", element: <SwpCalculator /> },
+  { path: "emi-calculator", element: <EmiCalculator /> },
   { path: "ppf-calculator", element: <PpfCalculator /> },
   { path: "apy-calculator", element: <ApyCalculator /> },
   { path: "inflation-calculator", element: <InflationCalculator /> },
