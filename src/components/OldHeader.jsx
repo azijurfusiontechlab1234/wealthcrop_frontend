@@ -183,7 +183,7 @@ useEffect(() => {
 
             {/* Static Links */}
             <Link
-              to="/blog"
+              to="/blogs"
               className="text-blue-900 font-medium hover:text-blue-700 hover:underline underline-offset-4 transition-colors duration-200"
             >
               Blog
@@ -399,7 +399,7 @@ useEffect(() => {
             )}
           </div>
 
-          <Link to="/blog" className="block text-blue-900 font-medium">
+          <Link to="/blogs" className="block text-blue-900 font-medium">
             Blog
           </Link>
           <Link to="/help" className="block text-blue-900 font-medium">

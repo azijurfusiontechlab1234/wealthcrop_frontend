@@ -288,7 +288,7 @@ const SipCalculator = () => {
             Retirement Calculator
           </button>
           <button
-            onClick={() => handleRedirect("/calculator/sip-calculator")}
+            onClick={() => handleRedirect("/calculator/lumpsum-calculator")}
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           >
             Lumpsum Calculator
@@ -300,7 +300,7 @@ const SipCalculator = () => {
             FD Calculator
           </button>
           <button
-            onClick={() => handleRedirect("/calculator/nps-cal")}
+            onClick={() => handleRedirect("/calculator/nps-calculator")}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow"
           >
             NPS Calculator

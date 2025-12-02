@@ -61,6 +61,8 @@ import { calculatorRoutes } from "./utils/CalculatorRoutes";
 import ScrollToTopButton from "./utils/ScrollToTopButton";
 import IndicesDetails from "./pages/IndicesDetails";
 import InvestmentOptions from "./pages/InvestmentOptions";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 
 const queryClient = new QueryClient();
@@ -214,6 +216,8 @@ function App() {
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />
           <Route path="/indices/:name" element={<IndicesDetails />} />
+          {/* <Route path="/blogs" element={<Blog/>} /> */}
+          <Route path="/blog/:id" element={<BlogPost />} />
 
           {/* Calculators */}
           <Route path="/calculators" element={<CalculatorsPage />} />
