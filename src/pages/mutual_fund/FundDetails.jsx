@@ -285,7 +285,7 @@ const [activeInfo, setActiveInfo] = useState(null);
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-sm text-gray-500">Timeframe:</span>
-              {["7D", "30D", "6M", "1Y"].map((tf) => (
+              {["30D", "3M", "6M", "1Y", "3Y", "5Y", "10Y", "ALL"].map((tf) => (
                 <button
                   key={tf}
                   onClick={() => setSelectedTimeframe(tf)}

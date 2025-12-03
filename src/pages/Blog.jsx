@@ -126,18 +126,20 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 py-10 px-4">
       <div className="max-w-6xl mx-auto">
-
         {/* HEADER */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900">WealthCrop Blog</h1>
+          <h1 className="text-4xl font-extrabold text-gray-900">
+            WealthCrop Blog
+          </h1>
           <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
-            Insights, wealth tips, mutual fund strategies, tax hacks & investing guides.
+            Insights, wealth tips, mutual fund strategies, tax hacks & investing
+            guides.
           </p>
 
           {/* SEARCH BAR */}
           <div className="mt-6 flex justify-center">
             <div className="relative w-full max-w-xl">
-              <FiSearch className="absolute left-4.5 top-4.5 text-gray-400" />
+              <FiSearch className="absolute left-4.5 top-4 text-gray-400" size={18}/>
               <input
                 value={searchQuery}
                 onChange={(e) => {
@@ -182,7 +184,9 @@ const Blog = () => {
           <>
             {/* EMPTY MESSAGE */}
             {filtered.length === 0 ? (
-              <div className="py-20 text-center text-gray-500">No matching articles.</div>
+              <div className="py-20 text-center text-gray-500">
+                No matching articles.
+              </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {currentPosts.map((post) => (

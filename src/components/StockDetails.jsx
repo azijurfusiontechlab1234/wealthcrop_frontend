@@ -283,8 +283,8 @@ const [activeInfo, setActiveInfo] = useState(null);
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-sm text-slate-500">Timeframe:</span>
-                {["7D","30D","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
-                  <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-3 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
+                {["7D","30D","3M","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
+                  <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-2.5 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
                 ))}
               </div>
               <div className="text-sm text-slate-500">Updated: {new Date().toLocaleTimeString()}</div>

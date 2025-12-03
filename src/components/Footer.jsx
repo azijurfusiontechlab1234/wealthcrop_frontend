@@ -85,22 +85,37 @@ const Footer = () => {
     "National Housing Bank",
   ];
 
-  const Section = ({ title, list, basePath }) => (
-    <div>
-      <h3 className="font-bold text-xl mb-4 text-blue-900">{title}</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {list.map((item, idx) => (
+const Section = ({ title, list, basePath }) => (
+  <div className="mb-6">
+    
+    {/* Modern footer title */}
+    <h3 className="text-sm font-semibold text-blue-900 mb-3 uppercase tracking-wide">
+      {title}
+    </h3>
+
+    {/* Inline links with bars */}
+    <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+      {list.map((item, idx) => (
+        <div key={idx} className="flex items-center">
           <Link
-            key={idx}
             to={`${basePath}/${item.toLowerCase().replace(/ /g, "-")}`}
-            className="text-sm py-2 px-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition shadow-sm"
+            className="hover:text-blue-700 transition-colors"
           >
             {item}
           </Link>
-        ))}
-      </div>
+
+          {/* Show | except last */}
+          {idx !== list.length - 1 && (
+            <span className="px-2 text-gray-400">|</span>
+          )}
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
+
+
+
 
   return (
     <>

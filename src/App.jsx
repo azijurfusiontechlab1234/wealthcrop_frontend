@@ -63,6 +63,7 @@ import IndicesDetails from "./pages/IndicesDetails";
 import InvestmentOptions from "./pages/InvestmentOptions";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import ChartPage from "./components/chart/ChartPage";
 
 
 const queryClient = new QueryClient();
@@ -216,8 +217,11 @@ function App() {
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />
           <Route path="/indices/:name" element={<IndicesDetails />} />
-          {/* <Route path="/blogs" element={<Blog/>} /> */}
+          <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />
+
+
+          <Route path="/chart" element={<ChartPage/>}/>
 
           {/* Calculators */}
           <Route path="/calculators" element={<CalculatorsPage />} />
