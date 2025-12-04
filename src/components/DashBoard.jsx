@@ -116,7 +116,7 @@ const Dashboard = () => {
   return (
   <>
     {/* DESKTOP VIEW */}
-    <div className="min-h-screen bg-white text-blue-950 hidden lg:block">
+    <div className="min-h-screen bg-white text-blue-950 hidden lg:block pb-2">
       
       {/* Sticky header */}
       <div
