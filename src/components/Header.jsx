@@ -22,81 +22,77 @@ export default function Header({ token }) {
         </Link>
 
         {/* 🔹 Desktop Navigation */}
-<nav className="hidden md:flex items-center space-x-10 relative top-4">
-  {/* 🔹 Stocks */}
-  <div className="relative group">
-    <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
-      Stocks
-    </button>
+        <nav className="hidden md:flex items-center space-x-10 relative top-4">
+          {/* 🔹 Stocks */}
+          <div className="relative group">
+            <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
+              Stocks
+            </button>
 
-    <div
-      className="absolute left-[-180px] top-full mt-1 w-[1200px] bg-white rounded overflow-hidden
+            <div
+              className="absolute left-[-180px] top-full mt-1 w-[1200px] bg-white rounded overflow-hidden
       opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
       transition-all duration-300 ease-out border-b border-gray-800"
-    >
-      <div className="mx-auto px-6 py-4">
-        <StocksMenu />
-      </div>
-    </div>
-  </div>
-
-  {/* 🔹 F&O */}
-  <div className="relative group">
-    <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
-      F&O
-    </button>
-
-    <div
-      className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl shadow-lg overflow-hidden
-      opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
-      transition-all duration-300 ease-out border border-gray-100"
-    >
-      <div className="max-w-[1200px] mx-auto px-6 py-4">
-        <FOMenu />
-      </div>
-    </div>
-  </div>
-
-  {/* 🔹 Mutual Funds */}
-  <div className="relative group">
-    <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
-      Mutual Funds
-    </button>
-
-    <div
-      className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl overflow-hidden
-      opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
-      transition-all duration-300 ease-out border border-gray-100"
-    >
-      <div className="max-w-[1200px] mx-auto px-6 py-4">
-        <MutualFundsMenu />
-      </div>
-    </div>
-  </div>
-
-   <div className="bg-blue-900 font-medium w-0.5 h-6">      
+            >
+              <div className="mx-auto px-6 py-4">
+                <StocksMenu />
+              </div>
             </div>
+          </div>
 
-  {/* 🔹 More */}
-  <div className="relative group">
-    <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
-      More
-    </button>
+          {/* 🔹 F&O */}
+          <div className="relative group">
+            <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
+              F&O
+            </button>
 
-    <div
-      className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl shadow-lg overflow-hidden
+            <div
+              className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl shadow-lg overflow-hidden
       opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
       transition-all duration-300 ease-out border border-gray-100"
-    >
-      <div className="max-w-[1200px] mx-auto px-6 py-4">
-        <MoreMenu />
-      </div>
-    </div>
-  </div>
-</nav>
+            >
+              <div className="max-w-[1200px] mx-auto px-6 py-4">
+                <FOMenu />
+              </div>
+            </div>
+          </div>
 
+          {/* 🔹 Mutual Funds */}
+          <div className="relative group">
+            <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
+              Mutual Funds
+            </button>
 
+            <div
+              className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl overflow-hidden
+      opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
+      transition-all duration-300 ease-out border border-gray-100"
+            >
+              <div className="max-w-[1200px] mx-auto px-6 py-4">
+                <MutualFundsMenu />
+              </div>
+            </div>
+          </div>
+          <div className="bg-blue-900 font-medium w-0.5 h-6">
+          </div>
 
+          {/* 🔹 More */}
+          <div className="relative group">
+            <button className="text-blue-900 font-medium hover:text-blue-700 transition cursor-pointer">
+              More
+            </button>
+
+            <div
+              className="absolute left-0 top-full mt-1 w-screen bg-white rounded-xl shadow-lg overflow-hidden
+      opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
+      transition-all duration-300 ease-out border border-gray-100"
+            >
+              <div className="max-w-[1200px] mx-auto px-6 py-4">
+                <MoreMenu />
+              </div>
+            </div>
+          </div>
+        </nav>
         {/* 🔹 Search Bar */}
         <div className="hidden md:flex flex-1 max-w-md mx-6 relative">
           <input
@@ -154,9 +150,8 @@ export default function Header({ token }) {
 
       {/* 🔹 Mobile Dropdown */}
       <div
-        className={`md:hidden bg-white border-t border-gray-100 transition-all duration-300 ease-in-out overflow-hidden ${
-          menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden bg-white border-t border-gray-100 transition-all duration-300 ease-in-out overflow-hidden ${menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="px-6 py-4 space-y-4">
           <Link to="/stocks" className="block text-gray-800 font-medium">
@@ -264,7 +259,7 @@ export default function Header({ token }) {
 //           <input
 //             type="text"
 //             placeholder="Search for stocks, mutual funds..."
-//             className="w-full border border-gray-200 rounded-full pl-10 pr-4 py-2 text-sm 
+//             className="w-full border border-gray-200 rounded-full pl-10 pr-4 py-2 text-sm
 //             focus:outline-none focus:ring-1 focus:ring-blue-700 text-gray-800 shadow-sm"
 //           />
 //           <svg
