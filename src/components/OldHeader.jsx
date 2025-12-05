@@ -111,7 +111,7 @@ export default function OldHeader() {
           <div className="hidden md:flex items-center space-x-8 relative">
             {/* Mutual Fund */}
             <div className="relative group">
-              <button className="text-[#1C2434] font-semibold hover:text-[#4A5FFF]">
+              <button onClick={() => navigate("/user/mutual_fund")} className="text-[#1C2434] font-semibold hover:text-[#4A5FFF] cursor-pointer">
                 Mutual Funds
               </button>
               {/* Full width mega dropdown */}
@@ -177,7 +177,7 @@ export default function OldHeader() {
             </div>
             {/* Stocks */}
             <div className="relative group">
-              <button className="text-[#1C2434] font-semibold hover:text-[#4A5FFF]">
+              <button onClick={() => navigate("/user/stocks")} className="text-[#1C2434] font-semibold hover:text-[#4A5FFF] cursor-pointer">
                 Stocks
               </button>
 
