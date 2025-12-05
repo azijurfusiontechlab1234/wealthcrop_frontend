@@ -1,14 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import CandleChart from "./CandleChart";
 import { useEffect, useState } from "react";
 
 export default function ChartPage() {
   const [data, setData] = useState([]);
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    fetch("/api/candles?symbol=SUNPHARMA&interval=1D")
-      .then(res => res.json())
-      .then(data => setData(data));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api/candles?symbol=SUNPHARMA&interval=1D")
+  //     .then(res => res.json())
+  //     .then(data => setData(data));
+  // }, []);
 
 
 //! API should return data shaped like this ⤵
@@ -25,7 +27,7 @@ export default function ChartPage() {
 
   return (
     <div className="p-5">
-      <CandleChart data={data} />
+      <CandleChart onOpenTerminal={() => navigate("/terminal")} data={data} />
     </div>
   );
 }

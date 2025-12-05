@@ -64,6 +64,9 @@ import InvestmentOptions from "./pages/InvestmentOptions";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import ChartPage from "./components/chart/ChartPage";
+import TerminalChart from "./components/chart/TerminalChart";
+import TradingViewWidget from "./components/chart/TradingViewWidget";
+import GrowChart from "./components/chart/GrowChart";
 
 
 const queryClient = new QueryClient();
@@ -141,7 +144,7 @@ function App() {
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-2 min-h-[calc(100vh-200px)] bg-white overflow-hidden">
+      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-0 min-h-[calc(100vh-200px)] bg-white overflow-hidden">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>
@@ -222,6 +225,9 @@ function App() {
 
 
           <Route path="/chart" element={<ChartPage/>}/>
+          {/* <Route path="/terminal" element={<TerminalChart/>} /> */}
+          <Route path="/terminal" element={<TradingViewWidget/>} />
+          {/* <Route path="/terminal" element={<GrowChart/>} /> */}
 
           {/* Calculators */}
           <Route path="/calculators" element={<CalculatorsPage />} />

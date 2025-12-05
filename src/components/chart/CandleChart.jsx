@@ -1,5 +1,3 @@
-// src/components/CandleChart.jsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import {
@@ -26,30 +24,31 @@ const timeframeMap = {
   All: data_All,
 };
 
-export default function CandleChart() {
+// ⭐ DATA SANITIZER FIX
+// --------------------------------------------------------
+function cleanData(raw) {
+  return [...raw]
+    .map((d) => ({
+      ...d,
+      timestamp: Math.floor(d.timestamp / 1000), // convert MS -> seconds int
+    }))
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .filter((d, i, arr) => i === 0 || d.timestamp !== arr[i - 1].timestamp); // remove duplicates
+}
+
+export default function CandleChart({ stockName = "Sun Pharma Adv. Res" }) {
   const containerRef = useRef(null);
   const chartInstance = useRef(null);
 
   const [currentTF, setCurrentTF] = useState("1D");
-  const [showVolume, setShowVolume] = useState(false);
-  const [showNifty, setShowNifty] = useState(true);
+  const [showVolume, setShowVolume] = useState(true);
+  const [chartType, setChartType] = useState("candles");
   const [ohlc, setOhlc] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const sortByTime = (arr) =>
-    [...arr].sort((a, b) => a.timestamp - b.timestamp);
-
-  // Fake loading shimmer
-  useEffect(() => {
-    setLoading(true);
-    const t = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(t);
-  }, [currentTF]);
 
   useEffect(() => {
-    if (!containerRef.current || loading) return;
+    if (!containerRef.current) return;
 
-    // Destroy previous chart
+    // Destroy old chart
     if (chartInstance.current) {
       chartInstance.current.remove();
       chartInstance.current = null;
@@ -57,145 +56,159 @@ export default function CandleChart() {
 
     const chart = createChart(containerRef.current, {
       width: containerRef.current.clientWidth,
-      height: 420,
-      layout: { background: { color: "#fff" }, textColor: "#000" },
+      height: 430,
+      layout: { background: { color: "#fff" }, textColor: "#1e293b" },
       grid: {
-        vertLines: { color: "#eee" },
-        horzLines: { color: "#eee" },
+        vertLines: { color: "#f3f4f6" },
+        horzLines: { color: "#f3f4f6" },
       },
       crosshair: { mode: 1 },
+      rightPriceScale: { scaleMargins: { top: 0.1, bottom: 0.30 } },
     });
 
     chartInstance.current = chart;
 
-    // Candle Series
-    const candleSeries = chart.addCandlestickSeries({
-      upColor: "#00b26a",
-      downColor: "#ff5349",
-      wickUpColor: "#00b26a",
-      wickDownColor: "#ff5349",
-    });
+    // ⭐ CLEAN & SAFE DATA
+    const DATA = cleanData(timeframeMap[currentTF]);
 
-    // Sort & remove duplicate timestamps
-    const DATA = sortByTime(timeframeMap[currentTF]).filter(
-      (d, i, arr) => i === 0 || d.timestamp !== arr[i - 1].timestamp
-    );
+    // --------------------------------------------------
+    // ⭐ MAIN SERIES
+    // --------------------------------------------------
+    let mainSeries;
 
-    candleSeries.setData(
+    if (chartType === "candles") {
+      mainSeries = chart.addCandlestickSeries({
+        upColor: "#00b26a",
+        downColor: "#ff4d4f",
+        wickUpColor: "#00b26a",
+        wickDownColor: "#ff4d4f",
+      });
+    } else {
+      mainSeries = chart.addLineSeries({
+        color: "#00b26a",
+        lineWidth: 2,
+      });
+    }
+
+    mainSeries.setData(
       DATA.map((d) => ({
-        time: d.timestamp / 1000,
+        time: d.timestamp,
         open: d.open,
         high: d.high,
         low: d.low,
         close: d.close,
+        value: d.close,
       }))
     );
 
-    // Volume
+    // --------------------------------------------------
+    // ⭐ VOLUME SERIES (Separate bottom panel)
+    // --------------------------------------------------
     if (showVolume) {
       const volumeSeries = chart.addHistogramSeries({
+        priceScaleId: "volume",
+        scaleMargins: { top: 0.75, bottom: 0 },
         priceFormat: { type: "volume" },
-        scaleMargins: { top: 0.8, bottom: 0 },
+      });
+
+      chart.priceScale("volume").applyOptions({
+        visible: true,
+        scaleMargins: { top: 0.75, bottom: 0 },
       });
 
       volumeSeries.setData(
         DATA.map((d) => ({
-          time: d.timestamp / 1000,
+          time: d.timestamp,
           value: d.volume,
-          color: d.close > d.open ? "#00b26a88" : "#ff534988",
+          color: d.close > d.open ? "#00b26a77" : "#ff4d4f77",
         }))
       );
     }
 
-    // NIFTY compare
-    if (showNifty) {
-      const niftySeries = chart.addLineSeries({
-        color: "#2962ff",
-        lineWidth: 2,
-      });
-
-      niftySeries.setData(
-        DATA.map((d) => ({
-          time: d.timestamp / 1000,
-          value: d.close + 20, // offset
-        }))
-      );
-    }
-
-    // OHLC on hover
+    // --------------------------------------------------
+    // ⭐ CROSSHAIR OHLC
+    // --------------------------------------------------
     chart.subscribeCrosshairMove((param) => {
-      const c = param.seriesData.get(candleSeries);
-      if (c) {
+      const p = param.seriesData.get(mainSeries);
+      if (p) {
         setOhlc({
-          open: c.open,
-          high: c.high,
-          low: c.low,
-          close: c.close,
+          open: p.open ?? p.value,
+          high: p.high ?? p.value,
+          low: p.low ?? p.value,
+          close: p.close ?? p.value,
         });
       }
     });
-  }, [currentTF, showVolume, showNifty, loading]);
+
+  }, [currentTF, showVolume, chartType]);
 
   return (
     <div className="w-full">
-      {/* Loading Shimmer */}
-      {loading && (
-        <div className="animate-pulse w-full h-[420px] bg-gray-100 rounded-md mb-4" />
-      )}
 
-      {/* OHLC Display */}
-      {!loading && (
-        <div className="flex gap-5 mb-3 text-[14px]">
-          {ohlc ? (
-            <>
-              <span>O <b>{ohlc.open}</b></span>
-              <span>H <b>{ohlc.high}</b></span>
-              <span>L <b>{ohlc.low}</b></span>
-              <span>C <b>{ohlc.close}</b></span>
-            </>
-          ) : (
-            <span className="text-gray-400">Hover to see OHLC</span>
-          )}
-        </div>
-      )}
+      {/* Stock Name */}
+      <div className="text-xl font-semibold mb-3">{stockName}</div>
 
-      {/* Toggles */}
-      <div className="flex gap-4 mb-3 items-center">
-        <label className="flex gap-2 items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showVolume}
-            onChange={() => setShowVolume(!showVolume)}
-          />
-          <span>Volume</span>
-        </label>
-
-        <label className="flex gap-2 items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showNifty}
-            onChange={() => setShowNifty(!showNifty)}
-          />
-          <span>NIFTY Compare</span>
-        </label>
+      {/* OHLC */}
+      <div className="flex items-center gap-6 bg-gray-50 p-3 rounded-lg border mb-3 shadow-sm">
+        {ohlc ? (
+          <>
+            <span className="text-gray-700">O <b>{ohlc.open}</b></span>
+            <span className="text-gray-700">H <b>{ohlc.high}</b></span>
+            <span className="text-gray-700">L <b>{ohlc.low}</b></span>
+            <span className="text-gray-700">C <b>{ohlc.close}</b></span>
+          </>
+        ) : (
+          <span className="text-gray-400">Hover on chart to see OHLC</span>
+        )}
       </div>
 
-      {/* Chart Container */}
+      {/* Controls */}
+      <div className="flex justify-between items-center mb-2">
+
+        <div className="flex items-center gap-4">
+          {/* Volume toggle */}
+          <label className="flex gap-2 items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showVolume}
+              onChange={() => setShowVolume(!showVolume)}
+            />
+            <span className="text-gray-700">Volume</span>
+          </label>
+
+          {/* Chart Type */}
+          <select
+            value={chartType}
+            onChange={(e) => setChartType(e.target.value)}
+            className="border px-3 py-1 rounded-md bg-white"
+          >
+            <option value="candles">Candles</option>
+            <option value="line">Line</option>
+          </select>
+        </div>
+
+        <div className="flex gap-3">
+          <button className="border px-4 py-1 rounded-md">Customize</button>
+          <button className="border px-4 py-1 rounded-md">Terminal</button>
+        </div>
+      </div>
+
       <div
         ref={containerRef}
-        className="w-full"
-        style={{ borderRadius: "10px", overflow: "hidden" }}
+        style={{ height: "430px" }}
+        className="rounded-xl border shadow-sm"
       />
 
-      {/* Timeframe Buttons */}
-      <div className="flex gap-3 justify-center mt-4 flex-wrap">
+      <div className="flex gap-2 justify-center mt-4 flex-wrap">
         {Object.keys(timeframeMap).map((tf) => (
           <button
             key={tf}
             onClick={() => setCurrentTF(tf)}
-            className={`px-4 py-1 rounded-full border text-sm transition 
-              ${currentTF === tf ? "bg-black text-white" : "hover:bg-gray-100"}
-            `}
+            className={`px-4 py-1 rounded-full border text-sm ${
+              currentTF === tf
+                ? "bg-black text-white"
+                : "bg-white hover:bg-gray-100"
+            }`}
           >
             {tf}
           </button>
