@@ -142,22 +142,42 @@ export default function CandleChart({ height = 320 }) {
       chartRef.current = null;
     }
 
-    const chart = createChart(containerRef.current, {
-      width: containerRef.current.clientWidth,
-      height,
-      layout: {
-        background: { color: "#ffffff" },
-        textColor: "#1e293b",
-      },
-      grid: {
-        vertLines: { color: "#f3f4f6" },
-        horzLines: { color: "#f3f4f6" },
-      },
-      crosshair: { mode: 1 },
-      // reserve space on right so volume panel doesn't overlap; main price scale keeps bottom margin
-      rightPriceScale: { scaleMargins: { top: 0.12, bottom: 0.22 } },
-      timeScale: { fixRightEdge: false, rightOffset: 6, barSpacing: 10  },
-    });
+  const chart = createChart(containerRef.current, {
+  width: containerRef.current.clientWidth,
+  height,
+  layout: {
+    background: { color: "#ffffff" },
+    textColor: "#1e293b",
+  },
+
+  // GRID LINES
+  grid: {
+    vertLines: { color: "#f3f4f6" },
+    horzLines: { color: "#f3f4f6" },
+  },
+
+  crosshair: { mode: 1 },
+
+  // MAIN LEFT PRICE SCALE BORDER COLOR
+  priceScale: {
+    borderColor: "#cbd5e1", // <-- border-slate-300
+  },
+
+  // RIGHT PRICE SCALE (YOUR CHART USES THIS)
+  rightPriceScale: {
+    borderColor: "#cbd5e1", // <-- border-slate-300
+    scaleMargins: { top: 0.12, bottom: 0.22 },
+  },
+
+  // TIME SCALE BORDER
+  timeScale: {
+    borderColor: "#cbd5e1", // <-- border-slate-300
+    fixRightEdge: false,
+    rightOffset: 6,
+    barSpacing: 10,
+  },
+});
+
 
     chartRef.current = chart;
 
@@ -320,12 +340,12 @@ export default function CandleChart({ height = 320 }) {
       {/* Chart container */}
       <div
         ref={containerRef}
-        className="w-full border rounded-xl shadow-sm overflow-hidden"
+        className="w-full border border-slate-300 rounded-xl shadow-sm overflow-hidden"
         style={{ height }}
       />
 
       {/* OHLC */}
-      <div className="mt-3 bg-gray-50 p-3 rounded-lg border flex gap-4 text-sm text-blue-950">
+      <div className="mt-3 bg-gray-50 p-3 rounded-lg border border-slate-300 flex gap-4 text-sm text-blue-950">
         {ohlc ? (
           <>
             <span>O: <b>{fmt(ohlc.open)}</b></span>
