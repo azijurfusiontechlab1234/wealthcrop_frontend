@@ -8,6 +8,7 @@ import SearchPopup from "./SearchPopup";
 import { logout } from "../redux/authenticationSlice";
 import StockImage from "../assets/mutualFund/stock.jpg";
 import StockImage2 from "../assets/mutualFund/stock1.jpg";
+import StockImage3 from "../assets/mutualFund/stock2.jpg";
 import {
   User,
   Mail,
@@ -182,16 +183,14 @@ export default function OldHeader() {
 
               {/* Full width mega dropdown */}
               <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-      py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-      transition-all duration-300 ease-out">
+             py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+             transition-all duration-300 ease-out">
 
                 {/* Center content */}
                 <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-10 px-6">
-
                   {/* Left Image + Text */}
                   <div className="col-span-1 flex flex-col gap-5 pr-10 border-r">
-                    <img src={StockImage} className="w-56 h-56 object-contain" />
-
+                    <img src={StockImage2} className="w-56 h-56 object-contain" />
                     <a href="#" className="hover:text-[#4A5FFF] transition">
                       <h3 className="text-xl font-semibold text-[#0F172A]">
                         Invest in Stocks
@@ -242,7 +241,6 @@ export default function OldHeader() {
                       </a>
                       <p className="text-gray-500">Open a free Demat account & start investing instantly.</p>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -252,7 +250,6 @@ export default function OldHeader() {
               <button className="text-[#1C2434] font-semibold hover:text-[#4A5FFF]">
                 F&O
               </button>
-
               {/* Full width mega dropdown */}
               <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
                    py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
@@ -261,7 +258,7 @@ export default function OldHeader() {
                 <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-10 px-6">
                   {/* Left Section */}
                   <div className="col-span-1 flex flex-col gap-5 pr-10 border-r">
-                    <img src={StockImage} className="w-56 h-56 object-contain" />
+                    <img src={StockImage3} className="w-56 h-56 object-contain" />
                     <a href="#" className="hover:text-[#4A5FFF] transition">
                       <h3 className="text-xl font-semibold text-[#0F172A]">
                         Futures & Options
@@ -275,7 +272,6 @@ export default function OldHeader() {
 
                   {/* Right Section - F&O Items */}
                   <div className="col-span-3 grid grid-cols-3 gap-10 text-sm">
-
                     <div className="space-y-5">
                       <a href="#" className="hover:text-[#4A5FFF] transition">
                         <h4 className="font-semibold text-[#0F172A]">Index Futures</h4>
@@ -334,26 +330,26 @@ export default function OldHeader() {
               </button>
               {/* Full width mega dropdown */}
               <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-                py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                py-12 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
                 transition-all duration-300 ease-out">
                 {/* Center content */}
                 <div className="max-w-[1280px] mx-auto grid grid-cols-2 gap-16 px-6 text-sm">
                   {/* LEFT COLUMN */}
                   <div className="space-y-6">
                     <div>
-                      <Link to="" className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]">
+                      <Link to="" className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]">
                         SIP Calculator
                       </Link>
                       <p className="text-gray-500">Calculate future wealth based on SIP investments.</p>
                     </div>
                     <div>
-                      <a href="#" className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]">
+                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
                         Brokerage Calculator
                       </a>
                       <p className="text-gray-500">Check charges before placing equity or F&O orders.</p>
                     </div>
                     <div>
-                      <a href="#" className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]">
+                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
                         Margin Calculator
                       </a>
                       <p className="text-gray-500">Estimate required margin for F&O trading.</p>
@@ -363,7 +359,7 @@ export default function OldHeader() {
                   {/* RIGHT COLUMN */}
                   <div className="space-y-6">
                     <div>
-                      <a href="#" className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]">
+                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
                         Swap Calculator
                       </a>
                       <p className="text-gray-500">Check overnight swap charges in leveraged trading.</p>
@@ -371,7 +367,7 @@ export default function OldHeader() {
                     <div>
                       <Link
                         to="/blogs"
-                        className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]"
+                        className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]"
                       >
                         Blog
                       </Link>
@@ -380,7 +376,7 @@ export default function OldHeader() {
                     <div>
                       <Link
                         to="/help"
-                        className="hover:text-[#4A5FFF] transition font-semibold text-[#0F172A]"
+                        className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]"
                       >
                         Help & Support
                       </Link>
