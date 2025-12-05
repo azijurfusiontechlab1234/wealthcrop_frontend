@@ -17,6 +17,18 @@ import { AiOutlineStar } from "react-icons/ai";
 import { MdOutlineInfo } from "react-icons/md";
 import logo from "../assets/mutualFund/sbi.webp"
 import { useParams } from "react-router-dom";
+import CandleChart from "./chart/CandleChart";
+import {
+  data_1D,
+  data_1W,
+  data_1M,
+  data_3M,
+  data_6M,
+  data_1Y,
+  data_3Y,
+  data_5Y,
+  data_All,
+} from "./chart/chartData";
 
 /**
  * NOTE: use your uploaded image path here (developer provided).
@@ -201,6 +213,11 @@ const [activeInfo, setActiveInfo] = useState(null);
   // market-depth scaling
   const maxQty = Math.max(...bids.map((b) => b.qty), ...asks.map((a) => a.qty));
 
+    //! one day high and low
+  const latest = data_1D[data_1D.length - 1];
+  const dayHigh = latest.high;
+  const dayLow = latest.low;
+
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-6">
@@ -278,63 +295,44 @@ const [activeInfo, setActiveInfo] = useState(null);
         </header>
 
         {/* CHART + QUICK METRICS */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-slate-500">Timeframe:</span>
-                {["7D","30D","3M","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
-                  <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-2.5 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
-                ))}
-              </div>
-              <div className="text-sm text-slate-500">Updated: {new Date().toLocaleTimeString()}</div>
-            </div>
+    <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      {/* LEFT SIDE — Chart Section */}
+      <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
+        
+        <CandleChart height={320} />
 
-            <div style={{width:"100%", height: 280}}>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={areaData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.18}/>
-                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.03}/>
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="name" tick={{fontSize:11}}/>
-                  <YAxis hide domain={["dataMin - 20", "dataMax + 20"]}/>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.08}/>
-                  <ReTooltip/>
-                  <Area type="monotone" dataKey="price" stroke="#10b981" fill="url(#g1)" strokeWidth={2} dot={false}/>
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="p-3 bg-white rounded-xl shadow-sm">
-                <p className="text-xs text-slate-500">Day High</p>
-                <p className="font-semibold">₹{baseStock.week52High}</p>
-              </div>
-              <div className="p-3 bg-white rounded-xl shadow-sm">
-                <p className="text-xs text-slate-500">Day Low</p>
-                <p className="font-semibold">₹{baseStock.week52Low}</p>
-              </div>
-            </div>
+        {/* BELOW CHART: keep your Day High / Day Low cards */}
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="p-3 bg-green-50 rounded-xl shadow-sm">
+            <p className="text-xs text-slate-500">Day High</p>
+            <p className="font-semibold">₹{dayHigh}</p>
           </div>
+          <div className="p-3 bg-orange-50 rounded-xl shadow-sm">
+            <p className="text-xs text-slate-500">Day Low</p>
+            <p className="font-semibold">₹{dayLow}</p>
+          </div>
+        </div>
+      </div>
 
-          <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md space-y-4">
-            <div className="p-3 bg-white rounded-xl shadow-sm">
+      {/* RIGHT SIDE — KEEP YOUR STATS */}
+      <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md space-y-4">
+            <div className="p-3 rounded-xl shadow-sm bg-linear-to-r from-sky-50 to-white">
               <p className="text-xs text-slate-500">Avg Volume (3M)</p>
               <p className="font-semibold">{Math.round(baseStock.volume/1e6 *10)/10}M</p>
             </div>
-            <div className="p-3 bg-white rounded-xl shadow-sm">
+            <div className="p-3 bg-linear-to-r from-rose-50 to-white rounded-xl shadow-sm">
               <p className="text-xs text-slate-500">Beta</p>
               <p className="font-semibold">{baseStock.beta}</p>
             </div>
-            <div className="p-3 bg-white rounded-xl shadow-sm">
+            <div className="p-3 bg-linear-to-r from-amber-50 to-white rounded-xl shadow-sm">
               <p className="text-xs text-slate-500">Dividend Yield</p>
               <p className="font-semibold">{baseStock.dividendYield}</p>
             </div>
           </aside>
-        </section>
+
+    </section>
+
 
         {/* FINANCIALS (quarterly/yearly) */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">

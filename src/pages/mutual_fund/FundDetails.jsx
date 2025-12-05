@@ -17,12 +17,14 @@ import {
   Tooltip as ReTooltip,
   ResponsiveContainer,
 } from "recharts";
+import { MF_DATA } from "../../components/chart/mfNavData";
 import { FiShare2 } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
 import { MdOutlineInfo } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import DonutChart from "../../components/DonutChart";
 import logo from "../../assets/mutualFund/sbi.webp"
+import MFChart from "../../components/chart/MFChart";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
@@ -303,38 +305,7 @@ const [activeInfo, setActiveInfo] = useState(null);
               Updated: {new Date().toLocaleTimeString()}
             </div>
           </div>
-
-          <div style={{ width: "100%", height: 280 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={areaData}
-                margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
-              >
-                <defs>
-                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.18} />
-                    <stop
-                      offset="100%"
-                      stopColor="#10b981"
-                      stopOpacity={0.03}
-                    />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                <YAxis hide domain={["dataMin - 20", "dataMax + 20"]} />
-                <CartesianGrid strokeDasharray="3 3" opacity={0.08} />
-                <ReTooltip />
-                <Area
-                  type="monotone"
-                  dataKey="price"
-                  stroke="#10b981"
-                  fill="url(#g1)"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <MFChart data={MF_DATA[selectedTimeframe]} height={320} />
 
           <div className="mt-4 grid grid-cols-2 gap-3">
             <div className="p-4 bg-green-50 rounded-xl shadow-sm text-center">
