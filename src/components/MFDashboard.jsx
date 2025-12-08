@@ -44,14 +44,6 @@ const MFDashboard = () => {
   { name: "Watchlist", link: "watchlist" },
 ];
 
-  const markets = [
-    { name: "NIFTY", value: "25,597.65", change: "0.00 (0.00%)" },
-    { name: "SENSEX", value: "83,459.15", change: "0.00 (0.00%)" },
-    { name: "BANKNIFTY", value: "57,827.05", change: "0.00 (0.00%)" },
-    { name: "MIDCPNIFTY", value: "13,375.25", change: "-130.75 (0.97%)" },
-    { name: "FINNIFTY", value: "27,195.00", change: "0.00 (0.00%)" },
-  ];
-
 
   const dropdownRef = useRef(null);
 
@@ -132,18 +124,6 @@ const MFDashboard = () => {
           />
         </div>
 
-        {/* Market indexes */}
-        <div className="flex justify-between items-center px-10 py-2 text-xs text-gray-600">
-          <div className="flex gap-16">
-            {markets.map((m) => (
-              <NavLink key={m.name} to="/user/mutual_fund/explore">
-                <span className="font-semibold text-gray-800">{m.name}</span>{" "}
-                {m.value}{" "}
-                <span className="text-gray-500">{m.change}</span>
-              </NavLink>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* DESKTOP OUTLET */}

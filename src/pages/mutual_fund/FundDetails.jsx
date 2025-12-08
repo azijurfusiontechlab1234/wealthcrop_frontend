@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import DonutChart from "../../components/DonutChart";
 import logo from "../../assets/mutualFund/sbi.webp"
 import MFChart from "../../components/chart/MFChart";
+import MutualFundInvestPage from "./MutualFundInvestPage";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
@@ -36,6 +37,7 @@ const FundDetails = () => {
     name: "SBI Gold Direct Plan Growth",
     category: "Gold",
     risk: "Very High Risk",
+    rating:"4.4",
     nav: 37.67,
     fundSize: "₹8,456 Cr",
     expense: "0.35%",
@@ -87,6 +89,7 @@ const FundDetails = () => {
   const selectedLumpRate = fund.annualRates[duration] ?? fund.annualRates[3];
   const lumpFV_selected = Math.round(futureValueLumpsum(lumpAmt, selectedLumpRate, duration));
   const lumpGainPct_selected = percentGain(lumpFV_selected, lumpAmt);
+  
 
   const data = [
     { label: "Technology", value: 35.5, color: "#15B7E6" },
@@ -127,9 +130,13 @@ const FundDetails = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
   };
   const [livePrice, setLivePrice] = useState(baseStock.price);
+  const [buyModal, setBuyModal] = useState(false)
   const pctChange = Math.round(((livePrice - baseStock.price) / baseStock.price) * 10000) / 100;
-   const openBuy = () => setBuySellModal({ open: true, type: "buy" });
-  const openSell = () => setBuySellModal({ open: true, type: "sell" });
+   const openBuy = () => setBuyModal(true);
+
+  const closeModal = () => setBuyModal(false);
+
+
 
   const fundamentals = [
   { label: "Top 5", value: "45%" },
@@ -160,126 +167,148 @@ const [activeInfo, setActiveInfo] = useState(null);
   return (
     <div className="w-full bg-gray-50 text-[#1A1A1A] py-10 px-5 lg:px-24 space-y-10">
       {/* HEADER */}
-      <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src={logo}
-                alt="logo"
-                className="w-16 h-16 rounded-xl object-cover shadow"
-              />
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 capitalize">{name}</h1>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-sm text-slate-500">
-                    {fund.category}
-                  </span>
-                  <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
-                    {fund.risk}
-                  </span>
-                </div>
-              </div>
-            </div>
+ <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setSaved(!saved)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${
-                  saved
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white border border-slate-200 text-slate-700"
-                }`}
-              >
-                <AiOutlineStar /> {saved ? "Saved" : "Save"}
-              </button>
+  {/* LEFT MAIN SECTION */}
+  <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
 
-              <button
-                onClick={shareWhatsApp}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow"
-              >
-                <FiShare2 /> Share
-              </button>
-            </div>
+    {/* TOP: Logo + Title + Save/Share */}
+    <div className="flex flex-col md:flex-row items-start md:justify-between gap-4">
+
+      {/* LOGO + TITLE */}
+      <div className="flex items-start gap-4 flex-1 min-w-0">
+        <img
+          src={logo}
+          alt="logo"
+          className="w-16 h-16 rounded-xl object-cover shadow"
+        />
+        <div className="flex-1 min-w-0">
+
+          {/* FUND NAME */}
+          <h1 className="text-2xl font-bold text-slate-900 capitalize break-words whitespace-normal">
+            {name}
+          </h1>
+
+          {/* CATEGORY + RISK */}
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            <span className="text-sm text-slate-500">{fund.category}</span>
+            <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
+              {fund.risk}
+            </span>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
-            <div>
-              <div className=" items-end gap-3">
-                <h2 className="text-4xl font-extrabold text-emerald-600">
-                  +31.29%{" "}
-                  <span className="text-gray-400 text-sm font-medium">
-                    3Y annualized
-                  </span>
-                </h2>
-                <div
-                  className={`px-3 py-1 rounded-md text-sm font-semibold 
-                          ${
-                            pctChange >= 0
-                              ? " text-emerald-700"
-                              : " text-red-600"
-                          }
-                          `}
-                >
-                  {/* {pctChange >= 0 ? "+" : ""}{pctChange}% */}
-                  +0.11%{" "}
-                  <span className="text-gray-400 text-sm font-medium">1D</span>
-                </div>
-              </div>
-              {/* <p className="text-xs text-slate-500 mt-1">As of {new Date().toLocaleString()}</p> */}
-            </div>
+          {/* SAVE + SHARE BUTTONS ON SMALL DEVICES */}
+          <div className="flex md:hidden gap-3 mt-3">
+            <button
+              onClick={() => setSaved(!saved)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition 
+                ${saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}
+            >
+              <AiOutlineStar />
+            </button>
 
-            <div className="flex gap-3 items-center">
-              <button
-                onClick={openBuy}
-                className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700"
-              >
-                Invest Now
-              </button>
+            <button
+              onClick={shareWhatsApp}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow"
+            >
+              <FiShare2 />
+            </button>
+          </div>
 
-              <div className="text-right text-sm text-slate-500">
-                <div>
-                  Nav:{" "}
-                  <span className="text-slate-900 font-medium">{fund.nav}</span>
-                </div>
-                <div>
-                  Fund size:{" "}
-                  <span className="text-slate-900 font-medium">
-                    {fund.fundSize}
-                  </span>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+
+      {/* SAVE + SHARE BUTTONS ON MEDIUM+ DEVICES */}
+      <div className="hidden md:flex md:items-center gap-3">
+        <button
+          onClick={() => setSaved(!saved)}
+          className={`flex items-center gap-2 px-3 py-2 rounded-xl transition 
+            ${saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}
+        >
+          <AiOutlineStar />
+          <span>{saved ? "Saved" : "Save"}</span>
+        </button>
+
+        <button
+          onClick={shareWhatsApp}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow"
+        >
+          <FiShare2 />
+          <span>Share</span>
+        </button>
+      </div>
+
+    </div>
+
+    {/* MIDDLE: Performance + Invest Now */}
+    <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
+
+      {/* FUND PERFORMANCE */}
+      <div>
+        <div className="flex items-end gap-3">
+          <h2 className="text-4xl font-extrabold text-emerald-600">
+            +31.29%{" "}
+            <span className="text-gray-400 text-sm font-medium">3Y annualized</span>
+          </h2>
+          <div className={`px-3 py-1 rounded-md text-sm font-semibold ${
+            pctChange >= 0 ? "text-emerald-700" : "text-red-600"
+          }`}>
+            +0.11% <span className="text-gray-400 text-sm font-medium">1D</span>
           </div>
         </div>
+      </div>
 
-        {/* RIGHT MINI */}
-        <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md h-full">
-          <div className="flex flex-col gap-4">
-            <div className="bg-gradient-to-r from-sky-50 to-white p-3 rounded-lg">
-              <p className="text-xs text-slate-500">Expence Ratio</p>
-              <p className="text-lg font-semibold">{fund.expense}</p>
-            </div>
+      {/* INVEST + FUND DETAILS */}
+      <div className="flex gap-3 items-center flex-wrap">
+        <button
+          onClick={openBuy}
+          className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700"
+        >
+          Invest Now
+        </button>
 
-            <div className="bg-gradient-to-r from-rose-50 to-white p-3 rounded-lg">
-              <p className="text-xs text-slate-500">52W Range</p>
-              <p className="text-sm font-semibold">
-                ₹{baseStock.week52Low} - ₹{baseStock.week52High}
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-r from-amber-50 to-white p-3 rounded-lg">
-              <p className="text-xs text-slate-500">Analyst Rating</p>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
-                  {4.5}
-                </div>
-                <div className="text-sm text-slate-700">Strong Buy</div>
-              </div>
-            </div>
+        <div className="text-right text-sm text-slate-500">
+          <div>
+            Nav: <span className="text-slate-900 font-medium">{fund.nav}</span>
           </div>
-        </aside>
-      </header>
+          <div>
+            Fund size: <span className="text-slate-900 font-medium">{fund.fundSize}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* RIGHT MINI PANEL */}
+  <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md h-full mt-4 lg:mt-0">
+    <div className="flex flex-col gap-4">
+
+      <div className="bg-linear-to-r from-sky-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">Expense Ratio</p>
+        <p className="text-lg font-semibold">{fund.expense}</p>
+      </div>
+
+      <div className="bg-linear-to-r from-rose-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">52W Range</p>
+        <p className="text-sm font-semibold">
+          ₹{fund.week52Low} - ₹{fund.week52High}
+        </p>
+      </div>
+
+      <div className="bg-linear-to-r from-amber-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">Analyst Rating</p>
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
+            {fund.rating}
+          </div>
+          <div className="text-sm text-slate-700">Strong Buy</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</header>
+
 
       {/* Chart Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -647,7 +676,7 @@ const [activeInfo, setActiveInfo] = useState(null);
 
         <table className="min-w-full table-auto border-collapse text-sm sm:text-base">
           <thead>
-            <tr className="bg-gradient-to-r from-blue-50 to-green-50 border-y">
+            <tr className="bg-linear-to-r from-blue-50 to-green-50 border-y">
               <th
                 colSpan={1}
                 className="py-3 px-4 font-semibold text-gray-700 text-left"
@@ -762,6 +791,31 @@ const [activeInfo, setActiveInfo] = useState(null);
           </p>
         </div>
       </div>
+
+          {
+            buyModal && (
+              <div
+              onClick={closeModal}
+               className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+
+              <div 
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-2xl h-[90vh] bg-white rounded-2xl shadow-2xl overflow-y-auto p-6 relative ">
+ {/* Close button */}
+      <button
+        onClick={closeModal}
+        className="absolute top-5 right-9 text-3xl text-slate-400 hover:text-slate-700 transition cursor-pointer"
+      >
+        ×
+      </button>
+      <MutualFundInvestPage/>
+              </div>
+
+              </div>
+            )
+          }
+
+
     </div>
   );
 };

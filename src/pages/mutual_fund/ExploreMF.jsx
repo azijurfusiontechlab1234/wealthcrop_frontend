@@ -26,12 +26,12 @@ const ExploreMF = () => {
   ];
 
   const collections = [
-    { name: "High Return", icon: <FaChartLine size={32} className="text-green-600" /> },
-    { name: "Gold Funds", icon: <FaCoins size={32} className="text-yellow-500" /> },
-    { name: "5 Star Funds", icon: <FaLandmark size={32} className="text-blue-500" /> },
-    { name: "Large Cap", icon: <FaChartPie size={32} className="text-indigo-600" /> },
-    { name: "Mid Cap", icon: <FaChartLine size={32} className="text-cyan-600" /> },
-    { name: "Small Cap", icon: <FaChartPie size={32} className="text-pink-600" /> },
+    { name: "High Return", link:"/mutual_fund/collections/high-return", icon: <FaChartLine size={32} className="text-green-600" /> },
+    { name: "Gold Funds", link:"/mutual_fund/collections/gold-funds", icon: <FaCoins size={32} className="text-yellow-500" /> },
+    { name: "5 Star Funds", link:"/mutual_fund/collections/5-star-funds", icon: <FaLandmark size={32} className="text-blue-500" /> },
+    { name: "Large Cap", link:"/mutual_fund/collections/large_cap", icon: <FaChartPie size={32} className="text-indigo-600" /> },
+    { name: "Mid Cap", link:"/mutual_fund/collections/mid_cap", icon: <FaChartLine size={32} className="text-cyan-600" /> },
+    { name: "Small Cap", link:"/mutual_fund/collections/small_cap", icon: <FaChartPie size={32} className="text-pink-600" /> },
   ];
 
   const growwFunds = [
@@ -96,6 +96,7 @@ const ExploreMF = () => {
             {collections.map((item, idx) => (
               <div
                 key={idx}
+                onClick={()=> navigate(item.link)}
                 className="rounded-xl p-4 bg-gray-50 shadow-sm hover:bg-gray-100 transition cursor-pointer flex flex-col items-center"
               >
                 <div className="w-12 h-12 flex items-center justify-center">

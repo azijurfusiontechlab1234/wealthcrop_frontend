@@ -29,13 +29,13 @@ import {
   data_5Y,
   data_All,
 } from "./chart/chartData";
+import OrderEntryPage from "../pages/stocks/OrderEntryPage";
 
 /**
  * NOTE: use your uploaded image path here (developer provided).
  * The image is available at:
  * /mnt/data/489847be-2715-4255-af96-6c64dad8bb92.png
  */
-const LOGO_PATH = "/mnt/data/489847be-2715-4255-af96-6c64dad8bb92.png";
 
 export default function StockDetailsPremiumFull() {
   // ---------------- MOCK STOCK DATA ----------------
@@ -222,77 +222,109 @@ const [activeInfo, setActiveInfo] = useState(null);
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* HEADER */}
-        <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <img src={logo} alt="logo" className="w-16 h-16 rounded-xl object-cover shadow" />
-                <div>
-                  <h1 className="text-2xl font-bold text-slate-900 capitalize">{name}</h1>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-sm text-slate-500">{baseStock.symbol}</span>
-                    <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">Technology</span>
-                  </div>
-                </div>
-              </div>
+       <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-              <div className="flex items-center gap-3">
-                <button onClick={() => setSaved(!saved)} className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>
-                  <AiOutlineStar /> {saved ? "Saved" : "Save"}
-                </button>
+  {/* LEFT SECTION */}
+  <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl md:p-6 p-4 shadow-md">
 
-                <button onClick={shareWhatsApp} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow">
-                  <FiShare2 /> Share
-                </button>
-              </div>
-            </div>
+    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
 
-            <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
-              <div>
-                <div className="flex items-end gap-3">
-                  <h2 className="text-4xl font-extrabold text-slate-900">₹{livePrice.toFixed(2)}</h2>
-                  <div className={`px-3 py-1 rounded-md text-sm font-semibold ${pctChange >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-600"}`}>
-                    {pctChange >= 0 ? "+" : ""}{pctChange}%
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 mt-1">As of {new Date().toLocaleString()}</p>
-              </div>
+      {/* LOGO + NAME */}
+      <div className="flex items-center gap-4 flex-1 min-w-0">
+        <img
+          src={logo}
+          alt="logo"
+          className="w-16 h-16 rounded-xl object-cover shadow"
+        />
 
-              <div className="flex gap-3 items-center">
-                <button onClick={openBuy} className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700">Buy</button>
-                <button onClick={openSell} className="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold shadow hover:bg-red-700">Sell</button>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl font-bold text-slate-900 capitalize break-words whitespace-normal">
+            {name}
+          </h1>
 
-                <div className="text-right text-sm text-slate-500">
-                  <div>Vol: <span className="text-slate-900 font-medium">{baseStock.volume.toLocaleString()}</span></div>
-                  <div>Mkt Cap: <span className="text-slate-900 font-medium">{baseStock.marketCap}</span></div>
-                </div>
-              </div>
-            </div>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-sm text-slate-500">{baseStock.symbol}</span>
+            <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
+              Technology
+            </span>
           </div>
+        </div>
+      </div>
 
-          {/* RIGHT MINI */}
-          <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md h-full">
-            <div className="flex flex-col gap-4">
-              <div className="bg-gradient-to-r from-sky-50 to-white p-3 rounded-lg">
-                <p className="text-xs text-slate-500">P/E Ratio</p>
-                <p className="text-lg font-semibold">{baseStock.pe}</p>
-              </div>
+      {/* ACTION BTNS */}
+      <div className="flex md:flex-row flex-row md:items-center items-start gap-3">
 
-              <div className="bg-gradient-to-r from-rose-50 to-white p-3 rounded-lg">
-                <p className="text-xs text-slate-500">52W Range</p>
-                <p className="text-sm font-semibold">₹{baseStock.week52Low} - ₹{baseStock.week52High}</p>
-              </div>
+        <button 
+          onClick={() => setSaved(!saved)}
+          className={`flex items-center gap-2 px-3 py-2 rounded-xl transition 
+            ${saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}
+        >
+          <AiOutlineStar />
+          <span className="hidden md:inline">
+            {saved ? "Saved" : "Save"}
+          </span>
+        </button>
 
-              <div className="bg-gradient-to-r from-amber-50 to-white p-3 rounded-lg">
-                <p className="text-xs text-slate-500">Analyst Rating</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">{baseStock.rating}</div>
-                  <div className="text-sm text-slate-700">Strong Buy</div>
-                </div>
-              </div>
-            </div>
-          </aside>
-        </header>
+        <button
+          onClick={shareWhatsApp}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow"
+        >
+          <FiShare2 />
+          <span className="hidden md:inline">Share</span>
+        </button>
+
+      </div>
+    </div>
+
+    {/* PRICE + BUY/SELL */}
+    <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
+      <div>
+        <div className="flex items-end gap-3">
+          <h2 className="text-4xl font-extrabold text-slate-900">₹{livePrice.toFixed(2)}</h2>
+          <div className={`px-3 py-1 rounded-md text-sm font-semibold ${pctChange >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-600"}`}>
+            {pctChange >= 0 ? "+" : ""}{pctChange}%
+          </div>
+        </div>
+        <p className="text-xs text-slate-500 mt-1">As of {new Date().toLocaleString()}</p>
+      </div>
+
+      <div className="flex items-center gap-3 flex-wrap">
+        <button onClick={openBuy} className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700">Buy</button>
+        <button onClick={openSell} className="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold shadow hover:bg-red-700">Sell</button>
+
+        <div className="text-right text-sm text-slate-500">
+          <div>Vol: <span className="text-slate-900 font-medium">{baseStock.volume.toLocaleString()}</span></div>
+          <div>Mkt Cap: <span className="text-slate-900 font-medium">{baseStock.marketCap}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* RIGHT MINI SECTION */}
+  <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md h-full">
+    <div className="flex flex-col gap-4">
+      <div className="bg-linear-to-r from-sky-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">P/E Ratio</p>
+        <p className="text-lg font-semibold">{baseStock.pe}</p>
+      </div>
+
+      <div className="bg-linear-to-r from-rose-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">52W Range</p>
+        <p className="text-sm font-semibold">₹{baseStock.week52Low} - ₹{baseStock.week52High}</p>
+      </div>
+
+      <div className="bg-linear-to-r from-amber-50 to-white p-3 rounded-lg">
+        <p className="text-xs text-slate-500">Analyst Rating</p>
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">{baseStock.rating}</div>
+          <div className="text-sm text-slate-700">Strong Buy</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</header>
+
 
         {/* CHART + QUICK METRICS */}
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -339,17 +371,40 @@ const [activeInfo, setActiveInfo] = useState(null);
           <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-slate-900">Financials</h3>
-              <div className="flex items-center gap-3">
-                <div className="flex gap-2">
-                  <button onClick={() => setFinPeriod("quarterly")} className={`px-3 py-1 rounded-md ${finPeriod==="quarterly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"}`}>Quarterly</button>
-                  <button onClick={() => setFinPeriod("yearly")} className={`px-3 py-1 rounded-md ${finPeriod==="yearly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"}`}>Yearly</button>
-                </div>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+  <div className="flex flex-wrap gap-2">
+    <button onClick={() => setFinPeriod("quarterly")}
+      className={`px-3 py-1 rounded-md ${
+        finPeriod==="quarterly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"
+      }`}>
+      Quarterly
+    </button>
 
-                <div className="flex gap-2">
-                  <button onClick={() => setFinTab("revenue")} className={`px-3 py-1 rounded-md ${finTab==="revenue" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"}`}>Revenue</button>
-                  <button onClick={() => setFinTab("profit")} className={`px-3 py-1 rounded-md ${finTab==="profit" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"}`}>Profit</button>
-                </div>
-              </div>
+    <button onClick={() => setFinPeriod("yearly")}
+      className={`px-3 py-1 rounded-md ${
+        finPeriod==="yearly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"
+      }`}>
+      Yearly
+    </button>
+  </div>
+
+  <div className="flex flex-wrap gap-2">
+    <button onClick={() => setFinTab("revenue")}
+      className={`px-3 py-1 rounded-md ${
+        finTab==="revenue" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"
+      }`}>
+      Revenue
+    </button>
+
+    <button onClick={() => setFinTab("profit")}
+      className={`px-3 py-1 rounded-md ${
+        finTab==="profit" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"
+      }`}>
+      Profit
+    </button>
+  </div>
+</div>
+
             </div>
 
             <div style={{width:"100%", height: 260}}>
@@ -549,7 +604,7 @@ const [activeInfo, setActiveInfo] = useState(null);
         </section>
 
         {/* sticky quick order */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
+        <div className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
           <div className="bg-white/80 backdrop-blur-md border border-white/30 rounded-3xl p-4 shadow-lg flex items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div className="text-sm text-slate-500">Quick Order</div>
@@ -568,47 +623,29 @@ const [activeInfo, setActiveInfo] = useState(null);
       </div>
 
       {/* BUY / SELL modal */}
-      {buySellModal.open && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-2xl bg-white rounded-2xl p-6 shadow-xl">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-xl font-semibold">{buySellModal.type === "buy" ? "Buy Shares" : "Sell Shares"}</h3>
-                <p className="text-sm text-slate-500">Place a simple {orderType} order</p>
-              </div>
-              <button onClick={closeModal} className="text-2xl text-slate-400">×</button>
-            </div>
+{buySellModal.open && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+    onClick={closeModal} // Click outside to close
+  >
+    <div
+      className="w-full max-w-2xl h-[90vh] bg-white rounded-2xl shadow-xl overflow-y-auto p-6 relative"
+      onClick={(e) => e.stopPropagation()} // Prevent clicks inside modal from closing
+    >
+      {/* Close button */}
+      <button
+        onClick={closeModal}
+        className="absolute top-5 right-9 text-3xl text-slate-400 hover:text-slate-700 transition cursor-pointer"
+      >
+        ×
+      </button>
 
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-slate-500">Quantity</label>
-                <input type="number" min={1} value={qty} onChange={(e)=>setQty(Math.max(1, Number(e.target.value||1)))} className="mt-2 w-full p-3 border rounded-lg"/>
-              </div>
+      {/* Your content */}
+      <OrderEntryPage />
+    </div>
+  </div>
+)}
 
-              <div>
-                <label className="text-sm text-slate-500">Order Type</label>
-                <select value={orderType} onChange={(e)=>setOrderType(e.target.value)} className="mt-2 w-full p-3 border rounded-lg">
-                  <option>Market</option>
-                  <option>Limit</option>
-                  <option>Stop Loss</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-500">Estimated Total</p>
-                <p className="text-lg font-semibold">₹{(livePrice*qty).toFixed(2)}</p>
-              </div>
-
-              <div className="flex gap-3">
-                <button onClick={closeModal} className="px-6 py-2 rounded-xl border">Cancel</button>
-                <button onClick={placeOrder} className="px-6 py-2 rounded-xl bg-emerald-600 text-white">Confirm {buySellModal.type === "buy" ? "Buy" : "Sell"}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

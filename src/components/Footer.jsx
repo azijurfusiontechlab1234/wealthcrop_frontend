@@ -122,7 +122,7 @@ const Section = ({ title, list, basePath }) => (
       {/* ---------------------------- */}
       {/* Main Footer Top Section */}
       {/* ---------------------------- */}
-      <footer className="bg-white border-t-2 border-gray-300 py-10 hidden lg:block ">
+      <footer className="bg-white border-t-2 border-gray-300 py-10  ">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
           <div className="flex flex-col items-center md:items-start space-y-4">
             <Link to="/">
@@ -191,7 +191,7 @@ const Section = ({ title, list, basePath }) => (
       {/* ---------------------------- */}
       {/* EXTENDED PROFESSIONAL FOOTER */}
       {/* ---------------------------- */}
-      <section className="bg-white text-blue-950 border-gray-300 py-4 hidden lg:block">
+      <section className="bg-white text-blue-950 border-gray-300 py-4 mb-20 lg:mb-0">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <Section title="Asset Management Companies (AMCs)" list={amcs} basePath="/amc" />
           <Section title="Popular Mutual Funds" list={mutualFunds} basePath="/mutual_fund" />

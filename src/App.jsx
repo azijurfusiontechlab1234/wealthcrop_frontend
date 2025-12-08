@@ -67,6 +67,7 @@ import ChartPage from "./components/chart/ChartPage";
 import TerminalChart from "./components/chart/TerminalChart";
 import TradingViewWidget from "./components/chart/TradingViewWidget";
 import GrowChart from "./components/chart/GrowChart";
+import FundCategorySection from "./pages/mutual_fund/FundCategorySection";
 
 
 const queryClient = new QueryClient();
@@ -134,7 +135,7 @@ function App() {
       {/* ✅ Large screens (always show OldHeader) */}
       <ScrollToTopButton/>
       <DraggableQRCodeCard value="https://example.com" size={100} />
-      <div className="hidden md:block sticky top-0 left-0 w-full z-50">
+      <div className="hidden lg:block sticky top-0 left-0 w-full z-50">
         <OldHeader />
       </div>
 
@@ -166,6 +167,7 @@ function App() {
               <Route path="sip" element={<SIPs />} />
               <Route path="watchlist" element={<WatchlistMF />} />
             </Route>
+            {/* <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} /> */}
 
             {/* F&O and Mutual Fund */}
             <Route path="/user/f&o" element={<FODashboard />} />

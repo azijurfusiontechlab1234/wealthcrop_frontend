@@ -14,6 +14,7 @@ import { AiOutlineStar } from "react-icons/ai";
 import { PieChart, Pie, Cell } from "recharts";
 import logo from "../assets/mutualFund/sbi.webp";
 import { useParams } from "react-router-dom";
+import CandleChart from "../components/chart/CandleChart";
 
 export default function IndicesDetails() {
   const { name } = useParams();
@@ -251,46 +252,16 @@ export default function IndicesDetails() {
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Price Chart</h2>
 
           <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <span className="text-sm text-slate-500">Timeframe:</span>
                 {["7D","30D","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
                   <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-3 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
                 ))}
-              </div>
+              </div> */}
               <div className="text-sm text-slate-500">Updated: {new Date().toLocaleTimeString()}</div>
             </div>
 
-          <div style={{ width: "100%", height: 260 }}>
-            <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
-                            data={areaData}
-                            margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
-                          >
-                            <defs>
-                              <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#10b981" stopOpacity={0.18} />
-                                <stop
-                                  offset="100%"
-                                  stopColor="#10b981"
-                                  stopOpacity={0.03}
-                                />
-                              </linearGradient>
-                            </defs>
-                            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                            <YAxis hide domain={["dataMin - 20", "dataMax + 20"]} />
-                            <CartesianGrid strokeDasharray="3 3" opacity={0.08} />
-                            <ReTooltip />
-                            <Area
-                              type="monotone"
-                              dataKey="price"
-                              stroke="#10b981"
-                              fill="url(#g1)"
-                              strokeWidth={2}
-                              dot={false}
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-          </div>
+          <CandleChart height={350} />
 
           <div className="grid grid-cols-2 gap-3 mt-4">
             <div className="bg-white shadow-sm rounded-xl p-3">
