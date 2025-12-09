@@ -98,7 +98,12 @@ const MFDashboard = () => {
         }`}
       >
         {/* Tabs + Search */}
-        <div className="flex flex-col lg:flex-row justify-between items-center px-10 py-5 gap-4">
+        <div className="flex flex-col px-10 py-5 gap-3.5">
+
+          <p className="text-[10px] text-gray-400 tracking-wide uppercase ">
+      Explore Mutual Fund 
+    </p>
+          <div className="flex flex-col lg:flex-row justify-between items-center">
           <nav className="flex gap-8 text-md font-medium overflow-x-auto">
             {topTabs.map((tab) => (
               <NavLink
@@ -123,6 +128,7 @@ const MFDashboard = () => {
             className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-1 focus:ring-blue-800 outline-none"
           />
         </div>
+         </div>
 
       </div>
 

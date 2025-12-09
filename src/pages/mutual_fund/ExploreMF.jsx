@@ -23,6 +23,7 @@ const ExploreMF = () => {
     { name: "Parag Parikh Flexi Cap Fund", return: "+21.6%", years: "3Y", img: parag },
     { name: "Motilal Oswal Midcap Fund", return: "+27.4%", years: "3Y", img: motilal },
     { name: "Bandhan Small Cap Fund", return: "+33.0%", years: "3Y", img: bandhan },
+    { name: "icici pudential fund", return: "24.6%", years: "3Y", img: parag}
   ];
 
   const collections = [

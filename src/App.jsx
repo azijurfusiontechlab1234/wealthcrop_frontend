@@ -68,6 +68,8 @@ import TerminalChart from "./components/chart/TerminalChart";
 import TradingViewWidget from "./components/chart/TradingViewWidget";
 import GrowChart from "./components/chart/GrowChart";
 import FundCategorySection from "./pages/mutual_fund/FundCategorySection";
+import IpoDashboardPage from "./components/ipo/IpoDashboardPage";
+import ManageSipPage from "./components/sip/ManageSipPage";
 
 
 const queryClient = new QueryClient();
@@ -167,6 +169,7 @@ function App() {
               <Route path="sip" element={<SIPs />} />
               <Route path="watchlist" element={<WatchlistMF />} />
             </Route>
+            <Route path="/mutual_fund/manage-sip" element={<ManageSipPage/>} />
             {/* <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} /> */}
 
             {/* F&O and Mutual Fund */}
@@ -208,6 +211,8 @@ function App() {
             <Route path="/user/balance/inr" element={<AddMoney />} />
             <Route path="/investments" element={<InvestmentOptions />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            {/* IPO */}
+            <Route path="/ipo" element={<IpoDashboardPage/>} />
           </Route>
 
           {/* Public routes */}

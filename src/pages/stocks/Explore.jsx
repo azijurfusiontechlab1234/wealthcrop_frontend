@@ -538,13 +538,13 @@ const Explore = () => {
               <h2 className="font-semibold text-lg mb-4">Products & Tools</h2>
               <div className="space-y-5">
                 {[
-                  { name: "IPO", count: 6 },
-                  { name: "Bonds", count: 1 },
-                  { name: "ETFs", count: 2 },
-                  { name: "Fixed Deposit", count: 3 },
+                  { name: "IPO", route:"/ipo", count: 6 },
+                  { name: "Bonds", route:"/", count: 1 },
+                  { name: "ETFs", route:"/", count: 2 },
+                  { name: "Fixed Deposit", route:"/", count: 3 },
                 ].map((tool) => (
                   <a
-                    href="#"
+                    href={tool.route}
                     key={tool.name}
                     className="bg-white rounded-xl p-6 shadow hover:shadow-md transition flex justify-between items-center"
                   >

@@ -43,7 +43,7 @@ const Positions = () => {
     ((totalPnL / totalInvested) * 100).toFixed(2);
 
   return (
-    <div className="py-5 px-14 min-h-screen bg-white ">
+    <div className="py-5 px-14 min-h-screen bg-slate-100 ">
       {/* ❌ EMPTY STATE */}
       {!hasStocks ? (
         <div className="flex flex-col items-center text-center mt-16">
