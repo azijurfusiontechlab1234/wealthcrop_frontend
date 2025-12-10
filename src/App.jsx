@@ -70,6 +70,8 @@ import GrowChart from "./components/chart/GrowChart";
 import FundCategorySection from "./pages/mutual_fund/FundCategorySection";
 import IpoDashboardPage from "./components/ipo/IpoDashboardPage";
 import ManageSipPage from "./components/sip/ManageSipPage";
+import IpoDetails from "./components/ipo/IpoDetails";
+import BondPage from "./components/BondPage";
 
 
 const queryClient = new QueryClient();
@@ -213,6 +215,9 @@ function App() {
             <Route path="/portfolio" element={<Portfolio />} />
             {/* IPO */}
             <Route path="/ipo" element={<IpoDashboardPage/>} />
+            <Route path="/ipo/:ipoName" element={<IpoDetails/>} />
+
+            <Route path="/bond" element={<BondPage/>} />
           </Route>
 
           {/* Public routes */}

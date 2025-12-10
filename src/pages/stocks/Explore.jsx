@@ -539,7 +539,7 @@ const Explore = () => {
               <div className="space-y-5">
                 {[
                   { name: "IPO", route:"/ipo", count: 6 },
-                  { name: "Bonds", route:"/", count: 1 },
+                  { name: "Bonds", route:"/bond", count: 1 },
                   { name: "ETFs", route:"/", count: 2 },
                   { name: "Fixed Deposit", route:"/", count: 3 },
                 ].map((tool) => (

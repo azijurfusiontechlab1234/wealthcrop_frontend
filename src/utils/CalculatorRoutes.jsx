@@ -10,6 +10,7 @@ import SipCalculator from "../pages/calculators/SipCalculator";
 import SwpCalculator from "../pages/calculators/SwpCalculator";
 import NPSCalculator from "../pages/calculators/NPSCalculator";
 import EmiCalculator from "../pages/calculators/EmiCalculator";
+import EducationCalculator from "../pages/calculators/EducationCalculator";
 
 
 export const calculatorRoutes = [
@@ -25,4 +26,7 @@ export const calculatorRoutes = [
   { path: "apy-calculator", element: <ApyCalculator /> },
   { path: "inflation-calculator", element: <InflationCalculator /> },
   { path: "hra-calculator", element: <HraCalculator /> },
+  { path: "education-cost-calculator", element: <EducationCalculator/> },
+  { path: "income-tax-calculator", },
+  { path: "rent-calculator",},
 ];

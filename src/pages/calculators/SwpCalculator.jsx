@@ -185,7 +185,7 @@ const SwpCalculator = () => {
       </div>
 
       {/* FAQ */}
-      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow bg-linear-to-r from-blue-200 to-green-100">
+      <div className="max-w-4xl mx-auto mt-10 p-6 rounded-2xl shadow bg-linear-to-r from-blue-200 to-green-100">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">FAQ — SWP</h2>
 
         {faqs.map((item, index) => (

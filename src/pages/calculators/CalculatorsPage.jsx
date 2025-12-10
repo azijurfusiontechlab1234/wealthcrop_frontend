@@ -91,6 +91,12 @@ const calculators = [
     icon: Calculator,
     bg: "from-sky-100 to-blue-200",
   },
+  {
+    name: "Education cost Calculator",
+    path: "/calculator/education-cost-calculator",
+    icon: Wallet,
+    bg: "from-teal-100 to-cyan-200",
+  },
   
 ];
 

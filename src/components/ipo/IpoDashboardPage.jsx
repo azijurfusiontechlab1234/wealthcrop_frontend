@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const IPO_DUMMY_DATA = [
   {
@@ -100,33 +101,39 @@ const IPO_DUMMY_DATA = [
 ];
 
 const IpoDashboardPage = () => {
-  const [marketFilter, setMarketFilter] = useState("ALL"); //All / Mainboard/ SME
-  const [statusFilter, setStatusFilter] = useState("OPEN");  //Open / closed / upcoming
-  const [search, setSearch] = useState(""); // ✅ NEW SEARCH STATE
+  const [marketFilter, setMarketFilter] = useState("ALL");
+  const [statusFilter, setStatusFilter] = useState("OPEN");
+  const [search, setSearch] = useState("");
 
-  // Filter IPOs
+  // APPLY MODAL STATES
+  const [showApply, setShowApply] = useState(false);
+  const [selectedIPO, setSelectedIPO] = useState(null);
+  const [lotCount, setLotCount] = useState(1);
+
+  const navigate = useNavigate();
+
+  // FILTERS
   const filteredIpos = useMemo(() => {
     return IPO_DUMMY_DATA.filter((ipo) => {
       const marketMatch =
         marketFilter === "ALL" ? true : ipo.marketType === marketFilter;
-
       const statusMatch = ipo.status === statusFilter;
-
       const searchMatch =
         ipo.name.toLowerCase().includes(search.toLowerCase()) ||
         ipo.symbol.toLowerCase().includes(search.toLowerCase());
 
-      return marketMatch && statusMatch && searchMatch; // ⭐ search applied
+      return marketMatch && statusMatch && searchMatch;
     });
   }, [marketFilter, statusFilter, search]);
 
-  // Summary
+  // SUMMARY
   const summary = useMemo(() => {
-    const openCount = IPO_DUMMY_DATA.filter((i) => i.status === "OPEN").length;
-    const oldCounr = IPO_DUMMY_DATA.filter((i)=> i.status === "old").length;
-    const closedCount = IPO_DUMMY_DATA.filter((i) => i.status === "CLOSED").length;
-    const upcomingCount = IPO_DUMMY_DATA.filter((i) => i.status === "UPCOMING").length;
-    return { openCount, closedCount, upcomingCount };
+    return {
+      openCount: IPO_DUMMY_DATA.filter((i) => i.status === "OPEN").length,
+      closedCount: IPO_DUMMY_DATA.filter((i) => i.status === "CLOSED").length,
+      upcomingCount: IPO_DUMMY_DATA.filter((i) => i.status === "UPCOMING")
+        .length,
+    };
   }, []);
 
   const statusLabelMap = {
@@ -137,7 +144,6 @@ const IpoDashboardPage = () => {
 
   const statusBadgeClass = (status) => {
     if (status === "OPEN") return "bg-emerald-100 text-emerald-700";
-    if (status === "OLD") return "bg-amber-100 text-amber-700";
     if (status === "CLOSED") return "bg-slate-100 text-slate-700";
     if (status === "UPCOMING") return "bg-blue-100 text-blue-700";
     return "bg-slate-100 text-slate-700";
@@ -146,25 +152,25 @@ const IpoDashboardPage = () => {
   return (
     <div className="min-h-screen bg-slate-100 flex justify-center px-4 py-6">
       <div className="w-full max-w-6xl">
-        
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-semibold text-slate-900">IPO Dashboard</h1>
-          {/* <p className="text-xs text-slate-500">Markets / IPO</p> */}
+          <h1 className="text-xl font-semibold text-slate-900">
+            IPO Dashboard
+          </h1>
         </div>
 
-        {/* ✅ SEARCH BAR (ONLY NEW UI) */}
+        {/* SEARCH */}
         <div className="mb-3">
           <input
             type="text"
             placeholder="Search IPO by name or symbol..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-3 py-2 w-full max-w-xs rounded-xl border border-slate-300 bg-white text-xs outline-none"
+            className="px-3 py-2 w-full max-w-xs rounded-xl border border-slate-300 text-xs bg-white outline-none"
           />
         </div>
 
-        {/* Top filter */}
+        {/* MARKET FILTERS */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div className="flex gap-2 text-xs font-medium bg-slate-100 rounded-2xl p-1">
             {["ALL", "MAINBOARD", "SME"].map((item) => (
@@ -172,7 +178,9 @@ const IpoDashboardPage = () => {
                 key={item}
                 onClick={() => setMarketFilter(item)}
                 className={`px-3 py-1.5 rounded-xl ${
-                  marketFilter === item ? "bg-slate-900 text-white" : "text-slate-700"
+                  marketFilter === item
+                    ? "bg-slate-900 text-white"
+                    : "text-slate-700"
                 }`}
               >
                 {item}
@@ -182,27 +190,25 @@ const IpoDashboardPage = () => {
 
           {/* Summary */}
           <div className="flex flex-wrap gap-2 text-xs">
-            <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span>Open IPOs</span>
-              {/* <span className="font-semibold">{summary.openCount}</span> */}
-              <span className="font-semibold">{summary.openCount}</span>
-            </div>
-            <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-slate-500" />
-              <span>Closed</span>
-              <span className="font-semibold">{summary.closedCount}</span>
-            </div>
-            <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-blue-500" />
-              <span>Upcoming</span>
-              {/* <span className="font-semibold">{summary.upcomingCount}</span> */}
-              <span className="font-semibold">{summary.upcomingCount}</span>
-            </div>
+            <SummaryTag
+              color="bg-emerald-500"
+              label="Open IPOs"
+              count={summary.openCount}
+            />
+            <SummaryTag
+              color="bg-slate-500"
+              label="Closed"
+              count={summary.closedCount}
+            />
+            <SummaryTag
+              color="bg-blue-500"
+              label="Upcoming"
+              count={summary.upcomingCount}
+            />
           </div>
         </div>
 
-        {/* Status tabs */}
+        {/* STATUS TABS */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex gap-2 text-xs font-medium border-b border-slate-200">
             {["OPEN", "CLOSED", "UPCOMING"].map((tab) => (
@@ -225,19 +231,21 @@ const IpoDashboardPage = () => {
           </p>
         </div>
 
-        {/* Table container */}
+        {/* TABLE */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <table className="w-full text-xs">
+          <table className="w-full text-xs text-blue-900">
             <thead className="bg-slate-50 text-[11px] font-medium text-slate-500">
               <tr>
                 <th className="text-left px-4 py-2">Company</th>
 
+                {/* dynamic columns based on status */}
                 {statusFilter === "CLOSED" ? (
                   <>
                     <th className="text-right px-4 py-2">Close date</th>
                     <th className="text-right px-4 py-2">Listing date</th>
                     <th className="text-right px-4 py-2">Issue price</th>
-                    <th className="text-right px-4 py-2">Overall subscription</th>
+                    <th className="text-right px-4 py-2">Subscription</th>
+                    <th className="text-right px-4 py-2"></th>
                   </>
                 ) : statusFilter === "OPEN" ? (
                   <>
@@ -245,6 +253,7 @@ const IpoDashboardPage = () => {
                     <th className="text-right px-4 py-2">Issue price</th>
                     <th className="text-right px-4 py-2">Lot size</th>
                     <th className="text-right px-4 py-2">Subscription</th>
+                    <th className="text-right px-4 py-2">Action</th>
                   </>
                 ) : (
                   <>
@@ -252,15 +261,25 @@ const IpoDashboardPage = () => {
                     <th className="text-right px-4 py-2">Listing date</th>
                     <th className="text-right px-4 py-2">Issue price</th>
                     <th className="text-right px-4 py-2">Type</th>
+                    <th className="text-right px-4 py-2"></th>
                   </>
                 )}
+
+                {/* 🔹 ALWAYS render Action column so header doesn’t shift */}
+                {/* {statusFilter === "OPEN" && (
+  
+)} */}
+
               </tr>
             </thead>
 
             <tbody>
               {filteredIpos.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-slate-500">
+                  <td
+                    colSpan="6"
+                    className="px-4 py-6 text-center text-slate-500"
+                  >
                     No IPOs match your search.
                   </td>
                 </tr>
@@ -270,7 +289,7 @@ const IpoDashboardPage = () => {
                     key={ipo.id}
                     className="border-t border-slate-100 hover:bg-slate-50 transition"
                   >
-                    {/* Company column */}
+                    {/* Company Column */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div
@@ -278,11 +297,23 @@ const IpoDashboardPage = () => {
                         >
                           {ipo.logoInitial}
                         </div>
+
                         <div>
-                          <p className="text-sm font-medium">{ipo.name}</p>
+                          <p
+                            onClick={() =>
+                              navigate(
+                                `/ipo/${ipo.name.replace(/\s+/g, "-")}`
+                              )
+                            }
+                            className="text-sm font-medium hover:underline cursor-pointer hover:text-blue-500"
+                          >
+                            {ipo.name}
+                          </p>
+
                           <p className="text-[11px] text-slate-500">
                             {ipo.symbol} • {ipo.marketType}
                           </p>
+
                           <span
                             className={`inline-flex mt-1 px-2 py-0.5 rounded-full text-[10px] ${statusBadgeClass(
                               ipo.status
@@ -298,14 +329,18 @@ const IpoDashboardPage = () => {
                       </div>
                     </td>
 
-                    {/* Other columns */}
+                    {/* Dynamic Content */}
                     {statusFilter === "OPEN" && (
                       <>
-                        <td className="text-right px-4 py-3">
+                        <td className="text-right px-4 py-3 font-medium">
                           {ipo.openDate} - {ipo.closeDate}
                         </td>
-                        <td className="text-right px-4 py-3">{ipo.issuePrice}</td>
-                        <td className="text-right px-4 py-3">{ipo.lotSize}</td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.issuePrice}
+                        </td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.lotSize}
+                        </td>
                         <td className="text-right px-4 py-3 text-emerald-600 font-medium">
                           {ipo.subscription}
                         </td>
@@ -314,9 +349,15 @@ const IpoDashboardPage = () => {
 
                     {statusFilter === "CLOSED" && (
                       <>
-                        <td className="text-right px-4 py-3">{ipo.closeDate}</td>
-                        <td className="text-right px-4 py-3">{ipo.listingDate}</td>
-                        <td className="text-right px-4 py-3">{ipo.issuePrice}</td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.closeDate}
+                        </td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.listingDate}
+                        </td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.issuePrice}
+                        </td>
                         <td className="text-right px-4 py-3 text-emerald-600 font-medium">
                           {ipo.subscription}
                         </td>
@@ -325,25 +366,146 @@ const IpoDashboardPage = () => {
 
                     {statusFilter === "UPCOMING" && (
                       <>
-                        <td className="text-right px-4 py-3">
+                        <td className="text-right px-4 py-3 font-medium">
                           {ipo.openDate} - {ipo.closeDate}
                         </td>
-                        <td className="text-right px-4 py-3">{ipo.listingDate}</td>
-                        <td className="text-right px-4 py-3">{ipo.issuePrice}</td>
-                        <td className="text-right px-4 py-3">
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.listingDate}
+                        </td>
+                        <td className="text-right px-4 py-3 font-medium">
+                          {ipo.issuePrice}
+                        </td>
+                        <td className="text-right px-4 py-3 font-medium">
                           {ipo.marketType}
                         </td>
                       </>
                     )}
+
+                    {/* APPLY BUTTON CELL (OPEN ONLY) */}
+                    <td className="px-4 py-3 text-right">
+                      {ipo.status === "OPEN" && (
+                        <button
+                          onClick={() => {
+                            setSelectedIPO(ipo);
+                            setLotCount(1);
+                            setShowApply(true);
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[11px] hover:bg-blue-700 transition"
+                        >
+                          Apply
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
         </div>
+
+        {/* ================= APPLY IPO MODAL ================= */}
+        {showApply && selectedIPO && (
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 animate-fadeIn">
+              {/* Header */}
+              <h2 className="text-lg font-semibold text-slate-900 mb-1">
+                Apply for {selectedIPO.name}
+              </h2>
+              <p className="text-xs text-slate-500 mb-4">
+                {selectedIPO.symbol}
+              </p>
+
+              {/* Price & Lot Info */}
+              <div className="bg-slate-50 rounded-xl p-4 mb-4">
+                <p className="text-xs text-slate-500">Price Band</p>
+                <p className="font-medium text-slate-800 mb-3">
+                  {selectedIPO.issuePrice}
+                </p>
+
+                <p className="text-xs text-slate-500">Lot Size</p>
+                <p className="font-medium text-slate-800">
+                  {selectedIPO.lotSize} Shares
+                </p>
+              </div>
+
+              {/* Lot Counter */}
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl mb-4">
+                <span className="text-sm font-medium text-slate-700">
+                  Lots
+                </span>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setLotCount((prev) => Math.max(1, prev - 1))}
+                    className="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-200 text-slate-800 text-lg"
+                  >
+                    –
+                  </button>
+
+                  <span className="text-sm font-semibold">{lotCount}</span>
+
+                  <button
+                    onClick={() => setLotCount((prev) => prev + 1)}
+                    className="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-200 text-slate-800 text-lg"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Calculations */}
+              {(() => {
+                const minPrice = parseInt(
+                  selectedIPO.issuePrice.replace(/\D/g, "")
+                );
+                const shares = lotCount * selectedIPO.lotSize;
+                const total = shares * (isNaN(minPrice) ? 0 : minPrice);
+
+                return (
+                  <div className="bg-blue-50 rounded-xl p-4 mb-4">
+                    <p className="text-xs text-slate-600">Total Shares</p>
+                    <p className="font-semibold text-slate-900 mb-3">
+                      {shares}
+                    </p>
+
+                    <p className="text-xs text-slate-600">Total Amount</p>
+                    <p className="font-semibold text-slate-900">
+                      ₹{total.toLocaleString()}
+                    </p>
+                  </div>
+                );
+              })()}
+
+              {/* Buttons */}
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={() => setShowApply(false)}
+                  className="px-4 py-2 text-xs rounded-lg bg-slate-200 text-slate-700"
+                >
+                  Cancel
+                </button>
+
+                <button className="px-4 py-2 text-xs rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                  Proceed to Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+/* Summary Tag Component */
+function SummaryTag({ color, label, count }) {
+  return (
+    <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center gap-2">
+      <span className={`h-2 w-2 rounded-full ${color}`} />
+      <span>{label}</span>
+      <span className="font-semibold">{count}</span>
+    </div>
+  );
+}
 
 export default IpoDashboardPage;
