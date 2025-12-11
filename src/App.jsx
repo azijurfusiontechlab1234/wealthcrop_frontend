@@ -72,6 +72,10 @@ import IpoDashboardPage from "./components/ipo/IpoDashboardPage";
 import ManageSipPage from "./components/sip/ManageSipPage";
 import IpoDetails from "./components/ipo/IpoDetails";
 import BondPage from "./components/BondPage";
+import ErrorPage from "./components/ErrorPage";
+import { OneTimeInvestmentPage } from "./components/OneTimeInvestmentPage";
+import { SIPInvestmentPage } from "./components/SIPInvestmentPage";
+import TrackPage from "./components/TrackPage";
 
 
 const queryClient = new QueryClient();
@@ -225,6 +229,7 @@ function App() {
             path="/"
             element={token ? <Navigate to="/user/stocks" /> : <Home />}
           />
+          <Route path="*" element={<ErrorPage/>} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
@@ -235,6 +240,9 @@ function App() {
           <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />
 
+            <Route path="/one-time-investment" element={<OneTimeInvestmentPage/>} />
+            <Route path="/sip-investment" element={<SIPInvestmentPage/>} />
+            <Route path="/track" element={<TrackPage/>} />
 
           <Route path="/chart" element={<ChartPage/>}/>
           {/* <Route path="/terminal" element={<TerminalChart/>} /> */}

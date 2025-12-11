@@ -21,7 +21,31 @@ import {
   Sun,
   ChevronRight,
 } from "lucide-react";
+import {
+  FileSearch,
+  LayoutDashboard,
+  PieChart,
+  LineChart,
+} from "lucide-react";
+import {
+  CandlestickChart,
+} from "lucide-react";
+import {
+  HelpCircle,
+  BookOpen,
+  Lightbulb,
+} from "lucide-react";
+
+
+
+const token = localStorage.getItem("token"); // check login
+
+
 import MutualFundCarousel from "../carousel/MutualFundCarousel";
+import MutualFundsMenu from "./hovercomp/MutualFundsMenu";
+import StocksMenu from "./hovercomp/StocksMenu";
+import FOMenu from "./hovercomp/FOMenu";
+import MoreMenu from "./hovercomp/MoreMenu";
 
 export default function OldHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -88,6 +112,27 @@ export default function OldHeader() {
     navigate("/profile")
   }
 
+  // ---------------- Mobile Menu States ----------------
+
+// Mutual Fund dropdown
+const [mfOpen, setMfOpen] = useState(false);
+
+// Stocks dropdown
+const [stocksOpen, setStocksOpen] = useState(false);
+
+// F&O dropdown
+const [fnoOpen, setFnoOpen] = useState(false);
+
+// Calculators dropdown
+// const [calcOpen, setCalcOpen] = useState(false);
+
+// // Invest In (your older section)
+// const [investOpen, setInvestOpen] = useState(false);
+
+// // Mobile Search
+// const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+
   return (
     <>
       <nav className={`w-full bg-white shadow-sm border-b border-gray-100 fixed top-0 left-0 z-50 transition-all duration-300
@@ -95,10 +140,10 @@ export default function OldHeader() {
         {/* ⭐ Always on top of everything */}
 
         <MutualFundCarousel />
-        <div className="flex justify-between items-center px-6 md:px-12 pb-1">
+        <div className="flex justify-between items-center px-6 md:px-12">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Link to="/">
+            <Link to="/" className="mb-1">
               <img
                 className="w-36 md:w-40 h-auto"
                 src={logo}
@@ -108,284 +153,16 @@ export default function OldHeader() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 relative">
-            {/* Mutual Fund */}
-            <div className="relative group">
-              <button onClick={() => navigate("/user/mutual_fund")} className="text-[#1C2434] font-semibold hover:text-[#4A5FFF] cursor-pointer">
-                Mutual Funds
-              </button>
-              {/* Full width mega dropdown */}
-              <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-                py-5 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-                 transition-all duration-300 ease-out">
+          <div className="hidden md:flex items-center space-x-4 relative">
 
-                {/* Center Content */}
-                <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-10 px-6">
-                  {/* Left Image + Text */}
-                  <div className="col-span-1 flex flex-col gap-5 pr-10 border-r">
-                    <img src={StockImage} className="w-56 h-56 object-contain" />
-                    <a href="#" className="hover:text-[#4A5FFF] transition">
-                      <h3 className="text-xl font-semibold text-[#0F172A]">
-                        Invest in Mutual Funds
-                      </h3>
-                    </a>
-
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      Explore SIP, tax-saving ELSS, aggressive funds, and track returns in real-time.
-                    </p>
-                  </div>
-
-                  {/* Right Section */}
-                  <div className="col-span-3 grid grid-cols-3 gap-10 text-sm">
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">SIP Investment</h4>
-                      </a>
-                      <p className="text-gray-500">Start monthly investing in best performing funds.</p>
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">One-Time Investment</h4>
-                      </a>
-                      <p className="text-gray-500">Invest lump sum when the market is favorable.</p>
-                    </div>
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Compare Funds</h4>
-                      </a>
-                      <p className="text-gray-500">Compare risk level, past returns & ratings.</p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Tax Saving (ELSS)</h4>
-                      </a>
-                      <p className="text-gray-500">Save up to ₹1.5L under section 80C.</p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">High-Return Funds</h4>
-                      </a>
-                      <p className="text-gray-500">Explore aggressive growth mutual funds.</p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Low Risk Funds</h4>
-                      </a>
-                      <p className="text-gray-500">Ideal for safe and stable investment planning.</p>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Stocks */}
-            <div className="relative group">
-              <button onClick={() => navigate("/user/stocks")} className="text-[#1C2434] font-semibold hover:text-[#4A5FFF] cursor-pointer">
-                Stocks
-              </button>
-
-              {/* Full width mega dropdown */}
-              <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-             py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-             transition-all duration-300 ease-out">
-
-                {/* Center content */}
-                <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-10 px-6">
-                  {/* Left Image + Text */}
-                  <div className="col-span-1 flex flex-col gap-5 pr-10 border-r">
-                    <img src={StockImage2} className="w-56 h-56 object-contain" />
-                    <a href="#" className="hover:text-[#4A5FFF] transition">
-                      <h3 className="text-xl font-semibold text-[#0F172A]">
-                        Invest in Stocks
-                      </h3>
-                    </a>
-
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      Buy, track, and manage your stock market portfolio with real-time updates,
-                      market news and analytics.
-                    </p>
-                  </div>
-
-                  {/* Right Section - 3 columns */}
-                  <div className="col-span-3 grid grid-cols-3 gap-10 text-sm">
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Intraday Trading</h4>
-                      </a>
-                      <p className="text-gray-500">Trade stocks within the day for quick opportunities.</p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">IPO Investments</h4>
-                      </a>
-                      <p className="text-gray-500">Apply for new IPOs before they get listed.</p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Stock Screener</h4>
-                      </a>
-                      <p className="text-gray-500">Filter stocks by price, PE ratio, volume & more.</p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">ETF Investing</h4>
-                      </a>
-                      <p className="text-gray-500">Diversify your investments with exchange-traded funds.</p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Market Watchlist</h4>
-                      </a>
-                      <p className="text-gray-500">Track your favorite stocks in real-time.</p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Demat + Trading</h4>
-                      </a>
-                      <p className="text-gray-500">Open a free Demat account & start investing instantly.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* F&O Section */}
-            <div className="relative group">
-              <button className="text-[#1C2434] font-semibold hover:text-[#4A5FFF]">
-                F&O
-              </button>
-              {/* Full width mega dropdown */}
-              <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-                   py-8 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-                   transition-all duration-300 ease-out">
-                {/* Center content */}
-                <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-10 px-6">
-                  {/* Left Section */}
-                  <div className="col-span-1 flex flex-col gap-5 pr-10 border-r">
-                    <img src={StockImage3} className="w-56 h-56 object-contain" />
-                    <a href="#" className="hover:text-[#4A5FFF] transition">
-                      <h3 className="text-xl font-semibold text-[#0F172A]">
-                        Futures & Options
-                      </h3>
-                    </a>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      Trade index and stock derivatives, hedge risks, or use leverage to
-                      amplify gains with live charts and smart order tools.
-                    </p>
-                  </div>
-
-                  {/* Right Section - F&O Items */}
-                  <div className="col-span-3 grid grid-cols-3 gap-10 text-sm">
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Index Futures</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        Trade NIFTY & BANKNIFTY futures with advanced indicators and tools.
-                      </p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Stock Futures</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        Buy & sell futures of top performing Indian stocks.
-                      </p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Options Trading</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        Trade call & put options with strike price insights.
-                      </p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Option Chains</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        View OI, IV, Greeks & price movement in real-time.
-                      </p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Strategies Builder</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        Create multi-leg strategies like Straddle, Strangle & Iron Condor.
-                      </p>
-
-                      <a href="#" className="hover:text-[#4A5FFF] transition">
-                        <h4 className="font-semibold text-[#0F172A]">Margin Calculator</h4>
-                      </a>
-                      <p className="text-gray-500">
-                        Check margin requirements before placing leveraged trades.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* More Section */}
-            <div className="relative group">
-              <button className="text-[#1C2434] font-semibold hover:text-[#4A5FFF]">
-                More
-              </button>
-              {/* Full width mega dropdown */}
-              <div className="fixed left-0 top-full right-0 w-full bg-white shadow-lg 
-                py-12 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-                transition-all duration-300 ease-out">
-                {/* Center content */}
-                <div className="max-w-[1280px] mx-auto grid grid-cols-2 gap-16 px-6 text-sm">
-                  {/* LEFT COLUMN */}
-                  <div className="space-y-6">
-                    <div>
-                      <Link to="" className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]">
-                        SIP Calculator
-                      </Link>
-                      <p className="text-gray-500">Calculate future wealth based on SIP investments.</p>
-                    </div>
-                    <div>
-                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
-                        Brokerage Calculator
-                      </a>
-                      <p className="text-gray-500">Check charges before placing equity or F&O orders.</p>
-                    </div>
-                    <div>
-                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
-                        Margin Calculator
-                      </a>
-                      <p className="text-gray-500">Estimate required margin for F&O trading.</p>
-                    </div>
-                  </div>
-
-                  {/* RIGHT COLUMN */}
-                  <div className="space-y-6">
-                    <div>
-                      <a href="#" className="hover:text-[#4A5FFF] text-lg transition font-semibold text-[#0F172A]">
-                        Swap Calculator
-                      </a>
-                      <p className="text-gray-500">Check overnight swap charges in leveraged trading.</p>
-                    </div>
-                    <div>
-                      <Link
-                        to="/blogs"
-                        className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]"
-                      >
-                        Blog
-                      </Link>
-                      <p className="text-gray-500">Learn investing, trading strategies & financial tips.</p>
-                    </div>
-                    <div>
-                      <Link
-                        to="/help"
-                        className="hover:text-[#4A5FFF] transition text-lg font-semibold text-[#0F172A]"
-                      >
-                        Help & Support
-                      </Link>
-                      <p className="text-gray-500">Get FAQs, customer care, and instant assistance.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <MutualFundsMenu token={token} />
+            <StocksMenu token={token} />
+            <FOMenu token={token} />
+            {
+              !token && (
+                <MoreMenu token={token} />
+              )
+            }
 
             {/* Static Links */}
           </div>
@@ -541,90 +318,155 @@ export default function OldHeader() {
 
         {/* Mobile Dropdown */}
         <div
-          className={`md:hidden space-y-4 bg-white border-t border-gray-100 px-6 py-4 shadow-md transition-all duration-300 ease-in-out ${menuOpen
-            ? "max-h-screen opacity-100"
-            : "max-h-0 opacity-0 overflow-hidden"
-            }`}
-        >
-          <div>
-            <button
-              onClick={() => setInvestOpen(!investOpen)}
-              className="w-full flex justify-between items-center text-blue-900 font-medium"
-            >
-              <span>Invest In</span>
-              <span>{investOpen ? "▴" : "▾"}</span>
-            </button>
-            {investOpen && (
-              <div className="pl-4 pt-2 space-y-1">
-                <Link to="/user/mutual_fund" className="block text-blue-900">
-                  Mutual Fund
-                </Link>
-                <Link to="/user/stocks" className="block text-blue-900">
-                  Stocks
-                </Link>
-                <Link to="/user/f&o" className="block text-blue-900">
-                  F&O
-                </Link>
-              </div>
-            )}
-          </div>
+  className={`md:hidden space-y-4 bg-white border-t border-gray-100 px-6 py-4 shadow-md transition-all duration-300 ease-in-out ${
+    menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+  }`}
+>
+  {/* ---------------- MUTUAL FUND (mobile dropdown) ---------------- */}
 
-          <div className="mt-4">
-            <button
-              onClick={() => setCalcOpen(!calcOpen)}
-              className="w-full flex justify-between items-center text-blue-900 font-medium"
-            >
-              <span>Calculators</span>
-              <span>{calcOpen ? "▴" : "▾"}</span>
-            </button>
-            {calcOpen && (
-              <div className="pl-4 pt-2 space-y-1">
-                <Link className="block text-blue-900">
-                  Mutual Fund Calculator
-                </Link>
-                <Link className="block text-blue-900">
-                  Fixed Deposit Calculator
-                </Link>
-                <Link className="block text-blue-900">
-                  Retirement Calculator
-                </Link>
-              </div>
-            )}
-          </div>
+    <div>
+      <button
+        onClick={() => setMfOpen(!mfOpen)}
+        className="w-full flex justify-between items-center text-blue-900 font-medium"
+      >
+        <span>Mutual Funds</span>
+        <span>{mfOpen ? "▴" : "▾"}</span>
+      </button>
 
-          <Link to="/blogs" className="block text-blue-900 font-medium">
-            Blog
+      {mfOpen && (
+        <div className="pl-4 pt-2 space-y-2 text-sm">
+          <Link to="/user/mutual_fund" className="block text-blue-900">
+            Explore Funds
           </Link>
-          <Link to="/help" className="block text-blue-900 font-medium">
-            Help
+          <Link to="/user/mf/sip" className="block text-blue-900">
+            SIP Investment
           </Link>
-
-          {token ? (
-            <div className="flex items-center justify-center gap-5 mt-5 text-blue-900">
-              <HiBell className="text-2xl" />
-              <Link to="/profile">
-                <HiUserCircle className="text-3xl" />
-              </Link>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="block text-center bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition mt-4"
-            >
-              Login / Signup
-            </Link>
-          )}
-
-          {/* Mobile Search */}
-          <div className="mt-3">
-            <input
-              type="text"
-              placeholder="Search..."
-              onFocus={() => token && setIsSearchOpen(true)}
-              className="w-full border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-900"
-            />
-          </div>
+          <Link to="/user/mf/compare" className="block text-blue-900">
+            Compare Funds
+          </Link>
+          <Link to="/user/mf/elss" className="block text-blue-900">
+            ELSS Tax Saving
+          </Link>
         </div>
+      )}
+    </div>
+
+
+  {/* ---------------- STOCKS (mobile dropdown) ---------------- */}
+ 
+    <div>
+      <button
+        onClick={() => setStocksOpen(!stocksOpen)}
+        className="w-full flex justify-between items-center text-blue-900 font-medium"
+      >
+        <span>Stocks</span>
+        <span>{stocksOpen ? "▴" : "▾"}</span>
+      </button>
+
+      {stocksOpen && (
+        <div className="pl-4 pt-2 space-y-2 text-sm">
+          <Link to="/user/stocks" className="block text-blue-900">
+            Stock Dashboard
+          </Link>
+          <Link to="/user/ipo" className="block text-blue-900">
+            IPO
+          </Link>
+          <Link to="/user/screener" className="block text-blue-900">
+            Stock Screener
+          </Link>
+          <Link to="/user/etf" className="block text-blue-900">
+            ETF Investing
+          </Link>
+        </div>
+      )}
+    </div>
+
+
+  {/* ---------------- F&O (mobile dropdown) ---------------- */}
+
+    <div>
+      <button
+        onClick={() => setFnoOpen(!fnoOpen)}
+        className="w-full flex justify-between items-center text-blue-900 font-medium"
+      >
+        <span>F&O</span>
+        <span>{fnoOpen ? "▴" : "▾"}</span>
+      </button>
+
+      {fnoOpen && (
+        <div className="pl-4 pt-2 space-y-2 text-sm">
+          <Link to="/user/fno/index-futures" className="block text-blue-900">
+            Index Futures
+          </Link>
+          <Link to="/user/fno/stock-futures" className="block text-blue-900">
+            Stock Futures
+          </Link>
+          <Link to="/user/fno/options" className="block text-blue-900">
+            Options Trading
+          </Link>
+          <Link to="/user/fno/chains" className="block text-blue-900">
+            Option Chain
+          </Link>
+        </div>
+      )}
+    </div>
+  
+
+  {/* ---------------- CALCULATORS ---------------- */}
+  <div className="mt-4">
+    <button
+      onClick={() => setCalcOpen(!calcOpen)}
+      className="w-full flex justify-between items-center text-blue-900 font-medium"
+    >
+      <span>Calculators</span>
+      <span>{calcOpen ? "▴" : "▾"}</span>
+    </button>
+
+    {calcOpen && (
+      <div className="pl-4 pt-2 space-y-2 text-sm">
+        <Link className="block text-blue-900">Mutual Fund Calculator</Link>
+        <Link className="block text-blue-900">FD Calculator</Link>
+        <Link className="block text-blue-900">Retirement Calculator</Link>
+      </div>
+    )}
+  </div>
+
+  {/* ---------------- Static Links ---------------- */}
+  <Link to="/blogs" className="block text-blue-900 font-medium">
+    Blog
+  </Link>
+  <Link to="/help" className="block text-blue-900 font-medium">
+    Help
+  </Link>
+
+  {/* ---------------- AUTH SECTION ---------------- */}
+  {token ? (
+    <div className="flex items-center justify-center gap-5 mt-5 text-blue-900">
+      <HiBell className="text-2xl" />
+      <Link to="/profile">
+        <HiUserCircle className="text-3xl" />
+      </Link>
+    </div>
+  ) : (
+    <Link
+      to="/login"
+      className="block text-center bg-blue-900 text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-blue-800 shadow-sm transition mt-4"
+    >
+      Login / Signup
+    </Link>
+  )}
+
+  {/* Mobile Search */}
+  <div className="mt-3">
+    <input
+      type="text"
+      placeholder="Search..."
+      onFocus={() => token && setIsSearchOpen(true)}
+      className="w-full border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-900"
+    />
+  </div>
+</div>
+
       </nav>
 
       {/* ✅ Global Search Popup */}
