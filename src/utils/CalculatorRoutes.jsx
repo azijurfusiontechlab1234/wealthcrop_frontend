@@ -11,6 +11,10 @@ import SwpCalculator from "../pages/calculators/SwpCalculator";
 import NPSCalculator from "../pages/calculators/NPSCalculator";
 import EmiCalculator from "../pages/calculators/EmiCalculator";
 import EducationCalculator from "../pages/calculators/EducationCalculator";
+import { elements } from "chart.js";
+import ELSSPlannerCalculator from "../pages/calculators/ELSSPlannerCalculator";
+import LTCGCalculator from "../pages/calculators/LTCGCalculator";
+import EightyCTracker from "../pages/calculators/EightyCTracker";
 
 
 export const calculatorRoutes = [
@@ -29,4 +33,7 @@ export const calculatorRoutes = [
   { path: "education-cost-calculator", element: <EducationCalculator/> },
   { path: "income-tax-calculator", },
   { path: "rent-calculator",},
+  { path: "elss-calculator", element: <ELSSPlannerCalculator/> },
+  { path: "ltcg-calculator", element: <LTCGCalculator/> },
+  { path: "eightyC-calculator", element: <EightyCTracker/> },
 ];

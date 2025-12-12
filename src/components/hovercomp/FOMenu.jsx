@@ -34,11 +34,11 @@ const FOMenu = ({token}) => {
     {/* Mega Menu */}
     {(openMenu && !token) && (
     <div
-      className="fixed left-0 top-full right-0 w-full bg-white shadow-lg border-t
+      className="fixed left-0 top-full right-0 w-full bg-white shadow-md
       opacity-0 invisible group-hover:opacity-100 group-hover:visible
       transition-all duration-300 ease-out z-50"
     >
-      <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-8">
+      <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
 
         {/* Header Row */}
         <div className="flex items-center justify-between mb-6">
@@ -54,7 +54,7 @@ const FOMenu = ({token}) => {
         </div>
 
         {/* Columns */}
-        <div className="grid grid-cols-4 gap-10 text-sm">
+        <div className="grid grid-cols-3 gap-10 text-sm">
 
           {/* 1 — Futures */}
           <div className="space-y-4 border-r pr-8">
@@ -99,7 +99,7 @@ const FOMenu = ({token}) => {
           </div>
 
           {/* 3 — Strategies */}
-          <div className="space-y-4 border-r pr-8">
+          {/* <div className="space-y-4 border-r pr-8">
             <h3 className="text-blue-950 font-semibold mb-1">Strategies</h3>
 
             <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
@@ -117,7 +117,7 @@ const FOMenu = ({token}) => {
                 <p className="text-slate-500 text-xs">Analyze Delta, Theta, Vega etc.</p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* 4 — Tools */}
           <div className="space-y-4">

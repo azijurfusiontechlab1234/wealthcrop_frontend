@@ -97,6 +97,24 @@ const calculators = [
     icon: Wallet,
     bg: "from-teal-100 to-cyan-200",
   },
+  {
+    name: "ELSS Calculator",
+    path: "/calculator/elss-calculator",
+    icon: HandCoins,
+    bg: "from-amber-100 to-yellow-200",
+  },
+  {
+    name: "LTCG Calculator",
+    path: "/calculator/ltcg-calculator",
+    icon: Landmark,
+    bg: "from-purple-100 to-indigo-200",
+  },
+  {
+    name: "80C Tracker",
+    path: "/calculator/eightyC-calculator",
+    icon: BarChart3,
+    bg: "from-green-100 to-emerald-200",
+  },
   
 ];
 

@@ -31,11 +31,11 @@ const MutualFundsMenu = ({token}) => {
 {
   (openMenu && !token) && (
       <div
-    className="fixed left-0 top-full right-0 w-full bg-white shadow-lg border-t
+    className="fixed left-0 top-full right-0 w-full bg-white shadow-md 
       opacity-0 invisible group-hover:opacity-100 group-hover:visible
       transition-all duration-300 ease-out z-50"
   >
-    <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-8">
+    <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
 
       {/* Header Row */}
       <div className="flex items-center justify-between mb-6">
@@ -101,12 +101,14 @@ const MutualFundsMenu = ({token}) => {
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 cursor-pointer flex gap-3">
-            <Shield size={18} className="text-blue-700 mt-1" />
+         <div className="hover:bg-blue-50/70 rounded-lg p-2 cursor-pointer flex gap-3"
+          onClick={() => navigate("/calculator/lumpsum-calculator")}
+          >
+            <Calculator size={18} className="text-blue-700 mt-1" />
             <div>
-              <p className="font-medium text-blue-950">ELSS Tax Saving</p>
+              <p className="font-medium text-blue-950">Lumpsum Calculator</p>
               <p className="text-slate-500 text-xs">
-                Save up to ₹1.5L under 80C.
+                Plan long-term wealth forecasting.
               </p>
             </div>
           </div>

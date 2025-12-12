@@ -35,12 +35,12 @@ const StocksMenu = ({ token }) => {
         (openMenu && !token) && (
       <div
         className={`
-          fixed left-0 top-full right-0 w-full bg-white shadow-lg border-t
+          fixed left-0 top-full right-0 w-full bg-white shadow-md
           transition-all duration-300 ease-out z-50
           ${open ? "opacity-100 visible" : "opacity-0 invisible"}
         `}
       >
-        <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-8">
+        <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
 
           {/* Header Row */}
           <div className="flex items-center justify-between mb-6">
@@ -55,21 +55,25 @@ const StocksMenu = ({ token }) => {
           </div>
 
           {/* Content Grid */}
-          <div className="grid grid-cols-4 gap-10 text-sm">
+          <div className="grid grid-cols-3 gap-10 text-sm">
 
             {/* 1 — Trading */}
             <div className="space-y-4 border-r pr-8">
               <h3 className="text-blue-950 font-semibold mb-1">Trading</h3>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
-                <TrendingUp size={18} className="text-blue-700 mt-1" />
+               <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
+                <Layers size={18} className="text-blue-700 mt-1" />
                 <div>
-                  <p className="font-medium text-blue-950">Intraday Trading</p>
-                  <p className="text-slate-500 text-xs">Fast buy–sell opportunities.</p>
+                  <p className="font-medium text-blue-950">ETF Investing</p>
+                  <p className="text-slate-500 text-xs">Diversified index investing.</p>
                 </div>
               </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/ipo")}
+              >
                 <CandlestickChart size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">IPO Investments</p>
@@ -79,10 +83,12 @@ const StocksMenu = ({ token }) => {
             </div>
 
             {/* 2 — Tools */}
-            <div className="space-y-4 border-r pr-8">
+            {/* <div className="space-y-4 border-r pr-8">
               <h3 className="text-blue-950 font-semibold mb-1">Tools</h3>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
                 <BarChart2 size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">Stock Screener</p>
@@ -92,20 +98,24 @@ const StocksMenu = ({ token }) => {
                 </div>
               </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
                 <Layers size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">ETF Investing</p>
                   <p className="text-slate-500 text-xs">Diversified index investing.</p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* 3 — Portfolio */}
             <div className="space-y-4 border-r pr-8">
               <h3 className="text-blue-950 font-semibold mb-1">Portfolio</h3>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
                 <TrendingUp size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">Market Watchlist</p>
@@ -115,7 +125,9 @@ const StocksMenu = ({ token }) => {
                 </div>
               </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/demat-account")}
+              >
                 <Layers size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">Demat + Trading</p>
@@ -130,7 +142,9 @@ const StocksMenu = ({ token }) => {
             <div className="space-y-4">
               <h3 className="text-blue-950 font-semibold mb-1">Insights</h3>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
                 <BarChart2 size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">Top Gainers</p>
@@ -140,7 +154,9 @@ const StocksMenu = ({ token }) => {
                 </div>
               </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer">
+              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
+              onClick={() => navigate("/signup")}
+              >
                 <TrendingUp size={18} className="text-blue-700 mt-1" />
                 <div>
                   <p className="font-medium text-blue-950">Market Trends</p>

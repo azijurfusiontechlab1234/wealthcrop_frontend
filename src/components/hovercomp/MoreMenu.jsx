@@ -12,6 +12,7 @@ const MoreMenu = ({token}) => {
   useEffect(()=>{
     setOpenMenu(false)
   },[location.pathname])
+
   return (
 
 <div className="relative group"
@@ -26,21 +27,21 @@ onMouseEnter={() => setOpenMenu(true)}
   {
     (openMenu && !token) && (
   <div
-    className="fixed left-0 top-full right-0 w-full bg-white shadow-lg border-t
+    className="fixed left-0 top-full right-0 w-full bg-white shadow-md
     opacity-0 invisible group-hover:opacity-100 group-hover:visible
     transition-all duration-300 ease-out z-50"
   >
-    <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-8">
+    <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-blue-950 font-semibold text-lg">More Tools & Resources</h2>
 
         <button
-          onClick={() => navigate("/user/stocks/explore")}
+          onClick={() => navigate("/calculators")}
           className="flex items-center gap-1 text-blue-700 hover:underline font-medium cursor-pointer text-sm"
         >
-          Explore More
+          Explore All Calculators
           <ArrowRight size={16} />
         </button>
       </div>
@@ -52,7 +53,9 @@ onMouseEnter={() => setOpenMenu(true)}
         <div className="space-y-4 border-r pr-8">
           <h3 className="text-blue-950 font-semibold mb-1">Calculators</h3>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/calculators")}
+          >
             <Calculator size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">SIP Calculator</p>
@@ -60,7 +63,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/calculators")}
+          >
             <Landmark size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">FD Calculator</p>
@@ -68,7 +73,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/calculators")}
+          >
             <Gift size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">SWP Calculator</p>
@@ -81,7 +88,9 @@ onMouseEnter={() => setOpenMenu(true)}
         <div className="space-y-4 border-r pr-8">
           <h3 className="text-blue-950 font-semibold mb-1">Research</h3>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/market-news")}
+          >
             <Newspaper size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Market News</p>
@@ -89,7 +98,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/learning-centre")}
+          >
             <BookOpen size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Learning Center</p>
@@ -97,7 +108,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/blogs")}
+          >
             <Newspaper size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Blog</p>
@@ -110,7 +123,9 @@ onMouseEnter={() => setOpenMenu(true)}
         <div className="space-y-4 border-r pr-8">
           <h3 className="text-blue-950 font-semibold mb-1">Account & Support</h3>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/profile")}
+          >
             <User size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Profile</p>
@@ -118,7 +133,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/support")}
+          >
             <HelpCircle size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Help & Support</p>
@@ -126,7 +143,9 @@ onMouseEnter={() => setOpenMenu(true)}
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/signup")}
+          >
             <Download size={18} className="text-blue-700 mt-1" />
             <div>
               <p className="font-medium text-blue-950">Documents</p>
@@ -139,18 +158,32 @@ onMouseEnter={() => setOpenMenu(true)}
         <div className="space-y-4">
           <h3 className="text-blue-950 font-semibold mb-1">Others</h3>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-            <Gift size={18} className="text-blue-700 mt-1" />
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/calculators")}
+          >
+            <Newspaper size={18} className="text-blue-700 mt-1" />
             <div>
-              <p className="font-medium text-blue-950">Refer & Earn</p>
-              <p className="text-slate-500 text-xs">Earn rewards.</p>
+              <p className="font-medium text-blue-950">Retirement Calculator</p>
+              <p className="text-slate-500 text-xs">Calculate your wealth till retirement.</p>
             </div>
           </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-            <Download size={18} className="text-blue-700 mt-1" />
+          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+          onClick={() => navigate("/calculator/inflation-calculator")}
+          >
+            <Calculator size={18} className="text-blue-700 mt-1" />
             <div>
-              <p className="font-medium text-blue-950">Download App</p>
+              <p className="font-medium text-blue-950">Inflation Calculator</p>
+              <p className="text-slate-500 text-xs">Plan your future wealth.</p>
+            </div>
+          </div>
+
+            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
+            onClick={() => navigate("/calculator/emi-calculator")}
+            >
+            <Newspaper size={18} className="text-blue-700 mt-1" />
+            <div>
+              <p className="font-medium text-blue-950">EMI Calculator</p>
               <p className="text-slate-500 text-xs">iOS & Android versions.</p>
             </div>
           </div>

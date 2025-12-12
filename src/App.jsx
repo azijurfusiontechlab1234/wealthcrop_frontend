@@ -76,6 +76,13 @@ import ErrorPage from "./components/ErrorPage";
 import { OneTimeInvestmentPage } from "./components/OneTimeInvestmentPage";
 import { SIPInvestmentPage } from "./components/SIPInvestmentPage";
 import TrackPage from "./components/TrackPage";
+import DematAccountPage from "./pages/DematAccountPage";
+import LearningCenterPage from "./pages/LearningCenterPage";
+import MarketNewsPage from "./pages/MarketNewsPage";
+import MutualFundLearning from "./pages/MutualFundLearning";
+import StockMarketLearning from "./pages/StockMarketLearning";
+import SIPWealthLearning from "./pages/SIPWealthLearning";
+import TaxPlanningLearning from "./pages/TaxPlanningLearning";
 
 
 const queryClient = new QueryClient();
@@ -217,10 +224,7 @@ function App() {
             <Route path="/user/balance/inr" element={<AddMoney />} />
             <Route path="/investments" element={<InvestmentOptions />} />
             <Route path="/portfolio" element={<Portfolio />} />
-            {/* IPO */}
-            <Route path="/ipo" element={<IpoDashboardPage/>} />
-            <Route path="/ipo/:ipoName" element={<IpoDetails/>} />
-
+          
             <Route path="/bond" element={<BondPage/>} />
           </Route>
 
@@ -240,9 +244,23 @@ function App() {
           <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />
 
+            {/* IPO */}
+            <Route path="/ipo" element={<IpoDashboardPage/>} />
+            <Route path="/ipo/:ipoName" element={<IpoDetails/>} />
+
+
             <Route path="/one-time-investment" element={<OneTimeInvestmentPage/>} />
             <Route path="/sip-investment" element={<SIPInvestmentPage/>} />
             <Route path="/track" element={<TrackPage/>} />
+            <Route path="/demat-account" element={<DematAccountPage/>} />
+            <Route path="/learning-centre" element={<LearningCenterPage/>} />
+            <Route path="/market-news" element={<MarketNewsPage/>} />
+
+            {/* Learning Centre */}
+            <Route path="/learning-centre/mutual_fund" element={<MutualFundLearning/>} /> 
+            <Route path="/learning-centre/stock_market" element={<StockMarketLearning/>} /> 
+            <Route path="/learning-centre/sip_investment" element={<SIPWealthLearning/>} /> 
+            <Route path="/learning-centre/tax_planning" element={<TaxPlanningLearning/>} /> 
 
           <Route path="/chart" element={<ChartPage/>}/>
           {/* <Route path="/terminal" element={<TerminalChart/>} /> */}
