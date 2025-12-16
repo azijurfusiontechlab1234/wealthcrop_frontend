@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { CandlestickChart, Bookmark } from "lucide-react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import axios from "axios";
+import { FaBasketballBall } from 'react-icons/fa'; // Import the basket icon
 
 
 const MFDashboard = () => {
@@ -122,11 +123,16 @@ const MFDashboard = () => {
             ))}
           </nav>
 
-          <input
-            type="text"
-            placeholder="Search..."
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-1 focus:ring-blue-800 outline-none"
-          />
+
+
+<Link to="/baskets">
+  <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm">
+    <FaBasketballBall className="mr-2 text-sm" />
+    Baskets
+  </button>
+</Link>
+
+
         </div>
          </div>
 

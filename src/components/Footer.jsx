@@ -89,9 +89,10 @@ const Section = ({ title, list, basePath }) => (
   <div className="mb-6">
     
     {/* Modern footer title */}
-    <h3 className="text-sm font-semibold text-blue-900 mb-3 uppercase tracking-wide">
+    <h3 className="text-sm font-semibold text-blue-900 mb-3 uppercase tracking-wide border-b-2 border-blue-300 ">
       {title}
     </h3>
+    {/* <h3 className="text-sm font-semibold uppercase tracking-wide bg-green-200 h-2"/> */}
 
     {/* Inline links with bars */}
     <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
@@ -193,7 +194,7 @@ const Section = ({ title, list, basePath }) => (
       {/* ---------------------------- */}
       <section className="bg-white text-blue-950 border-gray-300 py-4 mb-20 lg:mb-0">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
-          <Section title="Asset Management Companies (AMCs)" list={amcs} basePath="/amc" />
+          <Section title="Asset Management Companies (AMCs)" list={amcs} basePath="/stocks" />
           <Section title="Popular Mutual Funds" list={mutualFunds} basePath="/mutual_fund" />
           <Section title="Popular Stocks" list={stocks} basePath="/stocks" />
           <Section title="Financial Calculators" list={calculators} basePath="/calculator" />

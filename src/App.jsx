@@ -83,6 +83,16 @@ import MutualFundLearning from "./pages/MutualFundLearning";
 import StockMarketLearning from "./pages/StockMarketLearning";
 import SIPWealthLearning from "./pages/SIPWealthLearning";
 import TaxPlanningLearning from "./pages/TaxPlanningLearning";
+import BasketList from "./pages/basket/BasketList";
+import CreateBasket from "./pages/basket/CreateBasket";
+import BasketDetails from "./pages/basket/BasketDetails";
+
+import basketsData from "./data/baskets";
+import basketDetailsData from "./data/basketDetails";
+import Invest from "./pages/basket/Invest";
+import Performance from "./pages/basket/Performance";
+import AMCPage from "./pages/AMCPage";
+import VideoKYC from "./components/VideoKYC";
 
 
 const queryClient = new QueryClient();
@@ -96,6 +106,8 @@ function App() {
   // }, []);
 
   const { pathname } = useLocation();
+    const [baskets] = useState(basketsData); // static for now
+  const [basketDetails] = useState(basketDetailsData);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -226,6 +238,31 @@ function App() {
             <Route path="/portfolio" element={<Portfolio />} />
           
             <Route path="/bond" element={<BondPage/>} />
+
+            {/* Baskets */}
+               <Route
+            path="/baskets"
+            element={<BasketList baskets={baskets} />}
+          />
+
+          <Route
+            path="/basket/:id"
+            element={
+              <BasketDetails baskets={baskets} basketDetails={basketDetails} />
+            }
+          />
+
+          <Route
+            path="/invest/:id"
+            element={<Invest baskets={baskets} />}
+          />
+
+          <Route
+            path="/performance/:id"
+            element={<Performance basketDetails={basketDetails} />}
+          />
+          <Route path="/create-basket" element={<CreateBasket/>} />
+
           </Route>
 
           {/* Public routes */}
@@ -243,6 +280,7 @@ function App() {
           <Route path="/indices/:name" element={<IndicesDetails />} />
           <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/amc/:amcName" element={<AMCPage/>} />
 
             {/* IPO */}
             <Route path="/ipo" element={<IpoDashboardPage/>} />
@@ -269,6 +307,7 @@ function App() {
 
           {/* Calculators */}
           <Route path="/calculators" element={<CalculatorsPage />} />
+          <Route path="/kyc" element={<VideoKYC />} />
 
           {calculatorRoutes.map((route, i) => (
             <Route
