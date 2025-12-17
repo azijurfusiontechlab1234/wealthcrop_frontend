@@ -2,23 +2,19 @@ import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import invest from "../assets/top investment/topinvest.svg";
 import { FaAngleRight } from "react-icons/fa6";
-import { Search, ArrowLeft } from "lucide-react";
-import { HiMenu, HiX, HiBell, HiUserCircle } from "react-icons/hi";
+import { ArrowLeft } from "lucide-react";
+import { HiBell } from "react-icons/hi";
 import {
-  User,
-  Mail,
   IndianRupee,
   FileText,
   Headphones,
   BarChart3,
   LogOut,
-  Settings,
-  Sun,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../redux/authenticationSlice";
 import { useDispatch } from "react-redux";
-import { useEffect, useRef } from "react";
+import ThemeToggle from "../utils/ThemeToggle";
 
 const Profile = () => {
   const options = [
@@ -30,170 +26,161 @@ const Profile = () => {
     { name: "Account Related Forms", path: "account-forms" },
   ];
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const location = useLocation()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-     const handleLogout = () => {
-      dispatch(logout());
-      navigate("/"); // redirect to home
-      window.location.reload()
-    };
-  
-    const handleSetting = () =>{
-      navigate("/profile/basic")
-    }
-    const onClose = () =>{
-      navigate(-1)
-    }
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+    window.location.reload();
+  };
+
+  const handleSetting = () => {
+    navigate("/profile/basic");
+  };
+
+  const onClose = () => {
+    navigate(-1);
+  };
 
   return (
     <>
-    
-    <div className=" hidden lg:block mt-10 bg-white px-16 py-8">
-      {/* Main container using flex with percentage widths */}
-      <div className="flex gap-6 items-start w-full">
-        
-        {/* LEFT SIDEBAR (40%) */}
-        <div className="w-[30%] border border-gray-300 rounded-lg flex flex-col">
-          {/* Profile picture section */}
-          <div className="w-full h-52 flex justify-center items-center">
-            <img src={invest} alt="Profile" className="w-44" />
+      {/* ================= DESKTOP ================= */}
+      <div className="hidden lg:block mt-10 px-16 py-8 bg-white dark:bg-slate-900">
+        <div className="flex gap-6 items-start w-full">
+
+          {/* LEFT SIDEBAR */}
+          <div className="w-[30%] border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900">
+            <div className="w-full h-52 flex justify-center items-center">
+              <img src={invest} alt="Profile" className="w-44 opacity-90" />
+            </div>
+
+            <div className="h-px bg-gray-300 dark:bg-slate-700"></div>
+
+            <div className="flex flex-col">
+              {options.map((option, index) => (
+                <NavLink
+                  key={index}
+                  to={option.path}
+                  end
+                  className={({ isActive }) =>
+                    `
+                      flex items-center justify-between px-4 py-4
+                      font-semibold transition-colors
+                      text-gray-800 dark:text-gray-200
+                      hover:bg-gray-100 dark:hover:bg-slate-800
+                      ${isActive ? "bg-gray-200 dark:bg-slate-800" : ""}
+                    `
+                  }
+                >
+                  <span>{option.name}</span>
+                  <FaAngleRight />
+                </NavLink>
+              ))}
+            </div>
           </div>
 
-          {/* Divider */}
-          <div className="w-full h-0.5 bg-gray-300"></div>
-
-          {/* Sidebar options */}
-          <div className="w-full text-left mt-2 flex flex-col">
-            {options.map((option, index) => (
-              <NavLink
-                key={index}
-                to={option.path}
-                end
-                className={({ isActive }) =>
-                  `flex items-center justify-between w-full px-4 py-4 text-blue-950 font-semibold transition-colors duration-200 hover:bg-gray-100 ${
-                    isActive ? "bg-gray-200 hover:bg-gray-200" : ""
-                  }`
-                }
-              >
-                <span>{option.name}</span>
-                <FaAngleRight />
-              </NavLink>
-            ))}
+          {/* RIGHT CONTENT */}
+          <div className="w-[70%] border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900">
+            <Outlet />
           </div>
-        </div>
-
-        {/* RIGHT CONTENT AREA (60%) */}
-        <div className="w-[70%] border border-gray-300 rounded-lg bg-white">
-          <Outlet />
         </div>
       </div>
-    </div>
 
-      {/*For mobile and tab*/}
-      <div
-      className="
-        fixed inset-0 flex items-center justify-center lg:hidden
-        bg-black/40 
-        z-99999
-        animate-fadeInn
-      "
-    >
-      {/* Popup box */}
+      {/* ================= MOBILE / TAB ================= */}
       <div
         className="
-          bg-white shadow-lg overflow-y-auto
-          transition-all duration-300
-          w-full h-full
-   
+          fixed inset-0 flex items-center justify-center lg:hidden
+          bg-black/40 dark:bg-black/70
+          z-[99999]
         "
       >
-        {/* 🔹 Top Row: Back + Search Input */}
-        <div className="flex items-center justify-between gap-3 mb-5 sticky top-0 bg-white py-3 px-5 border-b border-gray-100 z-10">
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100 transition"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
+        <div className="w-full h-full bg-white dark:bg-slate-900 overflow-y-auto">
 
-          <div className="flex items-center gap-4 text-blue-900">
-           <HiBell className="text-2xl " />
-           {/* <Settings onClick={handleSetting} size={22} className="text-blue-900 cursor-pointer" /> */}
-           
+          {/* TOP BAR */}
+          <div className="flex items-center justify-between px-5 py-3 sticky top-0
+                          bg-white dark:bg-slate-900
+                          border-b border-gray-100 dark:border-slate-700">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+            </button>
+
+            <HiBell className="text-2xl text-gray-700 dark:text-gray-200" />
+          </div>
+
+          {/* PROFILE HEADER */}
+          <div
+            onClick={handleSetting}
+            className="flex items-start justify-between px-4 py-3
+                       border-b border-gray-100 dark:border-slate-700
+                       hover:bg-gray-50 dark:hover:bg-slate-800 cursor-pointer"
+          >
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                Fusion Techlab
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                fusionbusiness001@gmail.com
+              </p>
+            </div>
+            <FaAngleRight className="text-gray-500" />
+          </div>
+
+          {/* BALANCE */}
+          <div className="flex items-center gap-3 px-4 py-3
+                          border-b border-gray-100 dark:border-slate-700">
+            <IndianRupee size={18} className="text-gray-600 dark:text-gray-400" />
+            <div>
+              <p className="font-medium text-gray-900 dark:text-gray-100">
+                ₹0.00
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Stocks, F&O balance
+              </p>
+            </div>
+          </div>
+
+          {/* LINKS */}
+          <div className="py-2">
+            {[
+              { to: "/user/order/stocks", icon: <FileText size={18} />, label: "All Orders" },
+              { to: "/support", icon: <Headphones size={18} />, label: "24 × 7 Customer Support" },
+              { to: "/reports", icon: <BarChart3 size={18} />, label: "Reports" },
+            ].map((item, i) => (
+              <Link
+                key={i}
+                to={item.to}
+                className="flex items-center gap-3 px-4 py-2
+                           text-gray-800 dark:text-gray-200
+                           hover:bg-gray-50 dark:hover:bg-slate-800"
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* FOOTER */}
+          <div className="flex items-center justify-between px-4 py-3
+                          border-t border-gray-100 dark:border-slate-700">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2
+                         text-gray-700 dark:text-gray-300
+                         hover:text-blue-700 dark:hover:text-blue-400
+                         font-medium"
+            >
+              <LogOut size={18} />
+              Log out
+            </button>
+
+            <ThemeToggle />
           </div>
         </div>
-
-        {/* Below section */}
-                  <div className=" ">
-
-        {/* Header */}
-        <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100"
-        onClick={handleSetting}>
-          <div>
-            <h3 className="font-semibold text-gray-900">Fusion Techlab</h3>
-            <p className="text-sm text-gray-500">fusionbusiness001@gmail.com</p>
-          </div>
-          <FaAngleRight />
-        </div>
-
-        {/* Balance Section */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
-          <IndianRupee size={18} className="text-gray-600" />
-          <div>
-            <p className="text-gray-900 font-medium">₹0.00</p>
-            <p className="text-xs text-gray-500">Stocks, F&O balance</p>
-          </div>
-        </div>
-
-        {/* Links */}
-        <div className="py-2 space-y-2">
-          <Link
-            to="/user/order/stocks"
-            className="flex items-center gap-3 px-4 py-2 text-gray-800 hover:bg-gray-50"
-          >
-            <FileText size={18} />
-            <span>All Orders</span>
-          </Link>
-
-          <Link
-            to="/support"
-            className="flex items-center gap-3 px-4 py-2 text-gray-800 hover:bg-gray-50"
-          >
-            <Headphones size={18} />
-            <span>24 × 7 Customer Support</span>
-          </Link>
-
-          <Link
-            to="/reports"
-            className="flex items-center gap-3 px-4 py-2 text-gray-800 hover:bg-gray-50"
-          >
-            <BarChart3 size={18} />
-            <span>Reports</span>
-          </Link>
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-          {/* <Sun size={18} className="text-gray-700" /> */}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-blue-700 font-medium border-b border-dashed"
-          >
-            <LogOut size={18} />
-            <span>Log out</span>
-          </button>
-        </div>
-    </div>
-
-        
-
-   
-
-       
       </div>
-    </div>
     </>
   );
 };

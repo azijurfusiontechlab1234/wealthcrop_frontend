@@ -209,10 +209,10 @@ export default function CreateBasket({ onSave }) {
         {/* ADD BUTTON */}
         <button
           onClick={addAsset}
-          disabled={!selectedAsset || remainingWeight === 0}
+          disabled={!selectedAsset || weight === 0}
           className={`mt-5 px-6 py-2.5 rounded-xl shadow transition
             ${
-              selectedAsset && remainingWeight > 0
+              selectedAsset && weight > 0
                 ? "bg-blue-500 text-white hover:bg-blue-600"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}

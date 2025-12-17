@@ -93,6 +93,7 @@ import Invest from "./pages/basket/Invest";
 import Performance from "./pages/basket/Performance";
 import AMCPage from "./pages/AMCPage";
 import VideoKYC from "./components/VideoKYC";
+import KYC from "./components/kyc/KYC";
 
 
 const queryClient = new QueryClient();
@@ -307,7 +308,8 @@ function App() {
 
           {/* Calculators */}
           <Route path="/calculators" element={<CalculatorsPage />} />
-          <Route path="/kyc" element={<VideoKYC />} />
+          {/* <Route path="/kyc" element={<VideoKYC />} /> */}
+          <Route path="/kyc" element={<KYC />} />
 
           {calculatorRoutes.map((route, i) => (
             <Route

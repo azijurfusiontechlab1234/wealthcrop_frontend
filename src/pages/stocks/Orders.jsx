@@ -159,29 +159,30 @@ const Orders = () => {
         </div>
 
         {/* Search + Filters */}
-        <div className="flex items-center justify-between mt-4">
-          <input
-            type="text"
-            placeholder="Search stock…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="px-3 py-2 text-sm w-1/3 border rounded-lg bg-white"
-          />
+        <div className="flex flex-col md:flex-row gap-2 items-start md:items-center md:justify-between mt-4 w-full">
+  <input
+    type="text"
+    placeholder="Search stock…"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="px-3 py-2 text-sm w-full md:w-1/3 border rounded-lg bg-white"
+  />
 
-          <div className="flex gap-2">
-            {["All", "Executed", "Pending", "Rejected"].map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg text-sm border ${
-                  filter === f ? "bg-blue-600 text-white" : "bg-white text-slate-700"
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-        </div>
+  <div className="flex gap-2 mt-2 md:mt-0">
+    {["All", "Executed", "Pending", "Rejected"].map((f) => (
+      <button
+        key={f}
+        onClick={() => setFilter(f)}
+        className={`px-2.5 md:px-4 py-2 rounded-lg text-sm border ${
+          filter === f ? "bg-blue-600 text-white" : "bg-white text-slate-700"
+        }`}
+      >
+        {f}
+      </button>
+    ))}
+  </div>
+</div>
+
 
         {/* Orders List */}
         <div className="mt-4 space-y-3">

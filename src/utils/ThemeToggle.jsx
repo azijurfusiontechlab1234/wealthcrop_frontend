@@ -34,13 +34,14 @@ export default function ThemeToggle() {
     } catch (e) {}
   }, [theme]);
 
-  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+  // const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"))
 
   return (
     <button
       onClick={toggle}
       aria-pressed={theme === "dark"}
-      className="p-2 rounded bg-gray-200 dark:bg-gray-800 text-black dark:text-white"
+      className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-black dark:text-white"
       title="Toggle theme"
     >
       {theme === "dark" ? "☀️" : "🌙"}
