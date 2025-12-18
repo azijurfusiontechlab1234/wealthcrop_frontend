@@ -1,6 +1,9 @@
 import { useLayoutEffect, useState } from "react";
 
 export default function ThemeToggle() {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
   // null = not initialized yet
   const [theme, setTheme] = useState(() => {
     try {
@@ -10,19 +13,18 @@ export default function ThemeToggle() {
     }
   });
 
-  // Initialize to 'light' if null after mount (so UI shows something)
+  // Initialize theme
   useLayoutEffect(() => {
     if (theme === null) {
-      // If user hasn't chosen, set based on current html class (initializer script)
       const isDark = document.documentElement.classList.contains("dark");
       setTheme(isDark ? "dark" : "light");
     }
-    // we intentionally do not put anything else here
   }, [theme]);
 
-  // Apply theme changes synchronously
+  // Apply theme
   useLayoutEffect(() => {
     if (!theme) return;
+
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
@@ -31,18 +33,30 @@ export default function ThemeToggle() {
 
     try {
       localStorage.setItem("theme", theme);
-    } catch (e) {}
+    } catch {}
   }, [theme]);
 
-  // const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
-  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"))
+  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
     <button
       onClick={toggle}
       aria-pressed={theme === "dark"}
-      className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-black dark:text-white"
       title="Toggle theme"
+      className={`
+        p-2 rounded-full transition
+        text-black dark:text-white
+
+        ${
+          token
+            ? `
+              hover:bg-gray-200 dark:hover:bg-gray-800
+            `
+            : `
+              hover:bg-gray-100 dark:hover:bg-white/5
+            `
+        }
+      `}
     >
       {theme === "dark" ? "☀️" : "🌙"}
     </button>

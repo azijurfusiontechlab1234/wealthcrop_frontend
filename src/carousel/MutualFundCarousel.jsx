@@ -27,7 +27,11 @@ function MutualFundCarousel() {
 
   const funds = data?.data?.["10 yr Government Bond"] || [];
 
-  const getColor = (isUp) => (isUp ? "text-green-600" : "text-red-600");
+  const getColor = (isUp) =>
+  isUp
+    ? "text-green-600 dark:text-green-400"
+    : "text-red-600 dark:text-red-400";
+
   const getArrow = (isUp) =>
     isUp ? (
       <MdOutlineArrowDropUp className="text-lg inline" />
@@ -176,9 +180,15 @@ function MutualFundCarousel() {
   // if no funds yet, show placeholder bar (keeps height)
   if (!funds.length) {
     return (
-      <div className="left-0 w-full bg-white overflow-hidden" style={{ height: "40px" }}>
-        <div className="h-full flex items-center px-4 text-gray-400">Loading…</div>
-      </div>
+      <div
+  className="left-0 w-full bg-white dark:bg-[#020617] overflow-hidden"
+  style={{ height: "40px" }}
+>
+  <div className="h-full flex items-center px-4 text-gray-500 dark:text-gray-400">
+    Loading…
+  </div>
+</div>
+
     );
   }
 
@@ -186,100 +196,167 @@ function MutualFundCarousel() {
   const duplicated = [...funds, ...funds];
 
   return (
-    <div className="left-0 w-full bg-white overflow-hidden " style={{ height: "40px" }} ref={wrapperRef}>
-      {/* motion wrapper - we animate this */}
-      <motion.div
-        ref={motionRef}
-        className="flex whitespace-nowrap items-center h-full"
-        animate={controls}
-        initial={{ x: 0 }}
-        style={{ cursor: "default" }}
-      >
-        {/* content (single copy) — measure width from this */}
-        <div ref={contentRef} className="flex">
-          {funds.map((fund, idx) => (
-            <div
-              key={`a-${idx}`}
-              id={`fund-item-${idx}`}
-              className="flex items-center px-4 cursor-pointer hover:bg-gray-100 transition-all whitespace-nowrap"
-              onClick={() => handleItemClick(fund, idx)}
-            >
-              <span className="font-medium text-blue-950">{fund.fund_name}</span>
-              <span className="mx-2 text-sm">{fund.latest_nav}</span>
-              <span className={`${getColor(fund.percentage_change >= 0)} text-sm`}>
-                {getArrow(fund.percentage_change >= 0)} {fund.percentage_change}%
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* duplicate so loop is seamless */}
-        <div className="flex" aria-hidden>
-          {funds.map((fund, idx) => (
-            <div
-              key={`b-${idx}`}
-              className="flex items-center px-4 whitespace-nowrap"
-              onClick={() => handleItemClick(fund, idx)}
-            >
-              <span className="font-medium text-blue-950">{fund.fund_name}</span>
-              <span className="mx-2 text-sm">{fund.latest_nav}</span>
-              <span className={`${getColor(fund.percentage_change >= 0)} text-sm`}>
-                {getArrow(fund.percentage_change >= 0)} {fund.percentage_change}%
-              </span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Modal — fixed positioning so it stays visible */}
-      {showModal && selectedFund && (
+    <div
+  className="left-0 w-full bg-white dark:bg-[#020617] overflow-hidden"
+  style={{ height: "40px" }}
+  ref={wrapperRef}
+>
+  {/* motion wrapper - we animate this */}
+  <motion.div
+    ref={motionRef}
+    className="flex whitespace-nowrap items-center h-full"
+    animate={controls}
+    initial={{ x: 0 }}
+    style={{ cursor: "default" }}
+  >
+    {/* content (single copy) — measure width from this */}
+    <div ref={contentRef} className="flex">
+      {funds.map((fund, idx) => (
         <div
-          id="mf-modal"
-          className="fixed bg-white rounded-lg shadow-lg border p-4 w-72 z-[2000]"
-          style={{
-            top: modalPosition.top,
-            left: modalPosition.left,
-          }}
+          key={`a-${idx}`}
+          id={`fund-item-${idx}`}
+          className="
+            flex items-center px-4 cursor-pointer whitespace-nowrap
+            hover:bg-gray-100 dark:hover:bg-white/10
+            transition-all
+          "
+          onClick={() => handleItemClick(fund, idx)}
         >
-          <a
-            href={`/mutual-fund-Details/${selectedFund.fund_name}`}
-            className="block font-semibold mb-2 text-blue-600 hover:underline"
+          <span className="font-medium text-blue-950 dark:text-white">
+            {fund.fund_name}
+          </span>
+
+          <span className="mx-2 text-sm text-gray-700 dark:text-gray-400">
+            {fund.latest_nav}
+          </span>
+
+          <span
+            className={`${getColor(
+              fund.percentage_change >= 0
+            )} text-sm`}
           >
-            {selectedFund.fund_name}
-          </a>
-
-          <p className="text-sm text-gray-600 mb-1">Latest NAV: {selectedFund.latest_nav}</p>
-
-          <p className="mb-2">
-            <span className={getColor(selectedFund.percentage_change >= 0)}>
-              {getArrow(selectedFund.percentage_change >= 0)} {selectedFund.percentage_change}%
-            </span>
-          </p>
-
-          <div className="grid grid-cols-2 gap-3 bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Asset Size</span>
-              <span className="font-semibold text-gray-900">{selectedFund.asset_size} Cr</span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">1 Yr Return</span>
-              <span className="font-semibold text-gray-900">{selectedFund["1_year_return"]}%</span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">3 Yr Return</span>
-              <span className="font-semibold text-gray-900">{selectedFund["3_year_return"]}%</span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-500">5 Yr Return</span>
-              <span className="font-semibold text-gray-900">{selectedFund["5_year_return"]}%</span>
-            </div>
-          </div>
+            {getArrow(fund.percentage_change >= 0)}{" "}
+            {fund.percentage_change}%
+          </span>
         </div>
-      )}
+      ))}
     </div>
+
+    {/* duplicate so loop is seamless */}
+    <div className="flex" aria-hidden>
+      {funds.map((fund, idx) => (
+        <div
+          key={`b-${idx}`}
+          className="
+            flex items-center px-4 whitespace-nowrap cursor-pointer
+            hover:bg-gray-100 dark:hover:bg-white/10
+            transition-all
+          "
+          onClick={() => handleItemClick(fund, idx)}
+        >
+          <span className="font-medium text-blue-950 dark:text-gray-200">
+            {fund.fund_name}
+          </span>
+
+          <span className="mx-2 text-sm text-gray-700 dark:text-gray-400">
+            {fund.latest_nav}
+          </span>
+
+          <span
+            className={`${getColor(
+              fund.percentage_change >= 0
+            )} text-sm`}
+          >
+            {getArrow(fund.percentage_change >= 0)}{" "}
+            {fund.percentage_change}%
+          </span>
+        </div>
+      ))}
+    </div>
+  </motion.div>
+
+  {/* Modal — fixed positioning so it stays visible */}
+  {showModal && selectedFund && (
+    <div
+      id="mf-modal"
+      className="
+        fixed w-72 z-[2000] rounded-lg shadow-lg p-4
+        bg-white dark:bg-[#020617]
+        border border-gray-200 dark:border-white/10
+        text-gray-900 dark:text-gray-200
+      "
+      style={{
+        top: modalPosition.top,
+        left: modalPosition.left,
+      }}
+    >
+      <a
+        href={`/mutual-fund-Details/${selectedFund.fund_name}`}
+        className="block font-semibold mb-2 text-blue-600 dark:text-blue-400 hover:underline"
+      >
+        {selectedFund.fund_name}
+      </a>
+
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+        Latest NAV: {selectedFund.latest_nav}
+      </p>
+
+      <p className="mb-2">
+        <span className={getColor(selectedFund.percentage_change >= 0)}>
+          {getArrow(selectedFund.percentage_change >= 0)}{" "}
+          {selectedFund.percentage_change}%
+        </span>
+      </p>
+
+      <div
+        className="
+          grid grid-cols-2 gap-3
+          bg-gray-50 dark:bg-white/5
+          backdrop-blur-md
+          border border-gray-200 dark:border-white/10
+          rounded-xl p-4 shadow-sm
+        "
+      >
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Asset Size
+          </span>
+          <span className="font-semibold text-gray-900 dark:text-gray-200">
+            {selectedFund.asset_size} Cr
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            1 Yr Return
+          </span>
+          <span className="font-semibold text-gray-900 dark:text-gray-200">
+            {selectedFund["1_year_return"]}%
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            3 Yr Return
+          </span>
+          <span className="font-semibold text-gray-900 dark:text-gray-200">
+            {selectedFund["3_year_return"]}%
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            5 Yr Return
+          </span>
+          <span className="font-semibold text-gray-900 dark:text-gray-200">
+            {selectedFund["5_year_return"]}%
+          </span>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
   );
 }
 

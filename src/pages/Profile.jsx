@@ -46,7 +46,7 @@ const Profile = () => {
   return (
     <>
       {/* ================= DESKTOP ================= */}
-      <div className="hidden lg:block mt-10 px-16 py-8 bg-white dark:bg-slate-900">
+      <div className="hidden lg:block mt-10 px-16 py-8 bg-white dark:bg-[#020617]">
         <div className="flex gap-6 items-start w-full">
 
           {/* LEFT SIDEBAR */}

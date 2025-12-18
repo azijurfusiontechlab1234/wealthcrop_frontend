@@ -56,23 +56,43 @@ const handleRedirect = (url)=>{
 
 
   return (
-    <section className="py-16 px-6 bg-gray-50">
-
-  <h2 className="text-3xl font-semibold lg:pl-25 text-center lg:text-left text-blue-950 mb-12">
+ <section
+  className="
+    py-16 px-6
+    bg-gray-50
+    dark:bg-[#020617]
+  "
+>
+  <h2
+    className="
+      text-3xl font-semibold
+      lg:pl-25 text-center lg:text-left
+      text-blue-950 dark:text-gray-100
+      mb-12
+    "
+  >
     Frequently Asked Questions
   </h2>
 
   <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
-
     {/* LEFT — FAQ LIST */}
     <div className="lg:col-span-2 space-y-4">
       {faqs.map((item, i) => (
         <div
           key={i}
-          className="bg-white rounded-xl shadow p-4 border border-gray-100"
+          className="
+            rounded-xl p-4
+            bg-white dark:bg-white/5
+            shadow dark:shadow-white/5
+            border border-gray-100 dark:border-white/10
+          "
         >
           <button
-            className="w-full flex justify-between items-center text-left text-blue-950 font-medium"
+            className="
+              w-full flex justify-between items-center text-left
+              text-blue-950 dark:text-gray-100
+              font-medium
+            "
             onClick={() => setOpen(open === i ? null : i)}
           >
             {item.question}
@@ -80,7 +100,13 @@ const handleRedirect = (url)=>{
           </button>
 
           {open === i && (
-            <p className="text-gray-600 mt-2 border-t pt-2">
+            <p
+              className="
+                mt-2 pt-2
+                text-gray-600 dark:text-gray-400
+                border-t border-gray-200 dark:border-white/10
+              "
+            >
               {item.answer}
             </p>
           )}
@@ -89,39 +115,66 @@ const handleRedirect = (url)=>{
     </div>
 
     {/* RIGHT — SIDE INFO CARD */}
-    <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100 h-fit">
-      <h3 className="text-xl font-semibold text-blue-950 mb-4">
+    <div
+      className="
+        h-fit p-6 rounded-xl
+        bg-white dark:bg-white/5
+        shadow-xl dark:shadow-white/5
+        border border-gray-100 dark:border-white/10
+      "
+    >
+      <h3 className="text-xl font-semibold text-blue-950 dark:text-gray-100 mb-4">
         Need More Help?
       </h3>
 
-      <p className="text-gray-600 mb-4">
+      <p className="text-gray-600 dark:text-gray-400 mb-4">
         If your questions are not covered in the FAQ section, you can reach out
         to our support team anytime.
       </p>
 
       <div className="space-y-3">
-        <button onClick={()=>handleRedirect("/support")} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
+        <button
+          onClick={() => handleRedirect("/support")}
+          className="
+            w-full py-2 rounded-lg font-medium
+            bg-blue-600 hover:bg-blue-700
+            dark:bg-blue-500 dark:hover:bg-blue-600
+            text-white
+          "
+        >
           Contact Support
         </button>
-        <button onClick={()=>handleRedirect("/support")} className="w-full bg-gray-200 hover:bg-gray-300 text-blue-950 py-2 rounded-lg font-medium">
+
+        <button
+          onClick={() => handleRedirect("/support")}
+          className="
+            w-full py-2 rounded-lg font-medium
+            bg-gray-200 hover:bg-gray-300
+            dark:bg-white/10 dark:hover:bg-white/15
+            text-blue-950 dark:text-gray-100
+          "
+        >
           Live Chat
         </button>
-        <button onClick={handleWhatsapp} className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium">
+
+        <button
+          onClick={handleWhatsapp}
+          className="
+            w-full py-2 rounded-lg font-medium
+            bg-green-600 hover:bg-green-700
+            dark:bg-green-500 dark:hover:bg-green-600
+            text-white
+          "
+        >
           WhatsApp Help
         </button>
       </div>
 
-      <hr className="my-6" />
-
-      {/* <p className="text-gray-600 text-sm">Download our mobile app for easier support and tracking.</p>
-
-      <div className="flex gap-4 mt-4">
-        <div className="w-20 h-20 bg-gray-100 rounded-lg"></div>
-        <div className="w-20 h-20 bg-gray-100 rounded-lg"></div>
-      </div> */}
+      <hr className="my-6 border-gray-200 dark:border-white/10" />
     </div>
   </div>
 </section>
+
 
   );
 };

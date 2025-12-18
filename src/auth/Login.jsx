@@ -118,147 +118,160 @@ if (!otpMatch) {
   }, [loginMode, reset]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-semibold text-blue-950">Welcome Back 👋</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Login to continue investing with Wealthcrop
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#020617]">
+  <div className="w-full max-w-md bg-white dark:bg-[#020617] rounded-2xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-white/10">
+    {/* Header */}
+    <div className="text-center mb-6">
+      <h1 className="text-2xl font-semibold text-blue-950 dark:text-gray-100">
+        Welcome Back 👋
+      </h1>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+        Login to continue investing with Wealthcrop
+      </p>
+    </div>
+
+    {/* Tabs */}
+    <div className="flex mb-6 border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
+      <button
+        onClick={() => setLoginMode("password")}
+        className={`w-1/2 py-2 text-sm font-medium transition ${
+          loginMode === "password"
+            ? "bg-blue-950 text-white dark:bg-blue-600"
+            : "bg-gray-50 dark:bg-white/5 text-blue-950 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10"
+        }`}
+      >
+        Login with Password
+      </button>
+      <button
+        onClick={() => setLoginMode("otp")}
+        className={`w-1/2 py-2 text-sm font-medium transition ${
+          loginMode === "otp"
+            ? "bg-blue-950 text-white dark:bg-blue-600"
+            : "bg-gray-50 dark:bg-white/5 text-blue-950 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10"
+        }`}
+      >
+        Login with OTP
+      </button>
+    </div>
+
+    {/* Form */}
+    <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+      {/* Mobile */}
+      <div>
+        <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+          Mobile Number
+        </label>
+        <input
+          {...register("mobile")}
+          type="tel"
+          placeholder="Enter your mobile number"
+          className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
+          required
+        />
+        {errors.mobile && (
+          <p className="text-red-600 text-sm mt-1">
+            {errors.mobile.message}
           </p>
-        </div>
+        )}
+      </div>
 
-        {/* Tabs */}
-        <div className="flex mb-6 border border-gray-200 rounded-lg overflow-hidden">
-          <button
-            onClick={() => setLoginMode("password")}
-            className={`w-1/2 py-2 text-sm font-medium transition ${
-              loginMode === "password"
-                ? "bg-blue-950 text-white"
-                : "bg-gray-50 text-blue-950 hover:bg-gray-100"
-            }`}
-          >
-            Login with Password
-          </button>
-          <button
-            onClick={() => setLoginMode("otp")}
-            className={`w-1/2 py-2 text-sm font-medium transition ${
-              loginMode === "otp"
-                ? "bg-blue-950 text-white"
-                : "bg-gray-50 text-blue-950 hover:bg-gray-100"
-            }`}
-          >
-            Login with OTP
-          </button>
-        </div>
-
-        {/* Form */}
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-          {/* Mobile */}
+      {/* Password */}
+      {loginMode === "password" && (
+        <>
           <div>
-            <label className="block text-sm font-medium text-blue-950 mb-1">
-              Mobile Number
+            <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+              Password
             </label>
             <input
-              {...register("mobile")}
-              type="tel"
-              placeholder="Enter your mobile number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
+              {...register("password")}
+              type="password"
+              placeholder="Enter your password"
+              className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
               required
             />
-            {errors.mobile && (
-              <p className="text-red-600 text-sm mt-1">{errors.mobile.message}</p>
+            {errors.password && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
-          {/* Password */}
-          {loginMode === "password" && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-blue-950 mb-1">
-                  Password
-                </label>
-                <input
-                  {...register("password")}
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                  required
-                />
-                {errors.password && (
-                  <p className="text-red-600 text-sm mt-1">{errors.password.message}</p>
-                )}
-              </div>
+          <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+              <input
+                type="checkbox"
+                className="rounded accent-blue-700"
+              />
+              <span>Remember me</span>
+            </label>
+            <Link
+              to="/forgot-password"
+              className="text-blue-800 dark:text-blue-400 hover:text-blue-950 dark:hover:text-blue-300 font-medium"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+        </>
+      )}
 
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center space-x-2 text-gray-600">
-                  <input type="checkbox" className="rounded accent-blue-700" />
-                  <span>Remember me</span>
-                </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-blue-800 hover:text-blue-950 font-medium"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-            </>
-          )}
-
-          {/* OTP Inputs */}
-          <AnimatePresence>
-            {loginMode === "otp" && otpSent && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="flex justify-center gap-2 mt-3"
-              >
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength="1"
-                    value={digit}
-                    onChange={(e) => handleOtpChange(e.target.value, index)}
-                    onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                    ref={(el) => (otpRefs.current[index] = el)}
-                    className="w-10 h-10 text-center border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                  />
-                ))}
-                {errors.otp && (
-                  <p className="text-red-600 text-sm mt-1 col-span-6">
-                    {errors.otp.message}
-                  </p>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-950 text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
+      {/* OTP Inputs */}
+      <AnimatePresence>
+        {loginMode === "otp" && otpSent && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="flex justify-center gap-2 mt-3"
           >
-            {loginMode === "password"
-              ? "Login"
-              : otpSent
-              ? "Verify OTP"
-              : "Send OTP"}
-          </button>
-        </form>
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                type="text"
+                inputMode="numeric"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleOtpChange(e.target.value, index)}
+                onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                ref={(el) => (otpRefs.current[index] = el)}
+                className="w-10 h-10 text-center border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100"
+              />
+            ))}
+            {errors.otp && (
+              <p className="text-red-600 text-sm mt-1 col-span-6">
+                {errors.otp.message}
+              </p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Footer */}
-        <div className="text-center text-sm text-gray-600 mt-5">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-800 hover:text-blue-950 font-medium">
-            Sign up
-          </Link>
-        </div>
-      </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full bg-blue-950 dark:bg-blue-600 text-white rounded-lg py-2 font-medium hover:bg-blue-900 dark:hover:bg-blue-500 transition"
+      >
+        {loginMode === "password"
+          ? "Login"
+          : otpSent
+          ? "Verify OTP"
+          : "Send OTP"}
+      </button>
+    </form>
+
+    {/* Footer */}
+    <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-5">
+      Don’t have an account?{" "}
+      <Link
+        to="/signup"
+        className="text-blue-800 dark:text-blue-400 hover:text-blue-950 dark:hover:text-blue-300 font-medium"
+      >
+        Sign up
+      </Link>
     </div>
+  </div>
+</div>
+
   );
 }
 

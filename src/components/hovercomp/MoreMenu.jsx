@@ -1,202 +1,204 @@
-import React, { useEffect, useState } from 'react'
-import { BookOpen, Newspaper, User, HelpCircle, Download, Gift, Landmark, Calculator } from "lucide-react";
-import { ArrowRight, TrendingUp, Layers, BarChart2, Shield, CandlestickChart, LineChart } from "lucide-react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import {
+  BookOpen,
+  Newspaper,
+  User,
+  HelpCircle,
+  Download,
+  Gift,
+  Landmark,
+  Calculator,
+  ArrowRight,
+} from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import moreMenuImg from "../../assets/menu/moreMenu.svg";
 
+const MoreMenu = ({ token }) => {
+  const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const MoreMenu = ({token}) => {
-    const [openMenu, setOpenMenu] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  useEffect(()=>{
-    setOpenMenu(false)
-  },[location.pathname])
+  useEffect(() => {
+    setOpenMenu(false);
+  }, [location.pathname]);
 
   return (
+    <div
+      className="relative group"
+      onMouseEnter={() => setOpenMenu(true)}
+      onMouseLeave={() => setOpenMenu(false)}
+    >
+      {/* NAV ITEM */}
+      <button className="h-16 px-4 font-semibold cursor-pointer
+                         text-blue-900 dark:text-white
+                         hover:text-blue-600 dark:hover:text-blue-400">
+        More
+      </button>
 
-<div className="relative group"
-onMouseEnter={() => setOpenMenu(true)}
-    onMouseLeave={() => setOpenMenu(false)}
->
-  <button className="text-blue-900 font-semibold hover:text-blue-600 cursor-pointer h-16 px-4">
-    More
-  </button>
-
-  {/* Mega Menu */}
-  {
-    (openMenu && !token) && (
-  <div
-    className="fixed left-0 top-full right-0 w-full bg-white shadow-md
-    opacity-0 invisible group-hover:opacity-100 group-hover:visible
-    transition-all duration-300 ease-out z-50"
-  >
-    <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-blue-950 font-semibold text-lg">More Tools & Resources</h2>
-
-        <button
-          onClick={() => navigate("/calculators")}
-          className="flex items-center gap-1 text-blue-700 hover:underline font-medium cursor-pointer text-sm"
+      {/* MEGA MENU */}
+      {openMenu && !token && (
+        <div
+          className="
+            fixed left-0 right-0 top-full z-50
+            bg-white dark:bg-[#020617]
+            shadow-md dark:shadow-white/5
+            border-t border-gray-200 dark:border-white/10
+          "
         >
-          Explore All Calculators
-          <ArrowRight size={16} />
-        </button>
-      </div>
+          <div className="max-w-[1280px] mx-auto px-10 py-8">
 
-      {/* Columns */}
-      <div className="grid grid-cols-4 gap-10 text-sm">
+            {/* ================= ONE ROW LAYOUT ================= */}
+            <div className="grid grid-cols-[320px_1fr] gap-12">
 
-        {/* 1 — Calculators */}
-        <div className="space-y-4 border-r pr-8">
-          <h3 className="text-blue-950 font-semibold mb-1">Calculators</h3>
+              {/* ========= LEFT INFO PANEL ========= */}
+              <div className="pr-8 border-r border-slate-300 dark:border-white/10">
+                <div className="w-58 h-28 mb-4 rounded-xl overflow-hidden">
+                  <img
+                    src={moreMenuImg}
+                    alt="More menu"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
 
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/calculators")}
-          >
-            <Calculator size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">SIP Calculator</p>
-              <p className="text-slate-500 text-xs">Plan future wealth.</p>
+                <h2 className="text-xl font-semibold text-blue-950 dark:text-gray-100 mb-2">
+                  Tools & Resources
+                </h2>
+
+                <p className="text-sm leading-relaxed mb-4
+                              text-slate-600 dark:text-gray-400">
+                  Explore calculators, learning resources, research tools and
+                  account-related services to manage your finances better.
+                </p>
+
+                <button
+                  onClick={() => navigate("/calculators")}
+                  className="
+                    inline-flex items-center gap-1 px-4 py-1.5 rounded-full
+                    bg-gray-200 dark:bg-white/10
+                    text-blue-900 dark:text-gray-200
+                    text-sm font-medium
+                    hover:bg-gray-300 dark:hover:bg-white/15
+                  "
+                >
+                  Explore All <ArrowRight size={14} />
+                </button>
+              </div>
+
+              {/* ========= RIGHT MENU GRID ========= */}
+              <div className="grid grid-cols-3 gap-10 text-sm">
+
+                {/* Calculators */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Calculators
+                  </h3>
+
+                  <MenuItem
+                    icon={Calculator}
+                    title="SIP Calculator"
+                    desc="Plan long-term wealth."
+                    onClick={() => navigate("/calculators")}
+                  />
+
+                  <MenuItem
+                    icon={Landmark}
+                    title="FD Calculator"
+                    desc="Calculate FD maturity."
+                    onClick={() => navigate("/calculators")}
+                  />
+
+                  <MenuItem
+                    icon={Gift}
+                    title="SWP Calculator"
+                    desc="Smart withdrawal planning."
+                    onClick={() => navigate("/calculators")}
+                  />
+                </div>
+
+                {/* Research */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Research
+                  </h3>
+
+                  <MenuItem
+                    icon={Newspaper}
+                    title="Market News"
+                    desc="Daily market updates."
+                    onClick={() => navigate("/market-news")}
+                  />
+
+                  <MenuItem
+                    icon={BookOpen}
+                    title="Learning Center"
+                    desc="Beginner to advanced."
+                    onClick={() => navigate("/learning-centre")}
+                  />
+
+                  <MenuItem
+                    icon={Newspaper}
+                    title="Blog"
+                    desc="Insights & articles."
+                    onClick={() => navigate("/blogs")}
+                  />
+                </div>
+
+                {/* Account & Support */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Account & Support
+                  </h3>
+
+                  <MenuItem
+                    icon={User}
+                    title="Profile"
+                    desc="Manage your account."
+                    onClick={() => navigate("/profile")}
+                  />
+
+                  <MenuItem
+                    icon={HelpCircle}
+                    title="Help & Support"
+                    desc="FAQs & guidance."
+                    onClick={() => navigate("/support")}
+                  />
+
+                  <MenuItem
+                    icon={Download}
+                    title="Downloads"
+                    desc="Statements & reports."
+                    onClick={() => navigate("/downloads")}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/calculators")}
-          >
-            <Landmark size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">FD Calculator</p>
-              <p className="text-slate-500 text-xs">Calculate FD maturity.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/calculators")}
-          >
-            <Gift size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">SWP Calculator</p>
-              <p className="text-slate-500 text-xs">Smart withdrawal planning.</p>
-            </div>
+            {/* ================================================== */}
           </div>
         </div>
+      )}
+    </div>
+  );
+};
 
-        {/* 2 — Research */}
-        <div className="space-y-4 border-r pr-8">
-          <h3 className="text-blue-950 font-semibold mb-1">Research</h3>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/market-news")}
-          >
-            <Newspaper size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Market News</p>
-              <p className="text-slate-500 text-xs">Stay updated daily.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/learning-centre")}
-          >
-            <BookOpen size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Learning Center</p>
-              <p className="text-slate-500 text-xs">Beginner to advanced.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/blogs")}
-          >
-            <Newspaper size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Blog</p>
-              <p className="text-slate-500 text-xs">Insights & articles.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 3 — Account & Support */}
-        <div className="space-y-4 border-r pr-8">
-          <h3 className="text-blue-950 font-semibold mb-1">Account & Support</h3>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/profile")}
-          >
-            <User size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Profile</p>
-              <p className="text-slate-500 text-xs">Manage your account.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/support")}
-          >
-            <HelpCircle size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Help & Support</p>
-              <p className="text-slate-500 text-xs">FAQs & guidance.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/signup")}
-          >
-            <Download size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Documents</p>
-              <p className="text-slate-500 text-xs">Statements & reports.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 4 — Others */}
-        <div className="space-y-4">
-          <h3 className="text-blue-950 font-semibold mb-1">Others</h3>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/calculators")}
-          >
-            <Newspaper size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Retirement Calculator</p>
-              <p className="text-slate-500 text-xs">Calculate your wealth till retirement.</p>
-            </div>
-          </div>
-
-          <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-          onClick={() => navigate("/calculator/inflation-calculator")}
-          >
-            <Calculator size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">Inflation Calculator</p>
-              <p className="text-slate-500 text-xs">Plan your future wealth.</p>
-            </div>
-          </div>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer"
-            onClick={() => navigate("/calculator/emi-calculator")}
-            >
-            <Newspaper size={18} className="text-blue-700 mt-1" />
-            <div>
-              <p className="font-medium text-blue-950">EMI Calculator</p>
-              <p className="text-slate-500 text-xs">iOS & Android versions.</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
+/* ================= REUSABLE ITEM ================= */
+const MenuItem = ({ icon: Icon, title, desc, onClick }) => (
+  <div
+    onClick={onClick}
+    className="
+      flex gap-3 p-2 rounded-lg cursor-pointer transition
+      hover:bg-blue-50/70 dark:hover:bg-white/5
+    "
+  >
+    <Icon size={18} className="mt-1 text-blue-700 dark:text-blue-400" />
+    <div>
+      <p className="font-medium text-blue-950 dark:text-gray-100">
+        {title}
+      </p>
+      <p className="text-xs text-slate-500 dark:text-gray-400">
+        {desc}
+      </p>
     </div>
   </div>
-    )
-  }
-</div>
+);
 
-  )
-}
-
-export default MoreMenu
+export default MoreMenu;

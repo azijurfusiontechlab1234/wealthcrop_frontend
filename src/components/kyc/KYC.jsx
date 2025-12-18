@@ -45,7 +45,7 @@ export default function KYCFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1220] flex flex-col items-center px-4 py-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">
 
       {/* TOP INFO */}
       <div className="max-w-5xl w-full mb-8 text-center">

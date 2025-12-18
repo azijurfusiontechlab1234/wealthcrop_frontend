@@ -1,152 +1,177 @@
-import React, { useEffect, useState } from 'react'
-import { ArrowRight, TrendingUp, Layers, BarChart2, Calculator, Shield, CandlestickChart, LineChart } from "lucide-react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import {
+  ArrowRight,
+  TrendingUp,
+  Layers,
+  CandlestickChart,
+  LineChart,
+  Calculator,
+  BarChart2,
+} from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import foMenu from "../../assets/menu/foMenu.svg";
 
-const FOMenu = ({token}) => {
+const FOMenu = ({ token }) => {
+  const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const [openMenu, setOpenMenu] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
+  useEffect(() => {
+    setOpenMenu(false);
+  }, [location.pathname]);
 
-  useEffect(()=>{
-    setOpenMenu(false)
-  },[location.pathname])
-
-  const redirect = ()=>{
-    if(token) navigate("/user/fno/explore")
-  }
+  const redirect = () => {
+    if (token) navigate("/user/fno/explore");
+  };
 
   return (
-<>
-
-  <div className="relative group"
-    onMouseEnter={() => setOpenMenu(true)}
-    onMouseLeave={() => setOpenMenu(false)}
-  >
-    <button 
-    onClick={redirect} 
-    className="text-blue-900 font-semibold hover:text-blue-600 cursor-pointer h-16 px-4"
-    
-    >
-      F&O
-    </button>
-
-    {/* Mega Menu */}
-    {(openMenu && !token) && (
     <div
-      className="fixed left-0 top-full right-0 w-full bg-white shadow-md
-      opacity-0 invisible group-hover:opacity-100 group-hover:visible
-      transition-all duration-300 ease-out z-50"
+      className="relative group"
+      onMouseEnter={() => setOpenMenu(true)}
+      onMouseLeave={() => setOpenMenu(false)}
     >
-      <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
+      {/* NAV ITEM */}
+      <button
+        onClick={redirect}
+        className="
+          h-16 px-4 font-semibold
+          text-blue-900 dark:text-white
+          hover:text-blue-600 dark:hover:text-blue-400
+        "
+      >
+        F&amp;O
+      </button>
 
-        {/* Header Row */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-blue-950 font-semibold text-lg">F&O Menu</h2>
+      {/* MEGA MENU */}
+      {openMenu && !token && (
+        <div
+          className="
+            fixed left-0 right-0 top-full z-50
+            bg-white dark:bg-[#020617]
+            shadow-md dark:shadow-white/5
+            border-t border-gray-200 dark:border-white/10
+          "
+        >
+          <div className="max-w-[1280px] mx-auto px-10 py-8">
+            <div className="grid grid-cols-[320px_1fr] gap-12">
 
-          <button
-            onClick={() => navigate("/user/fno/explore")}
-            className="flex items-center gap-1 text-blue-700 hover:underline font-medium cursor-pointer text-sm"
-          >
-            Explore F&O
-            <ArrowRight size={16} />
-          </button>
+              {/* ========= LEFT INFO ========= */}
+              <div className="pr-8 border-r border-slate-300 dark:border-white/10">
+                <div className="w-58 h-28 mb-4 flex items-center">
+                  <img
+                    src={foMenu}
+                    alt="F&O"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                <h2 className="text-xl font-semibold text-blue-950 dark:text-gray-100 mb-2">
+                  Futures & Options
+                </h2>
+
+                <p className="text-sm leading-relaxed mb-4
+                              text-slate-600 dark:text-gray-400">
+                  Trade futures and options with advanced tools,
+                  option chains and real-time analytics.
+                </p>
+
+                <button
+                  onClick={() => navigate("/user/fno/explore")}
+                  className="
+                    inline-flex items-center gap-1 px-4 py-1.5 rounded-full
+                    bg-gray-200 dark:bg-white/10
+                    text-blue-900 dark:text-gray-200
+                    text-sm font-medium
+                    hover:bg-gray-300 dark:hover:bg-white/15
+                  "
+                >
+                  Explore Future &amp; Options <ArrowRight size={14} />
+                </button>
+              </div>
+
+              {/* ========= RIGHT GRID ========= */}
+              <div className="grid grid-cols-3 gap-10 text-sm">
+
+                {/* Futures */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Futures
+                  </h3>
+
+                  <MenuItem
+                    icon={TrendingUp}
+                    title="Index Futures"
+                    desc="NIFTY & BANKNIFTY."
+                  />
+                  <MenuItem
+                    icon={Layers}
+                    title="Stock Futures"
+                    desc="Leading stocks futures."
+                  />
+                </div>
+
+                {/* Options */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Options
+                  </h3>
+
+                  <MenuItem
+                    icon={CandlestickChart}
+                    title="Options Trading"
+                    desc="Calls & Puts."
+                  />
+                  <MenuItem
+                    icon={LineChart}
+                    title="Option Chain"
+                    desc="OI, IV & Greeks."
+                  />
+                </div>
+
+                {/* Tools */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Tools
+                  </h3>
+
+                  <MenuItem
+                    icon={Calculator}
+                    title="Margin Calculator"
+                    desc="Required margin."
+                  />
+                  <MenuItem
+                    icon={BarChart2}
+                    title="Brokerage Estimator"
+                    desc="Charges estimate."
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Columns */}
-        <div className="grid grid-cols-3 gap-10 text-sm">
-
-          {/* 1 — Futures */}
-          <div className="space-y-4 border-r pr-8">
-            <h3 className="text-blue-950 font-semibold mb-1">Futures</h3>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <TrendingUp size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Index Futures</p>
-                <p className="text-slate-500 text-xs">Trade NIFTY & BANKNIFTY futures.</p>
-              </div>
-            </div>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <Layers size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Stock Futures</p>
-                <p className="text-slate-500 text-xs">Trade futures of leading stocks.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 2 — Options */}
-          <div className="space-y-4 border-r pr-8">
-            <h3 className="text-blue-950 font-semibold mb-1">Options</h3>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <CandlestickChart size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Options Trading</p>
-                <p className="text-slate-500 text-xs">Trade Calls & Puts with insights.</p>
-              </div>
-            </div>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <LineChart size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Option Chain</p>
-                <p className="text-slate-500 text-xs">Track OI, IV, Greeks in real-time.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 3 — Strategies */}
-          {/* <div className="space-y-4 border-r pr-8">
-            <h3 className="text-blue-950 font-semibold mb-1">Strategies</h3>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <BarChart2 size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Strategy Builder</p>
-                <p className="text-slate-500 text-xs">Create multi-leg strategies.</p>
-              </div>
-            </div>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <Shield size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Greeks & Analysis</p>
-                <p className="text-slate-500 text-xs">Analyze Delta, Theta, Vega etc.</p>
-              </div>
-            </div>
-          </div> */}
-
-          {/* 4 — Tools */}
-          <div className="space-y-4">
-            <h3 className="text-blue-950 font-semibold mb-1">Tools</h3>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <Calculator size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Margin Calculator</p>
-                <p className="text-slate-500 text-xs">Check margin required for trades.</p>
-              </div>
-            </div>
-
-            <div className="hover:bg-blue-50/70 rounded-lg p-2 flex gap-3 cursor-pointer">
-              <BarChart2 size={18} className="text-blue-700 mt-1" />
-              <div>
-                <p className="font-medium text-blue-950">Brokerage Estimator</p>
-                <p className="text-slate-500 text-xs">Estimate charges before trading.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      )}
     </div>
-)}
-  </div>
-</>
-  )
-}
+  );
+};
 
-export default FOMenu
+/* ================= MENU ITEM ================= */
+const MenuItem = ({ icon: Icon, title, desc }) => (
+  <div
+    className="
+      flex gap-3 p-2 rounded-lg cursor-pointer transition
+      hover:bg-blue-50/70 dark:hover:bg-white/5
+    "
+  >
+    <Icon size={18} className="mt-1 text-blue-700 dark:text-blue-400" />
+    <div>
+      <p className="font-medium text-blue-950 dark:text-gray-100">
+        {title}
+      </p>
+      <p className="text-xs text-slate-500 dark:text-gray-400">
+        {desc}
+      </p>
+    </div>
+  </div>
+);
+
+export default FOMenu;

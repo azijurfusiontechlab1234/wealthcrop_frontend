@@ -1,179 +1,204 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, BarChart2, TrendingUp, Layers, CandlestickChart } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart2,
+  TrendingUp,
+  Layers,
+  CandlestickChart,
+  Download,
+  Newspaper,
+} from "lucide-react";
+import stockMenu from "../../assets/menu/stockMenu.svg";
 
 const StocksMenu = ({ token }) => {
-  const [openMenu, setOpenMenu] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
+  const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(()=>{
-    setOpenMenu(false)
-  },[location.pathname])
+  useEffect(() => {
+    setOpenMenu(false);
+  }, [location.pathname]);
 
-  const redirect = ()=>{
-    if(token) navigate("/user/stocks/explore")
-  }
-
+  const redirect = () => {
+    if (token) navigate("/user/stocks/explore");
+  };
 
   return (
     <div
       className="relative group"
-     onMouseEnter={() => setOpenMenu(true)}
-    onMouseLeave={() => setOpenMenu(false)}
+      onMouseEnter={() => setOpenMenu(true)}
+      onMouseLeave={() => setOpenMenu(false)}
     >
       {/* NAV ITEM */}
       <button
         onClick={redirect}
-        className="text-blue-900 font-semibold hover:text-blue-600 cursor-pointer h-16 px-4"
+        className="
+          h-16 px-4 font-semibold cursor-pointer
+          text-blue-900 dark:text-white
+          hover:text-blue-600 dark:hover:text-blue-400
+        "
       >
         Stocks
       </button>
 
       {/* MEGA MENU */}
-      {
-        (openMenu && !token) && (
-      <div
-        className={`
-          fixed left-0 top-full right-0 w-full bg-white shadow-md
-          transition-all duration-300 ease-out z-50
-          ${open ? "opacity-100 visible" : "opacity-0 invisible"}
-        `}
-      >
-        <div className="max-w-[1280px] mx-auto px-10 pb-12 pt-6">
+      {openMenu && !token && (
+        <div
+          className="
+            fixed left-0 right-0 top-full z-50
+            bg-white dark:bg-[#020617]
+            shadow-md dark:shadow-white/5
+            border-t border-gray-200 dark:border-white/10
+          "
+        >
+          <div className="max-w-[1280px] mx-auto px-10 py-8">
+            <div className="grid grid-cols-[320px_1fr] gap-12">
 
-          {/* Header Row */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-blue-950 font-semibold text-lg">Stocks Menu</h2>
-
-            <button
-              onClick={() => navigate("/user/stocks")}
-              className="flex items-center gap-1 text-blue-700 hover:underline cursor-pointer font-medium  text-sm"
-            >
-              Explore Stocks <ArrowRight size={16} />
-            </button>
-          </div>
-
-          {/* Content Grid */}
-          <div className="grid grid-cols-3 gap-10 text-sm">
-
-            {/* 1 — Trading */}
-            <div className="space-y-4 border-r pr-8">
-              <h3 className="text-blue-950 font-semibold mb-1">Trading</h3>
-
-               <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <Layers size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">ETF Investing</p>
-                  <p className="text-slate-500 text-xs">Diversified index investing.</p>
+              {/* ========= LEFT INFO PANEL ========= */}
+              <div className="pr-8 border-r border-slate-300 dark:border-white/10">
+                <div className="w-58 h-28 mb-4 rounded-xl flex items-center justify-center overflow-hidden">
+                  <img
+                    src={stockMenu}
+                    alt="Stock menu"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
+
+                <h2 className="text-xl font-semibold text-blue-950 dark:text-gray-100 mb-2">
+                  Stocks
+                </h2>
+
+                <p className="text-sm leading-relaxed mb-4 text-slate-600 dark:text-gray-400">
+                  Invest in stocks, ETFs and IPOs with real-time prices,
+                  advanced charts and expert insights.
+                </p>
+
+                <button
+                  onClick={() => navigate("/user/stocks")}
+                  className="
+                    inline-flex items-center gap-1 mt-2
+                    px-4 py-1.5 rounded-full
+                    bg-gray-200 dark:bg-white/10
+                    text-blue-900 dark:text-gray-200
+                    text-sm font-medium
+                    hover:bg-gray-300 dark:hover:bg-white/15
+                  "
+                >
+                  Explore Stocks <ArrowRight size={14} />
+                </button>
               </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/ipo")}
-              >
-                <CandlestickChart size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">IPO Investments</p>
-                  <p className="text-slate-500 text-xs">Apply for upcoming IPOs.</p>
+              {/* ========= RIGHT MENU GRID ========= */}
+              <div className="grid grid-cols-3 gap-10 text-sm">
+
+                {/* Trading */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Trading
+                  </h3>
+
+                  <MenuItem
+                    icon={Layers}
+                    title="ETF Investing"
+                    desc="Diversified index investing."
+                    onClick={() => navigate("/signup")}
+                  />
+
+                  <MenuItem
+                    icon={CandlestickChart}
+                    title="IPO Investments"
+                    desc="Apply for upcoming IPOs."
+                    onClick={() => navigate("/ipo")}
+                  />
+
+                  <MenuItem
+                    icon={Download}
+                    title="Documents"
+                    desc="Statements & reports."
+                    onClick={() => navigate("/signup")}
+                  />
                 </div>
-              </div>
-            </div>
 
-            {/* 2 — Tools */}
-            {/* <div className="space-y-4 border-r pr-8">
-              <h3 className="text-blue-950 font-semibold mb-1">Tools</h3>
+                {/* Portfolio */}
+                <div className="space-y-4 pr-8 border-r border-slate-300 dark:border-white/10">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Portfolio
+                  </h3>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <BarChart2 size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">Stock Screener</p>
-                  <p className="text-slate-500 text-xs">
-                    Filter stocks by PE, volume, trend.
-                  </p>
+                  <MenuItem
+                    icon={TrendingUp}
+                    title="Market Watchlist"
+                    desc="Track stocks live."
+                    onClick={() => navigate("/signup")}
+                  />
+
+                  <MenuItem
+                    icon={Layers}
+                    title="Demat + Trading"
+                    desc="Free Demat account."
+                    onClick={() => navigate("/demat-account")}
+                  />
+
+                  <MenuItem
+                    icon={Newspaper}
+                    title="EMI Calculator"
+                    desc="iOS & Android versions."
+                    onClick={() =>
+                      navigate("/calculator/emi-calculator")
+                    }
+                  />
                 </div>
-              </div>
 
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <Layers size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">ETF Investing</p>
-                  <p className="text-slate-500 text-xs">Diversified index investing.</p>
+                {/* Insights */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-blue-950 dark:text-gray-100">
+                    Insights
+                  </h3>
+
+                  <MenuItem
+                    icon={BarChart2}
+                    title="Top Gainers"
+                    desc="Stocks rising today."
+                    onClick={() => navigate("/signup")}
+                  />
+
+                  <MenuItem
+                    icon={TrendingUp}
+                    title="Market Trends"
+                    desc="Analyst insights."
+                    onClick={() => navigate("/signup")}
+                  />
                 </div>
-              </div>
-            </div> */}
 
-            {/* 3 — Portfolio */}
-            <div className="space-y-4 border-r pr-8">
-              <h3 className="text-blue-950 font-semibold mb-1">Portfolio</h3>
-
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <TrendingUp size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">Market Watchlist</p>
-                  <p className="text-slate-500 text-xs">
-                    Track all your stocks live.
-                  </p>
-                </div>
-              </div>
-
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/demat-account")}
-              >
-                <Layers size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">Demat + Trading</p>
-                  <p className="text-slate-500 text-xs">
-                    Open an instant free Demat account.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 4 — Insights */}
-            <div className="space-y-4">
-              <h3 className="text-blue-950 font-semibold mb-1">Insights</h3>
-
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <BarChart2 size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">Top Gainers</p>
-                  <p className="text-slate-500 text-xs">
-                    Stocks rising today.
-                  </p>
-                </div>
-              </div>
-
-              <div className="hover:bg-blue-50/70 p-2 rounded-lg flex gap-3 cursor-pointer"
-              onClick={() => navigate("/signup")}
-              >
-                <TrendingUp size={18} className="text-blue-700 mt-1" />
-                <div>
-                  <p className="font-medium text-blue-950">Market Trends</p>
-                  <p className="text-slate-500 text-xs">
-                    Analyst insights and charts.
-                  </p>
-                </div>
               </div>
             </div>
-
           </div>
         </div>
-      </div>
-        )
-      }
+      )}
     </div>
   );
 };
+
+/* ================= MENU ITEM ================= */
+const MenuItem = ({ icon: Icon, title, desc, onClick }) => (
+  <div
+    onClick={onClick}
+    className="
+      flex gap-3 p-2 rounded-lg cursor-pointer transition
+      hover:bg-blue-50/70 dark:hover:bg-white/5
+    "
+  >
+    <Icon size={18} className="mt-1 text-blue-700 dark:text-blue-400" />
+    <div>
+      <p className="font-medium text-blue-950 dark:text-gray-100">
+        {title}
+      </p>
+      <p className="text-xs text-slate-500 dark:text-gray-400">
+        {desc}
+      </p>
+    </div>
+  </div>
+);
 
 export default StocksMenu;

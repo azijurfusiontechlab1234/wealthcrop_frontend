@@ -45,160 +45,161 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
-        <AnimatePresence mode="wait">
-          {!pinOpen ? (
-            <motion.div
-              key="registerForm"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Header */}
-              <div className="text-center mb-6">
-                <h1 className="text-2xl font-semibold text-blue-950">
-                  Create your account ✨
-                </h1>
-                <p className="text-gray-500 text-sm mt-1">
-                  Start investing smarter with Wealthcrop
+   <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#020617]">
+  <div className="w-full max-w-md bg-white dark:bg-[#020617] rounded-2xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-white/10">
+    <AnimatePresence mode="wait">
+      {!pinOpen ? (
+        <motion.div
+          key="registerForm"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Header */}
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-semibold text-blue-950 dark:text-gray-100">
+              Create your account ✨
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+              Start investing smarter with Wealthcrop
+            </p>
+          </div>
+
+          {/* Register Form */}
+          <form
+            className="space-y-5"
+            noValidate
+            onSubmit={handleSubmit(submitForm)}
+          >
+            {/* Username */}
+            <div>
+              <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+                Username
+              </label>
+              <input
+                {...register("name")}
+                type="text"
+                placeholder="Enter your username"
+                className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm 
+                focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
+              />
+              {errors.name && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.name.message}
                 </p>
-              </div>
+              )}
+            </div>
 
-              {/* Register Form */}
-              <form
-                className="space-y-5"
-                noValidate
-                onSubmit={handleSubmit(submitForm)}
-              >
-                {/* Username */}
-                <div>
-                  <label className="block text-sm font-medium text-blue-950 mb-1">
-                    Username
-                  </label>
-                  <input
-                    {...register("name")}
-                    type="text"
-                    placeholder="Enter your username"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                  />
-                  {errors.name && (
-                    <p className="text-red-600 text-sm mt-1 ">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                {...register("email")}
+                placeholder="Enter your email"
+                className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm 
+                focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
+              />
+              {errors.email && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-blue-950 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    {...register("email")}
-                    placeholder="Enter your email"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                  />
-                  {errors.email && (
-                    <p className="text-red-600 text-sm mt-1 ">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
+            {/* Mobile Number */}
+            <div>
+              <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+                Mobile Number
+              </label>
+              <input
+                type="tel"
+                {...register("mobile")}
+                placeholder="Enter your mobile number"
+                className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm 
+                focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
+              />
+              {errors.mobile && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.mobile.message}
+                </p>
+              )}
+            </div>
 
-                {/* Mobile Number */}
-                <div>
-                  <label className="block text-sm font-medium text-blue-950 mb-1">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    {...register("mobile")}
-                    placeholder="Enter your mobile number"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm 
-                    focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                  />
-                  {errors.mobile && (
-                    <p className="text-red-600 text-sm mt-1 ">
-                      {errors.mobile.message}
-                    </p>
-                  )}
-                </div>
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="Create a password"
+                  className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 pr-10 text-sm 
+                  focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
+                />
 
-                {/* Password */}
-                <div>
-                  <label className="block text-sm font-medium text-blue-950 mb-1">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      {...register("password")}
-                      placeholder="Create a password"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 text-sm 
-                      focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-700"
-                    >
-                      {showPassword ? <FaEye /> : <FaEyeSlash />}
-                    </button>
-                  </div>
-                  {errors.password && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Create Account Button */}
-                <button
-                  type="submit"
-                  className="w-full bg-blue-950 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
-                  disabled={loading}
-                >
-                  {loading ? "Submitting..." : "Create Account"}
-                </button>
-
-                {/* Google Sign Up */}
                 <button
                   type="button"
-                  className="w-full border border-gray-300 text-blue-950 rounded-lg py-2 font-medium 
-                  hover:bg-gray-50 flex items-center justify-center gap-2 transition cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400"
                 >
-                  <img
-                    src="https://www.svgrepo.com/show/475656/google-color.svg"
-                    alt="Google"
-                    className="w-5 h-5"
-                  />
-                  Sign up with Google
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
-              </form>
-
-              {/* Footer */}
-              <div className="text-center text-sm text-gray-600 mt-5">
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="text-blue-800 hover:text-blue-950 font-medium"
-                >
-                  Login
-                </Link>
               </div>
-            </motion.div>
-          ) : (
-            <SetPin key="setPin" />
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            {/* Create Account Button */}
+            <button
+              type="submit"
+              className="w-full bg-blue-950 dark:bg-blue-600 cursor-pointer text-white rounded-lg py-2 font-medium hover:bg-blue-900 dark:hover:bg-blue-500 transition"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Create Account"}
+            </button>
+
+            {/* Google Sign Up */}
+            <button
+              type="button"
+              className="w-full border border-gray-300 dark:border-white/10 text-blue-950 dark:text-gray-200 rounded-lg py-2 font-medium 
+              hover:bg-gray-50 dark:hover:bg-white/10 flex items-center justify-center gap-2 transition cursor-pointer"
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              Sign up with Google
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-5">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-800 dark:text-blue-400 hover:text-blue-950 dark:hover:text-blue-300 font-medium"
+            >
+              Login
+            </Link>
+          </div>
+        </motion.div>
+      ) : (
+        <SetPin key="setPin" />
+      )}
+    </AnimatePresence>
+  </div>
+</div>
+
   );
 }
 
@@ -266,72 +267,95 @@ function SetPin() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
-      className="text-center"
-    >
-      <h2 className="text-xl font-semibold text-blue-950 mb-4">
-        Set your 4-digit PIN 🔒
-      </h2>
-      <p className="text-gray-500 text-sm mb-6">
-        You’ll use this PIN to access your account securely
-      </p>
+ <motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0, y: -10 }}
+  transition={{ duration: 0.3 }}
+  className="text-center"
+>
+  <h2 className="text-xl font-semibold text-blue-950 dark:text-gray-100 mb-4">
+    Set your 4-digit PIN 🔒
+  </h2>
 
-      {/* Enter PIN */}
-      <label className="text-sm font-medium text-blue-950 block mb-2">
-        Enter PIN
-      </label>
-      <div className="flex justify-center gap-3 mb-5">
-        {pin.map((digit, index) => (
-          <input
-            key={index}
-            type="password"
-            inputMode="numeric"
-            maxLength="1"
-            value={digit}
-            onChange={(e) => handlePinChange(e.target.value, index, "pin")}
-            onKeyDown={(e) => handleKeyDown(e, index, "pin")}
-            ref={(el) => (pinRefs.current[index] = el)}
-            className="w-12 h-12 text-center border border-gray-300 rounded-lg text-lg 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-          />
-        ))}
-      </div>
+  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+    You’ll use this PIN to access your account securely
+  </p>
 
-      {/* Confirm PIN */}
-      <label className="text-sm font-medium text-blue-950 block mb-2">
-        Confirm PIN
-      </label>
-      <div className="flex justify-center gap-3 mb-4">
-        {confirmPin.map((digit, index) => (
-          <input
-            key={index}
-            type="text"
-            inputMode="numeric"
-            maxLength="1"
-            value={digit}
-            onChange={(e) =>
-              handlePinChange(e.target.value, index, "confirm")
-            }
-            onKeyDown={(e) => handleKeyDown(e, index, "confirm")}
-            ref={(el) => (confirmRefs.current[index] = el)}
-            className="w-12 h-12 text-center border border-gray-300 rounded-lg text-lg 
-              focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950"
-          />
-        ))}
-      </div>
+  {/* Enter PIN */}
+  <label className="text-sm font-medium text-blue-950 dark:text-gray-200 block mb-2">
+    Enter PIN
+  </label>
 
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+  <div className="flex justify-center gap-3 mb-5">
+    {pin.map((digit, index) => (
+      <input
+        key={index}
+        type="password"
+        inputMode="numeric"
+        maxLength="1"
+        value={digit}
+        onChange={(e) => handlePinChange(e.target.value, index, "pin")}
+        onKeyDown={(e) => handleKeyDown(e, index, "pin")}
+        ref={(el) => (pinRefs.current[index] = el)}
+        className="
+          w-12 h-12 text-center rounded-lg text-lg
+          border border-gray-300 dark:border-white/10
+          bg-white dark:bg-white/5
+          text-blue-950 dark:text-gray-100
+          focus:outline-none focus:ring-1 focus:ring-blue-700
+        "
+      />
+    ))}
+  </div>
 
-      <button
-        className="w-full bg-blue-950 text-white rounded-lg py-2 font-medium hover:bg-blue-900 transition"
-        onClick={handleSavePin}
-      >
-        Save PIN
-      </button>
-    </motion.div>
+  {/* Confirm PIN */}
+  <label className="text-sm font-medium text-blue-950 dark:text-gray-200 block mb-2">
+    Confirm PIN
+  </label>
+
+  <div className="flex justify-center gap-3 mb-4">
+    {confirmPin.map((digit, index) => (
+      <input
+        key={index}
+        type="text"
+        inputMode="numeric"
+        maxLength="1"
+        value={digit}
+        onChange={(e) =>
+          handlePinChange(e.target.value, index, "confirm")
+        }
+        onKeyDown={(e) => handleKeyDown(e, index, "confirm")}
+        ref={(el) => (confirmRefs.current[index] = el)}
+        className="
+          w-12 h-12 text-center rounded-lg text-lg
+          border border-gray-300 dark:border-white/10
+          bg-white dark:bg-white/5
+          text-blue-950 dark:text-gray-100
+          focus:outline-none focus:ring-1 focus:ring-blue-700
+        "
+      />
+    ))}
+  </div>
+
+  {error && (
+    <p className="text-red-500 text-sm mb-4">
+      {error}
+    </p>
+  )}
+
+  <button
+    className="
+      w-full bg-blue-950 dark:bg-blue-600
+      text-white rounded-lg py-2 font-medium
+      hover:bg-blue-900 dark:hover:bg-blue-500
+      transition
+    "
+    onClick={handleSavePin}
+  >
+    Save PIN
+  </button>
+</motion.div>
+
   );
 }
