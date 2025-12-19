@@ -29,19 +29,19 @@ const NFO = () => {
 //     : fundList;
 
   return (
-    <div className="min-h-screen bg-blue-50 px-6 py-12">
+    <div className="min-h-screen bg-blue-50 px-6 py-12 dark:bg-[#020617]">
       {/* Page Header */}
       <div className="max-w-3xl mx-auto text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">New Fund Offerings</h1>
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-slate-200 mb-2">New Fund Offerings</h1>
         <div className="h-1 w-16 bg-green-500 mx-auto rounded-full mb-4"></div>
-        <p className="text-gray-600">Subscribe to the latest NFOs from top investment companies.</p>
+        <p className="text-gray-600 dark:text-slate-400">Subscribe to the latest NFOs from top investment companies.</p>
       </div>
 
       {/* Filter */}
       <div className="max-w-6xl mx-auto flex justify-end mb-4">
         <button
           className={`px-4 py-2 rounded-full font-medium text-sm ${
-            showOpenOnly ? "bg-green-500 text-white" : "bg-white text-gray-700 border"
+            showOpenOnly ? "bg-green-500 dark:bg-green-600 text-white" : "bg-white dark:bg-slate-800 text-gray-700 text-slate-400 border"
           }`}
         //   onClick={() => setShowOpenOnly(!showOpenOnly)}
         >
@@ -55,7 +55,7 @@ const NFO = () => {
         {fundList.map((fund, index) => (
           <div
             key={index}
-            className="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
+            className="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-white dark:bg-gray-900 rounded-xl shadow dark:shadow-white/10 hover:shadow-lg transition"
           >
             <img
               src={index % 2 === 0 ? logoUrl : logoUrl2}
@@ -64,17 +64,17 @@ const NFO = () => {
             />
 
             <div className="flex-1">
-              <Link to={`/mutual_fund/${fund.name}`} className="text-gray-800 font-semibold hover:text-blue-600 hover:underline">{fund.name}</Link>
-              <p className="text-sm text-gray-500 mt-1">{fund.risk} • {fund.category}</p>
+              <Link to={`/mutual_fund/${fund.name}`} className="text-gray-800 dark:text-gray-300 font-semibold hover:text-blue-600 hover:underline">{fund.name}</Link>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{fund.risk} • {fund.category}</p>
             </div>
 
             <div className="flex gap-6 mt-2 md:mt-0 flex-shrink-0">
               <div className="text-right">
-                <p className="font-medium text-gray-700">{fund.launch}</p>
+                <p className="font-medium text-gray-700 dark:text-gray-300">{fund.launch}</p>
                 <p className="text-xs text-gray-400">Launch Date</p>
               </div>
               <div className="text-right">
-                <p className="font-medium text-gray-700">{fund.close}</p>
+                <p className="font-medium text-gray-700 dark:text-gray-300">{fund.close}</p>
                 <p className="text-xs text-gray-400">Closing Date</p>
               </div>
             </div>

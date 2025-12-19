@@ -40,7 +40,7 @@ const MoreMenu = ({ token }) => {
         <div
           className="
             fixed left-0 right-0 top-full z-50
-            bg-white dark:bg-[#020617]
+            bg-white dark:bg-gray-900
             shadow-md dark:shadow-white/5
             border-t border-gray-200 dark:border-white/10
           "
@@ -97,21 +97,21 @@ const MoreMenu = ({ token }) => {
                     icon={Calculator}
                     title="SIP Calculator"
                     desc="Plan long-term wealth."
-                    onClick={() => navigate("/calculators")}
+                    onClick={() => navigate("/calculator/sip-calculator")}
                   />
 
                   <MenuItem
                     icon={Landmark}
                     title="FD Calculator"
                     desc="Calculate FD maturity."
-                    onClick={() => navigate("/calculators")}
+                    onClick={() => navigate("/calculator/fd-calculator")}
                   />
 
                   <MenuItem
                     icon={Gift}
                     title="SWP Calculator"
                     desc="Smart withdrawal planning."
-                    onClick={() => navigate("/calculators")}
+                    onClick={() => navigate("/calculator/swp-calculator")}
                   />
                 </div>
 

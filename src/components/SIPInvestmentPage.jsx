@@ -15,82 +15,159 @@ export function SIPInvestmentPage() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 p-8">
-      <div className="max-w-3xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-blue-200">
-        
-        {/* Header */}
-        <div className="flex items-start gap-6">
-          <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-300 to-blue-500 flex items-center justify-center text-3xl shadow-lg">📈</div>
+    <div className="
+  min-h-screen p-8
+  bg-linear-to-b from-blue-50 via-white to-blue-100
+  dark:from-[#020617] dark:via-[#020617] dark:to-[#020617]
+">
+  <div
+    className="
+      max-w-3xl mx-auto p-8 rounded-2xl shadow-xl border
+      bg-white border-blue-200
+      dark:bg-slate-900 dark:border-slate-700
+    "
+  >
+    {/* Header */}
+    <div className="flex items-start gap-6">
+      <div
+        className="
+          w-20 h-20 rounded-xl flex items-center justify-center text-3xl shadow-lg
+          bg-gradient-to-br from-blue-300 to-blue-500
+          dark:from-blue-600 dark:to-blue-800
+        "
+      >
+        📈
+      </div>
 
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-3">SIP — Systematic Investment Plan</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              SIP is one of the most effective and disciplined ways to build long-term wealth. 
-              Instead of investing a large amount at once, you invest small amounts at regular intervals.
-              This reduces market timing stress, manages risk, and leverages the power of compounding.
-            </p>
-          </div>
-        </div>
+      <div>
+        <h2 className="
+          text-4xl font-bold mb-3
+          text-gray-900
+          dark:text-slate-100
+        ">
+          SIP — Systematic Investment Plan
+        </h2>
 
-        {/* Additional Informative Section */}
-        <div className="mt-6 bg-blue-50 rounded-xl p-5 border border-blue-100">
-          <h3 className="text-xl font-semibold text-blue-800 mb-2">Why SIP Works?</h3>
-          <ul className="text-gray-700 space-y-2 leading-relaxed">
-            <li>✔ Encourages consistent financial discipline.</li>
-            <li>✔ Helps average out market ups and downs.</li>
-            <li>✔ Suitable for beginners & experienced investors.</li>
-            <li>✔ Ideal for long-term wealth creation & financial goals.</li>
-            <li>✔ Can be automated — set once and continue worry-free.</li>
-          </ul>
-        </div>
-
-        {/* More Detailed Information */}
-        <div className="mt-6 text-gray-700 leading-relaxed">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">How SIP Helps You Grow?</h3>
-          <p className="mb-4">
-            SIPs use the power of compounding, meaning your returns start generating their own returns 
-            as time passes. Even small monthly investments grow into large wealth when continued for years.
-          </p>
-
-          <p className="mb-4">
-            SIPs also reduce emotional investing. Instead of panicking during market dips or highs, 
-            your fixed investments keep happening, capturing opportunities automatically.
-          </p>
-
-          <p className="mb-4">
-            Most importantly, SIPs fit all types of financial goals — retirement, buying a house, 
-            child education, vacations, or simply building wealth.
-          </p>
-        </div>
-
-        {/* FAQ Section */}
-        <h3 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Frequently Asked Questions</h3>
-
-        <div className="space-y-3">
-          {sipFaqs.map((f, i) => {
-            const isOpen = openIndex === i;
-
-            return (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl shadow-sm">
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full text-left px-4 py-4 flex justify-between items-center font-medium text-gray-900"
-                >
-                  {f.q}
-                  <span className="text-xl">{isOpen ? "−" : "+"}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">
-                    {f.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
+        <p className="
+          leading-relaxed mb-6
+          text-gray-600
+          dark:text-slate-300
+        ">
+          SIP is one of the most effective and disciplined ways to build long-term wealth. 
+          Instead of investing a large amount at once, you invest small amounts at regular intervals.
+          This reduces market timing stress, manages risk, and leverages the power of compounding.
+        </p>
       </div>
     </div>
+
+    {/* Why SIP Works */}
+    <div
+      className="
+        mt-6 rounded-xl p-5 border
+        bg-blue-50 border-blue-100
+        dark:bg-slate-800 dark:border-slate-700
+      "
+    >
+      <h3 className="
+        text-xl font-semibold mb-2
+        text-blue-800
+        dark:text-blue-300
+      ">
+        Why SIP Works?
+      </h3>
+
+      <ul className="
+        space-y-2 leading-relaxed
+        text-gray-700
+        dark:text-slate-300
+      ">
+        <li>✔ Encourages consistent financial discipline.</li>
+        <li>✔ Helps average out market ups and downs.</li>
+        <li>✔ Suitable for beginners & experienced investors.</li>
+        <li>✔ Ideal for long-term wealth creation & financial goals.</li>
+        <li>✔ Can be automated — set once and continue worry-free.</li>
+      </ul>
+    </div>
+
+    {/* How SIP Helps */}
+    <div className="
+      mt-6 leading-relaxed
+      text-gray-700
+      dark:text-slate-300
+    ">
+      <h3 className="
+        text-xl font-semibold mb-2
+        text-gray-900
+        dark:text-slate-100
+      ">
+        How SIP Helps You Grow?
+      </h3>
+
+      <p className="mb-4">
+        SIPs use the power of compounding, meaning your returns start generating their own returns 
+        as time passes. Even small monthly investments grow into large wealth when continued for years.
+      </p>
+
+      <p className="mb-4">
+        SIPs also reduce emotional investing. Instead of panicking during market dips or highs, 
+        your fixed investments keep happening, capturing opportunities automatically.
+      </p>
+
+      <p className="mb-4">
+        Most importantly, SIPs fit all types of financial goals — retirement, buying a house, 
+        child education, vacations, or simply building wealth.
+      </p>
+    </div>
+
+    {/* FAQ */}
+    <h3 className="
+      text-2xl font-bold mt-10 mb-4
+      text-gray-900
+      dark:text-slate-100
+    ">
+      Frequently Asked Questions
+    </h3>
+
+    <div className="space-y-3">
+      {sipFaqs.map((f, i) => {
+        const isOpen = openIndex === i;
+
+        return (
+          <div
+            key={i}
+            className="
+              rounded-xl shadow-sm border
+              bg-white border-gray-200
+              dark:bg-slate-900 dark:border-slate-700
+            "
+          >
+            <button
+              onClick={() => setOpenIndex(isOpen ? null : i)}
+              className="
+                w-full px-4 py-4 flex justify-between items-center font-medium text-left
+                text-gray-900
+                dark:text-slate-200
+              "
+            >
+              {f.q}
+              <span className="text-xl">{isOpen ? "−" : "+"}</span>
+            </button>
+
+            {isOpen && (
+              <div className="
+                px-4 pb-4 text-sm leading-relaxed
+                text-gray-600
+                dark:text-slate-400
+              ">
+                {f.a}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
   );
 }

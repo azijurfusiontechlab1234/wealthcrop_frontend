@@ -15,85 +15,178 @@ export function OneTimeInvestmentPage() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-red-50 p-8">
-      <div className="max-w-3xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-rose-200">
+   <div
+  className="
+    min-h-screen p-8
+    bg-linear-to-b from-rose-50 via-white to-red-50
+    dark:from-[#020617] dark:via-[#020617] dark:to-[#020617]
+  "
+>
+  <div
+    className="
+      max-w-3xl mx-auto p-8 rounded-2xl shadow-xl border
+      bg-white border-rose-200
+      dark:bg-slate-900 dark:border-slate-700
+    "
+  >
+    {/* Header Section */}
+    <div className="flex items-start gap-6">
+      <div
+        className="
+          w-20 h-20 rounded-xl flex items-center justify-center text-3xl shadow-lg
+          bg-gradient-to-br from-rose-200 to-rose-400
+          dark:from-rose-600 dark:to-rose-800
+        "
+      >
+        💰
+      </div>
 
-        {/* Header Section */}
-        <div className="flex items-start gap-6">
-          <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-rose-200 to-rose-400 flex items-center justify-center text-3xl shadow-lg">
-            💰
-          </div>
+      <div>
+        <h2
+          className="
+            text-4xl font-bold mb-3
+            text-gray-900
+            dark:text-slate-100
+          "
+        >
+          One-Time (Lump Sum) Investment
+        </h2>
 
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-3">One-Time (Lump Sum) Investment</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              A one-time investment allows your entire amount to start compounding immediately. 
-              It is ideal when markets are at attractive levels or when you have a clear financial 
-              strategy and long-term vision.
-            </p>
-          </div>
-        </div>
-
-        {/* Extra Informative Section */}
-        <div className="mt-6 bg-rose-50 rounded-xl p-5 border border-rose-100">
-          <h3 className="text-xl font-semibold text-rose-800 mb-2">Why Consider Lump Sum?</h3>
-          <ul className="text-gray-700 space-y-2 leading-relaxed">
-            <li>✔ Provides full market exposure instantly.</li>
-            <li>✔ Faster compounding because entire capital is invested upfront.</li>
-            <li>✔ Suitable for investors with a clear risk appetite.</li>
-            <li>✔ Ideal for investing bonuses, inheritances, or windfalls.</li>
-            <li>✔ Can outperform SIP when markets trend upward consistently.</li>
-          </ul>
-        </div>
-
-        {/* Additional Information */}
-        <div className="mt-6 text-gray-700 leading-relaxed">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">How Lump Sum Helps You Grow?</h3>
-          <p className="mb-4">
-            By investing the entire amount at once, you give your capital more time to grow. 
-            If markets rise steadily over the next few years, lump sum investments can deliver 
-            significantly higher returns compared to staggered SIPs.
-          </p>
-
-          <p className="mb-4">
-            However, timing risk exists. To balance risk and reward, many investors choose to 
-            invest lump sum amounts into safer funds or use step-based deployment.
-          </p>
-
-          <p>
-            Lump sum investing is best suited for medium to long-term goals, where the impact 
-            of short-term volatility becomes minimal.
-          </p>
-        </div>
-
-        {/* FAQ Section */}
-        <h3 className="text-2xl font-bold text-gray-900 mt-10 mb-4">Frequently Asked Questions</h3>
-
-        <div className="space-y-3">
-          {oneTimeFaqs.map((f, i) => {
-            const isOpen = openIndex === i;
-
-            return (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl shadow-sm">
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="w-full text-left px-4 py-4 flex justify-between items-center font-medium text-gray-900"
-                >
-                  {f.q}
-                  <span className="text-xl">{isOpen ? "−" : "+"}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">
-                    {f.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
+        <p
+          className="
+            leading-relaxed mb-6
+            text-gray-600
+            dark:text-slate-300
+          "
+        >
+          A one-time investment allows your entire amount to start compounding immediately. 
+          It is ideal when markets are at attractive levels or when you have a clear financial 
+          strategy and long-term vision.
+        </p>
       </div>
     </div>
+
+    {/* Why Consider Lump Sum */}
+    <div
+      className="
+        mt-6 rounded-xl p-5 border
+        bg-rose-50 border-rose-100
+        dark:bg-slate-800 dark:border-slate-700
+      "
+    >
+      <h3
+        className="
+          text-xl font-semibold mb-2
+          text-rose-800
+          dark:text-rose-300
+        "
+      >
+        Why Consider Lump Sum?
+      </h3>
+
+      <ul
+        className="
+          space-y-2 leading-relaxed
+          text-gray-700
+          dark:text-slate-300
+        "
+      >
+        <li>✔ Provides full market exposure instantly.</li>
+        <li>✔ Faster compounding because entire capital is invested upfront.</li>
+        <li>✔ Suitable for investors with a clear risk appetite.</li>
+        <li>✔ Ideal for investing bonuses, inheritances, or windfalls.</li>
+        <li>✔ Can outperform SIP when markets trend upward consistently.</li>
+      </ul>
+    </div>
+
+    {/* How Lump Sum Helps */}
+    <div
+      className="
+        mt-6 leading-relaxed
+        text-gray-700
+        dark:text-slate-300
+      "
+    >
+      <h3
+        className="
+          text-xl font-semibold mb-2
+          text-gray-900
+          dark:text-slate-100
+        "
+      >
+        How Lump Sum Helps You Grow?
+      </h3>
+
+      <p className="mb-4">
+        By investing the entire amount at once, you give your capital more time to grow. 
+        If markets rise steadily over the next few years, lump sum investments can deliver 
+        significantly higher returns compared to staggered SIPs.
+      </p>
+
+      <p className="mb-4">
+        However, timing risk exists. To balance risk and reward, many investors choose to 
+        invest lump sum amounts into safer funds or use step-based deployment.
+      </p>
+
+      <p>
+        Lump sum investing is best suited for medium to long-term goals, where the impact 
+        of short-term volatility becomes minimal.
+      </p>
+    </div>
+
+    {/* FAQ Section */}
+    <h3
+      className="
+        text-2xl font-bold mt-10 mb-4
+        text-gray-900
+        dark:text-slate-100
+      "
+    >
+      Frequently Asked Questions
+    </h3>
+
+    <div className="space-y-3">
+      {oneTimeFaqs.map((f, i) => {
+        const isOpen = openIndex === i;
+
+        return (
+          <div
+            key={i}
+            className="
+              rounded-xl shadow-sm border
+              bg-white border-gray-200
+              dark:bg-slate-900 dark:border-slate-700
+            "
+          >
+            <button
+              onClick={() => setOpenIndex(isOpen ? null : i)}
+              className="
+                w-full px-4 py-4 flex justify-between items-center font-medium text-left
+                text-gray-900
+                dark:text-slate-200
+              "
+            >
+              {f.q}
+              <span className="text-xl">{isOpen ? "−" : "+"}</span>
+            </button>
+
+            {isOpen && (
+              <div
+                className="
+                  px-4 pb-4 text-sm leading-relaxed
+                  text-gray-600
+                  dark:text-slate-400
+                "
+              >
+                {f.a}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
   );
 }

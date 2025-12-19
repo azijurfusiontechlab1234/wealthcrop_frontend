@@ -46,24 +46,24 @@ export default function IpoFaq() {
 
   return (
     <div className="mb-20">
-      <h2 className="text-lg font-semibold text-slate-900 mb-4">FAQs</h2>
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">FAQs</h2>
 
       <div className="space-y-3">
         {faqData.map((item, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-2xl shadow-md px-5 py-4 cursor-pointer transition"
+            className="bg-white dark:bg-slate-900/90 rounded-2xl shadow-md px-5 py-4 cursor-pointer transition"
             onClick={() => setOpen(open === idx ? null : idx)}
           >
             <div className="flex justify-between items-center">
-              <p className="text-sm font-medium text-slate-800">{item.q}</p>
-              <span className="text-lg text-slate-400">
+              <p className="text-sm font-medium text-slate-800 dark:text-gray-100">{item.q}</p>
+              <span className="text-lg text-slate-400 dark:text-slate-200">
                 {open === idx ? "−" : "+"}
               </span>
             </div>
 
             {open === idx && (
-              <p className="mt-3 text-xs text-slate-600 leading-relaxed">
+              <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 {item.a}
               </p>
             )}

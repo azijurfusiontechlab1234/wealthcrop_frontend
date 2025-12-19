@@ -137,7 +137,7 @@ const [fnoOpen, setFnoOpen] = useState(false);
   return (
     <>
      <nav
-  className={`w-full bg-white dark:bg-[#020617] shadow-sm
+  className={`w-full bg-white dark:bg-gray-900 shadow-sm
   border-b border-gray-100 dark:border-white/10
   fixed top-0 left-0 z-50 transition-all duration-300
   ${isScroll ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}
@@ -212,66 +212,129 @@ const [fnoOpen, setFnoOpen] = useState(false);
             </button>
 
             {/* Dropdown */}
-            <div
-              className="
-                absolute -right-2.5 top-full mt-1 w-80
-                bg-white dark:bg-[#020617]
-                text-gray-900 dark:text-gray-200
-                rounded-xl shadow-xl
-                border border-gray-100 dark:border-white/10
-                opacity-0 invisible group-hover:opacity-100
-                group-hover:visible group-hover:translate-y-1
-                transition-all duration-300 ease-out z-50
-              "
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100 dark:border-white/10">
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                    Fusion Techlab
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    fusionbusiness001@gmail.com
-                  </p>
-                </div>
-                <Settings
-                  onClick={handleSetting}
-                  size={18}
-                  className="text-gray-500 dark:text-gray-400 mt-1 cursor-pointer"
-                />
-              </div>
+            
+                  {/* Dropdown */}
+                 <div
+  className="
+    absolute -right-2.5 top-full mt-1 w-80 
+    bg-white dark:bg-gray-800 
+    text-gray-900 dark:text-gray-200
+    rounded-xl shadow-xl 
+    border border-gray-100 dark:border-gray-700
+    opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1
+    transition-all duration-300 ease-out z-50"
+>
+  {/* Header */}
+  <div
+    className="flex items-start justify-between px-4 py-3 
+               border-b border-gray-100 dark:border-gray-700"
+  >
+    <div>
+      <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+        Fusion Techlab
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        fusionbusiness001@gmail.com
+      </p>
+    </div>
+    <Settings
+      onClick={handleSetting}
+      size={18}
+      className="text-gray-500 dark:text-gray-400 mt-1 cursor-pointer"
+    />
+  </div>
 
-              {/* Balance */}
-              <Link
-                to="/user/balance"
-                className="flex items-center justify-between px-4 py-3 border-b
-                border-gray-100 dark:border-white/10
-                hover:bg-gray-50 dark:hover:bg-white/5 transition"
-              >
-                <div className="flex items-center gap-2">
-                  <IndianRupee size={18} className="text-gray-600 dark:text-gray-300" />
-                  <div>
-                    <p className="font-medium">₹0.00</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Stocks, F&O balance
-                    </p>
-                  </div>
-                </div>
-                <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
-              </Link>
+  {/* Balance */}
+  <Link
+    to="/user/balance"
+    className="
+      flex items-center justify-between px-4 py-3 
+      border-b border-gray-100 dark:border-gray-700
+      hover:bg-gray-50 dark:hover:bg-gray-800
+      transition"
+  >
+    <div className="flex items-center gap-2">
+      <IndianRupee size={18} className="text-gray-600 dark:text-gray-300" />
+      <div>
+        <p className="text-gray-900 dark:text-gray-100 font-medium">
+          ₹0.00
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Stocks, F&O balance
+        </p>
+      </div>
+    </div>
+    <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
+  </Link>
 
-              {/* Footer */}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-white/10">
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 font-medium"
-                >
-                  <LogOut size={18} />
-                  Log out
-                </button>
-                <ThemeToggle />
-              </div>
-            </div>
+  {/* Links */}
+  <div className="py-2 space-y-1">
+    <Link
+      to="/user/order/stocks"
+      className="
+        flex items-center justify-between px-4 py-2 
+        text-gray-800 dark:text-gray-200 
+        hover:bg-gray-50 dark:hover:bg-gray-800
+        transition"
+    >
+      <div className="flex items-center gap-3">
+        <FileText size={18} className="dark:text-gray-300" />
+        <span>All Orders</span>
+      </div>
+      <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
+    </Link>
+
+    <Link
+      to="/support"
+      className="
+        flex items-center justify-between px-4 py-2 
+        text-gray-800 dark:text-gray-200 
+        hover:bg-gray-50 dark:hover:bg-gray-800
+        transition"
+    >
+      <div className="flex items-center gap-3">
+        <Headphones size={18} className="dark:text-gray-300" />
+        <span>24 × 7 Customer Support</span>
+      </div>
+      <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
+    </Link>
+
+    <Link
+      to="/reports"
+      className="
+        flex items-center justify-between px-4 py-2 
+        text-gray-800 dark:text-gray-200 
+        hover:bg-gray-50 dark:hover:bg-gray-800
+        transition"
+    >
+      <div className="flex items-center gap-3">
+        <BarChart3 size={18} className="dark:text-gray-300" />
+        <span>Reports</span>
+      </div>
+      <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
+    </Link>
+  </div>
+
+  {/* Footer */}
+  <div
+    className="flex items-center justify-between px-4 py-3 
+               border-t border-gray-100 dark:border-gray-700"
+  >
+    <button
+      onClick={handleLogout}
+      className="
+        flex items-center gap-2 
+        text-gray-700 dark:text-gray-300 
+        cursor-pointer hover:text-blue-700 dark:hover:text-blue-400 
+        font-medium border-b border-dashed"
+    >
+      <LogOut size={18} />
+      <span>Log out</span>
+    </button>
+
+    <ThemeToggle />
+  </div>
+</div>
           </div>
         </>
       ) : (

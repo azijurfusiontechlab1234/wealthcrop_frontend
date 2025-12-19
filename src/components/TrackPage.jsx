@@ -20,120 +20,150 @@ export default function TrackPage() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E4F4FF] via-[#F7FCFF] to-[#DDF1FF]">
+    <div
+  className="
+    min-h-screen
+    bg-gradient-to-b from-[#E4F4FF] via-[#F7FCFF] to-[#DDF1FF]
+    dark:from-[#020617] dark:via-[#020617] dark:to-[#020617]
+  "
+>
 
-      {/* Login Popup */}
-      {showLogin && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-xl p-6 relative max-h-[90vh] overflow-auto">
-            <button
-              onClick={() => setShowLogin(false)}
-              className="absolute top-3 right-3 text-xl font-bold text-gray-700 hover:text-black"
-            >
-              ✕
-            </button>
+  {/* Login Popup */}
+  {showLogin && (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div
+        className="
+          bg-white dark:bg-[#020617]
+          rounded-2xl shadow-xl dark:shadow-none
+          w-[90%] max-w-xl p-6 relative max-h-[90vh] overflow-auto
+          border dark:border-white/10
+        "
+      >
+        <button
+          onClick={() => setShowLogin(false)}
+          className="absolute top-3 right-3 text-xl font-bold text-gray-700 dark:text-gray-400 hover:text-black dark:hover:text-white"
+        >
+          ✕
+        </button>
 
-            <Register />
-          </div>
-        </div>
-      )}
-
-      {/* Hero Section */}
-      <div className="max-w-6xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-2 gap-10 items-center">
-        <div>
-          <h1 className="text-5xl font-extrabold text-[#0A3A60] leading-snug mb-4">
-            Track Your Investments
-          </h1>
-          <p className="text-gray-700 text-lg mb-6">
-            Import and manage all your mutual fund investments easily on Wealthcrop.
-          </p>
-          <button className="px-6 py-3 bg-sky-600 text-white rounded-xl font-semibold hover:bg-sky-700 shadow-md">
-            Track Now
-          </button>
-        </div>
-
-        <div className="flex justify-center">
-          <img
-            src={track}
-            alt="Track Illustration"
-            className="w-full max-w-md drop-shadow-xl"
-          />
-        </div>
-      </div>
-
-      {/* Why Track Section */}
-      <div className="bg-[#F2F9FF] py-20">
-        <h2 className="text-center text-3xl font-bold text-[#0A3A60] mb-12">
-          Why track on Wealthcrop?
-        </h2>
-
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 px-6 text-center">
-          <div className="p-6 rounded-xl bg-white shadow hover:shadow-lg transition">
-            <img src={trading} alt="Simple" className="w-32 h-32 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#0A3A60] mb-2">Simple</h3>
-            <p className="text-gray-600">Manage all your mutual fund investments in one place.</p>
-          </div>
-
-          <div className="p-6 rounded-xl bg-white shadow hover:shadow-lg transition">
-            <img src={insights} alt="Insights" className="w-32 h-32 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#0A3A60] mb-2">Insights</h3>
-            <p className="text-gray-600">Analyse your investments and stay up-to-date.</p>
-          </div>
-
-          <div className="p-6 rounded-xl bg-white shadow hover:shadow-lg transition">
-            <img src={switchh} alt="Switch" className="w-32 h-32 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#0A3A60] mb-2">Switch</h3>
-            <p className="text-gray-600">Easily switch funds based on performance and goals.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ⭐ NEW: More Features Section */}
-      <div className="py-20 bg-gradient-to-b from-white to-[#E6F5FF]">
-        <h2 className="text-center text-3xl font-bold text-[#0A3A60] mb-8">
-          More Features You’ll Love
-        </h2>
-
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 px-6">
-          <div className="p-6 bg-white shadow rounded-xl hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-[#0A567F] mb-2">Realtime Updates</h3>
-            <p className="text-gray-600 text-sm">Stay updated with NAV changes and market moves.</p>
-          </div>
-
-          <div className="p-6 bg-white shadow rounded-xl hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-[#0A567F] mb-2">Smart Analytics</h3>
-            <p className="text-gray-600 text-sm">Understand risk, returns, sectors and diversification.</p>
-          </div>
-
-          <div className="p-6 bg-white shadow rounded-xl hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-[#0A567F] mb-2">100% Secure</h3>
-            <p className="text-gray-600 text-sm">Your data stays encrypted and fully private.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* FAQ Section */}
-      <div className="max-w-4xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-[#0A3A60] mb-8 text-center">Frequently Asked Questions</h2>
-
-        <div className="space-y-3">
-          {faqs.map((f, i) => (
-            <div key={i} className="bg-white border border-gray-200 rounded-xl shadow-sm">
-              <button
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full text-left px-4 py-4 flex justify-between items-center font-medium text-[#0A3A60]"
-              >
-                {f.q}
-                <span className="text-xl">{openIndex === i ? "−" : "+"}</span>
-              </button>
-
-              {openIndex === i && (
-                <div className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">{f.a}</div>
-              )}
-            </div>
-          ))}
-        </div>
+        <Register />
       </div>
     </div>
+  )}
+
+  {/* Hero Section */}
+  <div className="max-w-6xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <h1 className="text-5xl font-extrabold text-[#0A3A60] dark:text-gray-100 leading-snug mb-4">
+        Track Your Investments
+      </h1>
+      <p className="text-gray-700 dark:text-gray-400 text-lg mb-6">
+        Import and manage all your mutual fund investments easily on Wealthcrop.
+      </p>
+      <button className="px-6 py-3 bg-sky-600 dark:bg-blue-500 text-white rounded-xl font-semibold hover:bg-sky-700 dark:hover:bg-blue-400 shadow-md">
+        Track Now
+      </button>
+    </div>
+
+    <div className="flex justify-center">
+      <img
+        src={track}
+        alt="Track Illustration"
+        className="w-full max-w-md drop-shadow-xl dark:drop-shadow-none"
+      />
+    </div>
+  </div>
+
+  {/* Why Track Section */}
+  <div className="bg-[#F2F9FF] dark:bg-[#020617] py-20">
+    <h2 className="text-center text-3xl font-bold text-[#0A3A60] dark:text-gray-100 mb-12">
+      Why track on Wealthcrop?
+    </h2>
+
+    <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 px-6 text-center">
+      {[
+        ["Simple", "Manage all your mutual fund investments in one place.", trading],
+        ["Insights", "Analyse your investments and stay up-to-date.", insights],
+        ["Switch", "Easily switch funds based on performance and goals.", switchh],
+      ].map(([title, desc, img], i) => (
+        <div
+          key={i}
+          className="
+            p-6 rounded-xl
+            bg-white dark:bg-white/5
+            shadow hover:shadow-lg dark:shadow-none
+            transition border dark:border-white/10
+          "
+        >
+          <img src={img} alt={title} className="w-32 h-32 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-[#0A3A60] dark:text-gray-100 mb-2">
+            {title}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400">{desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* More Features Section */}
+  <div className="py-20 bg-gradient-to-b from-white to-[#E6F5FF] dark:from-[#020617] dark:to-[#020617]">
+    <h2 className="text-center text-3xl font-bold text-[#0A3A60] dark:text-gray-100 mb-8">
+      More Features You’ll Love
+    </h2>
+
+    <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 px-6">
+      {[
+        ["Realtime Updates", "Stay updated with NAV changes and market moves."],
+        ["Smart Analytics", "Understand risk, returns, sectors and diversification."],
+        ["100% Secure", "Your data stays encrypted and fully private."],
+      ].map(([title, desc], i) => (
+        <div
+          key={i}
+          className="
+            p-6 bg-white dark:bg-white/5
+            shadow rounded-xl hover:shadow-lg dark:shadow-none
+            transition border dark:border-white/10
+          "
+        >
+          <h3 className="text-xl font-semibold text-[#0A567F] dark:text-blue-400 mb-2">
+            {title}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">{desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* FAQ Section */}
+  <div className="max-w-4xl mx-auto px-6 py-20">
+    <h2 className="text-3xl font-bold text-[#0A3A60] dark:text-gray-100 mb-8 text-center">
+      Frequently Asked Questions
+    </h2>
+
+    <div className="space-y-3">
+      {faqs.map((f, i) => (
+        <div
+          key={i}
+          className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-sm dark:shadow-none"
+        >
+          <button
+            onClick={() => setOpenIndex(openIndex === i ? null : i)}
+            className="w-full text-left px-4 py-4 flex justify-between items-center font-medium text-[#0A3A60] dark:text-gray-200"
+          >
+            {f.q}
+            <span className="text-xl">{openIndex === i ? "−" : "+"}</span>
+          </button>
+
+          {openIndex === i && (
+            <div className="px-4 pb-4 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+              {f.a}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
   );
 }

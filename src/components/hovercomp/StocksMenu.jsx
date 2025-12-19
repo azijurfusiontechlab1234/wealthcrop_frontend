@@ -47,7 +47,7 @@ const StocksMenu = ({ token }) => {
         <div
           className="
             fixed left-0 right-0 top-full z-50
-            bg-white dark:bg-[#020617]
+            bg-white dark:bg-gray-900
             shadow-md dark:shadow-white/5
             border-t border-gray-200 dark:border-white/10
           "

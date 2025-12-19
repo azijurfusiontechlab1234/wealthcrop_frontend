@@ -181,7 +181,7 @@ function MutualFundCarousel() {
   if (!funds.length) {
     return (
       <div
-  className="left-0 w-full bg-white dark:bg-[#020617] overflow-hidden"
+  className="left-0 w-full bg-white dark:bg-gray-900 overflow-hidden"
   style={{ height: "40px" }}
 >
   <div className="h-full flex items-center px-4 text-gray-500 dark:text-gray-400">
@@ -197,7 +197,7 @@ function MutualFundCarousel() {
 
   return (
     <div
-  className="left-0 w-full bg-white dark:bg-[#020617] overflow-hidden"
+  className="left-0 w-full bg-white dark:bg-gray-900 overflow-hidden"
   style={{ height: "40px" }}
   ref={wrapperRef}
 >
@@ -281,7 +281,7 @@ function MutualFundCarousel() {
       id="mf-modal"
       className="
         fixed w-72 z-[2000] rounded-lg shadow-lg p-4
-        bg-white dark:bg-[#020617]
+        bg-white dark:bg-gray-900
         border border-gray-200 dark:border-white/10
         text-gray-900 dark:text-gray-200
       "

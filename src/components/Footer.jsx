@@ -135,7 +135,7 @@ const Section = ({ title, list, basePath }) => (
      <footer
   className="
     py-10
-    bg-white dark:bg-[#020617]
+    bg-white dark:bg-gray-900
     border-t-2 border-gray-300 dark:border-white/10
   "
 >
@@ -262,7 +262,7 @@ const Section = ({ title, list, basePath }) => (
   className="
     py-4 mb-20 lg:mb-0
     bg-white text-blue-950
-    dark:bg-[#020617] dark:text-gray-100
+    dark:bg-gray-900 dark:text-gray-100
     border-gray-300 dark:border-white/10
   "
 >
