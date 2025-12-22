@@ -155,7 +155,7 @@ const EmiCalculator = () => {
             className="
               mt-2 w-full bg-orange-600 hover:bg-orange-700 
               text-white py-2 rounded-lg font-bold text-sm transition
-              dark:bg-orange-500 dark:hover:bg-orange-600
+              dark:bg-orange-700 dark:hover:bg-orange-800
             "
           >
             Calculate EMI
@@ -166,7 +166,7 @@ const EmiCalculator = () => {
       {/* RIGHT RESULT */}
       <div className="
         p-8 bg-linear-to-br from-red-500 to-orange-500 
-        dark:from-orange-400 dark:to-red-500
+        dark:from-gray-800 dark:to-gray-800
         text-white flex flex-col justify-center
       ">
         <h3 className="text-xl font-bold mb-4">📊 EMI Summary</h3>

@@ -11,7 +11,6 @@ export function highlightText(text = "", query = "") {
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-export function escapeText(){replaceAll("&", "&amp;")}
 function escapeHtml(unsafe) {
   return unsafe
     .replaceAll("&", "&amp;")

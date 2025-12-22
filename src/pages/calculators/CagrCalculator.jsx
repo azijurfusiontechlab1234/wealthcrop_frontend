@@ -167,7 +167,7 @@ const CagrCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-pink-600 to-yellow-600
-          dark:from-pink-500 dark:to-yellow-600
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

@@ -172,7 +172,7 @@ const NPSCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-indigo-500 to-blue-400
-          dark:from-indigo-500 dark:to-blue-500
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

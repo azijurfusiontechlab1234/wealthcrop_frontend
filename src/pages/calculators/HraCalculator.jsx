@@ -171,7 +171,6 @@ const HraCalculator = () => {
             className="
               mt-2 w-full py-2 rounded-lg font-bold text-sm transition
               bg-cyan-600 hover:bg-cyan-700
-              dark:bg-cyan-500 dark:hover:bg-cyan-600
               text-white
             "
           >
@@ -185,7 +184,7 @@ const HraCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-cyan-600 to-blue-700
-          dark:from-cyan-500 dark:to-blue-700
+        dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

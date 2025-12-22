@@ -159,7 +159,7 @@ const PpfCalculator = () => {
             className="
               mt-2 w-full py-2 rounded-lg font-bold text-sm transition
               bg-green-600 hover:bg-green-700
-              dark:bg-green-500 dark:hover:bg-green-600
+              dark:bg-green-700 dark:hover:bg-green-800
               text-white
             "
           >
@@ -173,7 +173,7 @@ const PpfCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-green-600 to-blue-600
-          dark:from-green-500 dark:to-blue-600
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

@@ -219,109 +219,229 @@ const [activeInfo, setActiveInfo] = useState(null);
   const dayLow = latest.low;
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4 dark:from-[var(--app-bg)] dark:to-[var(--app-bg)] ">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* HEADER */}
        <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
   {/* LEFT SECTION */}
-  <div className="col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl md:p-6 p-4 shadow-md">
+  <div
+  className="
+    col-span-2
+    bg-white/60 backdrop-blur-sm
+    border border-white/40
+    rounded-2xl md:p-6 p-4 shadow-md
 
-    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
+  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
 
-      {/* LOGO + NAME */}
-      <div className="flex items-center gap-4 flex-1 min-w-0">
-        <img
-          src={logo}
-          alt="logo"
-          className="w-16 h-16 rounded-xl object-cover shadow"
-        />
+    {/* LOGO + NAME */}
+    <div className="flex items-center gap-4 flex-1 min-w-0">
+      <img
+        src={logo}
+        alt="logo"
+        className="w-16 h-16 rounded-xl object-cover shadow"
+      />
 
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-bold text-slate-900 capitalize break-words whitespace-normal">
-            {name}
-          </h1>
+      <div className="flex-1 min-w-0">
+        <h1 className="text-2xl font-bold text-slate-900 capitalize break-words whitespace-normal dark:text-[var(--text-primary)]">
+          {name}
+        </h1>
 
-          <div className="flex items-center gap-3 mt-1">
-            <span className="text-sm text-slate-500">{baseStock.symbol}</span>
-            <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
-              Technology
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ACTION BTNS */}
-      <div className="flex md:flex-row flex-row md:items-center items-start gap-3">
-
-        <button 
-          onClick={() => setSaved(!saved)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-xl transition 
-            ${saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}
-        >
-          <AiOutlineStar />
-          <span className="hidden md:inline">
-            {saved ? "Saved" : "Save"}
+        <div className="flex items-center gap-3 mt-1">
+          <span className="text-sm text-slate-500 dark:text-[var(--text-secondary)]">
+            {baseStock.symbol}
           </span>
-        </button>
-
-        <button
-          onClick={shareWhatsApp}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:shadow"
-        >
-          <FiShare2 />
-          <span className="hidden md:inline">Share</span>
-        </button>
-
+          <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
+            Technology
+          </span>
+        </div>
       </div>
     </div>
 
-    {/* PRICE + BUY/SELL */}
-    <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
-      <div>
-        <div className="flex items-end gap-3">
-          <h2 className="text-4xl font-extrabold text-slate-900">₹{livePrice.toFixed(2)}</h2>
-          <div className={`px-3 py-1 rounded-md text-sm font-semibold ${pctChange >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-600"}`}>
-            {pctChange >= 0 ? "+" : ""}{pctChange}%
-          </div>
+    {/* ACTION BTNS */}
+    <div className="flex md:flex-row md:items-center items-start gap-3">
+
+      <button
+        onClick={() => setSaved(!saved)}
+        className={`flex items-center gap-2 px-3 py-2 rounded-xl transition
+          ${
+            saved
+              ? "bg-emerald-600 text-white"
+              : `
+                bg-white border border-slate-200 text-slate-700
+                dark:bg-[var(--gray-800)]
+                dark:border-[var(--border-color)]
+                dark:text-[var(--text-secondary)]
+              `
+          }`}
+      >
+        <AiOutlineStar />
+        <span className="hidden md:inline">
+          {saved ? "Saved" : "Save"}
+        </span>
+      </button>
+
+      <button
+        onClick={shareWhatsApp}
+        className="
+          flex items-center gap-2 px-3 py-2 rounded-xl
+          bg-white border border-slate-200 text-slate-700 hover:shadow
+
+          dark:bg-[var(--gray-800)]
+          dark:border-[var(--border-color)]
+          dark:text-[var(--text-secondary)]
+        "
+      >
+        <FiShare2 />
+        <span className="hidden md:inline">Share</span>
+      </button>
+
+    </div>
+  </div>
+
+  {/* PRICE + BUY/SELL */}
+  <div className="mt-5 flex flex-wrap items-center gap-6 justify-between">
+    <div>
+      <div className="flex items-end gap-3">
+        <h2 className="text-4xl font-extrabold text-slate-900 dark:text-[var(--text-primary)]">
+          ₹{livePrice.toFixed(2)}
+        </h2>
+
+        <div
+          className={`px-3 py-1 rounded-md text-sm font-semibold
+            ${
+              pctChange >= 0
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-red-50 text-red-600"
+            }`}
+        >
+          {pctChange >= 0 ? "+" : ""}
+          {pctChange}%
         </div>
-        <p className="text-xs text-slate-500 mt-1">As of {new Date().toLocaleString()}</p>
       </div>
 
-      <div className="flex items-center gap-3 flex-wrap">
-        <button onClick={openBuy} className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700">Buy</button>
-        <button onClick={openSell} className="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold shadow hover:bg-red-700">Sell</button>
+      <p className="text-xs text-slate-500 mt-1 dark:text-[var(--text-secondary)]">
+        As of {new Date().toLocaleString()}
+      </p>
+    </div>
 
-        <div className="text-right text-sm text-slate-500">
-          <div>Vol: <span className="text-slate-900 font-medium">{baseStock.volume.toLocaleString()}</span></div>
-          <div>Mkt Cap: <span className="text-slate-900 font-medium">{baseStock.marketCap}</span></div>
+    <div className="flex items-center gap-3 flex-wrap">
+      <button
+        onClick={openBuy}
+        className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700"
+      >
+        Buy
+      </button>
+
+      <button
+        onClick={openSell}
+        className="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold shadow hover:bg-red-700"
+      >
+        Sell
+      </button>
+
+      <div className="text-right text-sm text-slate-500 dark:text-[var(--text-secondary)]">
+        <div>
+          Vol:
+          <span className="text-slate-900 font-medium dark:text-[var(--text-primary)]">
+            {" "}
+            {baseStock.volume.toLocaleString()}
+          </span>
+        </div>
+        <div>
+          Mkt Cap:
+          <span className="text-slate-900 font-medium dark:text-[var(--text-primary)]">
+            {" "}
+            {baseStock.marketCap}
+          </span>
         </div>
       </div>
     </div>
   </div>
+</div>
+
 
   {/* RIGHT MINI SECTION */}
-  <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md h-full">
-    <div className="flex flex-col gap-4">
-      <div className="bg-linear-to-r from-sky-50 to-white p-3 rounded-lg">
-        <p className="text-xs text-slate-500">P/E Ratio</p>
-        <p className="text-lg font-semibold">{baseStock.pe}</p>
-      </div>
+  <aside
+  className="
+    bg-white/60 backdrop-blur-sm
+    border border-white/40
+    rounded-2xl p-4 shadow-md h-full
 
-      <div className="bg-linear-to-r from-rose-50 to-white p-3 rounded-lg">
-        <p className="text-xs text-slate-500">52W Range</p>
-        <p className="text-sm font-semibold">₹{baseStock.week52Low} - ₹{baseStock.week52High}</p>
-      </div>
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
+  <div className="flex flex-col gap-4">
 
-      <div className="bg-linear-to-r from-amber-50 to-white p-3 rounded-lg">
-        <p className="text-xs text-slate-500">Analyst Rating</p>
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">{baseStock.rating}</div>
-          <div className="text-sm text-slate-700">Strong Buy</div>
+    {/* P/E Ratio */}
+    <div
+      className="
+        bg-linear-to-r from-sky-50 to-white
+        p-3 rounded-lg
+        dark:border
+
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+      "
+    >
+      <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+        P/E Ratio
+      </p>
+      <p className="text-lg font-semibold dark:text-[var(--text-primary)]">
+        {baseStock.pe}
+      </p>
+    </div>
+
+    {/* 52W Range */}
+    <div
+      className="
+        bg-linear-to-r from-rose-50 to-white
+        p-3 rounded-lg
+ dark:border
+
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+      "
+    >
+      <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+        52W Range
+      </p>
+      <p className="text-sm font-semibold dark:text-[var(--text-primary)]">
+        ₹{baseStock.week52Low} - ₹{baseStock.week52High}
+      </p>
+    </div>
+
+    {/* Analyst Rating */}
+    <div
+      className="
+        bg-linear-to-r from-amber-50 to-white
+        p-3 rounded-lg
+ dark:border
+
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+      "
+    >
+      <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+        Analyst Rating
+      </p>
+
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
+          {baseStock.rating}
+        </div>
+
+        <div className="text-sm text-slate-700 dark:text-[var(--text-secondary)]">
+          Strong Buy
         </div>
       </div>
     </div>
-  </aside>
+
+  </div>
+</aside>
+
 
 </header>
 
@@ -330,294 +450,649 @@ const [activeInfo, setActiveInfo] = useState(null);
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       {/* LEFT SIDE — Chart Section */}
-      <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
+      <div className="lg:col-span-2 bg-white/60  backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md
+      dark:bg-(--white-10)
+      ">
         
         <CandleChart height={320} />
 
         {/* BELOW CHART: keep your Day High / Day Low cards */}
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <div className="p-3 bg-green-50 rounded-xl shadow-sm">
-            <p className="text-xs text-slate-500">Day High</p>
-            <p className="font-semibold">₹{dayHigh}</p>
-          </div>
-          <div className="p-3 bg-orange-50 rounded-xl shadow-sm">
-            <p className="text-xs text-slate-500">Day Low</p>
-            <p className="font-semibold">₹{dayLow}</p>
-          </div>
-        </div>
+  <div
+    className="
+      p-3 rounded-xl shadow-sm
+      bg-green-50
+      dark:border
+      dark:bg-[var(--gray-800)] border-(--border-color)
+    "
+  >
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+      Day High
+    </p>
+    <p className="font-semibold dark:text-[var(--text-primary)]">
+      ₹{dayHigh}
+    </p>
+  </div>
+
+  <div
+    className="
+      p-3 rounded-xl shadow-sm
+      bg-orange-50
+      dark:border
+      dark:bg-[var(--gray-800)] border-(--border-color)
+    "
+  >
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+      Day Low
+    </p>
+    <p className="font-semibold dark:text-[var(--text-primary)]">
+      ₹{dayLow}
+    </p>
+  </div>
+</div>
+
       </div>
 
       {/* RIGHT SIDE — KEEP YOUR STATS */}
-      <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md space-y-4">
-            <div className="p-3 rounded-xl shadow-sm bg-linear-to-r from-sky-50 to-white">
-              <p className="text-xs text-slate-500">Avg Volume (3M)</p>
-              <p className="font-semibold">{Math.round(baseStock.volume/1e6 *10)/10}M</p>
-            </div>
-            <div className="p-3 bg-linear-to-r from-rose-50 to-white rounded-xl shadow-sm">
-              <p className="text-xs text-slate-500">Beta</p>
-              <p className="font-semibold">{baseStock.beta}</p>
-            </div>
-            <div className="p-3 bg-linear-to-r from-amber-50 to-white rounded-xl shadow-sm">
-              <p className="text-xs text-slate-500">Dividend Yield</p>
-              <p className="font-semibold">{baseStock.dividendYield}</p>
-            </div>
-          </aside>
+      <aside
+  className="
+    bg-white/60 backdrop-blur-sm
+    border border-white/40
+    rounded-2xl p-4 shadow-md space-y-4
+
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
+  {/* Avg Volume */}
+  <div
+    className="
+      p-3 rounded-xl shadow-sm
+      bg-linear-to-r from-sky-50 to-white
+ dark:border
+
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+    "
+  >
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+      Avg Volume (3M)
+    </p>
+    <p className="font-semibold dark:text-[var(--text-primary)]">
+      {Math.round(baseStock.volume / 1e6 * 10) / 10}M
+    </p>
+  </div>
+
+  {/* Beta */}
+  <div
+    className="
+      p-3 rounded-xl shadow-sm
+      bg-linear-to-r from-rose-50 to-white
+ dark:border
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+    "
+  >
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+      Beta
+    </p>
+    <p className="font-semibold dark:text-[var(--text-primary)]">
+      {baseStock.beta}
+    </p>
+  </div>
+
+  {/* Dividend Yield */}
+  <div
+    className="
+      p-3 rounded-xl shadow-sm
+      bg-linear-to-r from-amber-50 to-white
+ dark:border
+        dark:from-[var(--white-5)] dark:to-[var(--white-5)] border-[var(--border-color)]
+    "
+  >
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+      Dividend Yield
+    </p>
+    <p className="font-semibold dark:text-[var(--text-primary)]">
+      {baseStock.dividendYield}
+    </p>
+  </div>
+</aside>
+
 
     </section>
 
 
         {/* FINANCIALS (quarterly/yearly) */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-slate-900">Financials</h3>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-  <div className="flex flex-wrap gap-2">
-    <button onClick={() => setFinPeriod("quarterly")}
-      className={`px-3 py-1 rounded-md ${
-        finPeriod==="quarterly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"
-      }`}>
-      Quarterly
-    </button>
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <button onClick={() => setFinPeriod("yearly")}
-      className={`px-3 py-1 rounded-md ${
-        finPeriod==="yearly" ? "bg-blue-950 text-white" : "bg-white border border-slate-200"
-      }`}>
-      Yearly
-    </button>
-  </div>
+  {/* FINANCIALS */}
+  <div
+    className="
+      lg:col-span-2
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-6 shadow-md
 
-  <div className="flex flex-wrap gap-2">
-    <button onClick={() => setFinTab("revenue")}
-      className={`px-3 py-1 rounded-md ${
-        finTab==="revenue" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"
-      }`}>
-      Revenue
-    </button>
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+        Financials
+      </h3>
 
-    <button onClick={() => setFinTab("profit")}
-      className={`px-3 py-1 rounded-md ${
-        finTab==="profit" ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"
-      }`}>
-      Profit
-    </button>
-  </div>
-</div>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setFinPeriod("quarterly")}
+            className={`px-3 py-1 rounded-md ${
+              finPeriod === "quarterly"
+                ? "bg-blue-950 text-white"
+                : "bg-white border border-slate-200 dark:bg-[var(--gray-800)] dark:border-[var(--border-color)] dark:text-[var(--text-secondary)]"
+            }`}
+          >
+            Quarterly
+          </button>
 
-            </div>
-
-            <div style={{width:"100%", height: 260}}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={finData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                  <XAxis dataKey="name" />
-                  <ReTooltip />
-                  <Bar dataKey="value" fill="#06b6d4" barSize={18}>
-                    <LabelList dataKey="value" position="top" style={{ fontSize: 12, fontWeight: 700 }}/>
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-4">
-              <div className="p-4 bg-white rounded-xl shadow-sm">
-                <p className="text-xs text-slate-500">Net Profit (TTM)</p>
-                <p className="font-semibold">₹3,820 Cr</p>
-              </div>
-              <div className="p-4 bg-white rounded-xl shadow-sm">
-                <p className="text-xs text-slate-500">EBITDA Margin</p>
-                <p className="font-semibold">24.7%</p>
-              </div>
-              <div className="p-4 bg-white rounded-xl shadow-sm">
-                <p className="text-xs text-slate-500">Operating Cashflow</p>
-                <p className="font-semibold">₹5,200 Cr</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Fundamentals */}
-          <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md">
-  <h4 className="text-lg font-semibold text-slate-900 mb-3">Fundamentals</h4>
-
-  <div className="grid grid-cols-2 gap-3">
-    {fundamentals.map((item, index) => (
-      <div
-        key={index}
-        className="relative p-3 bg-white rounded-md shadow-sm border border-gray-100 cursor-pointer"
-        onClick={() => setActiveInfo(activeInfo === index ? null : index)}
-      >
-        <div className="flex justify-between items-center">
-          <p className="text-xs text-slate-500">{item.label}</p>
-          <span className="text-gray-500 text-xs"><MdOutlineInfo /></span>
+          <button
+            onClick={() => setFinPeriod("yearly")}
+            className={`px-3 py-1 rounded-md ${
+              finPeriod === "yearly"
+                ? "bg-blue-950 text-white"
+                : "bg-white border border-slate-200 dark:bg-[var(--gray-800)] dark:border-[var(--border-color)] dark:text-[var(--text-secondary)]"
+            }`}
+          >
+            Yearly
+          </button>
         </div>
 
-        <p className="font-semibold mt-1">{item.value}</p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setFinTab("revenue")}
+            className={`px-3 py-1 rounded-md ${
+              finTab === "revenue"
+                ? "bg-emerald-600 text-white"
+                : "bg-white border border-slate-200 dark:bg-[var(--gray-800)] dark:border-[var(--border-color)] dark:text-[var(--text-secondary)]"
+            }`}
+          >
+            Revenue
+          </button>
 
-        {activeInfo === index && (
-          <div className="absolute top-14 left-0 w-56 p-3 bg-white border border-gray-200 rounded-lg shadow-md text-xs text-gray-700 z-50">
-            {fundamentalsDefinitions[item.label]}
-          </div>
-        )}
+          <button
+            onClick={() => setFinTab("profit")}
+            className={`px-3 py-1 rounded-md ${
+              finTab === "profit"
+                ? "bg-emerald-600 text-white"
+                : "bg-white border border-slate-200 dark:bg-[var(--gray-800)] dark:border-[var(--border-color)] dark:text-[var(--text-secondary)]"
+            }`}
+          >
+            Profit
+          </button>
+        </div>
       </div>
-    ))}
+    </div>
+
+    <div style={{ width: "100%", height: 260 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={finData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <XAxis dataKey="name" />
+          <ReTooltip />
+          <Bar dataKey="value" fill="#06b6d4" barSize={18}>
+            <LabelList
+              dataKey="value"
+              position="top"
+              style={{ fontSize: 12, fontWeight: 700 }}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+
+    <div className="mt-6 grid grid-cols-3 gap-4">
+      {[
+        ["Net Profit (TTM)", "₹3,820 Cr"],
+        ["EBITDA Margin", "24.7%"],
+        ["Operating Cashflow", "₹5,200 Cr"],
+      ].map(([label, value], i) => (
+        <div
+          key={i}
+          className="
+            p-4 rounded-xl shadow-sm
+            bg-white
+
+            dark:bg-[var(--white-5)]
+            dark:border dark:border-[var(--border-color)]
+          "
+        >
+          <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+            {label}
+          </p>
+          <p className="font-semibold dark:text-[var(--text-primary)]">
+            {value}
+          </p>
+        </div>
+      ))}
+    </div>
   </div>
 
-  <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
-    <span className="text-gray-500"><MdOutlineInfo /></span>
-    <span>Click any metric to view its definition</span>
-  </div>
-</aside>
+  {/* FUNDAMENTALS */}
+  <aside
+    className="
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-4 shadow-md
 
-        </section>
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <h4 className="text-lg font-semibold text-slate-900 dark:text-[var(--text-primary)] mb-3">
+      Fundamentals
+    </h4>
+
+    <div className="grid grid-cols-2 gap-3">
+      {fundamentals.map((item, index) => (
+        <div
+          key={index}
+          onClick={() => setActiveInfo(activeInfo === index ? null : index)}
+          className="
+            relative p-3 rounded-md shadow-sm cursor-pointer
+            bg-white border border-gray-100
+
+            dark:bg-[var(--white-5)]
+            dark:border-[var(--border-color)]
+          "
+        >
+          <div className="flex justify-between items-center">
+            <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+              {item.label}
+            </p>
+            <span className="text-gray-500 text-xs">
+              <MdOutlineInfo />
+            </span>
+          </div>
+
+          <p className="font-semibold mt-1 dark:text-[var(--text-primary)]">
+            {item.value}
+          </p>
+
+          {activeInfo === index && (
+            <div
+              className="
+                absolute top-14 left-0 w-56 p-3 rounded-lg shadow-md z-50
+                bg-white border border-gray-200 text-xs text-gray-700
+
+                dark:bg-[var(--gray-900)]
+                dark:border-[var(--border-color)]
+                dark:text-[var(--text-secondary)]
+              "
+            >
+              {fundamentalsDefinitions[item.label]}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <div className="mt-3 flex items-center gap-2 text-sm text-slate-500 dark:text-[var(--text-secondary)]">
+      <span className="text-gray-500"><MdOutlineInfo /></span>
+      <span>Click any metric to view its definition</span>
+    </div>
+  </aside>
+</section>
+
 
         {/* MARKET DEPTH + PEERS + NEWS */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Market Depth */}
-          <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Market Depth</h3>
 
-            <div className="w-full">
-              <div className="flex justify-between text-md text-slate-600 font-medium">
-                <span>Buy order quantity</span>
-                <span>Sell order quantity</span>
-              </div>
+  {/* MARKET DEPTH */}
+  <div
+    className="
+      lg:col-span-2
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-6 shadow-md
 
-              <div className="flex w-full h-2 rounded-full overflow-hidden mt-2 bg-slate-200">
-                <div className="bg-emerald-500" style={{width: `${33}%`}}></div>
-                <div className="bg-red-500" style={{width: `${67}%`}}></div>
-              </div>
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <h3 className="text-lg font-semibold text-slate-900 dark:text-[var(--text-primary)] mb-4">
+      Market Depth
+    </h3>
 
-              <div className="flex justify-between mt-1 text-sm font-medium">
-                <span className="text-emerald-600">33%</span>
-                <span className="text-red-500">67%</span>
-              </div>
+    <div className="w-full">
+      <div className="flex justify-between text-md font-medium text-slate-600 dark:text-[var(--text-secondary)]">
+        <span>Buy order quantity</span>
+        <span>Sell order quantity</span>
+      </div>
+
+      <div className="flex w-full h-2 rounded-full overflow-hidden mt-2 bg-slate-200 dark:bg-[var(--gray-800)]">
+        <div className="bg-emerald-500" style={{ width: "33%" }} />
+        <div className="bg-red-500" style={{ width: "67%" }} />
+      </div>
+
+      <div className="flex justify-between mt-1 text-sm font-medium">
+        <span className="text-emerald-600">33%</span>
+        <span className="text-red-500">67%</span>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-2 gap-4 mt-6 divide-x dark:divide-[var(--border-color)]">
+      {/* BIDS */}
+      <div className="pr-4">
+        <div className="grid grid-cols-2 text-sm mb-2 text-slate-600 dark:text-[var(--text-secondary)]">
+          <span className="font-medium">Bid Price</span>
+          <span className="text-right font-medium">Qty</span>
+        </div>
+
+        {bids.map((b, i) => (
+          <div key={i} className="grid grid-cols-2 items-center text-sm mb-2 relative">
+            <span className="dark:text-[var(--text-primary)]">
+              {b.price.toLocaleString()}
+            </span>
+
+            <div className="relative text-right">
+              <span className="text-emerald-600 font-medium relative z-10">
+                {b.qty.toLocaleString()}
+              </span>
+              <div
+                className="absolute right-0 top-1/2 -translate-y-1/2 h-full bg-emerald-100 dark:bg-emerald-500/20 rounded"
+                style={{ width: `${(b.qty / maxQty) * 100}%` }}
+              />
             </div>
+          </div>
+        ))}
 
-            <div className="grid grid-cols-2 gap-4 mt-6 divide-x">
-              <div className="pr-4">
-                <div className="grid grid-cols-2 text-sm text-slate-600 mb-2">
-                  <span className="text-slate-500 font-medium">Bid Price</span>
-                  <span className="text-right text-slate-500 font-medium">Qty</span>
-                </div>
+        <div className="flex justify-between mt-3 font-semibold dark:text-[var(--text-primary)]">
+          <span>Bid Total</span>
+          <span>{bids.reduce((acc, c) => acc + c.qty, 0).toLocaleString()}</span>
+        </div>
+      </div>
 
-                {bids.map((b, i) => (
-                  <div key={i} className="grid grid-cols-2 items-center text-sm mb-2 relative">
-                    <span>{b.price.toLocaleString()}</span>
-                    <div className="relative text-right">
-                      <span className="text-emerald-600 font-medium relative z-10">{b.qty.toLocaleString()}</span>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 h-full bg-emerald-100 rounded" style={{width:`${(b.qty/maxQty)*100}%`}}/>
-                    </div>
-                  </div>
-                ))}
+      {/* ASKS */}
+      <div className="pl-4">
+        <div className="grid grid-cols-2 text-sm mb-2 text-slate-600 dark:text-[var(--text-secondary)]">
+          <span className="font-medium">Ask Price</span>
+          <span className="text-right font-medium">Qty</span>
+        </div>
 
-                <div className="flex justify-between mt-3 font-semibold">
-                  <span>Bid Total</span>
-                  <span>{bids.reduce((acc,c)=>acc+c.qty,0).toLocaleString()}</span>
-                </div>
-              </div>
+        {asks.map((a, i) => (
+          <div key={i} className="grid grid-cols-2 items-center text-sm mb-2 relative">
+            <span className="dark:text-[var(--text-primary)]">
+              {a.price.toLocaleString()}
+            </span>
 
-              <div className="pl-4">
-                <div className="grid grid-cols-2 text-sm text-slate-600 mb-2">
-                  <span className="text-slate-500 font-medium">Ask Price</span>
-                  <span className="text-right text-slate-500 font-medium">Qty</span>
-                </div>
+            <div className="relative text-right">
+              <span className="text-red-500 font-medium relative z-10">
+                {a.qty.toLocaleString()}
+              </span>
+              <div
+                className="absolute right-0 top-1/2 -translate-y-1/2 h-full bg-red-100 dark:bg-red-500/20 rounded"
+                style={{ width: `${(a.qty / maxQty) * 100}%` }}
+              />
+            </div>
+          </div>
+        ))}
 
-                {asks.map((a,i)=>(
-                  <div key={i} className="grid grid-cols-2 items-center text-sm mb-2 relative">
-                    <span>{a.price.toLocaleString()}</span>
-                    <div className="relative text-right">
-                      <span className="text-red-500 font-medium relative z-10">{a.qty.toLocaleString()}</span>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 h-full bg-red-100 rounded" style={{width:`${(a.qty/maxQty)*100}%`}}/>
-                    </div>
-                  </div>
-                ))}
+        <div className="flex justify-between mt-3 font-semibold dark:text-[var(--text-primary)]">
+          <span>Ask Total</span>
+          <span>{asks.reduce((acc, c) => acc + c.qty, 0).toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                <div className="flex justify-between mt-3 font-semibold">
-                  <span>Ask Total</span>
-                  <span>{asks.reduce((acc,c)=>acc+c.qty,0).toLocaleString()}</span>
-                </div>
-              </div>
+  {/* PEERS & NEWS */}
+  <aside
+    className="
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-4 shadow-md
+
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <h4 className="text-lg font-semibold mb-3 dark:text-[var(--text-primary)]">
+      Peers
+    </h4>
+
+    <div className="space-y-2">
+      {peers.map((p, i) => (
+        <div
+          key={i}
+          className="
+            flex justify-between items-center p-2 rounded-md transition
+            hover:bg-white
+
+            dark:hover:bg-[var(--gray-800)]
+          "
+        >
+          <div>
+            <div className="font-medium dark:text-[var(--text-primary)]">
+              {p.company}
+            </div>
+            <div className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+              {p.mcap}
             </div>
           </div>
 
-          {/* Peers & News */}
-          <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md">
-            <h4 className="text-lg font-semibold mb-3">Peers</h4>
-            <div className="space-y-2">
-              {peers.map((p,i)=>(
-                <div key={i} className="flex justify-between items-center p-2 rounded-md hover:bg-white transition">
-                  <div>
-                    <div className="font-medium">{p.company}</div>
-                    <div className="text-xs text-slate-500">{p.mcap}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold">₹{p.price}</div>
-                    <div className={`text-sm ${p.change>=0? "text-emerald-600":"text-red-600"}`}>{p.change>=0?"+":""}{p.change}%</div>
-                  </div>
-                </div>
-              ))}
+          <div className="text-right">
+            <div className="font-semibold dark:text-[var(--text-primary)]">
+              ₹{p.price}
             </div>
-
-            <hr className="my-4"/>
-
-            <h4 className="text-lg font-semibold mb-3">Latest News</h4>
-            <ul className="space-y-3">
-              {news.map((n,i)=>(
-                <li key={i} className="p-3 rounded-lg hover:bg-white transition flex justify-between items-start">
-                  <div>
-                    <div className="font-semibold text-slate-900">{n.title}</div>
-                    <div className="text-xs text-slate-500 mt-1">{n.src} • {n.time}</div>
-                  </div>
-                  <button className="text-slate-500 text-sm">Read</button>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        </section>
-
-        {/* ABOUT & FOOTER */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-            <h3 className="text-lg font-semibold mb-3">About {baseStock.name}</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">{baseStock.description}</p>
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="p-4 bg-white rounded-md shadow-sm">
-                <p className="text-xs text-slate-500">Parent Organisation</p>
-                <p className="font-semibold">Aether Group</p>
-              </div>
-              <div className="p-4 bg-white rounded-md shadow-sm">
-                <p className="text-xs text-slate-500">Headquarters</p>
-                <p className="font-semibold">Bengaluru, India</p>
-              </div>
-            </div>
-          </div>
-
-          <aside className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 shadow-md">
-            <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
-            <ul className="flex flex-col gap-2">
-              <li><a className="text-slate-700 hover:underline" href="#">Quarterly results</a></li>
-              <li><a className="text-slate-700 hover:underline" href="#">Shareholding pattern</a></li>
-              <li><a className="text-slate-700 hover:underline" href="#">Corporate announcements</a></li>
-            </ul>
-          </aside>
-        </section>
-
-        {/* sticky quick order */}
-        <div className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
-          <div className="bg-white/80 backdrop-blur-md border border-white/30 rounded-3xl p-4 shadow-lg flex items-center justify-between gap-4">
-            <div className="flex items-center gap-6">
-              <div className="text-sm text-slate-500">Quick Order</div>
-              <div className="text-lg font-semibold">₹{livePrice.toFixed(2)}</div>
-              <div className={`px-2 py-1 rounded text-sm ${pctChange>=0 ? "bg-emerald-50 text-emerald-700":"bg-red-50 text-red-600"}`}>{pctChange>=0?"+":""}{pctChange}%</div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button onClick={openBuy} className="px-6 py-2 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700">Buy</button>
-              <button onClick={openSell} className="px-6 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700">Sell</button>
+            <div className={`text-sm ${p.change >= 0 ? "text-emerald-600" : "text-red-600"}`}>
+              {p.change >= 0 ? "+" : ""}
+              {p.change}%
             </div>
           </div>
         </div>
+      ))}
+    </div>
+
+    <hr className="my-4 border-slate-200 dark:border-[var(--border-color)]" />
+
+    <h4 className="text-lg font-semibold mb-3 dark:text-[var(--text-primary)]">
+      Latest News
+    </h4>
+
+    <ul className="space-y-3">
+      {news.map((n, i) => (
+        <li
+          key={i}
+          className="
+            p-3 rounded-lg transition flex justify-between items-start
+            hover:bg-white
+
+            dark:hover:bg-[var(--gray-800)]
+          "
+        >
+          <div>
+            <div className="font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+              {n.title}
+            </div>
+            <div className="text-xs text-slate-500 dark:text-[var(--text-secondary)] mt-1">
+              {n.src} • {n.time}
+            </div>
+          </div>
+          <button className="text-slate-500 dark:text-[var(--text-secondary)] text-sm">
+            Read
+          </button>
+        </li>
+      ))}
+    </ul>
+  </aside>
+</section>
+
+
+        {/* ABOUT & FOOTER */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  {/* ABOUT */}
+  <div
+    className="
+      lg:col-span-2
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-6 shadow-md
+
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <h3 className="text-lg font-semibold mb-3 text-slate-900 dark:text-[var(--text-primary)]">
+      About {baseStock.name}
+    </h3>
+
+    <p className="text-sm leading-relaxed text-slate-700 dark:text-[var(--text-secondary)]">
+      {baseStock.description}
+    </p>
+
+    <div className="mt-6 grid grid-cols-2 gap-4">
+      <div
+        className="
+          p-4 rounded-md shadow-sm
+          bg-white
+
+          dark:bg-[var(--gray-800)]
+        "
+      >
+        <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+          Parent Organisation
+        </p>
+        <p className="font-semibold dark:text-[var(--text-primary)]">
+          Aether Group
+        </p>
+      </div>
+
+      <div
+        className="
+          p-4 rounded-md shadow-sm
+          bg-white
+
+          dark:bg-[var(--gray-800)]
+        "
+      >
+        <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+          Headquarters
+        </p>
+        <p className="font-semibold dark:text-[var(--text-primary)]">
+          Bengaluru, India
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* QUICK LINKS */}
+  <aside
+    className="
+      bg-white/60 backdrop-blur-sm
+      border border-white/40
+      rounded-2xl p-4 shadow-md
+
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <h4 className="text-lg font-semibold mb-3 dark:text-[var(--text-primary)]">
+      Quick Links
+    </h4>
+
+    <ul className="flex flex-col gap-2">
+      <li>
+        <a
+          className="
+            text-slate-700 hover:underline
+            dark:text-[var(--text-secondary)]
+          "
+          href="#"
+        >
+          Quarterly results
+        </a>
+      </li>
+
+      <li>
+        <a
+          className="
+            text-slate-700 hover:underline
+            dark:text-[var(--text-secondary)]
+          "
+          href="#"
+        >
+          Shareholding pattern
+        </a>
+      </li>
+
+      <li>
+        <a
+          className="
+            text-slate-700 hover:underline
+            dark:text-[var(--text-secondary)]
+          "
+          href="#"
+        >
+          Corporate announcements
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+</section>
+
+
+        {/* sticky quick order */}
+        <div className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
+  <div
+    className="
+      bg-white/80 backdrop-blur-md
+      border border-white/30
+      rounded-3xl p-4 shadow-lg
+      flex items-center justify-between gap-4
+
+      dark:bg-[var(--white-10)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    <div className="flex items-center gap-6">
+      <div className="text-sm text-slate-500 dark:text-[var(--text-secondary)]">
+        Quick Order
+      </div>
+
+      <div className="text-lg font-semibold dark:text-[var(--text-primary)]">
+        ₹{livePrice.toFixed(2)}
+      </div>
+
+      <div
+        className={`px-2 py-1 rounded text-sm ${
+          pctChange >= 0
+            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
+            : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
+        }`}
+      >
+        {pctChange >= 0 ? "+" : ""}
+        {pctChange}%
+      </div>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <button
+        onClick={openBuy}
+        className="px-6 py-2 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700"
+      >
+        Buy
+      </button>
+
+      <button
+        onClick={openSell}
+        className="px-6 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700"
+      >
+        Sell
+      </button>
+    </div>
+  </div>
+</div>
+
 
         <div className="h-28" />
       </div>
@@ -625,25 +1100,44 @@ const [activeInfo, setActiveInfo] = useState(null);
       {/* BUY / SELL modal */}
 {buySellModal.open && (
   <div
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-    onClick={closeModal} // Click outside to close
-  >
-    <div
-      className="w-full max-w-2xl h-[90vh] bg-white rounded-2xl shadow-xl overflow-y-auto p-6 relative"
-      onClick={(e) => e.stopPropagation()} // Prevent clicks inside modal from closing
-    >
-      {/* Close button */}
-      <button
-        onClick={closeModal}
-        className="absolute top-5 right-9 text-3xl text-slate-400 hover:text-slate-700 transition cursor-pointer"
-      >
-        ×
-      </button>
+  className="
+    fixed inset-0 z-50 flex items-center justify-center p-4
+    bg-black/40
+    dark:bg-(--white-10)
+  "
+  onClick={closeModal}
+>
+  <div
+    className="
+      w-full max-w-2xl h-[90vh]
+      rounded-2xl shadow-xl overflow-y-auto p-6 relative
 
-      {/* Your content */}
-      <OrderEntryPage />
-    </div>
+      bg-white
+      dark:bg-[var(--card-bg)]
+      dark:border
+      dark:border-[var(--border-color)]
+    "
+    onClick={(e) => e.stopPropagation()}
+  >
+    {/* Close button */}
+    <button
+      onClick={closeModal}
+      className="
+        absolute top-5 right-9 text-3xl transition cursor-pointer
+
+        text-slate-400 hover:text-slate-700
+        dark:text-[var(--text-secondary)]
+        dark:hover:text-[var(--text-primary)]
+      "
+    >
+      ×
+    </button>
+
+    {/* Your content */}
+    <OrderEntryPage />
   </div>
+</div>
+
 )}
 
     </div>

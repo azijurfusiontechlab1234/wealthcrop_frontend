@@ -152,7 +152,7 @@ const InflationCalculator = () => {
             className="
               mt-2 w-full py-2 rounded-lg font-bold text-sm transition
               bg-orange-600 hover:bg-orange-700
-              dark:bg-orange-500 dark:hover:bg-orange-600
+              dark:bg-orange-700 dark:hover:bg-orange-800
               text-white
             "
           >
@@ -166,7 +166,7 @@ const InflationCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-orange-600 to-red-600
-          dark:from-orange-500 dark:to-red-600
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

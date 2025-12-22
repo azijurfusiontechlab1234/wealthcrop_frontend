@@ -178,7 +178,7 @@ const FDCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-blue-600 to-indigo-600
-          dark:from-blue-700 dark:to-indigo-700
+          dark:from-gray-800 dark:to-gray-800
           text-white
           flex flex-col justify-center
         "

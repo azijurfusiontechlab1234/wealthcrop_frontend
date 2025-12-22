@@ -226,7 +226,7 @@ const IpoDashboardPage = () => {
     </div>
 
     {/* TABLE */}
-    <div className="bg-white dark:bg-white/5 rounded-2xl
+    <div className="bg-white dark:bg-[var(--white-5)] rounded-2xl
     border border-slate-200 dark:border-white/10
     shadow-sm dark:shadow-none overflow-hidden">
 

@@ -137,120 +137,194 @@ const Orders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-6 flex justify-center">
-      <div className="w-full max-w-5xl">
-        <h1 className="text-xl font-semibold text-slate-900">Orders</h1>
+    <div
+  className="
+    min-h-screen px-4 py-6 flex justify-center
+    bg-slate-100
 
-        {/* Tabs */}
-        <div className="flex gap-3 mt-3 text-sm border-b border-slate-300 pb-2">
-          {["Equity", "F&O", "GTT", "Others"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setActiveTab(t)}
-              className={`pb-1 ${
-                activeTab === t
-                  ? "text-blue-600 border-b-2 border-blue-600 font-medium"
-                  : "text-slate-500"
-              }`}
+    dark:bg-[var(--app-bg)]
+  "
+>
+  <div className="w-full max-w-5xl">
+    <h1
+      className="
+        text-xl font-semibold
+        text-slate-900
+
+        dark:text-[var(--text-primary)]
+      "
+    >
+      Orders
+    </h1>
+
+    {/* Tabs */}
+    <div
+      className="
+        flex gap-3 mt-3 text-sm pb-2
+        border-b border-slate-300
+
+        dark:border-[var(--border-color)]
+      "
+    >
+      {["Equity", "F&O", "GTT", "Others"].map((t) => (
+        <button
+          key={t}
+          onClick={() => setActiveTab(t)}
+          className={`pb-1 ${
+            activeTab === t
+              ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+              : "text-slate-500 dark:text-[var(--text-secondary)]"
+          }`}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+
+    {/* Search + Filters */}
+    <div className="flex flex-col md:flex-row gap-2 items-start md:items-center md:justify-between mt-4 w-full">
+      <input
+        type="text"
+        placeholder="Search stock…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="
+          px-3 py-2 text-sm w-full md:w-1/3 rounded-lg
+          bg-white border border-slate-300 text-slate-700
+
+          dark:bg-[var(--card-bg)]
+          dark:border-[var(--border-color)]
+          dark:text-[var(--text-primary)]
+        "
+      />
+
+      <div className="flex gap-2 mt-2 md:mt-0">
+        {["All", "Executed", "Pending", "Rejected"].map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-2.5 md:px-4 py-2 rounded-lg text-sm border ${
+              filter === f
+                ? "bg-blue-600 text-white"
+                : `
+                  bg-white text-slate-700
+                  dark:bg-[var(--card-bg)]
+                  dark:text-[var(--text-secondary)]
+                  dark:border-[var(--border-color)]
+                `
+            }`}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Orders List */}
+    <div className="mt-4 space-y-3">
+      {visibleOrders.map((o) => (
+        <div
+          key={o.id}
+          className="
+            bg-white border border-slate-200 rounded-xl p-4 shadow-sm
+            flex justify-between items-center
+
+            dark:bg-[var(--card-bg)]
+            dark:border-[var(--border-color)]
+          "
+        >
+          {/* Left */}
+          <div className="flex items-center gap-4">
+            <div
+              className="
+                h-10 w-10 rounded-full flex items-center justify-center font-semibold
+                bg-slate-100 text-slate-800
+
+                dark:bg-[var(--gray-800)]
+                dark:text-[var(--text-primary)]
+              "
             >
-              {t}
-            </button>
-          ))}
+              {o.symbol.slice(0, 2)}
+            </div>
+
+            <div>
+              <p
+                className="
+                  text-base font-semibold
+                  dark:text-[var(--text-primary)]
+                "
+              >
+                {o.symbol}{" "}
+                <span
+                  className={`px-2 py-0.5 text-[11px] rounded-full ${
+                    o.side === "BUY"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-rose-100 text-rose-700"
+                  }`}
+                >
+                  {o.side}
+                </span>
+              </p>
+
+              <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)]">
+                {o.name}
+              </p>
+
+              <p className="text-xs text-slate-600 mt-1 dark:text-[var(--text-secondary)]">
+                {o.qty} Qty • ₹{o.price.toFixed(2)} • {o.orderType}
+              </p>
+
+              <p className="text-[11px] text-slate-400 dark:text-[var(--text-secondary)]">
+                {o.placedAt}
+              </p>
+            </div>
+          </div>
+
+          {/* Right */}
+          <div className="text-right min-w-[110px]">
+            <div className="flex justify-end items-center gap-1">
+              <StatusIcon status={o.status} />
+              <span
+                className={`px-3 py-1 rounded-full text-[11px] font-medium ${statusColors[o.status]}`}
+              >
+                {o.status}
+              </span>
+            </div>
+
+            <p
+              className="
+                mt-2 text-base font-semibold
+                text-slate-900
+
+                dark:text-[var(--text-primary)]
+              "
+            >
+              ₹{(o.qty * o.price).toFixed(2)}
+            </p>
+          </div>
         </div>
+      ))}
+    </div>
 
-        {/* Search + Filters */}
-        <div className="flex flex-col md:flex-row gap-2 items-start md:items-center md:justify-between mt-4 w-full">
-  <input
-    type="text"
-    placeholder="Search stock…"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    className="px-3 py-2 text-sm w-full md:w-1/3 border rounded-lg bg-white"
-  />
+    {/* Load More */}
+    {visibleOrders.length < getFilteredOrders().length && (
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={loadMore}
+          className="
+            px-5 py-2 rounded-lg
+            bg-slate-900 text-white
 
-  <div className="flex gap-2 mt-2 md:mt-0">
-    {["All", "Executed", "Pending", "Rejected"].map((f) => (
-      <button
-        key={f}
-        onClick={() => setFilter(f)}
-        className={`px-2.5 md:px-4 py-2 rounded-lg text-sm border ${
-          filter === f ? "bg-blue-600 text-white" : "bg-white text-slate-700"
-        }`}
-      >
-        {f}
-      </button>
-    ))}
+            dark:bg-[var(--gray-800)]
+          "
+        >
+          Load More
+        </button>
+      </div>
+    )}
   </div>
 </div>
 
-
-        {/* Orders List */}
-        <div className="mt-4 space-y-3">
-          {visibleOrders.map((o) => (
-            <div
-              key={o.id}
-              className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex justify-between items-center"
-            >
-              {/* Left */}
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-800 font-semibold">
-                  {o.symbol.slice(0, 2)}
-                </div>
-
-                <div>
-                  <p className="text-base font-semibold">
-                    {o.symbol}{" "}
-                    <span
-                      className={`px-2 py-0.5 text-[11px] rounded-full ${
-                        o.side === "BUY"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-rose-100 text-rose-700"
-                      }`}
-                    >
-                      {o.side}
-                    </span>
-                  </p>
-
-                  <p className="text-xs text-slate-500">{o.name}</p>
-                  <p className="text-xs text-slate-600 mt-1">
-                    {o.qty} Qty • ₹{o.price.toFixed(2)} • {o.orderType}
-                  </p>
-                  <p className="text-[11px] text-slate-400">{o.placedAt}</p>
-                </div>
-              </div>
-
-              {/* Right */}
-              <div className="text-right min-w-[110px]">
-                <div className="flex justify-end items-center gap-1">
-                  <StatusIcon status={o.status} />
-                  <span
-                    className={`px-3 py-1 rounded-full text-[11px] font-medium ${statusColors[o.status]}`}
-                  >
-                    {o.status}
-                  </span>
-                </div>
-
-                <p className="mt-2 text-base font-semibold text-slate-900">
-                  ₹{(o.qty * o.price).toFixed(2)}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Load More */}
-        {visibleOrders.length < getFilteredOrders().length && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={loadMore}
-              className="px-5 py-2 bg-slate-900 text-white rounded-lg"
-            >
-              Load More
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
   );
 };
 

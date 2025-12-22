@@ -127,8 +127,13 @@ export default function CandleChart({ height = 320 }) {
     const key = mapSelectionToKey[selectedTimeframe] ?? "1D";
     return timeframeMap[key] ?? [];
   }, [selectedTimeframe]);
-
+  
   const DATA = useMemo(() => cleanData(rawData), [rawData]);
+  
+  const cssVar = (name) =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  const isDark = document.documentElement.classList.contains("dark");
 
   // -------- CREATE CHART (once) --------
   useEffect(() => {
@@ -142,41 +147,46 @@ export default function CandleChart({ height = 320 }) {
       chartRef.current = null;
     }
 
-  const chart = createChart(containerRef.current, {
+
+const chart = createChart(containerRef.current, {
   width: containerRef.current.clientWidth,
   height,
+
   layout: {
-    background: { color: "#ffffff" },
-    textColor: "#1e293b",
+    background: {
+      color: isDark ? cssVar("--gray-900") : "#ffffff",
+    },
+    textColor: isDark ? cssVar("--text-secondary") : "#1e293b",
   },
 
-  // GRID LINES
   grid: {
-    vertLines: { color: "#f3f4f6" },
-    horzLines: { color: "#f3f4f6" },
+    vertLines: {
+      color: isDark ? cssVar("--white-5") : "#f3f4f6",
+    },
+    horzLines: {
+      color: isDark ? cssVar("--white-5") : "#f3f4f6",
+    },
   },
 
   crosshair: { mode: 1 },
 
-  // MAIN LEFT PRICE SCALE BORDER COLOR
   priceScale: {
-    borderColor: "#cbd5e1", // <-- border-slate-300
+    borderColor: isDark ? cssVar("--border-color") : "#cbd5e1",
   },
 
-  // RIGHT PRICE SCALE (YOUR CHART USES THIS)
   rightPriceScale: {
-    borderColor: "#cbd5e1", // <-- border-slate-300
+    borderColor: isDark ? cssVar("--border-color") : "#cbd5e1",
     scaleMargins: { top: 0.12, bottom: 0.22 },
   },
 
-  // TIME SCALE BORDER
   timeScale: {
-    borderColor: "#cbd5e1", // <-- border-slate-300
+    borderColor: isDark ? cssVar("--border-color") : "#cbd5e1",
     fixRightEdge: false,
     rightOffset: 6,
     barSpacing: 10,
   },
 });
+
 
 
     chartRef.current = chart;
@@ -263,12 +273,15 @@ export default function CandleChart({ height = 320 }) {
       });
 
       vol.setData(
-        DATA.map((d) => ({
-          time: d.timestamp,
-          value: d.volume,
-          color: d.close > d.open ? "#00b26a66" : "#ff4d4f66",
-        }))
-      );
+  DATA.map((d) => ({
+    time: d.timestamp,
+    value: d.volume,
+    color:
+      d.close > d.open
+        ? (isDark ? cssVar("--vol-up") : "#00b26a66")
+        : (isDark ? cssVar("--vol-down") : "#ff4d4f66"),
+  }))
+);
 
       // Ensure volume price scale options are applied so it sits as a bottom panel and doesn't overlap
       try {
@@ -326,73 +339,113 @@ export default function CandleChart({ height = 320 }) {
       <div className="flex gap-2 mb-3 flex-wrap">
         {timeframeButtons.map((tf) => (
           <button
-            key={tf}
-            onClick={() => setSelectedTimeframe(tf)}
-            className={`px-3 py-1 rounded-md text-sm ${
-              selectedTimeframe === tf ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            {tf}
-          </button>
+  key={tf}
+  onClick={() => setSelectedTimeframe(tf)}
+  className={`px-3 py-1 rounded-md text-sm transition ${
+    selectedTimeframe === tf
+      ? "bg-blue-600 text-white"
+      : `
+          bg-gray-100 text-gray-700
+          dark:bg-[var(--gray-800)]
+          dark:text-[var(--text-secondary)]
+        `
+  }
+  dark:${selectedTimeframe === tf ? "bg-blue-500 text-white" : ""}
+  `}
+>
+  {tf}
+</button>
+
         ))}
       </div>
 
       {/* Chart container */}
       <div
         ref={containerRef}
-        className="w-full border border-slate-300 rounded-xl shadow-sm overflow-hidden"
+        className="w-full border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm overflow-hidden"
         style={{ height }}
       />
 
       {/* OHLC */}
-      <div className="mt-3 bg-gray-50 p-3 rounded-lg border border-slate-300 flex gap-4 text-sm text-blue-950">
-        {ohlc ? (
-          <>
-            <span>O: <b>{fmt(ohlc.open)}</b></span>
-            <span>H: <b>{fmt(ohlc.high)}</b></span>
-            <span>L: <b>{fmt(ohlc.low)}</b></span>
-            <span>C: <b>{fmt(ohlc.close)}</b></span>
-          </>
-        ) : (
-          <span className="text-gray-500">Hover to view OHLC</span>
-        )}
-      </div>
+      <div
+  className="
+    mt-3 p-3 rounded-lg flex gap-4 text-sm
+    bg-gray-50 border border-slate-300 text-blue-950
+
+    dark:bg-[var(--gray-800)]
+    dark:border-[var(--border-color)]
+    dark:text-[var(--text-primary)]
+  "
+>
+  {ohlc ? (
+    <>
+      <span>O: <b>{fmt(ohlc.open)}</b></span>
+      <span>H: <b>{fmt(ohlc.high)}</b></span>
+      <span>L: <b>{fmt(ohlc.low)}</b></span>
+      <span>C: <b>{fmt(ohlc.close)}</b></span>
+    </>
+  ) : (
+    <span className="text-gray-500 dark:text-[var(--text-secondary)]">
+      Hover to view OHLC
+    </span>
+  )}
+</div>
+
 
       {/* Controls */}
       <div className="flex items-center gap-6 mt-4">
 
   {/* Custom Checkbox */}
-  <label className="flex items-center gap-2 text-slate-700 font-medium cursor-pointer select-none">
-    <input
-      type="checkbox"
-      checked={showVolume}
-      onChange={() => setShowVolume((s) => !s)}
-      className="h-4 w-4 accent-blue-600 rounded cursor-pointer"
-    />
-    <span>Volume</span>
-  </label>
+ <label
+  className="
+    flex items-center gap-2 font-medium cursor-pointer select-none
+    text-slate-700
+
+    dark:text-[var(--text-secondary)]
+  "
+>
+  <input
+    type="checkbox"
+    checked={showVolume}
+    onChange={() => setShowVolume((s) => !s)}
+    className="
+      h-4 w-4 rounded cursor-pointer
+      accent-blue-600
+
+      dark:accent-blue-500
+    "
+  />
+  <span>Volume</span>
+</label>
+
 
   {/* Styled Select Dropdown */}
-  <select
-    value={chartType}
-    onChange={(e) => setChartType(e.target.value)}
-    className="
-      px-3 py-1.5
-      rounded-md
-      bg-white
-      border border-slate-300
-      text-slate-700
-      text-sm
-      outline-none
-      cursor-pointer
-      hover:border-slate-400
-      transition
-      shadow-sm
-    "
-  >
-    <option value="candles">Candlestick</option>
-    <option value="line">Line</option>
-  </select>
+<select
+  value={chartType}
+  onChange={(e) => setChartType(e.target.value)}
+  className="
+    px-3 py-1.5
+    rounded-md
+    text-sm
+    cursor-pointer
+    outline-none
+    transition
+    shadow-sm
+
+    bg-white
+    border border-slate-300
+    text-slate-700
+    hover:border-slate-400
+
+    dark:bg-[var(--gray-800)]
+    dark:border-[var(--border-color)]
+    dark:text-[var(--text-primary)]
+  "
+>
+  <option value="candles">Candlestick</option>
+  <option value="line">Line</option>
+</select>
+
 
 </div>
 

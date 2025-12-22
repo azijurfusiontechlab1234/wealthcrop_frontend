@@ -20,6 +20,35 @@ html, body {
   overflow-x: hidden;
 }
 
+@layer base {
+  /* :root {
+    --app-bg: #f8fafc;        
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+  } */
+
+  .dark {
+    /* DARK THEME */
+    /* --app-bg: #121212;       */
+    --app-bg: #020617;         /* 🔥 your main dark color */
+    --card-bg: #020617;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --gray-800: #1f2937;  /* same as tailwind gray-800 */
+    --gray-900: #020617;  /* your dark surface */
+    --white-5: rgba(255, 255, 255, 0.05);
+    --white-10: rgba(255, 255, 255, 0.10);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --vol-up: rgba(16, 185, 129, 0.55);   /* emerald-500 */
+    --vol-down: rgba(239, 68, 68, 0.55);  /* red-500 */
+
+    --chart-up: #22c55e;   /* emerald-500 */
+    --chart-down: #ef4444; /* red-500 */
+    --chart-line: #38bdf8; /* sky-400 */
+  }
+}
 
 
 /* For header hover */

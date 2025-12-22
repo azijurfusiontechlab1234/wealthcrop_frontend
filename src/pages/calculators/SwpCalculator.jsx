@@ -195,7 +195,7 @@ const SwpCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-emerald-500 to-green-500
-          dark:from-emerald-400 dark:to-green-500
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

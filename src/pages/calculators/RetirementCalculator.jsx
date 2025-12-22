@@ -58,14 +58,14 @@ const RetirementCalculator = () => {
   className="
     min-h-screen
     bg-linear-to-r from-blue-100 to-green-100
-    dark:from-gray-900 dark:to-gray-800
+    dark:from-[var(--gray-900)] dark:to-[var(--gray-800)]
   "
 >
   {/* HEADER */}
   <div
     className="
       bg-linear-to-r from-blue-100 to-green-100
-      dark:from-gray-900 dark:to-gray-800
+      dark:from-[var(--gray-900)] dark:to-[var(--gray-800)]
       py-14 px-6 text-center
     "
   >
@@ -170,7 +170,7 @@ const RetirementCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-purple-600 to-indigo-600
-          dark:from-purple-500 dark:to-indigo-600
+         dark:from-[var(--gray-800)] dark:to-[var(--gray-800)]
           text-white flex flex-col justify-center
         "
       >

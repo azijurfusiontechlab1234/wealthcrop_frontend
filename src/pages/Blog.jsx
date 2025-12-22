@@ -96,6 +96,7 @@ const Blog = () => {
     });
   }, [allPosts, activeCategory, searchQuery]);
 
+  
   /** -------------------------
    * PAGINATION LOGIC
    * ------------------------- */
@@ -124,30 +125,55 @@ const Blog = () => {
    * ------------------------- */
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 py-10 px-4">
+      <div
+      className="
+        min-h-screen py-10 px-4
+        bg-gradient-to-br from-blue-100 to-green-100
+        dark:from-[var(--app-bg)] dark:to-[var(--app-bg)] 
+      "
+    >
       <div className="max-w-6xl mx-auto">
+
         {/* HEADER */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900">
+          <h1 className="
+            text-4xl font-extrabold
+            text-gray-900
+            dark:text-[var(--text-primary)]
+          ">
             WealthCrop Blog
           </h1>
-          <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
-            Insights, wealth tips, mutual fund strategies, tax hacks & investing
-            guides.
+
+          <p className="
+            mt-2 max-w-2xl mx-auto
+            text-gray-600
+            dark:text-[var(--text-secondary)]
+          ">
+            Insights, wealth tips, mutual fund strategies, tax hacks & investing guides.
           </p>
 
-          {/* SEARCH BAR */}
+          {/* SEARCH */}
           <div className="mt-6 flex justify-center">
             <div className="relative w-full max-w-xl">
-              <FiSearch className="absolute left-4.5 top-4 text-gray-400" size={18}/>
+              <FiSearch className="absolute left-4 top-4 text-gray-400" size={18} />
+
               <input
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
-                  setCurrentPage(1);
+                  goToPage(1);
                 }}
                 placeholder="Search SIP, PPF, Tax, FD, Retirement..."
-                className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 shadow-sm bg-white focus:ring-2 focus:ring-indigo-200 outline-none"
+                className="
+                  w-full pl-10 pr-4 py-3 rounded-full outline-none
+                  bg-white border border-gray-200 shadow-sm
+                  focus:ring-2 focus:ring-indigo-200
+
+                  dark:bg-[var(--card-bg)]
+                  dark:border-[var(--border-color)]
+                  dark:text-[var(--text-primary)]
+                  dark:placeholder:text-[var(--text-secondary)]
+                "
               />
             </div>
           </div>
@@ -160,12 +186,17 @@ const Blog = () => {
               key={cat}
               onClick={() => {
                 setActiveCategory(cat);
-                setCurrentPage(1);
+                goToPage(1);
               }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                 activeCategory === cat
                   ? "bg-indigo-600 text-white shadow-md"
-                  : "bg-white border text-gray-700"
+                  : `
+                    bg-white border text-gray-700
+                    dark:bg-[var(--gray-800)]
+                    dark:border-[var(--border-color)]
+                    dark:text-[var(--text-secondary)]
+                  `
               }`}
             >
               {cat}
@@ -173,18 +204,15 @@ const Blog = () => {
           ))}
         </div>
 
-        {/* LOADING */}
+        {/* CONTENT */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {Array.from({ length: postsPerPage }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
+          <div className="text-center py-20 text-gray-500 dark:text-[var(--text-secondary)]">
+            Loading articles...
           </div>
         ) : (
           <>
-            {/* EMPTY MESSAGE */}
             {filtered.length === 0 ? (
-              <div className="py-20 text-center text-gray-500">
+              <div className="py-20 text-center text-gray-500 dark:text-[var(--text-secondary)]">
                 No matching articles.
               </div>
             ) : (
@@ -192,19 +220,18 @@ const Blog = () => {
                 {currentPosts.map((post) => (
                   <article
                     key={post.id}
-                    className="bg-white rounded-2xl shadow-md overflow-hidden"
+                    className="
+                      rounded-2xl shadow-md overflow-hidden
+                      bg-white
+                      dark:bg-[var(--card-bg)]
+                      dark:border dark:border-[var(--border-color)]
+                    "
                   >
                     <Link to={`/blog/${post.id}`}>
                       <img
                         src={post.image}
                         alt={post.title}
                         loading="lazy"
-                        width="400"
-                        height="180"
-                        onError={(e) => {
-                          e.target.src =
-                            "https://placehold.co/600x400?text=Image+Unavailable";
-                        }}
                         className="w-full h-56 object-cover"
                       />
                     </Link>
@@ -215,23 +242,35 @@ const Blog = () => {
                       </p>
 
                       <h2
-                        className="text-lg font-bold mt-1"
+                        className="
+                          text-lg font-bold mt-1
+                          text-gray-900
+                          dark:text-[var(--text-primary)]
+                        "
                         dangerouslySetInnerHTML={renderHighlighted(post.title)}
                       />
 
                       <p
-                        className="mt-2 text-gray-600 text-sm"
+                        className="
+                          mt-2 text-sm
+                          text-gray-600
+                          dark:text-[var(--text-secondary)]
+                        "
                         dangerouslySetInnerHTML={renderHighlighted(
                           post.description || post.content || ""
                         )}
                       />
 
-                      <div className="mt-3 flex justify-between text-xs text-gray-400">
+                      <div className="
+                        mt-3 flex justify-between text-xs
+                        text-gray-400
+                        dark:text-[var(--text-secondary)]
+                      ">
                         <span>{new Date(post.date).toLocaleDateString()}</span>
 
                         <button
                           onClick={() => navigate(`/blog/${post.id}`)}
-                          className="text-indigo-600 font-semibold cursor-pointer"
+                          className="text-indigo-600 font-semibold"
                         >
                           Read more →
                         </button>
@@ -245,32 +284,19 @@ const Blog = () => {
             {/* PAGINATION */}
             {filtered.length > 0 && (
               <div className="flex justify-center items-center gap-3 mt-10">
-                {/* PREV */}
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-3 py-2 rounded-md border ${
-                    currentPage === 1
-                      ? "opacity-40 cursor-not-allowed"
-                      : "hover:bg-white"
-                  }`}
+                  className="px-3 py-2 rounded-md border
+                    dark:border-[var(--border-color)]
+                    dark:text-[var(--text-secondary)]
+                  "
                 >
                   <FiChevronLeft />
                 </button>
 
-                {/* PAGES */}
                 {Array.from({ length: totalPages }).map((_, i) => {
                   const page = i + 1;
-
-                  // show only pages near current
-                  const show =
-                    totalPages <= 7 ||
-                    Math.abs(page - currentPage) <= 2 ||
-                    page === 1 ||
-                    page === totalPages;
-
-                  if (!show) return null;
-
                   return (
                     <button
                       key={page}
@@ -278,7 +304,12 @@ const Blog = () => {
                       className={`px-3 py-1 rounded-md ${
                         currentPage === page
                           ? "bg-indigo-600 text-white"
-                          : "bg-white border hover:bg-gray-50"
+                          : `
+                            bg-white border
+                            dark:bg-[var(--gray-800)]
+                            dark:border-[var(--border-color)]
+                            dark:text-[var(--text-secondary)]
+                          `
                       }`}
                     >
                       {page}
@@ -286,15 +317,13 @@ const Blog = () => {
                   );
                 })}
 
-                {/* NEXT */}
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-3 py-2 rounded-md border ${
-                    currentPage === totalPages
-                      ? "opacity-40 cursor-not-allowed"
-                      : "hover:bg-white"
-                  }`}
+                  className="px-3 py-2 rounded-md border
+                    dark:border-[var(--border-color)]
+                    dark:text-[var(--text-secondary)]
+                  "
                 >
                   <FiChevronRight />
                 </button>
@@ -303,8 +332,11 @@ const Blog = () => {
           </>
         )}
 
-        {/* ERROR MESSAGE */}
-        {error && <p className="mt-6 text-center text-red-500">{error}</p>}
+        {error && (
+          <p className="mt-6 text-center text-red-500 dark:text-red-400">
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

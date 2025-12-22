@@ -29,7 +29,7 @@ const NFO = () => {
 //     : fundList;
 
   return (
-    <div className="min-h-screen bg-blue-50 px-6 py-12 dark:bg-[#020617]">
+    <div className="min-h-screen bg-blue-50 px-6 py-12 dark:bg-[var(--app-bg)] ">
       {/* Page Header */}
       <div className="max-w-3xl mx-auto text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800 dark:text-slate-200 mb-2">New Fund Offerings</h1>

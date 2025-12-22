@@ -118,7 +118,7 @@ const LumpsumCalculator = () => {
 
               <button
                 onClick={calculateLumpsum}
-                className="mt-2 w-full bg-teal-600 dark:bg-teal-500 dark:hover-bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg font-bold text-sm transition"
+                className="mt-2 w-full bg-teal-600  hover:bg-teal-700 text-white py-2 rounded-lg font-bold text-sm transition"
               >
                 Calculate
               </button>
@@ -126,7 +126,7 @@ const LumpsumCalculator = () => {
           </div>
 
           {/* RIGHT SIDE RESULT */}
-          <div className="p-8 bg-linear-to-br from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-400 text-white flex flex-col justify-center">
+          <div className="p-8 bg-linear-to-br from-emerald-500 to-teal-400 dark:from-gray-800 dark:to-gray-800 text-white flex flex-col justify-center">
             <h3 className="text-xl font-bold mb-4">📊 Lumpsum Summary</h3>
 
             {result ? (

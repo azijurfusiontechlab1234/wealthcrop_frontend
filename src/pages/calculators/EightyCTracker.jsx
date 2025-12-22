@@ -117,7 +117,7 @@ const EightyCTracker = () => {
             className="
               mt-2 w-full bg-green-600 hover:bg-green-700
               text-white py-2 rounded-lg font-bold
-              dark:bg-green-500 dark:hover:bg-green-600
+              dark:bg-green-800 dark:hover:bg-green-900
             "
           >
             Calculate
@@ -130,6 +130,7 @@ const EightyCTracker = () => {
         className="
           p-8 bg-linear-to-br from-green-500 to-teal-500
           text-white flex flex-col justify-center
+          dark:from-gray-800 dark:to-gray-800
         "
       >
         <h3 className="text-xl font-bold mb-4">📘 80C Summary</h3>

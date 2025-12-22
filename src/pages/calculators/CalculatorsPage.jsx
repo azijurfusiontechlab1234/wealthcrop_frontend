@@ -121,52 +121,73 @@ const calculators = [
 
 const CalculatorsPage = () => {
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div
+  className="
+    min-h-screen p-6
+    bg-linear-to-br from-blue-50 to-indigo-100
+    dark:from-slate-900 dark:to-slate-800
+  "
+>
+  <div className="max-w-6xl mx-auto">
 
-        {/* HEADER */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-blue-900 drop-shadow">
-            Financial Calculators
-          </h1>
-          <p className="text-blue-800 mt-3 text-sm font-medium max-w-2xl mx-auto">
-            WealthCrop provides more advanced calculators to help you make smarter
-            and more accurate financial decisions. Choose a tool below and start
-            planning your wealth journey today.
-          </p>
-        </div>
-
-        {/* CALCULATOR GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {calculators.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={idx}
-                to={item.path}
-                className="rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 bg-white border border-gray-200 overflow-hidden"
-              >
-                <div className={`p-4 bg-linear-to-br ${item.bg} flex flex-col items-center`}>
-                  <Icon className="text-blue-900" size={28} />
-                </div>
-
-                <div className="p-4 flex flex-col items-center text-center">
-                  <h3 className="text-sm font-semibold text-blue-900">
-                    {item.name}
-                  </h3>
-                  <ArrowRight className="text-blue-600 mt-2" size={18} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* FOOT NOTE */}
-        <div className="text-center text-xs text-blue-700 mt-10 font-medium">
-          These tools help estimate returns but do not provide guaranteed results.
-        </div>
-      </div>
+    {/* HEADER */}
+    <div className="text-center mb-10">
+      <h1 className="text-4xl font-extrabold text-blue-900 drop-shadow dark:text-blue-400">
+        Financial Calculators
+      </h1>
+      <p className="text-blue-800 mt-3 text-sm font-medium max-w-2xl mx-auto dark:text-slate-300">
+        WealthCrop provides more advanced calculators to help you make smarter
+        and more accurate financial decisions. Choose a tool below and start
+        planning your wealth journey today.
+      </p>
     </div>
+
+    {/* CALCULATOR GRID */}
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      {calculators.map((item, idx) => {
+        const Icon = item.icon;
+        return (
+          <Link
+            key={idx}
+            to={item.path}
+            className="
+              rounded-2xl overflow-hidden
+              shadow-md hover:shadow-xl transition transform hover:-translate-y-1
+              bg-white border border-gray-200
+              dark:bg-slate-900 dark:border-slate-700
+            "
+          >
+            <div
+              className={`
+                p-4 flex flex-col items-center
+                bg-linear-to-br ${item.bg}
+                dark:brightness-90
+              `}
+            >
+              <Icon className="text-blue-900 dark:text-blue-300" size={28} />
+            </div>
+
+            <div className="p-4 flex flex-col items-center text-center">
+              <h3 className="text-sm font-semibold text-blue-900 dark:text-slate-200">
+                {item.name}
+              </h3>
+              <ArrowRight
+                className="text-blue-600 mt-2 dark:text-blue-400"
+                size={18}
+              />
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+
+    {/* FOOT NOTE */}
+    <div className="text-center text-xs text-blue-700 mt-10 font-medium dark:text-slate-400">
+      These tools help estimate returns but do not provide guaranteed results.
+    </div>
+  </div>
+</div>
+
   );
 };
 

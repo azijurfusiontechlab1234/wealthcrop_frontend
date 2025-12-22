@@ -182,7 +182,6 @@ const EducationCalculator = () => {
             className="
               mt-2 w-full py-2 rounded-lg font-bold text-sm transition
               bg-indigo-600 hover:bg-indigo-700
-              dark:bg-indigo-500 dark:hover:bg-indigo-600
               text-white
             "
           >
@@ -196,7 +195,7 @@ const EducationCalculator = () => {
         className="
           p-8
           bg-linear-to-br from-indigo-600 to-sky-700
-          dark:from-indigo-500 dark:to-sky-700
+          dark:from-gray-800 dark:to-gray-800
           text-white flex flex-col justify-center
         "
       >

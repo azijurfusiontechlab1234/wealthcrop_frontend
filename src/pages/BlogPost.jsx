@@ -64,38 +64,148 @@ const BlogPost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-r from-blue-100 to-green-100 py-10 px-4">
-      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow overflow-hidden">
-        <img src={post.image} alt={post.title} className="w-full h-72 object-cover" />
+      <div
+      className="
+        min-h-screen py-10 px-4
+        bg-linear-to-r from-blue-100 to-green-100
+        dark:from-[var(--app-bg)] dark:to-[var(--app-bg)]
+      "
+    >
+      <div
+        className="
+          max-w-5xl mx-auto rounded-2xl shadow overflow-hidden
+          bg-white
+          dark:bg-[var(--card-bg)]
+          dark:border dark:border-[var(--border-color)]
+        "
+      >
+        {/* COVER IMAGE */}
+        <img
+          src={post.image}
+          alt={post.title}
+          className="w-full h-72 object-cover"
+        />
+
         <div className="p-6">
-          <div className="flex items-center justify-between">
+          {/* HEADER */}
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
-              <p className="text-xs text-indigo-600">{post.category}</p>
-              <h1 className="text-3xl font-bold mt-2">{post.title}</h1>
-              <div className="text-sm text-gray-500 mt-2">{new Date(post.date).toLocaleDateString()} • {estimateReadTime(post.content)}</div>
+              <p className="text-xs text-indigo-600 font-semibold">
+                {post.category}
+              </p>
+
+              <h1
+                className="
+                  text-3xl font-bold mt-2
+                  text-gray-900
+                  dark:text-[var(--text-primary)]
+                "
+              >
+                {post.title}
+              </h1>
+
+              <div
+                className="
+                  text-sm mt-2
+                  text-gray-500
+                  dark:text-[var(--text-secondary)]
+                "
+              >
+                {new Date(post.date).toLocaleDateString()} •{" "}
+                {estimateReadTime(post.content)}
+              </div>
             </div>
 
+            {/* ACTIONS */}
             <div className="flex gap-2">
-              <button onClick={share} className="px-3 py-2 bg-indigo-600 text-white rounded-md flex items-center gap-2"><FiShare2 /> Share</button>
-              <Link to="/blogs" className="px-3 py-2 border rounded-md">Back</Link>
+              <button
+                onClick={share}
+                className="
+                  px-3 py-2 rounded-md flex items-center gap-2
+                  bg-indigo-600 text-white
+                  hover:bg-indigo-700 transition
+                "
+              >
+                <FiShare2 /> Share
+              </button>
+
+              <Link
+                to="/blogs"
+                className="
+                  px-3 py-2 rounded-md border
+                  text-gray-700
+                  bg-white
+                  dark:bg-[var(--gray-800)]
+                  dark:border-[var(--border-color)]
+                  dark:text-[var(--text-secondary)]
+                "
+              >
+                Back
+              </Link>
             </div>
           </div>
 
-          <article className="prose max-w-none mt-6 text-gray-700">
+          {/* CONTENT */}
+          <article
+            className="
+              prose max-w-none mt-6
+              text-gray-700
+              dark:text-[var(--text-secondary)]
+            "
+          >
             <p>{post.content}</p>
-            {/* If post has more rich content, render here */}
           </article>
 
-          {/* Related */}
+          {/* RELATED POSTS */}
           {related.length > 0 && (
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">Related posts</h3>
+            <div className="mt-10">
+              <h3
+                className="
+                  text-xl font-semibold mb-4
+                  text-gray-900
+                  dark:text-[var(--text-primary)]
+                "
+              >
+                Related posts
+              </h3>
+
               <div className="grid sm:grid-cols-3 gap-4">
                 {related.map((r) => (
-                  <Link key={r.id} to={`/blog/${r.id}`} className="bg-white rounded-lg shadow p-3">
-                    <img src={r.image} alt={r.title} className="h-28 w-full object-cover rounded" />
-                    <h4 className="text-sm font-semibold mt-2">{r.title}</h4>
-                    <p className="text-xs text-gray-500 mt-1">{new Date(r.date).toLocaleDateString()}</p>
+                  <Link
+                    key={r.id}
+                    to={`/blog/${r.id}`}
+                    className="
+                      rounded-lg p-3 shadow
+                      bg-white
+                      dark:bg-[var(--gray-800)]
+                      dark:border dark:border-[var(--border-color)]
+                    "
+                  >
+                    <img
+                      src={r.image}
+                      alt={r.title}
+                      className="h-28 w-full object-cover rounded"
+                    />
+
+                    <h4
+                      className="
+                        text-sm font-semibold mt-2
+                        text-gray-900
+                        dark:text-[var(--text-primary)]
+                      "
+                    >
+                      {r.title}
+                    </h4>
+
+                    <p
+                      className="
+                        text-xs mt-1
+                        text-gray-500
+                        dark:text-[var(--text-secondary)]
+                      "
+                    >
+                      {new Date(r.date).toLocaleDateString()}
+                    </p>
                   </Link>
                 ))}
               </div>

@@ -147,7 +147,7 @@ const ELSSPlannerCalculator = () => {
             className="
               mt-2 w-full bg-blue-600 hover:bg-blue-700
               text-white py-2 rounded-lg font-bold transition
-              dark:bg-blue-500 dark:hover:bg-blue-600
+              dark:bg-blue-800 dark:hover:bg-blue-900
             "
           >
             Calculate
@@ -160,6 +160,7 @@ const ELSSPlannerCalculator = () => {
         className="
           p-8 bg-linear-to-br from-blue-500 to-cyan-500
           text-white flex flex-col justify-center
+          dark:from-gray-800 dark:to-gray-800
         "
       >
         <h3 className="text-xl font-bold mb-4">📊 ELSS Summary</h3>

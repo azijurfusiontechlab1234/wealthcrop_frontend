@@ -204,7 +204,7 @@ const LTCGCalculator = () => {
             className="
               mt-2 w-full bg-purple-600 hover:bg-purple-700
               text-white py-2 rounded-lg font-bold
-              dark:bg-purple-500 dark:hover:bg-purple-600
+              dark:bg-purple-800 dark:hover:bg-purple-900
             "
           >
             Calculate
@@ -217,6 +217,7 @@ const LTCGCalculator = () => {
         className="
           p-8 bg-linear-to-br from-purple-500 to-indigo-500
           text-white flex flex-col justify-center
+          dark:from-gray-800 dark:to-gray-800
         "
       >
         <h3 className="text-xl font-bold mb-4">📈 Capital Gain Summary</h3>
