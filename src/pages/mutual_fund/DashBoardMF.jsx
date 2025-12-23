@@ -83,7 +83,7 @@ const DashBoardMF = () => {
   // UI START
   // =====================================================================
   return (
-    <div className="p-4 min-h-screen bg-slate-50">
+    <div className="p-4 min-h-screen bg-slate-50 dark:bg-[var(--app-bg)]">
 
       {/* ------------------------------------------------------ */}
       {/*  EMPTY DASHBOARD */}
@@ -92,16 +92,16 @@ const DashBoardMF = () => {
         <div className="flex flex-col items-center justify-center text-center mt-12">
           <img src={emptyDashboardImg} alt="Empty" className="w-64 h-64 mb-6" />
 
-          <h2 className="text-blue-900 font-semibold text-xl mb-2">
+          <h2 className="text-blue-900 dark:text-[var(--text-primary)] font-semibold text-xl mb-2">
             Already invested somewhere?
           </h2>
-          <p className="text-gray-500 text-sm mb-6 max-w-xs">
+          <p className="text-gray-500 text-[var(--text-secondary)] text-sm mb-6 max-w-xs">
             Manage & analyse all your Mutual Fund holdings on one dashboard
           </p>
 
           <button
             onClick={handleExternal}
-            className="bg-teal-600 text-white font-medium py-2 px-5 rounded-md"
+            className="bg-teal-600 text-white text-[var(--text-primary)] font-medium py-2 px-5 rounded-md"
           >
             Import External Funds
           </button>
@@ -113,27 +113,27 @@ const DashBoardMF = () => {
           {/* ------------------------------------------------------ */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             {/* Current Value */}
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-[11px] text-slate-500">Current Value</p>
-              <p className="text-lg font-semibold text-blue-900">
+            <div className="bg-white dark:bg-[var(--white-10)] p-4 rounded-xl border shadow-sm dark:border-[var(--border-color)]">
+              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">Current Value</p>
+              <p className="text-lg font-semibold text-blue-900 dark:text-[var(--text-prmary)]">
                 ₹{currentValue.toLocaleString()}
               </p>
             </div>
 
             {/* Total Invested */}
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-[11px] text-slate-500">Invested</p>
-              <p className="text-lg font-semibold text-slate-900">
+            <div className="bg-white dark:bg-[var(--white-10)] dark:border-[var(--border-color)] p-4 rounded-xl border shadow-sm">
+              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)] ">Invested</p>
+              <p className="text-lg font-semibold text-slate-900 dark:text-[var(--text-prmary)]">
                 ₹{totalInvested.toLocaleString()}
               </p>
             </div>
 
             {/* Profit/Loss */}
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-[11px] text-slate-500">Profit / Loss</p>
+            <div className="bg-white dark:bg-[var(--white-10)] p-4 rounded-xl border dark:border-[var(--border-color)] shadow-sm">
+              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">Profit / Loss</p>
               <p
                 className={`text-lg font-semibold ${
-                  totalReturns >= 0 ? "text-emerald-600" : "text-red-500"
+                  totalReturns >= 0 ? "text-emerald-600 dark:text-green-400" : "text-red-500 dark:text-red-400"
                 }`}
               >
                 {totalReturns >= 0 ? "+" : ""}
@@ -142,11 +142,11 @@ const DashBoardMF = () => {
             </div>
 
             {/* XIRR */}
-            <div className="bg-white p-4 rounded-xl border shadow-sm">
-              <p className="text-[11px] text-slate-500">XIRR</p>
+            <div className="bg-white dark:bg-[var(--white-10)] p-4 rounded-xl border dark:border-[var(--border-color)] shadow-sm">
+              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">XIRR</p>
               <p
                 className={`text-lg font-semibold ${
-                  xirr >= 0 ? "text-emerald-600" : "text-red-500"
+                  xirr >= 0 ? "text-emerald-600 dark:text-green-400" : "text-red-500"
                 }`}
               >
                 {xirr}%
@@ -157,9 +157,9 @@ const DashBoardMF = () => {
           {/* ------------------------------------------------------ */}
           {/* Asset Allocation Pie Chart */}
           {/* ------------------------------------------------------ */}
-          <div className="bg-white border shadow-sm rounded-xl p-4 mb-5">
+          <div className="bg-white dark:bg-[var(--white-10)] border dark:border-[var(--border-color)] shadow-sm rounded-xl p-4 mb-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-semibold text-blue-900">
+              <p className="text-sm font-semibold text-blue-900 dark:text-[var(--text-prmary)]">
                 Asset Allocation
               </p>
             </div>
@@ -186,16 +186,16 @@ const DashBoardMF = () => {
           {/* ------------------------------------------------------ */}
           {/* SIP Summary */}
           {/* ------------------------------------------------------ */}
-          <div className="bg-white border shadow-sm rounded-xl p-4 mb-5">
-            <p className="text-sm font-semibold text-blue-900 mb-1">Active SIPs</p>
-            <p className="text-gray-600 text-sm mb-2">
+          <div className="bg-white dark:bg-[var(--white-10)] border dark:border-[var(--border-color)] shadow-sm rounded-xl p-4 mb-5">
+            <p className="text-sm font-semibold text-blue-900 dark:text-[var(--text-prmary)] mb-1">Active SIPs</p>
+            <p className="text-gray-600 dark:text-[var(--text-secondary)] text-sm mb-2">
               You have{" "}
-              <span className="font-bold text-teal-600">{activeSipCount}</span>{" "}
+              <span className="font-bold text-teal-600 dark:text-teal-400">{activeSipCount}</span>{" "}
               active SIPs.
             </p>
 
             <button
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-md text-xs"
+              className="bg-blue-600 dark:bg-blue-400 text-white px-4 py-1.5 rounded-md text-xs"
               onClick={() => navigate("/mutual_fund/manage-sip")}
             >
               Manage SIPs
@@ -206,12 +206,12 @@ const DashBoardMF = () => {
           {/* Fund List + Sorting */}
           {/* ------------------------------------------------------ */}
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-blue-900">Your Funds</p>
+            <p className="text-sm font-semibold text-blue-900 dark:text-[var(--text-prmary)]">Your Funds</p>
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="text-xs border bg-white rounded-md p-1"
+              className="text-xs border bg-white dark:bg-blue-400 dark:border dark:border-[var(--border-color)] rounded-md p-1"
             >
               <option value="name">Sort by Name</option>
               <option value="amount">Sort by Invested</option>
@@ -223,18 +223,18 @@ const DashBoardMF = () => {
             {sortedFunds.map((fund, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-lg shadow-sm border border-gray-200 bg-white flex items-center justify-between"
+                className="p-4 rounded-lg shadow-sm border border-gray-200 bg-white dark:bg-[var(--white-10)] dark:border-[var(--border-color)] flex items-center justify-between"
               >
                 <div>
-                  <p className="font-semibold text-blue-900">{fund.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-semibold text-blue-900 dark:text-[var(--text-prmary)]">{fund.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-[var(--text-secondary)]">
                     Invested: ₹{fund.amount.toLocaleString()}
                   </p>
                 </div>
 
                 <p
                   className={`font-semibold ${
-                    fund.returns >= 0 ? "text-green-600" : "text-red-500"
+                    fund.returns >= 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-rose-500"
                   }`}
                 >
                   {fund.returns >= 0 ? "+" : ""}

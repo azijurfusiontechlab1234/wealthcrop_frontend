@@ -88,58 +88,69 @@ const MFDashboard = () => {
   return (
   <>
     {/* DESKTOP VIEW */}
-    <div className="min-h-screen bg-white text-blue-950 hidden lg:block pb-2">
-      
-      {/* Sticky header */}
+     <div className="min-h-screen bg-[var(--app-bg)] text-[var(--text-primary)] hidden lg:block pb-2">
+
+      {/* ================= STICKY HEADER ================= */}
       <div
-        className={`bg-white transition-top duration-300 border-b ease-in-out ${
-          isSticky
-            ? "fixed top-0 left-0 w-full shadow-sm z-50"
-            : "relative"
-        }`}
+        className={`transition-all duration-300 ease-in-out border-b
+          bg-[var(--card-bg)]
+          border-[var(--border-color)]
+          ${
+            isSticky
+              ? "fixed top-0 left-0 w-full shadow-sm z-50"
+              : "relative"
+          }`}
       >
-        {/* Tabs + Search */}
         <div className="flex flex-col px-10 py-5 gap-3.5">
 
-          <p className="text-[10px] text-gray-400 tracking-wide uppercase ">
-      Explore Mutual Fund 
-    </p>
-          <div className="flex flex-col lg:flex-row justify-between items-center">
-          <nav className="flex gap-8 text-md font-medium overflow-x-auto">
-            {topTabs.map((tab) => (
-              <NavLink
-                key={tab.name}
-                to={tab.link}
-                end
-                className={({ isActive }) =>
-                  `relative text-gray-600 hover:text-blue-800 transition pb-1
-                  after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-800 
-                  after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300
-                  ${isActive ? "text-blue-800 after:scale-x-100" : ""}`
-                }
+          {/* SMALL LABEL */}
+          <p className="text-[10px] tracking-wide uppercase text-[var(--text-secondary)]">
+            Explore Mutual Fund
+          </p>
+
+          {/* TABS + BUTTON */}
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+
+            {/* NAV TABS */}
+            <nav className="flex gap-8 text-md font-medium overflow-x-auto">
+              {topTabs.map((tab) => (
+                <NavLink
+                  key={tab.name}
+                  to={tab.link}
+                  end
+                  className={({ isActive }) =>
+                    `relative pb-1 transition
+                    text-[var(--text-secondary)] hover:text-sky-400
+                    after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5
+                    after:bg-sky-400
+                    after:scale-x-0 hover:after:scale-x-100
+                    after:origin-left after:transition-transform after:duration-300
+                    ${isActive ? "text-sky-400 after:scale-x-100" : ""}`
+                  }
+                >
+                  {tab.name}
+                </NavLink>
+              ))}
+            </nav>
+
+            {/* BASKETS BUTTON */}
+            <Link to="/baskets">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-md
+                bg-sky-500 hover:bg-sky-600
+                text-white text-sm font-medium
+                shadow-sm transition"
               >
-                {tab.name}
-              </NavLink>
-            ))}
-          </nav>
+                <FaBasketballBall className="text-sm" />
+                Baskets
+              </button>
+            </Link>
 
-
-
-<Link to="/baskets">
-  <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm">
-    <FaBasketballBall className="mr-2 text-sm" />
-    Baskets
-  </button>
-</Link>
-
-
+          </div>
         </div>
-         </div>
-
       </div>
 
-      {/* DESKTOP OUTLET */}
-      <div className="mt-2">
+      {/* ================= OUTLET ================= */}
+      <div className={`${isSticky ? "pt-[92px]" : "mt-2"} px-10`}>
         <Outlet />
       </div>
     </div>

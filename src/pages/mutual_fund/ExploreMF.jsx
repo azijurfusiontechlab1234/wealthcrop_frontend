@@ -56,10 +56,10 @@ const ExploreMF = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* RIGHT SECTION SHOWS FIRST IN MOBILE */}
-        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 text-center bg-white h-full lg:h-[70%]">
+        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 dark:border-[var(--border-color)] text-center bg-white dark:bg-[var(--card-bg)] h-full lg:h-[70%]">
           <img src={account_setup} alt="setup" className="w-[65%] mx-auto rounded-lg" />
-          <h3 className="text-lg font-semibold text-gray-800 mt-4">Attention required!</h3>
-          <p className="text-sm text-gray-500 mt-1 px-2">
+          <h3 className="text-lg font-semibold text-gray-800 mt-4 dark:text-[var(--text-prmary)]">Attention required!</h3>
+          <p className="text-sm text-gray-500 dark:text-[var(--text-secondary)] mt-1 px-2">
             Complete setting up your account to start investing on Wealthcrop
           </p>
           <button className="mt-5 w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
@@ -75,7 +75,7 @@ const ExploreMF = () => {
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {popularFunds.map((fund, index) => (
-              <div key={index} className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition"
+              <div key={index} className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 dark:hover:bg-[var(--white-10)] hover:shadow  transition"
               onClick={()=> showFundPage(fund.name)}>
                 <div className="flex gap-3 flex-col text-left">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
@@ -84,7 +84,7 @@ const ExploreMF = () => {
 
                 <div className="flex justify-between mt-4">
                   <p className="text-green-600 font-semibold">{fund.return}</p>
-                  <p className="text-gray-500 text-sm">{fund.years}</p>
+                  <p className="text-gray-500 dark:text-[var(--text-secondary)] text-sm">{fund.years}</p>
                 </div>
               </div>
             ))}
@@ -98,7 +98,7 @@ const ExploreMF = () => {
               <div
                 key={idx}
                 onClick={()=> navigate(item.link)}
-                className="rounded-xl p-4 bg-gray-50 shadow-sm hover:bg-gray-100 transition cursor-pointer flex flex-col items-center"
+                className="rounded-xl p-4 bg-gray-50 dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)] dark:border-[var(--border-color)] dark:border shadow-sm hover:bg-gray-100 transition cursor-pointer flex flex-col items-center"
               >
                 <div className="w-12 h-12 flex items-center justify-center">
                   {item.icon}
@@ -114,7 +114,7 @@ const ExploreMF = () => {
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {growwFunds.map((fund, index) => (
               <div key={index} onClick={()=> showFundPage(fund.name)}
-               className="rounded-xl p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:shadow  transition">
+               className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 hover:shadow  transition">
                 <div className="flex flex-col text-left gap-3">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name}</p>
@@ -133,7 +133,7 @@ const ExploreMF = () => {
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
             {trending.map((fund, index) => (
               <div key={index} onClick={()=> showFundPage(fund.name)}
-               className="rounded-xl p-4 bg-white hover:bg-gray-50 hover:shadow border border-gray-200 transition">
+               className="rounded-xl p-4 bg-white dark:border-[var(--border-color)] dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)]  hover:bg-gray-50 hover:shadow border border-gray-200 transition">
                 <div className="flex flex-col text-left gap-3">
                   <img src={fund.img} className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name}</p>

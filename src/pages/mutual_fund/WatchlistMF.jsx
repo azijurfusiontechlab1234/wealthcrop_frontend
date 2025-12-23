@@ -37,29 +37,43 @@ const handleCreateWatchlist = () => {
   return (
     <>
     {
-      watchList.length === 0 ? (
-   <div className="mx-auto w-full min-h-[400px] p-6 bg-white">
-  <div className="p-6 min-h-[350px] max-w-4xl w-full flex flex-col sm:flex-row items-center justify-center gap-10 mx-auto">
-    <div>
-      <img src={emptyWatchlist} alt="Empty state" className="w-xl object-contain" />
-    </div>
+  watchList.length === 0 ? (
+    /* ================= EMPTY STATE ================= */
+    <div className="mx-auto w-full min-h-[400px] p-6 bg-[var(--app-bg)]">
+      <div className="p-6 min-h-[350px] max-w-4xl w-full flex flex-col sm:flex-row items-center justify-center gap-10 mx-auto">
 
-    <div className="flex flex-col space-y-12 text-center sm:text-left">
-      <h1 className="text-2xl font-semibold text-blue-950">Not Watching any funds</h1>
-      <p className="text-sm text-gray-600">
-        Keep a watch and stay updated about mutual funds of your interest
-      </p>
-      <button className="mt-4 bg-emerald-500 hover:bg-emerald-700 text-white px-2 w-36 py-2 rounded-lg text-sm font-medium transition focus:outline-none">
-        Explore all funds
-      </button>
-    </div>
-  </div>
-</div>
+        <img
+          src={emptyWatchlist}
+          alt="Empty state"
+          className="w-xl object-contain"
+        />
 
-      ):(
-      <div className="m-auto w-[1200px] bg-white border border-gray-400 rounded-lg mt-5 h-auto">
-      {/* Watchlist Tabs */}
-      <div className="flex items-center px-5 py-4 gap-5 border-b border-gray-300">
+        <div className="flex flex-col space-y-4 text-center sm:text-left">
+          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+            Not Watching any funds
+          </h1>
+
+          <p className="text-sm text-[var(--text-secondary)]">
+            Keep a watch and stay updated about mutual funds of your interest
+          </p>
+
+          <button
+            className="mt-4 bg-emerald-500 hover:bg-emerald-600
+            text-white px-4 w-40 py-2 rounded-lg text-sm font-medium transition"
+          >
+            Explore all funds
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : (
+    /* ================= WATCHLIST ================= */
+    <div className="m-auto w-[1200px] bg-[var(--card-bg)]
+      border border-[var(--border-color)]
+      rounded-lg mt-5 h-auto">
+
+      {/* ===== TABS ===== */}
+      <div className="flex items-center px-5 py-4 gap-5 border-b border-[var(--border-color)]">
         {Array.from({ length: 5 }).map((_, index) => {
           const tab = index + 1;
           const isSelected = selectedWatchlist === tab;
@@ -68,44 +82,53 @@ const handleCreateWatchlist = () => {
             <span
               key={index}
               onClick={() => setSelectedWatchlist(tab)}
-              className={`
-                cursor-pointer pb-1 
-                ${isSelected
-                  ? "text-blue-900 font-semibold border-b-2 border-blue-350"
-                  : "text-gray-500 hover:text-blue-900 font-semibold"
-                }
-              `}
+              className={`cursor-pointer pb-1 font-semibold transition
+                ${
+                  isSelected
+                    ? "text-sky-400 border-b-2 border-sky-400"
+                    : "text-[var(--text-secondary)] hover:text-sky-400"
+                }`}
             >
               Watchlist {tab}
             </span>
           );
         })}
 
-        <button className="text-lg text-green-500 font-semibold cursor-pointer"
-        onClick={()=> setCreateWatchList(true)}>
-          +Watchlist
+        <button
+          className="text-emerald-500 font-semibold cursor-pointer"
+          onClick={() => setCreateWatchList(true)}
+        >
+          + Watchlist
         </button>
       </div>
 
-      {/* Search Bar */}
-      <div className="px-5 py-6 w-84">
+      {/* ===== SEARCH ===== */}
+      <div className="px-5 py-6">
         <div className="relative w-full">
-          <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--text-secondary)] absolute left-4 top-1/2 -translate-y-1/2" />
 
           <input
             type="text"
             placeholder="Search your watchlist"
-            className="border border-gray-300 px-10 py-1.5 rounded-lg w-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-10 py-1.5 rounded-lg
+              bg-[var(--card-bg)]
+              border border-[var(--border-color)]
+              text-[var(--text-primary)]
+              placeholder:text-[var(--text-secondary)]
+              focus:outline-none focus:ring-2 focus:ring-sky-500"
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Table */}
+      {/* ===== TABLE ===== */}
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
+
           <thead>
-            <tr className="text-left text-gray-500 border-b bg-gray-300">
+            <tr className="text-left text-[var(--text-secondary)]
+              bg-[var(--white-5)]
+              border-b border-[var(--border-color)]">
               <th className="py-2 px-3">Company ({filteredList.length})</th>
               <th className="py-2 px-3">Trend</th>
               <th className="py-2 px-3">Mkt price</th>
@@ -113,33 +136,42 @@ const handleCreateWatchlist = () => {
               <th className="py-2 px-3">1D Volume</th>
             </tr>
           </thead>
+
           <tbody>
             {filteredList.map((item, index) => (
               <tr
                 key={index}
-                className={`hover:bg-gray-100 relative ${
-                  index === filteredList.length - 1 ? "" : "border-b"
-                }`}
-                onMouseEnter={ () => setHoveredRow(index)}
-                onMouseLeave={ () => setHoveredRow(null)}
+                className={`relative transition
+                  hover:bg-[var(--white-5)]
+                  ${
+                    index === filteredList.length - 1
+                      ? ""
+                      : "border-b border-[var(--border-color)]"
+                  }`}
+                onMouseEnter={() => setHoveredRow(index)}
+                onMouseLeave={() => setHoveredRow(null)}
               >
-                <td className="py-4 px-3">
-                  <NavLink className="hover:underline hover:text-emerald-500 font-semibold">
+                <td className="py-4 px-3 font-semibold">
+                  <NavLink className="hover:text-emerald-400 transition">
                     {item.name}
                   </NavLink>
                 </td>
 
                 <td className="py-4 px-3">
-  <TrendChart data={item.trendData} />
-</td>
+                  <TrendChart data={item.trendData} />
+                </td>
 
-                <td className="py-4 px-3 flex items-center"><IndianRupee className="w-4 h-4 text-gray-600" />
-{item.price}</td>
+                <td className="py-4 px-3 flex items-center gap-1">
+                  <IndianRupee className="w-4 h-4 text-[var(--text-secondary)]" />
+                  {item.price}
+                </td>
 
                 <td className="py-4 px-3">
                   <p
                     className={`text-sm font-medium ${
-                      Math.random() > 0.5 ? "text-green-600" : "text-red-600"
+                      Math.random() > 0.5
+                        ? "text-emerald-400"
+                        : "text-red-400"
                     }`}
                   >
                     {Math.random() > 0.5 ? "+" : "-"}
@@ -147,52 +179,56 @@ const handleCreateWatchlist = () => {
                   </p>
                 </td>
 
-                <td className="py-4 px-3">{item.oneDvol}
+                <td className="py-4 px-3 relative">
+                  {item.oneDvol}
 
-                         {/* Icons visible on hover */}
-                                  {hoveredRow === index && (
-                                    <div className="flex items-center bg-gray-100 gap-2 absolute right-28 top-1/2 -translate-y-1/2 transition-opacity duration-200 z-40">
-                                      {/* Candle icon */}
-                                     <button
-                    onClick={() =>
-                      window.open(
-                        `https://www.tradingview.com/chart/?symbol=NSE:${row.indexName}`,
-                        "_blank"
-                      )
-                    }
-                    className="p-1 rounded-lg border border-gray-300 hover:bg-blue-100"
-                    title="View Chart"
-                  >
-                    <CandlestickChart size={24} className="text-blue-900 cursor-pointer" />
-                  </button>
-                  
-                  
-                                      {/* Bookmark icon */}
-                                      <button
-                                        onClick={() => handleBookmark(row.company)}
-                                        className="p-1 bg-green-500 w-8 h-8 rounded-lg hover:cursor-pointer"
-                                        title="Buy"
-                                      >
-                                        B
-                                      </button>
-                                      <button
-                                        onClick={() => handleBookmark(row.company)}
-                                        className="p-1 hover:cursor-pointer rounded-lg bg-orange-600 w-8 h-8"
-                                        title="Sell"
-                                      >
-                                        S
-                                      </button>
-                                    </div>
-                                  )}
+                  {/* ===== HOVER ACTIONS ===== */}
+                  {hoveredRow === index && (
+                    <div className="flex items-center gap-2 absolute right-6 top-1/2 -translate-y-1/2
+                      bg-[var(--card-bg)]
+                      border border-[var(--border-color)]
+                      p-2 rounded-lg shadow-lg z-40">
+
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://www.tradingview.com/chart/?symbol=NSE:${item.indexName}`,
+                            "_blank"
+                          )
+                        }
+                        className="p-1 rounded-lg border border-[var(--border-color)]
+                          hover:bg-[var(--white-5)]"
+                        title="View Chart"
+                      >
+                        <CandlestickChart className="w-5 h-5 text-sky-400" />
+                      </button>
+
+                      <button
+                        className="w-8 h-8 rounded-lg bg-emerald-500 text-white text-sm font-bold"
+                        title="Buy"
+                      >
+                        B
+                      </button>
+
+                      <button
+                        className="w-8 h-8 rounded-lg bg-orange-500 text-white text-sm font-bold"
+                        title="Sell"
+                      >
+                        S
+                      </button>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
+
         </table>
       </div>
     </div>
-      )
-    }
+  )
+}
+
    
 
     
