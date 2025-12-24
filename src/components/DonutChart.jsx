@@ -49,7 +49,7 @@ const DonutChart = ({data, hoverIndex, setHoverIndex}) => {
         </svg>
 
         {/* CENTER VALUE */}
-        <div className="absolute text-lg font-semibold">
+        <div className="absolute text-lg font-semibold dark:text-[var(--text-secondary)]">
           ₹32,710Cr
         </div>
       </div>

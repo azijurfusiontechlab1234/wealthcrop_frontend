@@ -75,10 +75,10 @@ const NomineeSection = () => {
 
       {/* 🔵 CASE 1 — Nominee Already Added */}
       {nomineeAdded && !showForm && (
-        <div className="bg-white shadow-lg rounded-2xl p-6 border border-gray-300 mb-10">
-          <h2 className="text-2xl font-bold text-blue-900 mb-4">Nominee Details</h2>
+        <div className="bg-white dark:bg-[var(--app-bg)] shadow-lg rounded-2xl p-6 border border-gray-300 mb-10 dark:border-[var(--border-color)]">
+          <h2 className="text-2xl font-bold text-blue-900 dark:text-[var(--text-primary)] mb-4">Nominee Details</h2>
 
-          <div className="space-y-3 text-gray-700">
+          <div className="space-y-3 text-gray-700 dark:text-[var(--text-secondary)]">
             <p><strong>Name:</strong> {nominee.name}</p>
             <p><strong>Relationship:</strong> {nominee.relation}</p>
             <p><strong>Allocation:</strong> {nominee.percentage}%</p>
@@ -128,154 +128,248 @@ const NomineeSection = () => {
 
       {/* 🔵 CASE 2 — FORM (For Add or Edit) */}
       {showForm || !nomineeAdded ? (
-        <div className='bg-white shadow-lg rounded-2xl p-6 border border-gray-300 mb-10'>
-          <h2 className='text-2xl mb-6 font-bold text-blue-900'>
+        <div className='bg-white dark:bg-[var(--card-bg)] shadow-lg rounded-2xl p-6 border border-gray-300 dark:border-slate-700  mb-10'>
+          <div className="flex items-center justify-between">
+          <h2 className='text-2xl mb-6 font-bold text-blue-900 dark:text-[var(--text-primary)]'>
             {nomineeAdded ? "Edit Nominee" : "Add Nominee"}
           </h2>
-
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-
-            {/* NAME */}
-            <div>
-              <label className='text-sm text-gray-700'>Full Name</label>
-              <input
-                type="text"
-                className='w-full border p-2 rounded-lg mt-1'
-                placeholder='Ex: Rahul Sharma'
-                value={nominee.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-              />
-            </div>
-
-            {/* RELATION */}
-            <div>
-              <label className='text-sm text-gray-700'>Relationship</label>
-              <select
-                className='w-full border p-2 rounded-lg mt-1'
-                value={nominee.relation}
-                onChange={(e) => handleChange("relation", e.target.value)}
-              >
-                <option value="">Select Relation</option>
-                <option value="Spouse">Spouse</option>
-                <option value="Father">Father</option>
-                <option value="Mother">Mother</option>
-                <option value="Son">Son</option>
-                <option value="Daughter">Daughter</option>
-                <option value="Brother">Brother</option>
-                <option value="Sister">Sister</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            {/* DOB */}
-            <div>
-              <label className="text-sm text-gray-700">Date of Birth</label>
-              <input
-                type="date"
-                className="w-full border p-2 rounded-lg mt-1"
-                value={nominee.dob}
-                onChange={(e) => handleChange("dob", e.target.value)}
-              />
-            </div>
-
-            {/* MOBILE */}
-            <div>
-              <label className="text-sm text-gray-700">Mobile Number</label>
-              <input
-                type="number"
-                className="w-full border p-2 rounded-lg mt-1"
-                placeholder="9876543210"
-                value={nominee.mobile}
-                onChange={(e) => handleChange("mobile", e.target.value)}
-              />
-            </div>
-
-            {/* EMAIL */}
-            <div>
-              <label className="text-sm text-gray-700">Email (Optional)</label>
-              <input
-                type="email"
-                className="w-full border p-2 rounded-lg mt-1"
-                placeholder="example@gmail.com"
-                value={nominee.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-              />
-            </div>
-
-            {/* ALLOCATION */}
-            <div>
-              <label className="text-sm text-gray-700">Allocation (%)</label>
-              <input
-                type="number"
-                className="w-full border p-2 rounded-lg mt-1"
-                value={nominee.percentage}
-                onChange={(e) => handleChange("percentage", e.target.value)}
-              />
-            </div>
-
-            {/* ADDRESS */}
-            <div className="md:col-span-2">
-              <label className="text-sm text-gray-700">Address</label>
-              <textarea
-                rows="2"
-                className="w-full border p-2 rounded-lg mt-1"
-                placeholder="Enter full address"
-                value={nominee.address}
-                onChange={(e) => handleChange("address", e.target.value)}
-              ></textarea>
-            </div>
-
-            {/* PINCODE */}
-            <div>
-              <label className="text-sm text-gray-700">Pincode</label>
-              <input
-                type="number"
-                className="w-full border p-2 rounded-lg mt-1"
-                placeholder="400001"
-                value={nominee.pincode}
-                onChange={(e) => handleChange("pincode", e.target.value)}
-              />
-            </div>
-
-            {/* MINOR */}
-            <div>
-              <label className="text-sm text-gray-700">Is Nominee a Minor?</label>
-              <select
-                className="w-full border p-2 rounded-lg mt-1"
-                value={nominee.isMinor}
-                onChange={(e) => handleChange("isMinor", e.target.value)}
-              >
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
-              </select>
-            </div>
-
-            {/* GUARDIAN */}
-            {nominee.isMinor === "yes" && (
-              <>
-                <div>
-                  <label className='text-sm text-gray-700'>Guardian Name</label>
-                  <input
-                    className="w-full border p-2 rounded-lg mt-1"
-                    placeholder="Ex: Suresh Kumar"
-                    value={nominee.guardianName}
-                    onChange={(e) => handleChange("guardianName", e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-gray-700">Guardian Relationship</label>
-                  <input
-                    className="w-full border p-2 rounded-lg mt-1"
-                    placeholder="Father / Mother"
-                    value={nominee.guardianRelation}
-                    onChange={(e) => handleChange("guardianRelation", e.target.value)}
-                  />
-                </div>
-              </>
-            )}
-
+        <span onClick={() => {setShowForm(false); setNomineeAdded(true)}} className="mb-6 text-blue-900 font-semibold bg-sky-300 px-2 rounded hover:bg-sky-400 dark:bg-sky-400 px-2 rounded dark:hover:bg-sky-500 cursor-pointer">
+          Back
+        </span>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  {/* NAME */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Full Name
+    </label>
+    <input
+      type="text"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      placeholder="Ex: Rahul Sharma"
+      value={nominee.name}
+      onChange={(e) => handleChange("name", e.target.value)}
+    />
+  </div>
+
+  {/* RELATION */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Relationship
+    </label>
+    <select
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      value={nominee.relation}
+      onChange={(e) => handleChange("relation", e.target.value)}
+    >
+      <option value="">Select Relation</option>
+      <option value="Spouse">Spouse</option>
+      <option value="Father">Father</option>
+      <option value="Mother">Mother</option>
+      <option value="Son">Son</option>
+      <option value="Daughter">Daughter</option>
+      <option value="Brother">Brother</option>
+      <option value="Sister">Sister</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  {/* DOB */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Date of Birth
+    </label>
+    <input
+      type="date"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      value={nominee.dob}
+      onChange={(e) => handleChange("dob", e.target.value)}
+    />
+  </div>
+
+  {/* MOBILE */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Mobile Number
+    </label>
+    <input
+      type="number"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      placeholder="9876543210"
+      value={nominee.mobile}
+      onChange={(e) => handleChange("mobile", e.target.value)}
+    />
+  </div>
+
+  {/* EMAIL */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Email (Optional)
+    </label>
+    <input
+      type="email"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      placeholder="example@gmail.com"
+      value={nominee.email}
+      onChange={(e) => handleChange("email", e.target.value)}
+    />
+  </div>
+
+  {/* ALLOCATION */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Allocation (%)
+    </label>
+    <input
+      type="number"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      value={nominee.percentage}
+      onChange={(e) => handleChange("percentage", e.target.value)}
+    />
+  </div>
+
+  {/* ADDRESS */}
+  <div className="md:col-span-2">
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Address
+    </label>
+    <textarea
+      rows="2"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      placeholder="Enter full address"
+      value={nominee.address}
+      onChange={(e) => handleChange("address", e.target.value)}
+    />
+  </div>
+
+  {/* PINCODE */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Pincode
+    </label>
+    <input
+      type="number"
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      placeholder="400001"
+      value={nominee.pincode}
+      onChange={(e) => handleChange("pincode", e.target.value)}
+    />
+  </div>
+
+  {/* MINOR */}
+  <div>
+    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+      Is Nominee a Minor?
+    </label>
+    <select
+      className="
+        w-full border p-2 rounded-lg mt-1
+        bg-white text-gray-900
+        dark:bg-[var(--white-5)]
+        dark:text-[var(--text-primary)]
+        dark:border-[var(--border-color)]
+      "
+      value={nominee.isMinor}
+      onChange={(e) => handleChange("isMinor", e.target.value)}
+    >
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+  </div>
+
+  {/* GUARDIAN */}
+  {nominee.isMinor === "yes" && (
+    <>
+      <div>
+        <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+          Guardian Name
+        </label>
+        <input
+          className="
+            w-full border p-2 rounded-lg mt-1
+            bg-white text-gray-900
+            dark:bg-[var(--white-5)]
+            dark:text-[var(--text-primary)]
+            dark:border-[var(--border-color)]
+          "
+          placeholder="Ex: Suresh Kumar"
+          value={nominee.guardianName}
+          onChange={(e) => handleChange("guardianName", e.target.value)}
+        />
+      </div>
+
+      <div>
+        <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+          Guardian Relationship
+        </label>
+        <input
+          className="
+            w-full border p-2 rounded-lg mt-1
+            bg-white text-gray-900
+            dark:bg-[var(--white-5)]
+            dark:text-[var(--text-primary)]
+            dark:border-[var(--border-color)]
+          "
+          placeholder="Father / Mother"
+          value={nominee.guardianRelation}
+          onChange={(e) => handleChange("guardianRelation", e.target.value)}
+        />
+      </div>
+    </>
+  )}
+
+</div>
+
 
           {/* SAVE BUTTON */}
           <button
@@ -286,27 +380,56 @@ const NomineeSection = () => {
           </button>
 
           {/* FAQ */}
-          <div className='mt-10'>
-            <h2 className='text-xl font-bold text-blue-950 mb-4'>FAQs</h2>
+         <div className="mt-10">
+  <h2
+    className="
+      text-xl font-bold mb-4
+      text-blue-950
+      dark:text-[var(--text-primary)]
+    "
+  >
+    FAQs
+  </h2>
 
-            <div className='space-y-3'>
-              {faqs.map((item, index) => (
-                <div key={index} className='bg-white rounded-xl p-4 border'>
-                  <button
-                    className='w-full flex justify-between font-medium text-gray-800'
-                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                  >
-                    {item.q}
-                    <span>{openFAQ === index ? "-" : "+"}</span>
-                  </button>
+  <div className="space-y-3">
+    {faqs.map((item, index) => (
+      <div
+        key={index}
+        className="
+          rounded-xl p-4 border
+          bg-white border-gray-200
+          dark:bg-[var(--card-bg)]
+          dark:border-[var(--border-color)]
+        "
+      >
+        <button
+          className="
+            w-full flex justify-between font-medium
+            text-gray-800
+            dark:text-[var(--text-primary)]
+          "
+          onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+        >
+          {item.q}
+          <span>{openFAQ === index ? "-" : "+"}</span>
+        </button>
 
-                  {openFAQ === index && (
-                    <p className="mt-2 text-gray-600">{item.a}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+        {openFAQ === index && (
+          <p
+            className="
+              mt-2
+              text-gray-600
+              dark:text-[var(--text-secondary)]
+            "
+          >
+            {item.a}
+          </p>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
 
         </div>
       ) : null}

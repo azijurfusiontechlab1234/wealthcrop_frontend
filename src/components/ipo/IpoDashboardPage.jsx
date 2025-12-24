@@ -280,7 +280,7 @@ const IpoDashboardPage = () => {
                 {/* Company */}
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className={`h-9 w-9 rounded-lg flex items-center justify-center text-[11px] font-bold ${ipo.logoBg}`}>
+                    <div className={`h-9 w-9 rounded-lg dark:text-[var(--app-bg)] flex items-center justify-center text-[11px] font-bold ${ipo.logoBg}`}>
                       {ipo.logoInitial}
                     </div>
 

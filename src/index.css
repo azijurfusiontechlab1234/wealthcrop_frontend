@@ -50,6 +50,16 @@ html, body {
   }
 }
 
+select option {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark select option {
+  background-color: #0f172a; /* dark slate */
+  color: #e5e7eb;            /* light text */
+}
+
 
 /* For header hover */
 /* @keyframes fadeIn {

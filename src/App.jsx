@@ -173,7 +173,7 @@ function App() {
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-0 min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900 overflow-hidden">
+      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-0 min-h-[calc(100vh-200px)] bg-white dark:bg-[var(--app-bg)] overflow-hidden">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>

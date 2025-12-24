@@ -111,60 +111,97 @@ export default function IndicesDetails() {
   const colors = ["#0ea5e9", "#6366f1", "#10b981", "#f59e0b", "#ef4444", "#14b8a6", "#8b5cf6", "#94a3b8"];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white pt-10 px-4">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white dark:from-[var(--app-bg)] dark:to-[var(--app-bg)] pt-10 px-4">
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* HEADER */}
- <header className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
+<header
+  className="
+    bg-white/70 backdrop-blur-sm border border-white/40
+    rounded-2xl p-6 shadow-md
+
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
   <div className="flex justify-between items-center gap-6 flex-wrap">
-    
+
     {/* Left Column */}
     <div className="flex flex-col items-start gap-3">
       <div className="flex items-center gap-4">
-        <img src={logo} alt="logo" className="w-16 h-16 rounded-xl shadow" />
+        <img
+          src={logo}
+          alt="logo"
+          className="w-16 h-16 rounded-xl shadow"
+        />
+
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 capitalize">{name}</h1>
-          <p className="text-sm text-slate-500">{baseStock.symbol}</p>
+          <h1
+            className="
+              text-2xl font-bold capitalize
+              text-slate-900 dark:text-[var(--text-primary)]
+            "
+          >
+            {name}
+          </h1>
+
+          <p
+            className="
+              text-sm
+              text-slate-500 dark:text-[var(--text-secondary)]
+            "
+          >
+            {baseStock.symbol}
+          </p>
         </div>
       </div>
+
       <div>
-        <h2 className="text-4xl font-extrabold text-slate-900">₹{livePrice.toFixed(2)}</h2>
+        <h2
+          className="
+            text-4xl font-extrabold
+            text-slate-900 dark:text-[var(--text-primary)]
+          "
+        >
+          ₹{livePrice.toFixed(2)}
+        </h2>
+
         <span
           className={`mt-1 inline-block px-3 py-1 rounded-md text-sm font-semibold ${
-            pctChange >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
+            pctChange >= 0
+              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400"
+              : "bg-red-100 text-red-600 dark:bg-rose-500/20 dark:text-rose-400"
           }`}
         >
-          {pctChange >= 0 ? "+" : ""}{pctChange}%
+          {pctChange >= 0 ? "+" : ""}
+          {pctChange}%
         </span>
       </div>
     </div>
 
     {/* Middle Column */}
     <div className="grid grid-cols-3 grid-rows-2 gap-6 text-center flex-1">
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">Previous Close</p>
-        <p>₹{baseStock.prevClose}</p>
-      </div>
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">Open</p>
-        <p>₹{baseStock.open}</p>
-      </div>
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">1D Range</p>
-        <p>₹{baseStock.low} - ₹{baseStock.high}</p>
-      </div>
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">52 Week High</p>
-        <p>₹{baseStock.week52High}</p>
-      </div>
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">52 Week Low</p>
-        <p>₹{baseStock.week52Low}</p>
-      </div>
-      <div className="text-sm text-gray-600">
-        <p className="font-semibold">Volume</p>
-        <p>{baseStock.volume}</p>
-      </div>
+      {[
+        ["Previous Close", `₹${baseStock.prevClose}`],
+        ["Open", `₹${baseStock.open}`],
+        ["1D Range", `₹${baseStock.low} - ₹${baseStock.high}`],
+        ["52 Week High", `₹${baseStock.week52High}`],
+        ["52 Week Low", `₹${baseStock.week52Low}`],
+        ["Volume", baseStock.volume],
+      ].map(([label, value]) => (
+        <div
+          key={label}
+          className="
+            text-sm
+            text-gray-600 dark:text-[var(--text-secondary)]
+          "
+        >
+          <p className="font-semibold">{label}</p>
+          <p className="text-[var(--text-primary)] dark:text-[var(--text-primary)]">
+            {value}
+          </p>
+        </div>
+      ))}
     </div>
 
     {/* Right Column */}
@@ -172,23 +209,42 @@ export default function IndicesDetails() {
       <button className="px-6 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">
         Buy
       </button>
+
       <button className="px-6 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
         Sell
       </button>
+
       <button
-        className="px-6 py-2 rounded-xl bg-white border border-slate-200 hover:shadow flex items-center justify-center gap-2"
+        className="
+          px-6 py-2 rounded-xl flex items-center justify-center gap-2
+          bg-white border border-slate-200 hover:shadow
+
+          dark:bg-[var(--white-5)]
+          dark:border-[var(--border-color)]
+          dark:text-[var(--text-primary)]
+        "
         onClick={() =>
           window.open(
-            `https://wa.me/?text=${encodeURIComponent(`Check ${baseStock.name} price: ₹${livePrice}`)}`
+            `https://wa.me/?text=${encodeURIComponent(
+              `Check ${baseStock.name} price: ₹${livePrice}`
+            )}`
           )
         }
       >
         <FiShare2 />
       </button>
+
       <button
         onClick={() => setSaved(!saved)}
         className={`px-6 py-2 rounded-xl flex items-center justify-center gap-2 ${
-          saved ? "bg-emerald-600 text-white" : "bg-white border border-slate-200"
+          saved
+            ? "bg-emerald-600 text-white"
+            : `
+              bg-white border border-slate-200
+              dark:bg-[var(--white-5)]
+              dark:border-[var(--border-color)]
+              dark:text-[var(--text-primary)]
+            `
         }`}
       >
         <AiOutlineStar />
@@ -197,6 +253,7 @@ export default function IndicesDetails() {
 
   </div>
 </header>
+
 
 
 
@@ -210,17 +267,17 @@ export default function IndicesDetails() {
           ].map((m, i) => (
             <div
               key={i}
-              className="bg-white/70 backdrop-blur-sm p-4 rounded-xl border border-white/40 shadow-sm"
+              className="bg-white/70 backdrop-blur-sm p-4 rounded-xl border border-white/40 shadow-sm dark:bg-[var(--white-10)] dark:border-[var(--border-color)] "
             >
-              <p className="text-xs text-slate-500">{m.label}</p>
-              <p className="text-lg font-semibold">{m.value}</p>
+              <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)] ">{m.label}</p>
+              <p className="text-lg font-semibold dark:text-[var(--text-primary)] ">{m.value}</p>
             </div>
           ))}
         </section>
 
         {/* SECTOR CHART */}
-        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Sector Allocation</h2>
+        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md dark:bg-[var(--white-10)] dark:border-[var(--border-color)]">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4 dark:text-[var(--text-primary)] ">Sector Allocation</h2>
           <div className="flex justify-center">
             <PieChart width={260} height={260}>
               <Pie
@@ -241,124 +298,232 @@ export default function IndicesDetails() {
             {sectorData.map((s, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-sm" style={{ background: colors[i] }}></span>
-                <p className="text-slate-700">{s.name}: {s.value}%</p>
+                <p className="text-slate-700 dark:text-[var(--text-secondary)]">{s.name}: {s.value}%</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* CHART */}
-        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Price Chart</h2>
+      <section
+  className="
+    bg-white/70 backdrop-blur-sm border border-white/40
+    rounded-2xl p-6 shadow-md
 
-          <div className="flex items-center justify-between mb-4">
-              {/* <div className="flex items-center gap-3">
-                <span className="text-sm text-slate-500">Timeframe:</span>
-                {["7D","30D","6M","1Y","3Y","5Y","10Y","ALL"].map((tf) => (
-                  <button key={tf} onClick={() => setSelectedTimeframe(tf)} className={`px-3 py-1 rounded-md text-sm font-medium ${selectedTimeframe===tf ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>{tf}</button>
-                ))}
-              </div> */}
-              <div className="text-sm text-slate-500">Updated: {new Date().toLocaleTimeString()}</div>
-            </div>
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
+  <h2
+    className="
+      text-lg font-semibold mb-4
+      text-slate-900 dark:text-[var(--text-primary)]
+    "
+  >
+    Price Chart
+  </h2>
 
-          <CandleChart height={350} />
+  <div className="flex items-center justify-between mb-4">
+    {/* Timeframe selector intentionally commented (unchanged) */}
 
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            <div className="bg-white shadow-sm rounded-xl p-3">
-              <p className="text-xs text-slate-500">52 Week High</p>
-              <p className="font-semibold">₹{22000 + 800}</p>
-            </div>
-            <div className="bg-white shadow-sm rounded-xl p-3">
-              <p className="text-xs text-slate-500">52 Week Low</p>
-              <p className="font-semibold">₹{22000 - 900}</p>
-            </div>
-          </div>
-        </section>
+    <div
+      className="
+        text-sm
+        text-slate-500 dark:text-[var(--text-secondary)]
+      "
+    >
+      Updated: {new Date().toLocaleTimeString()}
+    </div>
+  </div>
+
+  <CandleChart height={350} />
+
+  <div className="grid grid-cols-2 gap-3 mt-4">
+    <div
+      className="
+        bg-white shadow-sm rounded-xl p-3
+
+        dark:bg-[var(--white-5)]
+        dark:border dark:border-[var(--border-color)]
+      "
+    >
+      <p
+        className="
+          text-xs
+          text-slate-500 dark:text-[var(--text-secondary)]
+        "
+      >
+        52 Week High
+      </p>
+      <p
+        className="
+          font-semibold
+          text-slate-900 dark:text-[var(--text-primary)]
+        "
+      >
+        ₹{22000 + 800}
+      </p>
+    </div>
+
+    <div
+      className="
+        bg-white shadow-sm rounded-xl p-3
+
+        dark:bg-[var(--white-5)]
+        dark:border dark:border-[var(--border-color)]
+      "
+    >
+      <p
+        className="
+          text-xs
+          text-slate-500 dark:text-[var(--text-secondary)]
+        "
+      >
+        52 Week Low
+      </p>
+      <p
+        className="
+          font-semibold
+          text-slate-900 dark:text-[var(--text-primary)]
+        "
+      >
+        ₹{22000 - 900}
+      </p>
+    </div>
+  </div>
+</section>
+
 
         {/* INDEX OVERVIEW */}
-        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-          <h2 className="text-lg font-bold text-slate-900 mb-3">Index Overview</h2>
-          <p className="text-slate-700 text-sm leading-relaxed">
+        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md dark:bg-[var(--white-10)] dark:border-[var(--border-color)]">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-[var(--text-primary)]  mb-3">Index Overview</h2>
+          <p className="text-slate-700 dark:text-[var(--text-secondary)] text-sm leading-relaxed">
             {name} tracks the performance of 50 large-cap companies listed on the National Stock Exchange (NSE).  
             It represents key sectors of the Indian economy including Financials, IT, FMCG, Energy, and more.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm">
             <div>
-              <p className="text-slate-500 text-xs">Launched</p>
-              <p className="font-medium">{baseStock.launched}</p>
+              <p className="text-slate-500 dark:text-[var(--text-secondary)] text-xs">Launched</p>
+              <p className="font-medium dark:text-[var(--text-primary)] ">{baseStock.launched}</p>
             </div>
             <div>
-              <p className="text-slate-500 text-xs">Base Value</p>
-              <p className="font-medium">{baseStock.baseValue}</p>
+              <p className="text-slate-500 dark:text-[var(--text-secondary)] text-xs">Base Value</p>
+              <p className="font-medium dark:text-[var(--text-primary)] ">{baseStock.baseValue}</p>
             </div>
             <div>
-              <p className="text-slate-500 text-xs">Companies</p>
-              <p className="font-medium">{baseStock.totalCompanies}</p>
+              <p className="text-slate-500 dark:text-[var(--text-secondary)] text-xs">Companies</p>
+              <p className="font-medium dark:text-[var(--text-primary)] ">{baseStock.totalCompanies}</p>
             </div>
             <div>
-              <p className="text-slate-500 text-xs">Methodology</p>
-              <p className="font-medium">Free-Float Market Cap</p>
+              <p className="text-slate-500 dark:text-[var(--text-secondary)] text-xs">Methodology</p>
+              <p className="font-medium dark:text-[var(--text-primary)] ">Free-Float Market Cap</p>
             </div>
           </div>
         </section>
 
         {/* PERFORMANCE TABLE */}
-        <section className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">Index Constituents</h2>
+        <section
+  className="
+    bg-white/70 backdrop-blur-sm border border-white/40
+    rounded-2xl p-6 shadow-md
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm table-fixed">
-              <thead>
-                <tr className="border-b text-left text-white bg-slate-500">
-                  <th className="py-2 w-[40%] pl-5">Company</th>
-                  <th className="py-2 w-[15%]">Weight</th>
-                  <th className="py-2 w-[15%]">Change</th>
-                  <th className="py-2 w-[15%]">Market Cap</th>
-                  <th className="py-2 w-[15%]">Sector</th>
-                </tr>
-              </thead>
+    dark:bg-[var(--white-10)]
+    dark:border-[var(--border-color)]
+  "
+>
+  <h2
+    className="
+      text-lg font-bold mb-4
+      text-slate-900 dark:text-[var(--text-primary)]
+    "
+  >
+    Index Constituents
+  </h2>
 
-              <tbody>
-                {paginated.map((c, idx) => (
-                  <tr key={idx} className="border-b last:border-none text-slate-800 text-md font-medium">
-                    <td className="py-3 truncate pl-5">{c.name}</td>
-                    <td className="py-3">{c.weight}</td>
-                    <td
-                      className={`font-semibold ${
-                        c.change.includes("+") ? "text-emerald-600" : "text-red-600"
-                      }`}
-                    >
-                      {c.change}
-                    </td>
-                    <td className="py-3">{c.mcap}</td>
-                    <td className="py-3">{c.sector}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+  <div className="overflow-x-auto">
+    <table className="w-full text-sm table-fixed">
+      <thead>
+        <tr
+          className="
+            border-b text-left
+            text-white bg-slate-500
 
-          <div className="flex justify-center gap-3 mt-5">
-            {Array.from({ length: Math.ceil(companies.length / perPage) }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i + 1)}
-                className={`px-4 py-1 rounded-lg text-sm font-medium border ${
-                  page === i + 1 ? "bg-slate-900 text-white" : "bg-white text-slate-700"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        </section>
+            dark:bg-[var(--gray-800)]
+            dark:text-[var(--text-primary)]
+          "
+        >
+          <th className="py-2 w-[40%] pl-5">Company</th>
+          <th className="py-2 w-[15%]">Weight</th>
+          <th className="py-2 w-[15%]">Change</th>
+          <th className="py-2 w-[15%]">Market Cap</th>
+          <th className="py-2 w-[15%]">Sector</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {paginated.map((c, idx) => (
+          <tr
+            key={idx}
+            className="
+              border-b last:border-none
+              text-slate-800 text-md font-medium
+
+              dark:text-[var(--text-primary)]
+              dark:border-[var(--border-color)]
+            "
+          >
+            <td className="py-3 truncate pl-5">{c.name}</td>
+
+            <td className="py-3">{c.weight}</td>
+
+            <td
+              className={`py-3 font-semibold ${
+                c.change.includes("+")
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-red-600 dark:text-rose-400"
+              }`}
+            >
+              {c.change}
+            </td>
+
+            <td className="py-3">{c.mcap}</td>
+
+            <td className="py-3">{c.sector}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div className="flex justify-center gap-3 mt-5">
+    {Array.from({ length: Math.ceil(companies.length / perPage) }).map((_, i) => (
+      <button
+        key={i}
+        onClick={() => setPage(i + 1)}
+        className={`px-4 py-1 rounded-lg text-sm font-medium border transition ${
+          page === i + 1
+            ? "bg-slate-900 text-white dark:bg-[var(--text-primary)] dark:text-[var(--app-bg)]"
+            : `
+              bg-white text-slate-700
+              dark:bg-[var(--white-5)]
+              dark:text-[var(--text-primary)]
+              dark:border-[var(--border-color)]
+            `
+        }`}
+      >
+        {i + 1}
+      </button>
+    ))}
+  </div>
+</section>
+
 
         {/* more section */}
  <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
   {/* Historical Returns */}
-  <div className="bg-linear-to-b from-white/80 to-slate-50 backdrop-blur-sm border border-white/30 rounded-2xl p-6 shadow-md">
-    <h2 className="text-lg font-bold text-slate-900 mb-4">Historical Returns</h2>
+  <div className="bg-linear-to-b from-white/80 to-slate-50 dark:from-[var(--white-10)] dark:to-[var(--white-10)] backdrop-blur-sm border border-white/30 dark:border-[var(--border-color)] rounded-2xl p-6 shadow-md">
+    <h2 className="text-lg font-bold text-slate-900 dark:text-[var(--text-primary)]  mb-4">Historical Returns</h2>
     <div className="grid grid-cols-2 gap-4 text-center">
       {[
         { label: "1 Year", value: "14.2%" },
@@ -368,19 +533,19 @@ export default function IndicesDetails() {
       ].map((r, i) => (
         <div
           key={i}
-          className="bg-white/80 rounded-xl p-4 shadow-sm hover:shadow-md transition duration-150"
+          className="bg-white/80 dark:border dark:bg-[var(--white-10)] dark:border-[var(--border-color)] rounded-xl p-4 shadow-sm hover:shadow-md transition duration-150"
         >
-          <p className="text-xs text-gray-500">{r.label}</p>
-          <p className="text-lg font-semibold text-slate-900 mt-1">{r.value}</p>
+          <p className="text-xs text-gray-500 dark:text-[var(--text-secondary)]">{r.label}</p>
+          <p className="text-lg font-semibold text-slate-900 dark:text-[var(--text-primary)] mt-1">{r.value}</p>
         </div>
       ))}
     </div>
   </div>
 
   {/* Top Movers */}
-  <div className="bg-linear-to-b from-white/80 to-slate-50 backdrop-blur-sm border border-white/30 rounded-2xl p-6 shadow-md">
-    <h2 className="text-lg font-bold text-slate-900 mb-4">Top Movers Today</h2>
-    <div className="divide-y divide-gray-200">
+  <div className="bg-linear-to-b from-white/80 to-slate-50 dark:from-[var(--white-10)] dark:to-[var(--white-10)] dark:border-[var(--border-color)] backdrop-blur-sm border border-white/30 rounded-2xl p-6 shadow-md">
+    <h2 className="text-lg font-bold text-slate-900 dark:text-[var(--text-primary)]  mb-4">Top Movers Today</h2>
+    <div className="divide-y divide-gray-200 dark:divide-[var(--border-color)]">
       {[
         { name: "Reliance Industries", change: "+1.2%" },
         { name: "TCS", change: "+0.8%" },
@@ -390,9 +555,9 @@ export default function IndicesDetails() {
       ].map((c, i) => (
         <div
           key={i}
-          className="flex justify-between items-center py-2 hover:bg-slate-100/50 rounded-md px-2 transition duration-150"
+          className="flex justify-between items-center py-2 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-md px-2 transition duration-150"
         >
-          <p className="text-slate-800 font-medium">{c.name}</p>
+          <p className="text-slate-800 font-medium dark:text-[var(--text-primary)] ">{c.name}</p>
           <p
             className={`font-semibold ${
               c.change.includes("+") ? "text-emerald-600" : "text-red-600"

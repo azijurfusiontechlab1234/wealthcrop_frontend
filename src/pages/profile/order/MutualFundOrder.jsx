@@ -40,106 +40,176 @@ const MutualFundOrder = () => {
   // const [funds, setFunds] = useState([]);
 
   return (
-    <div className="bg-white min-h-[400px] rounded-xl shadow-sm p-6">
-      {funds.length === 0 ? (
-        // 🔹 Empty State
-        <div className="flex flex-col items-center justify-center min-h-[350px] text-center px-6">
-          <img
-            src={emptymutual}
-            alt="No Mutual Funds"
-            className="w-56 md:w-64 lg:w-80 mb-4 object-contain"
-          />
-          <h2 className="text-2xl font-semibold text-blue-950">
-            No Mutual Fund Orders
-          </h2>
-          <p className="text-gray-600 text-sm mt-2">
-            You haven’t invested in any mutual funds yet.
-            <br />
-            Start your SIP journey today and build your wealth.
-          </p>
-          <button className="mt-5 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition">
-            Explore Mutual Funds
-          </button>
-        </div>
-      ) : (
-        // 🔹 Table for Mutual Fund Orders
-        <div className="overflow-x-auto">
-          <h2 className="text-xl font-semibold text-blue-950 mb-4">
-            Your Mutual Fund Orders
-          </h2>
-          <table className="min-w-full border border-gray-200 text-sm rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 text-left text-gray-700 font-medium">
-                  Fund Name
-                </th>
-                <th className="px-4 py-2 text-left text-gray-700 font-medium">
-                  Type
-                </th>
-                <th className="px-4 py-2 text-right text-gray-700 font-medium">
-                  NAV
-                </th>
-                <th className="px-4 py-2 text-right text-gray-700 font-medium">
-                  Units
-                </th>
-                <th className="px-4 py-2 text-right text-gray-700 font-medium">
-                  Investment (₹)
-                </th>
-                <th className="px-4 py-2 text-right text-gray-700 font-medium">
-                  Date
-                </th>
-                <th className="px-4 py-2 text-right text-gray-700 font-medium">
-                  Status
-                </th>
-              </tr>
-            </thead>
+    <div
+  className="
+    bg-white min-h-[400px] rounded-xl shadow-sm p-6
 
-            <tbody>
-              {funds.map((fund) => (
-                <tr
-                  key={fund.id}
-                  className="border-t hover:bg-gray-50 transition"
-                >
-                  <td className="px-4 py-2 text-blue-950 font-medium whitespace-nowrap">
-                    {fund.fundName}
-                  </td>
-                  <td
-                    className={`px-4 py-2 font-medium ${
-                      fund.type === "Equity"
-                        ? "text-green-600"
-                        : "text-blue-700"
-                    }`}
-                  >
-                    {fund.type}
-                  </td>
-                  <td className="px-4 py-2 text-right text-gray-700">
-                    ₹{fund.nav.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-2 text-right text-gray-700">
-                    {fund.units.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-2 text-right text-gray-700">
-                    ₹{fund.invested.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2 text-right text-gray-700">
-                    {fund.date}
-                  </td>
-                  <td
-                    className={`px-4 py-2 text-right font-medium ${
-                      fund.status === "Completed"
-                        ? "text-green-600"
-                        : "text-yellow-600"
-                    }`}
-                  >
-                    {fund.status}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+    dark:bg-[var(--card-bg)]
+  "
+>
+  {funds.length === 0 ? (
+    // 🔹 Empty State
+    <div
+      className="
+        flex flex-col items-center justify-center min-h-[350px]
+        text-center px-6
+
+        dark:bg-[var(--card-bg)]
+      "
+    >
+      <img
+        src={emptymutual}
+        alt="No Mutual Funds"
+        className="w-56 md:w-64 lg:w-80 mb-4 object-contain"
+      />
+
+      <h2
+        className="
+          text-2xl font-semibold
+          text-blue-950
+          dark:text-[var(--text-primary)]
+        "
+      >
+        No Mutual Fund Orders
+      </h2>
+
+      <p
+        className="
+          text-gray-600 text-sm mt-2
+          dark:text-[var(--text-secondary)]
+        "
+      >
+        You haven’t invested in any mutual funds yet.
+        <br />
+        Start your SIP journey today and build your wealth.
+      </p>
+
+      <button
+        className="
+          mt-5 px-6 py-2 rounded-lg text-sm font-medium transition
+          bg-emerald-600 hover:bg-emerald-700 text-white
+        "
+      >
+        Explore Mutual Funds
+      </button>
     </div>
+  ) : (
+    // 🔹 Table for Mutual Fund Orders
+    <div className="overflow-x-auto">
+      <h2
+        className="
+          text-xl font-semibold mb-4
+          text-blue-950
+          dark:text-[var(--text-primary)]
+        "
+      >
+        Your Mutual Fund Orders
+      </h2>
+
+      <table
+        className="
+          min-w-full text-sm rounded-lg overflow-hidden
+          border border-gray-200
+
+          dark:border-[var(--border-color)]
+        "
+      >
+        <thead
+          className="
+            bg-gray-100
+
+            dark:bg-[var(--white-5)]
+          "
+        >
+          <tr>
+            {[
+              "Fund Name",
+              "Type",
+              "NAV",
+              "Units",
+              "Investment (₹)",
+              "Date",
+              "Status",
+            ].map((h) => (
+              <th
+                key={h}
+                className="
+                  px-4 py-2 font-medium text-left
+                  text-gray-700
+                  dark:text-[var(--text-secondary)]
+                "
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {funds.map((fund) => (
+            <tr
+              key={fund.id}
+              className="
+                border-t transition
+                hover:bg-gray-50
+
+                dark:border-[var(--border-color)]
+                dark:hover:bg-[var(--white-5)]
+              "
+            >
+              <td
+                className="
+                  px-4 py-2 font-medium whitespace-nowrap
+                  text-blue-950
+                  dark:text-[var(--text-primary)]
+                "
+              >
+                {fund.fundName}
+              </td>
+
+              <td
+                className={`px-4 py-2 font-medium ${
+                  fund.type === "Equity"
+                    ? "text-green-600 dark:text-emerald-400"
+                    : "text-blue-700 dark:text-blue-400"
+                }`}
+              >
+                {fund.type}
+              </td>
+
+              <td className="px-4 py-2 text-right text-gray-700 dark:text-[var(--text-secondary)]">
+                ₹{fund.nav.toFixed(2)}
+              </td>
+
+              <td className="px-4 py-2 text-right text-gray-700 dark:text-[var(--text-secondary)]">
+                {fund.units.toFixed(2)}
+              </td>
+
+              <td className="px-4 py-2 text-right text-gray-700 dark:text-[var(--text-secondary)]">
+                ₹{fund.invested.toLocaleString()}
+              </td>
+
+              <td className="px-4 py-2 text-right text-gray-700 dark:text-[var(--text-secondary)]">
+                {fund.date}
+              </td>
+
+              <td
+                className={`px-4 py-2 text-right font-medium ${
+                  fund.status === "Completed"
+                    ? "text-green-600 dark:text-emerald-400"
+                    : "text-yellow-600 dark:text-amber-400"
+                }`}
+              >
+                {fund.status}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
+
   );
 };
 

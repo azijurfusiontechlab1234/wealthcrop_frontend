@@ -15,48 +15,79 @@ export default function MFChart({ data, height = 320 }) {
       chartRef.current = null;
     }
 
-    const chart = createChart(containerRef.current, {
-      width: containerRef.current.clientWidth,
-      height,
-      layout: {
-        background: { color: "#ffffff" },
-        textColor: "#1e293b",
-      },
-      grid: {
-        vertLines: { color: "#f3f4f6" },
-        horzLines: { color: "#f3f4f6" },
-      },
-      crosshair: {
-        mode: 1,
-        vertLine: { width: 1, color: "#9ca3af", style: 2 },
-        horzLine: { visible: false },
-      },
-      rightPriceScale: {
-        borderVisible: true,          // show right/bottom border inside chart
-        borderColor: "#00000011",
-        scaleMargins: {
-          top: 0.28,                  // more space above line
-          bottom: 0.18,
-        },
-      },
-      timeScale: {
-        borderVisible: true,          // this is the bottom border inside
-        borderColor: "#00000011",
-        fixRightEdge: false,
-        rightOffset: 0,
-        minBarSpacing: 0.5,
-      },
-    });
+    function cssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
+
+
+    const isDark = document.documentElement.classList.contains("dark");
+
+const chart = createChart(containerRef.current, {
+  width: containerRef.current.clientWidth,
+  height,
+
+  layout: {
+    background: {
+      color: isDark ? "transparent" : "#ffffff",
+    },
+    textColor: isDark ? cssVar("--text-secondary") : "#1e293b",
+  },
+
+  grid: {
+    vertLines: {
+      color: isDark ? cssVar("--border-color") : "#f3f4f6",
+    },
+    horzLines: {
+      color: isDark ? cssVar("--border-color") : "#f3f4f6",
+    },
+  },
+
+  crosshair: {
+    mode: 1,
+    vertLine: {
+      width: 1,
+      color: isDark ? cssVar("--text-secondary") : "#9ca3af",
+      style: 2,
+    },
+    horzLine: {
+      visible: false,
+    },
+  },
+
+  rightPriceScale: {
+    borderVisible: true,
+    borderColor: isDark ? cssVar("--border-color") : "#00000011",
+    scaleMargins: {
+      top: 0.28,
+      bottom: 0.18,
+    },
+  },
+
+  timeScale: {
+    borderVisible: true,
+    borderColor: isDark ? cssVar("--border-color") : "#00000011",
+    fixRightEdge: false,
+    rightOffset: 0,
+    minBarSpacing: 0.5,
+  },
+});
+
+
 
     chartRef.current = chart;
 
-    const lineSeries = chart.addLineSeries({
-      color: "#00b26a",
-      lineWidth: 2,
-      lineType: 0,
-      lastValueVisible: true,
-      priceLineVisible: true,
-    });
+
+const lineSeries = chart.addLineSeries({
+  color: "#00b26a",
+  lineWidth: 2,
+  lineType: 0,
+  lastValueVisible: true,
+  priceLineVisible: true,
+});
+
+
 
     const safeData = Array.isArray(data) ? data : [];
 
@@ -73,20 +104,37 @@ export default function MFChart({ data, height = 320 }) {
     }, 0);
 
     // Groww-style top-left tooltip
-    const tooltip = document.createElement("div");
-    tooltip.style.position = "absolute";
-    tooltip.style.top = "6px";
-    tooltip.style.left = "10px";
-    tooltip.style.background = "white";
-    tooltip.style.padding = "4px 8px";
-    tooltip.style.borderRadius = "6px";
-    tooltip.style.fontSize = "13px";
-    tooltip.style.color = "#4b5563";
-    tooltip.style.boxShadow = "0 2px 6px rgba(0,0,0,0.12)";
-    tooltip.style.zIndex = "10";
-    tooltip.style.display = "none";
-    tooltip.style.pointerEvents = "none";
-    containerRef.current.appendChild(tooltip);
+
+const tooltip = document.createElement("div");
+tooltip.style.position = "absolute";
+tooltip.style.top = "6px";
+tooltip.style.left = "10px";
+tooltip.style.padding = "4px 8px";
+tooltip.style.borderRadius = "6px";
+tooltip.style.fontSize = "13px";
+tooltip.style.zIndex = "10";
+tooltip.style.display = "none";
+tooltip.style.pointerEvents = "none";
+
+/* THEME AWARE STYLES */
+tooltip.style.background = isDark
+  ? "var(--white-10)"
+  : "white";
+
+tooltip.style.color = isDark
+  ? "var(--text-primary)"
+  : "#4b5563";
+
+tooltip.style.boxShadow = isDark
+  ? "0 2px 8px rgba(0,0,0,0.45)"
+  : "0 2px 6px rgba(0,0,0,0.12)";
+
+tooltip.style.border = isDark
+  ? "1px solid var(--border-color)"
+  : "1px solid #e5e7eb";
+
+containerRef.current.appendChild(tooltip);
+
 
     chart.subscribeCrosshairMove((param) => {
       const point = param.seriesData.get(lineSeries);
@@ -112,7 +160,13 @@ export default function MFChart({ data, height = 320 }) {
 
   return (
    <div
-  className="w-full rounded-xl border border-slate-300 shadow-sm bg-white overflow-hidden !pb-0 !mb-0 !h-auto"
+className="
+  w-full rounded-xl shadow-sm overflow-hidden !pb-0 !mb-0 !h-auto
+  border border-slate-300 bg-white
+
+  dark:border-[var(--border-color)]
+  dark:bg-[var(--card-bg)]
+"
 >
   <div
     ref={containerRef}

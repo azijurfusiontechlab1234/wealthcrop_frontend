@@ -110,179 +110,322 @@ export default function CreateBasket({ onSave }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f7fb] p-6">
-      {/* HEADER */}
-      <div className="max-w-3xl mx-auto mb-6">
-        <h1 className="text-3xl font-bold text-slate-800">
-          Create New Basket
-        </h1>
-        <p className="text-slate-600 text-sm mt-1">
-          Total allocation must be exactly <b>100%</b>
-        </p>
+   <div
+  className="
+    min-h-screen p-6
+    bg-[#f3f7fb]
+    dark:bg-[var(--app-bg)]
+  "
+>
+  {/* HEADER */}
+  <div className="max-w-3xl mx-auto mb-6">
+    <h1
+      className="
+        text-3xl font-bold
+        text-slate-800
+        dark:text-[var(--text-primary)]
+      "
+    >
+      Create New Basket
+    </h1>
+
+    <p
+      className="
+        text-sm mt-1
+        text-slate-600
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Total allocation must be exactly <b>100%</b>
+    </p>
+  </div>
+
+  {/* CARD */}
+  <div
+    className="
+      bg-white max-w-3xl mx-auto p-8 rounded-2xl shadow-md
+      border border-[#e0e7ef]
+
+      dark:bg-[var(--card-bg)]
+      dark:border-[var(--border-color)]
+    "
+  >
+    {/* BASKET NAME */}
+    <label
+      className="
+        text-sm font-medium mb-1 block
+        text-slate-700
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Basket Name
+    </label>
+
+    <input
+      className="
+        w-full mb-5 p-3 rounded-xl
+        border border-[#d4dbe5]
+        bg-[#f9fbff]
+        text-slate-800
+
+        dark:bg-[var(--white-5)]
+        dark:border-[var(--border-color)]
+        dark:text-[var(--text-primary)]
+      "
+      placeholder="e.g., Long Term Wealth Basket"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+    />
+
+    {/* ADD ASSET ROW */}
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* TYPE */}
+      <div>
+        <label
+          className="
+            text-sm font-medium mb-1 block
+            text-slate-700
+            dark:text-[var(--text-secondary)]
+          "
+        >
+          Asset Type
+        </label>
+
+        <select
+          value={type}
+          onChange={(e) => {
+            setType(e.target.value);
+            setQuery("");
+            setResults([]);
+          }}
+          className="
+            w-full p-3 rounded-xl
+            border border-[#d4dbe5]
+            bg-[#f9fbff]
+
+            dark:bg-[var(--white-5)]
+            dark:border-[var(--border-color)]
+            dark:text-[var(--text-primary)]
+            dark:border-[var(--border-color)]
+          "
+        >
+          <option value="stock">Stock</option>
+          <option value="mutual_fund">Mutual Fund</option>
+        </select>
       </div>
 
-      {/* CARD */}
-      <div className="bg-white max-w-3xl mx-auto p-8 rounded-2xl shadow-md border border-[#e0e7ef]">
-
-        {/* BASKET NAME */}
-        <label className="text-sm font-medium text-slate-700 mb-1 block">
-          Basket Name
+      {/* SEARCH */}
+      <div className="relative">
+        <label
+          className="
+            text-sm font-medium mb-1 block
+            text-slate-700
+            dark:text-[var(--text-secondary)]
+          "
+        >
+          Search Asset
         </label>
+
         <input
-          className="border border-[#d4dbe5] p-3 rounded-xl w-full mb-5 bg-[#f9fbff]"
-          placeholder="e.g., Long Term Wealth Basket"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          className="
+            w-full p-3 rounded-xl
+            border border-[#d4dbe5]
+            bg-[#f9fbff]
+
+            dark:bg-[var(--white-5)]
+            dark:border-[var(--border-color)]
+            dark:text-[var(--text-primary)]
+          "
+          placeholder={
+            type === "stock"
+              ? "Search stock (e.g. Reliance)"
+              : "Search mutual fund"
+          }
+          value={query}
+          onChange={(e) => searchAssets(e.target.value)}
         />
 
-        {/* ADD ASSET ROW */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {results.length > 0 && (
+          <div
+            className="
+              absolute z-10 w-full mt-1 rounded-xl shadow overflow-hidden
+              bg-white border border-[#e0e7ef]
 
-          {/* TYPE */}
-          <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">
-              Asset Type
-            </label>
-            <select
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-                setQuery("");
-                setResults([]);
-              }}
-              className="border border-[#d4dbe5] p-3 rounded-xl w-full bg-[#f9fbff]"
-            >
-              <option value="stock">Stock</option>
-              <option value="mutual_fund">Mutual Fund</option>
-            </select>
-          </div>
+              dark:bg-[var(--card-bg)]
+              dark:border-[var(--border-color)]
+            "
+          >
+            {results.map((asset) => (
+              <div
+                key={asset.id}
+                onClick={() => {
+                  setSelectedAsset(asset);
+                  setQuery(asset.name);
+                  setResults([]);
+                }}
+                className="
+                  px-4 py-2 text-sm cursor-pointer
+                  hover:bg-blue-50
 
-          {/* SEARCH */}
-          <div className="relative">
-            <label className="text-sm font-medium text-slate-700 mb-1 block">
-              Search Asset
-            </label>
-            <input
-              className="border border-[#d4dbe5] p-3 rounded-xl w-full bg-[#f9fbff]"
-              placeholder={
-                type === "stock"
-                  ? "Search stock (e.g. Reliance)"
-                  : "Search mutual fund"
-              }
-              value={query}
-              onChange={(e) => searchAssets(e.target.value)}
-            />
-
-            {results.length > 0 && (
-              <div className="absolute z-10 w-full bg-white border border-[#e0e7ef] rounded-xl shadow mt-1 overflow-hidden">
-                {results.map((asset) => (
-                  <div
-                    key={asset.id}
-                    onClick={() => {
-                      setSelectedAsset(asset);
-                      setQuery(asset.name);
-                      setResults([]);
-                    }}
-                    className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer"
-                  >
-                    {asset.name}
-                  </div>
-                ))}
+                  dark:hover:bg-blue-500/15
+                  dark:text-[var(--text-primary)]
+                "
+              >
+                {asset.name}
               </div>
-            )}
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* WEIGHT */}
-          <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">
-              Weight (%)
-            </label>
-            <input
-              className="border border-[#d4dbe5] p-3 rounded-xl w-full bg-[#f9fbff]"
-              placeholder={`Max ${remainingWeight}%`}
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* ADD BUTTON */}
-        <button
-          onClick={addAsset}
-          disabled={!selectedAsset || weight === 0}
-          className={`mt-5 px-6 py-2.5 rounded-xl shadow transition
-            ${
-              selectedAsset && weight > 0
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
+      {/* WEIGHT */}
+      <div>
+        <label
+          className="
+            text-sm font-medium mb-1 block
+            text-slate-700
+            dark:text-[var(--text-secondary)]
+          "
         >
-          + Add Asset
-        </button>
+          Weight (%)
+        </label>
 
-        {/* WEIGHT STATUS */}
-        <div className="mt-4 text-sm text-slate-600">
-          Allocated: <b>{totalWeight}%</b> | Remaining:{" "}
-          <b className={remainingWeight === 0 ? "text-green-600" : "text-blue-600"}>
-            {remainingWeight}%
-          </b>
-        </div>
+        <input
+          className="
+            w-full p-3 rounded-xl
+            border border-[#d4dbe5]
+            bg-[#f9fbff]
 
-        {/* ASSET LIST */}
-        <div className="mt-8">
-          <h3 className="text-lg font-semibold text-slate-800 mb-3">
-            Assets in Basket
-          </h3>
-
-          {assets.length === 0 && (
-            <p className="text-gray-500 text-sm">
-              No assets added yet.
-            </p>
-          )}
-
-          {assets.map((a) => (
-            <div
-              key={a.id}
-              className="flex justify-between items-center border-b py-3 text-sm"
-            >
-              <div>
-                <span className="font-medium text-slate-800">
-                  {a.name}
-                </span>
-                <span className="ml-2 text-xs text-gray-500">
-                  ({a.type})
-                </span>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="font-semibold text-blue-600">
-                  {a.weight}%
-                </span>
-                <button
-                  onClick={() => removeAsset(a.id)}
-                  className="text-red-500 text-xs hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* SAVE */}
-        <button
-          onClick={saveBasket}
-          disabled={totalWeight !== 100 || !name}
-          className={`w-full mt-8 py-3 rounded-xl text-lg font-semibold transition
-            ${
-              totalWeight === 100 && name
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
-        >
-          Save Basket
-        </button>
+            dark:bg-[var(--white-5)]
+            dark:border-[var(--border-color)]
+            dark:text-[var(--text-primary)]
+          "
+          placeholder={`Max ${remainingWeight}%`}
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+        />
       </div>
     </div>
+
+    {/* ADD BUTTON */}
+    <button
+      onClick={addAsset}
+      disabled={!selectedAsset || weight === 0}
+      className={`mt-5 px-6 py-2.5 rounded-xl shadow transition ${
+        selectedAsset && weight > 0
+          ? "bg-blue-500 text-white hover:bg-blue-600"
+          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+      }`}
+    >
+      + Add Asset
+    </button>
+
+    {/* WEIGHT STATUS */}
+    <div
+      className="
+        mt-4 text-sm
+        text-slate-600
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Allocated: <b>{totalWeight}%</b> | Remaining:{" "}
+      <b
+        className={
+          remainingWeight === 0
+            ? "text-green-600"
+            : "text-blue-600"
+        }
+      >
+        {remainingWeight}%
+      </b>
+    </div>
+
+    {/* ASSET LIST */}
+    <div className="mt-8">
+      <h3
+        className="
+          text-lg font-semibold mb-3
+          text-slate-800
+          dark:text-[var(--text-primary)]
+        "
+      >
+        Assets in Basket
+      </h3>
+
+      {assets.length === 0 && (
+        <p
+          className="
+            text-sm
+            text-gray-500
+            dark:text-[var(--text-secondary)]
+          "
+        >
+          No assets added yet.
+        </p>
+      )}
+
+      {assets.map((a) => (
+        <div
+          key={a.id}
+          className="
+            flex justify-between items-center py-3 text-sm
+            border-b
+
+            dark:border-[var(--border-color)]
+          "
+        >
+          <div>
+            <span
+              className="
+                font-medium
+                text-slate-800
+                dark:text-[var(--text-primary)]
+              "
+            >
+              {a.name}
+            </span>
+
+            <span
+              className="
+                ml-2 text-xs
+                text-gray-500
+                dark:text-[var(--text-secondary)]
+              "
+            >
+              ({a.type})
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="font-semibold text-blue-600">
+              {a.weight}%
+            </span>
+
+            <button
+              onClick={() => removeAsset(a.id)}
+              className="text-red-500 text-xs hover:underline"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* SAVE */}
+    <button
+      onClick={saveBasket}
+      disabled={totalWeight !== 100 || !name}
+      className={`w-full mt-8 py-3 rounded-xl text-lg font-semibold transition ${
+        totalWeight === 100 && name
+          ? "bg-blue-500 text-white hover:bg-blue-600"
+          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+      }`}
+    >
+      Save Basket
+    </button>
+  </div>
+</div>
+
   );
 }
