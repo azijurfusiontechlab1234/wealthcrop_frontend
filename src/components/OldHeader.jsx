@@ -137,8 +137,8 @@ const [fnoOpen, setFnoOpen] = useState(false);
   return (
     <>
      <nav
-  className={`w-full bg-white dark:bg-gray-900 shadow-sm
-  border-b border-gray-100 dark:border-white/10
+  className={`w-full bg-white dark:bg-[var(--app-bg)] shadow-sm
+  border-b border-gray-100 dark:border-[var(--border-color)]
   fixed top-0 left-0 z-50 transition-all duration-300
   ${isScroll ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}
 >

@@ -60,7 +60,7 @@ const NomineeSection = () => {
     <div className="p-6 max-w-4xl mx-auto relative overflow-hidden">
 
          {/* Decorative blobs */}
-      <div className="absolute -top-16 -left-16 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply opacity-50"></div>
+      {/* <div className="absolute -top-16 -left-16 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply opacity-50"></div>
       <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-red-200 rounded-full mix-blend-multiply opacity-40"></div>
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-24 h-24 bg-emerald-200 rounded-full mix-blend-multiply opacity-30"></div>
 <div className="absolute -top-20 right-10 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply opacity-40"></div>
@@ -71,7 +71,7 @@ const NomineeSection = () => {
 
 <div className="absolute bottom-35 left-12 w-30 h-30 bg-indigo-200 rounded-full mix-blend-multiply opacity-35"></div>
 
-<div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-28 h-28 bg-orange-200 rounded-full mix-blend-multiply opacity-25"></div>
+<div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-28 h-28 bg-orange-200 rounded-full mix-blend-multiply opacity-25"></div> */}
 
       {/* 🔵 CASE 1 — Nominee Already Added */}
       {nomineeAdded && !showForm && (
@@ -94,35 +94,38 @@ const NomineeSection = () => {
             )}
           </div>
 
-          <button
-            className="mt-5 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-            onClick={() => setShowForm(true)}
-          >
-            Edit Nominee
-          </button>
+         <div className="flex flex-col lg:flex-row gap-4 mt-5">
+  <button
+    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+    onClick={() => setShowForm(true)}
+  >
+    Edit Nominee
+  </button>
 
-          <button
-            className="mt-5 ml-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-            onClick={() => {
-              setShowForm(true);
-              setNominee({
-                name: "",
-                relation: "",
-                dob: "",
-                mobile: "",
-                email: "",
-                percentage: "",
-                address: "",
-                pincode: "",
-                isMinor: "no",
-                guardianName: "",
-                guardianRelation: "",
-              });
-              setNomineeAdded(false);
-            }}
-          >
-            Add New Nominee
-          </button>
+  <button
+    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+    onClick={() => {
+      setShowForm(true);
+      setNominee({
+        name: "",
+        relation: "",
+        dob: "",
+        mobile: "",
+        email: "",
+        percentage: "",
+        address: "",
+        pincode: "",
+        isMinor: "no",
+        guardianName: "",
+        guardianRelation: "",
+      });
+      setNomineeAdded(false);
+    }}
+  >
+    Add New Nominee
+  </button>
+</div>
+
         </div>
       )}
 

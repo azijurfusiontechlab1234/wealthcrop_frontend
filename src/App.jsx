@@ -94,6 +94,7 @@ import Performance from "./pages/basket/Performance";
 import AMCPage from "./pages/AMCPage";
 import VideoKYC from "./components/VideoKYC";
 import KYC from "./components/kyc/KYC";
+import RiskProfilingPage from "./pages/riskProfile/RiskProfilingPage";
 
 
 const queryClient = new QueryClient();
@@ -163,17 +164,17 @@ function App() {
       {/* ✅ Large screens (always show OldHeader) */}
       <ScrollToTopButton/>
       <DraggableQRCodeCard value="https://example.com" size={100} />
-      <div className="hidden lg:block sticky top-0 left-0 w-full z-50">
+      <div className="hidden lg:block sticky top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         <OldHeader />
       </div>
 
       {/* ✅ Mobile screens */}
-      <div className="block lg:hidden fixed top-0 left-0 w-full z-50">
+      <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
       </div>
 
       {/* ✅ Page Content */}
-      <main className=" mt-28 lg:mt-24 pb-12 lg:pb-0 min-h-[calc(100vh-200px)] bg-white dark:bg-[var(--app-bg)] overflow-hidden">
+      <main className="mt-28 lg:mt-24 lg:pb-0 min-h-auto bg-white dark:bg-[var(--app-bg)] overflow-hidden">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>
@@ -229,6 +230,11 @@ function App() {
               <>
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/basic" element={<BasicDetails />} />
+                <Route path="/profile/change-password" element={<ChangePassword />} />
+                <Route path="/profile/change-pin" element={<ChangePin />} />
+                <Route path="/profile/report-activity" element={<ReportActivity />} />
+                <Route path="/profile/nominee_details" element={<NomineeDetails />} />
+                <Route path="/profile/account-forms" element={<AccountForm />} />
               </>
             )}
             <Route path="/support" element={<Support />} />
@@ -237,6 +243,7 @@ function App() {
             <Route path="/user/balance/inr" element={<AddMoney />} />
             <Route path="/investments" element={<InvestmentOptions />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/risk" element={<RiskProfilingPage/>} />
           
             <Route path="/bond" element={<BondPage/>} />
 
@@ -321,9 +328,13 @@ function App() {
         </Routes>
       </main>
 
-      <Footer />
+      {/* Footer only on large screens */}
+<div className="">
+  <Footer />
+</div>
 
-      <div className="lg:hidden">
+
+      <div className="lg:hidden ">
         {token && (
           <BottomHeader
             activeCategory={activeCategory}

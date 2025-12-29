@@ -1042,7 +1042,7 @@ const [activeInfo, setActiveInfo] = useState(null);
 
 
         {/* sticky quick order */}
-        <div className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
+        {/* <div className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 w-[min(900px,95%)] z-50">
   <div
     className="
       bg-white/80 backdrop-blur-md
@@ -1091,7 +1091,7 @@ const [activeInfo, setActiveInfo] = useState(null);
       </button>
     </div>
   </div>
-</div>
+</div> */}
 
 
         <div className="h-28" />

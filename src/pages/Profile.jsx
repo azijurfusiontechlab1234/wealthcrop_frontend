@@ -10,6 +10,12 @@ import {
   Headphones,
   BarChart3,
   LogOut,
+  ShieldCheck,
+  AlertTriangle,
+  User,
+  KeyRound,
+  Activity,
+  Users,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../redux/authenticationSlice";
@@ -17,6 +23,15 @@ import { useDispatch } from "react-redux";
 import ThemeToggle from "../utils/ThemeToggle";
 
 const Profile = () => {
+
+    // ---------------- STATIC DATA ----------------
+  const riskProfile = {
+    isSet: true, // 🔁 change to false to test NOT SET state
+    category: "Moderate",
+    equityLimit: "60%",
+    lastUpdated: "12 Jan 2025",
+  };
+
   const options = [
     { name: "Basic Details", path: "basic" },
     { name: "Change Password", path: "change-password" },
@@ -53,6 +68,65 @@ const Profile = () => {
           <div className="w-[30%] border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900">
             <div className="w-full h-52 flex justify-center items-center">
               <img src={invest} alt="Profile" className="w-44 opacity-90" />
+            </div>
+
+            {/* RISK PROFILE CARD */}
+            <div className="px-4 pb-4">
+              {riskProfile.isSet ? (
+                <div className="border border-gray-300 dark:border-slate-700 rounded-xl p-4 bg-green-50 dark:bg-green-900/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ShieldCheck className="text-green-600" size={18} />
+                    <h4 className="font-semibold text-green-700 dark:text-green-400">
+                      Risk Profile Set
+                    </h4>
+                  </div>
+
+                  <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                    <p>
+                      <span className="font-medium">Category:</span>{" "}
+                      {riskProfile.category}
+                    </p>
+                    <p>
+                      <span className="font-medium">Equity Exposure:</span>{" "}
+                      {riskProfile.equityLimit}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Last updated: {riskProfile.lastUpdated}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => navigate("/risk")}
+                    className="mt-3 w-full text-sm py-2 rounded-lg
+                               border border-green-600 text-green-700
+                               hover:bg-green-100 dark:hover:bg-green-900/30"
+                  >
+                    Re-evaluate Risk Profile
+                  </button>
+                </div>
+              ) : (
+                <div className="border rounded-xl p-4 bg-yellow-50 dark:bg-yellow-900/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle className="text-yellow-600" size={18} />
+                    <h4 className="font-semibold text-yellow-700 dark:text-yellow-400">
+                      Risk Profile Not Set
+                    </h4>
+                  </div>
+
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Complete risk profiling to get suitable investment
+                    recommendations.
+                  </p>
+
+                  <button
+                    onClick={() => navigate("/risk")}
+                    className="mt-3 w-full text-sm py-2 rounded-lg
+                               bg-yellow-600 text-white hover:bg-yellow-700"
+                  >
+                    Start Risk Profiling
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="h-px bg-gray-300 dark:bg-slate-700"></div>
@@ -148,7 +222,36 @@ const Profile = () => {
             {[
               { to: "/user/order/stocks", icon: <FileText size={18} />, label: "All Orders" },
               { to: "/support", icon: <Headphones size={18} />, label: "24 × 7 Customer Support" },
-              { to: "/reports", icon: <BarChart3 size={18} />, label: "Reports" },
+               {
+    to: "/profile/basic",
+    icon: <User size={18} />,
+    label: "Basic Details",
+  },
+  {
+    to: "/profile/change-password",
+    icon: <KeyRound size={18} />,
+    label: "Change Password",
+  },
+  {
+    to: "/profile/change-pin",
+    icon: <ShieldCheck size={18} />,
+    label: "Change Pin",
+  },
+  {
+    to: "/profile/report-activity",
+    icon: <Activity size={18} />,
+    label: "Report Activity",
+  },
+  {
+    to: "/profile/nominee_details",
+    icon: <Users size={18} />,
+    label: "Nominee Details",
+  },
+  {
+    to: "/profile/account-forms",
+    icon: <FileText size={18} />,
+    label: "Account Form",
+  },
             ].map((item, i) => (
               <Link
                 key={i}
