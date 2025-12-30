@@ -95,6 +95,7 @@ import AMCPage from "./pages/AMCPage";
 import VideoKYC from "./components/VideoKYC";
 import KYC from "./components/kyc/KYC";
 import RiskProfilingPage from "./pages/riskProfile/RiskProfilingPage";
+import MutualFundInvestPage from "./pages/mutual_fund/MutualFundInvestPage";
 
 
 const queryClient = new QueryClient();
@@ -197,7 +198,7 @@ function App() {
               <Route path="watchlist" element={<WatchlistMF />} />
             </Route>
             <Route path="/mutual_fund/manage-sip" element={<ManageSipPage/>} />
-            {/* <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} /> */}
+            <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} />
 
             {/* F&O and Mutual Fund */}
             <Route path="/user/f&o" element={<FODashboard />} />
@@ -244,6 +245,7 @@ function App() {
             <Route path="/investments" element={<InvestmentOptions />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/risk" element={<RiskProfilingPage/>} />
+            <Route path="/mutual_fund/:name/purchase_fund" element={<MutualFundInvestPage/>} />
           
             <Route path="/bond" element={<BondPage/>} />
 

@@ -1,5 +1,6 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { X, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 /* ---------------------------------------------
    DEMO FUND DATA FOR ALL COLLECTIONS
@@ -155,6 +156,9 @@ const FUND_DATA_BY_CATEGORY = {
 };
 
 /* ---------------------------------------------
+   META
+--------------------------------------------- */
+/* ---------------------------------------------
    SUBTITLES FOR ALL COLLECTIONS
 --------------------------------------------- */
 const CATEGORY_META = {
@@ -166,11 +170,25 @@ const CATEGORY_META = {
   "small_cap": { subtitle: "High-growth potential small cap companies." },
 };
 
-// Convert slug → Title Case (handles "-" and "_")
+const SORT_OPTIONS = [
+  { label: "Returns (High To Low)", key: "RET_DESC" },
+  { label: "Returns (Low To High)", key: "RET_ASC" },
+  { label: "Asset Size (High To Low)", key: "AUM_DESC" },
+  { label: "Asset Size (Low To High)", key: "AUM_ASC" },
+  { label: "Volatility (High To Low)", key: "VOL_DESC" },
+  { label: "Volatility (Low To High)", key: "VOL_ASC" },
+];
+
+const FILTERS = {
+  Category: ["Equity", "Debt", "Hybrid", "Commodities"],
+  // "Sub Category": ["Silver", "Flexi Cap"],
+  Risk: ["Low", "Low to Moderate", "Moderate", "Moderately High", "High", "Very High"],
+  AMC: ["HDFC", "Axis", "PPFAS"],
+  Nature: ["Growth", "IDCW"],
+};
+
 const humanize = (slug = "") =>
-  slug
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  slug.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 const Stars = ({ rating }) => (
   <span className="text-[11px] text-amber-500">
@@ -182,72 +200,390 @@ const Stars = ({ rating }) => (
 /* ---------------------------------------------
    COMPONENT
 --------------------------------------------- */
-
 const FundCategorySection = () => {
   const { categorySlug } = useParams();
-
   const title = humanize(categorySlug);
   const subtitle = CATEGORY_META[categorySlug]?.subtitle || "";
 
-  const funds = FUND_DATA_BY_CATEGORY[categorySlug] || [];
+  const baseFunds = FUND_DATA_BY_CATEGORY[categorySlug] || [];
   const periods = ["1Y", "3Y", "5Y"];
 
+  const [showSort, setShowSort] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [sort, setSort] = useState(null);
+  const [activeTab, setActiveTab] = useState("Category");
+  const [activeCategory, setActiveCategory] = useState()
+
+  const navigate = useNavigate()
+
+  const [filters, setFilters] = useState({
+    Category: [],
+    // "Sub Category": [],
+    Risk: [],
+    AMC: [],
+    Nature: [],
+  });
+
+  const filterCount = Object.values(filters).flat().length;
+
+  const funds = useMemo(() => {
+    let list = [...baseFunds];
+
+    Object.entries(filters).forEach(([key, values]) => {
+      if (!values.length) return;
+      const map =
+        key === "Sub Category" ? "subCategory" : key.toLowerCase();
+      list = list.filter((f) => values.includes(f[map]));
+    });
+
+    switch (sort) {
+      case "RET_DESC":
+        list.sort((a, b) => (b.returns["1Y"] ?? 0) - (a.returns["1Y"] ?? 0));
+        break;
+      case "RET_ASC":
+        list.sort((a, b) => (a.returns["1Y"] ?? 0) - (b.returns["1Y"] ?? 0));
+        break;
+      case "AUM_DESC":
+        list.sort((a, b) => b.assetSize - a.assetSize);
+        break;
+      case "AUM_ASC":
+        list.sort((a, b) => a.assetSize - b.assetSize);
+        break;
+      case "VOL_DESC":
+        list.sort((a, b) => b.volatility - a.volatility);
+        break;
+      case "VOL_ASC":
+        list.sort((a, b) => a.volatility - b.volatility);
+        break;
+      default:
+        break;
+    }
+
+    return list;
+  }, [baseFunds, filters, sort]);
+
+  const slugify = (text = "") =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+
+
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6">
+   <div className="w-full max-w-4xl mx-auto px-4 py-6">
+  {/* TITLE */}
+  <h2 className="text-xl font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+    {title}
+  </h2>
 
-      {/* Title + Subtitle */}
-      <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
-      {subtitle && (
-        <p className="text-xs text-slate-500 mt-1">{subtitle}</p>
+  {subtitle && (
+    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)] mt-1">
+      {subtitle}
+    </p>
+  )}
+
+  {/* FILTER + SORT */}
+  <div className="flex gap-3 mt-4">
+    <button
+      onClick={() => setShowFilter(true)}
+      className="
+        flex items-center gap-2
+        text-gray-700 dark:text-[var(--text-primary)]
+        border border-gray-300 dark:border-[var(--border-color)]
+        rounded-full px-4 py-2 text-sm font-medium
+        bg-white dark:bg-[var(--card-bg)]
+        hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
+        transition
+      "
+    >
+      <SlidersHorizontal size={16} className="text-blue-500" strokeWidth={2.5} />
+      Filters
+      {filterCount > 0 && (
+        <span className="bg-blue-600 text-white text-xs px-2 rounded-full">
+          {filterCount}
+        </span>
       )}
+    </button>
 
-      <div className="space-y-2 mt-4">
-        {funds.map((f) => (
+    <button
+      onClick={() => setShowSort(true)}
+      className="
+        flex items-center gap-2
+        border border-gray-300 dark:border-[var(--border-color)]
+        text-gray-700 dark:text-[var(--text-primary)]
+        rounded-full px-4 py-2 text-sm font-medium
+        bg-white dark:bg-[var(--card-bg)]
+        hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
+        transition
+      "
+    >
+      Sort By
+      <ChevronDown size={14} strokeWidth={2.5} className="text-blue-500" />
+    </button>
+  </div>
+
+  {/* LIST */}
+  <div className="space-y-2 mt-4">
+    {funds.map((f) => (
+      <div
+        key={f.id}
+        className="
+          bg-white dark:bg-[var(--card-bg)]
+          border border-gray-400 dark:border-[var(--border-color)]
+          rounded-xl px-4 py-3
+          flex justify-between
+          hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
+          transition
+        "
+      >
+        {/* LEFT */}
+        <div className="flex gap-3 flex-1">
           <div
-            key={f.id}
-            className="bg-white border border-slate-200 rounded-xl px-4 py-3 flex items-center justify-between hover:bg-slate-50 transition"
+            className={`
+              h-9 w-9 rounded-lg flex items-center justify-center font-bold
+              ${f.logoBg}
+              dark:bg-[var(--white-10)]
+              dark:text-[var(--text-primary)]
+            `}
           >
-            {/* LEFT: Fund Info */}
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className={`h-9 w-9 rounded-lg flex items-center justify-center font-bold ${f.logoBg}`}>
-                {f.logoText}
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold truncate">{f.name}</p>
-                <p className="text-[11px] text-slate-500 truncate">{f.subType}</p>
-                <div className="mt-1 flex gap-2 text-[11px]">
-                  <Stars rating={f.rating} />
-                  <span className="px-2 py-0.5 bg-slate-100 rounded text-slate-600">
-                    Risk : {f.risk}
-                  </span>
-                </div>
-              </div>
-            </div>
+            {f.logoText}
+          </div>
 
-            {/* RIGHT: Returns */}
-            <div className="flex items-center gap-6 text-sm text-right">
-              {periods.map((p) => {
-                const val = f.returns[p];
-                return (
-                  <div key={p}>
-                    <p className="text-[11px] text-slate-500">{p}</p>
-                    {val == null ? (
-                      <p className="text-slate-400">--</p>
-                    ) : (
-                      <p className={`font-medium ${val >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
-                        {val > 0 ? "+" : ""}
-                        {val.toFixed(2)}%
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
+          <div>
+            <p
+              onClick={() => navigate(`/mutual_fund/${slugify(f.name)}`)}
+              className="
+                text-sm font-semibold cursor-pointer
+                text-slate-900 dark:text-[var(--text-primary)]
+                hover:underline
+              "
+            >
+              {f.name}
+            </p>
+
+            <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+              {f.subType}
+            </p>
+
+            <div className="mt-1 flex gap-2 text-[11px]">
+              <Stars rating={f.rating} />
+              <span
+                className="
+                  bg-slate-100 dark:bg-[var(--white-10)]
+                  text-slate-600 dark:text-[var(--text-secondary)]
+                  px-2 rounded
+                "
+              >
+                Risk : {f.risk}
+              </span>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* RETURNS */}
+        <div className="flex gap-6 text-right">
+          {periods.map((p) => (
+            <div key={p}>
+              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+                {p}
+              </p>
+
+              {f.returns[p] == null ? (
+                <p className="text-slate-400 dark:text-[var(--text-secondary)]">
+                  --
+                </p>
+              ) : (
+                <p className="font-medium text-emerald-600 dark:text-[var(--chart-up)]">
+                  +{f.returns[p].toFixed(2)}%
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* BUY */}
+        <button
+        onClick={() => navigate(`/mutual_fund/${slugify(f.name)}/purchase_fund`)}
+          className="
+            ml-6 px-4 py-2 rounded-lg text-sm
+            bg-blue-500 hover:bg-blue-600
+            text-white
+            shadow-sm transition
+          "
+        >
+          Buy
+        </button>
       </div>
-    </div>
+    ))}
+  </div>
+
+  {/* SORT MODAL */}
+  {showSort && (
+    <Modal title="Sort By" onClose={() => setShowSort(false)}>
+      {SORT_OPTIONS.map((o) => (
+        <Option
+          key={o.key}
+          label={o.label}
+          active={sort === o.key}
+          onClick={() => {
+            setSort(o.key);
+            setShowSort(false);
+          }}
+        />
+      ))}
+    </Modal>
+  )}
+
+  {/* FILTER MODAL */}
+  {showFilter && (
+    <Modal title="Filter" wide onClose={() => setShowFilter(false)}>
+      <div className="flex h-80 border-t border-gray-400 dark:border-[var(--border-color)]">
+        <div className="w-[50%] border-r border-gray-400 dark:border-[var(--border-color)]">
+          {Object.keys(FILTERS).map((k) => (
+            <button
+              key={k}
+              onClick={() => setActiveTab(k)}
+              className={`
+                w-full text-left px-4 py-3 text-md
+                ${
+                  activeTab === k
+                    ? "bg-blue-50 dark:bg-sky-500/10 text-blue-500 dark:text-sky-400"
+                    : "text-slate-700 dark:text-[var(--text-secondary)]"
+                }
+              `}
+            >
+              {k}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex-1 p-4 space-y-3 overflow-auto">
+          {FILTERS[activeTab].map((opt) => (
+            <label
+              key={opt}
+              className="flex gap-2 text-sm text-slate-700 dark:text-[var(--text-secondary)]"
+            >
+              <input
+                type="checkbox"
+                checked={filters[activeTab].includes(opt)}
+                onChange={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    [activeTab]: prev[activeTab].includes(opt)
+                      ? prev[activeTab].filter((x) => x !== opt)
+                      : [...prev[activeTab], opt],
+                  }))
+                }
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex gap-3 mt-4">
+        <button
+          onClick={() =>
+            setFilters({
+              Category: [],
+              "Sub Category": [],
+              Risk: [],
+              AMC: [],
+              Nature: [],
+            })
+          }
+          className="
+            flex-1 border rounded-lg py-3 font-semibold
+            border-blue-400 text-blue-600
+            hover:bg-sky-100 dark:hover:bg-sky-500/10
+          "
+        >
+          Clear
+        </button>
+
+        <button
+          onClick={() => setShowFilter(false)}
+          className="
+            flex-1 bg-blue-600 hover:bg-blue-700
+            text-white rounded-lg py-3 font-semibold
+          "
+        >
+          Apply
+        </button>
+      </div>
+    </Modal>
+  )}
+</div>
+
   );
 };
 
 export default FundCategorySection;
+
+/* ---------------------------------------------
+   SMALL COMPONENTS
+--------------------------------------------- */
+const Modal = ({ title, children, onClose, wide }) => (
+  <div
+  className="
+    fixed inset-0 z-50
+    bg-black/40 dark:bg-black/70
+    flex items-center justify-center
+  "
+  onClick={onClose}
+>
+  <div
+    className={`
+      rounded-xl p-4
+      ${wide ? "w-[800px]" : "w-[360px]"}
+      
+      bg-white dark:bg-[var(--card-bg)]
+      text-slate-900 dark:text-[var(--text-primary)]
+      border border-transparent dark:border-[var(--border-color)]
+      shadow-xl
+    `}
+    onClick={(e) => e.stopPropagation()}
+  >
+    <div className="flex justify-between items-center mb-3">
+      <h3 className="font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+        {title}
+      </h3>
+
+      <button
+        onClick={onClose}
+        className="
+          cursor-pointer
+          text-slate-500 hover:text-slate-700
+          dark:text-[var(--text-secondary)]
+          dark:hover:text-white
+          transition
+        "
+      >
+        <X size={18} />
+      </button>
+    </div>
+
+    {children}
+  </div>
+</div>
+
+);
+
+
+const Option = ({ label, active, onClick }) => (
+  <button
+  onClick={onClick}
+  className={`
+    w-full text-left px-2 py-3 text-sm transition
+    text-slate-700 dark:text-[var(--text-secondary)]
+    
+    ${active
+      ? "font-semibold text-blue-600 dark:text-sky-400 bg-blue-50 dark:bg-[var(--white-10)]"
+      : "hover:bg-slate-100 dark:hover:bg-[var(--white-5)]"}
+  `}
+>
+  {label}
+</button>
+
+);

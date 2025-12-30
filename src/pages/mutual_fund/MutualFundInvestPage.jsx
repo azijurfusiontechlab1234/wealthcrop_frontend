@@ -20,6 +20,11 @@ const MutualFundInvestPage = () => {
   const [amount, setAmount] = useState(5000);
   const [sipDay, setSipDay] = useState("05");
 
+  const [recurringFrequency, setRecurringFrequency] = useState("DAILY");
+const [confirmAutoDebit, setConfirmAutoDebit] = useState(true);
+const [confirmNoAdvisor, setConfirmNoAdvisor] = useState(true);
+const [confirmTerms, setConfirmTerms] = useState(true);
+
   const estimatedUnits = useMemo(() => {
     if (!amount || nav <= 0) return 0;
     return amount / nav;
@@ -39,23 +44,34 @@ const MutualFundInvestPage = () => {
 
   const handleInvest = () => {
     const payload = {
-      schemeCode,
-      schemeName: name,
-      investType,          // LUMPSUM or SIP
-      planType,            // GROWTH or IDCW
-      amount: Number(amount),
-      nav,
-      mode: "ONLINE",
-      orderSource: "WEB_APP",
+  schemeCode,
+  schemeName: name,
+  investType,
+  planType,
+  amount: Number(amount),
+  nav,
+  mode: "ONLINE",
+  orderSource: "WEB_APP",
 
-      sipDetails:
-        investType === "SIP"
-          ? {
-              sipDay,
-              sipFrequency: "MONTHLY", // always monthly
-            }
-          : null,
-    };
+  sipDetails:
+    investType === "SIP"
+      ? {
+          sipDay,
+          sipFrequency: "MONTHLY",
+        }
+      : null,
+
+  recurringDetails:
+    investType === "RECURRING"
+      ? {
+          frequency: recurringFrequency,
+          startDate: new Date().toISOString(),
+          autoDebitConfirmed: confirmAutoDebit,
+          termsAccepted: confirmTerms,
+        }
+      : null,
+};
+
 
     console.log("MF Invest Payload:", payload);
 
@@ -89,7 +105,7 @@ const MutualFundInvestPage = () => {
         </p>
       </div>
 
-      <div className="
+      {/* <div className="
         flex gap-2 text-xs
         text-slate-500 dark:text-[var(--text-secondary)]
       ">
@@ -101,7 +117,7 @@ const MutualFundInvestPage = () => {
         ">
           Invest
         </span>
-      </div>
+      </div> */}
     </div>
 
     {/* Fund header */}
@@ -203,29 +219,26 @@ const MutualFundInvestPage = () => {
       ">
 
         {/* Lumpsum / SIP Toggle */}
-        <div className="flex gap-2 text-xs font-medium mb-2">
-          <button
-            onClick={() => setInvestType("LUMPSUM")}
-            className={`flex-1 py-2 rounded-xl transition-all ${
-              investType === "LUMPSUM"
-                ? "bg-emerald-500 text-white shadow-sm"
-                : "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400"
-            }`}
-          >
-            Lumpsum
-          </button>
+       <div className="flex gap-2 text-xs font-medium mb-2">
+  {[
+    ["LUMPSUM", "Lumpsum", "emerald"],
+    ["SIP", "SIP", "blue"],
+    ["RECURRING", "Recurring", "indigo"],
+  ].map(([type, label, color]) => (
+    <button
+      key={type}
+      onClick={() => setInvestType(type)}
+      className={`flex-1 py-2 rounded-xl transition-all ${
+        investType === type
+          ? `bg-${color}-500 text-white shadow-sm`
+          : `bg-${color}-100 text-${color}-700 dark:bg-${color}-500/15 dark:text-${color}-400`
+      }`}
+    >
+      {label}
+    </button>
+  ))}
+</div>
 
-          <button
-            onClick={() => setInvestType("SIP")}
-            className={`flex-1 py-2 rounded-xl transition-all ${
-              investType === "SIP"
-                ? "bg-blue-500 text-white shadow-sm"
-                : "bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400"
-            }`}
-          >
-            SIP
-          </button>
-        </div>
 
         {/* Plan type */}
         <div className="text-xs">
@@ -310,6 +323,72 @@ const MutualFundInvestPage = () => {
           </div>
         )}
 
+        {/* RECURRING OPTIONS */}
+{investType === "RECURRING" && (
+  <div className="space-y-3 text-xs">
+    {/* Frequency */}
+    <div>
+      <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)] mb-1">
+        Frequency (Daily / Weekly / Fortnightly)
+      </p>
+
+      <select
+        value={recurringFrequency}
+        onChange={(e) => setRecurringFrequency(e.target.value)}
+        className="
+          w-full rounded-xl px-3 py-2 outline-none text-xs
+          border border-slate-200 dark:border-[var(--border-color)]
+          bg-slate-50 dark:bg-[var(--white-5)]
+          text-slate-900 dark:text-[var(--text-primary)]
+        "
+      >
+        <option value="DAILY">Daily</option>
+        <option value="WEEKLY">Weekly</option>
+        <option value="FORTNIGHTLY">Fortnightly</option>
+      </select>
+    </div>
+
+    {/* Confirmations */}
+    <div className="space-y-2 text-[11px]">
+      <label className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          checked={confirmAutoDebit}
+          onChange={() => setConfirmAutoDebit(!confirmAutoDebit)}
+        />
+        <span className="text-slate-600 dark:text-[var(--text-secondary)]">
+          I confirm that the first payment starts today. Subsequent payments
+          will be processed {recurringFrequency.toLowerCase()} (including
+          weekends and holidays).
+        </span>
+      </label>
+
+      <label className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          checked={confirmNoAdvisor}
+          onChange={() => setConfirmNoAdvisor(!confirmNoAdvisor)}
+        />
+        <span className="text-slate-600 dark:text-[var(--text-secondary)]">
+          I confirm that I have not been advised by any employee or partner.
+        </span>
+      </label>
+
+      <label className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          checked={confirmTerms}
+          onChange={() => setConfirmTerms(!confirmTerms)}
+        />
+        <span className="text-slate-600 dark:text-[var(--text-secondary)]">
+          I agree to the Terms and Conditions.
+        </span>
+      </label>
+    </div>
+  </div>
+)}
+
+
         {/* Estimated units */}
         {investType === "LUMPSUM" && (
           <div className="
@@ -345,7 +424,7 @@ const MutualFundInvestPage = () => {
             <p className="mt-0.5">
               Mode{" "}
               <span className="font-medium text-slate-800 dark:text-[var(--text-primary)]">
-                {investType === "LUMPSUM" ? "One-time lumpsum" : "Monthly SIP"}
+                {investType === "LUMPSUM" ? "One-time lumpsum" : investType === "SIP" ? "Monthly SIP" : investType === "RECURRING" ? "Recurring Investment" : "Unknown"}
               </span>
             </p>
           </div>
@@ -358,7 +437,12 @@ const MutualFundInvestPage = () => {
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            {investType === "LUMPSUM" ? "Confirm & Invest" : "Start SIP"}
+            {investType === "LUMPSUM"
+  ? "Confirm & Invest"
+  : investType === "SIP"
+  ? "Start SIP"
+  : "Buy"}
+
           </button>
         </div>
       </div>

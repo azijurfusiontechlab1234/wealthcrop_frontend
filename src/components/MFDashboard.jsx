@@ -88,13 +88,13 @@ const MFDashboard = () => {
   return (
   <>
     {/* DESKTOP VIEW */}
-     <div className="min-h-screen bg-[var(--app-bg)] text-[var(--text-primary)] hidden lg:block pb-2">
+     <div className="min-h-screen bg-white dark:bg-[var(--app-bg)] dark:text-[var(--text-primary)] hidden lg:block pb-2">
 
       {/* ================= STICKY HEADER ================= */}
       <div
-        className={`transition-all duration-300 ease-in-out border-b
-          bg-[var(--card-bg)]
-          border-[var(--border-color)]
+        className={`transition-top duration-300 ease-in-out border-b bg-white
+          dark:bg-[var(--card-bg)]
+          dark:border-[var(--border-color)]
           ${
             isSticky
               ? "fixed top-0 left-0 w-full shadow-sm z-50"
@@ -120,7 +120,7 @@ const MFDashboard = () => {
                   end
                   className={({ isActive }) =>
                     `relative pb-1 transition
-                    text-[var(--text-secondary)] hover:text-sky-400
+                    dark:text-[var(--text-secondary)] hover:text-sky-400
                     after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5
                     after:bg-sky-400
                     after:scale-x-0 hover:after:scale-x-100

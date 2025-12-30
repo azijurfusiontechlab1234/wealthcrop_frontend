@@ -234,7 +234,7 @@ const DashBoardMF = () => {
 
                 <p
                   className={`font-semibold ${
-                    fund.returns >= 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-rose-500"
+                    fund.returns >= 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-rose -500"
                   }`}
                 >
                   {fund.returns >= 0 ? "+" : ""}

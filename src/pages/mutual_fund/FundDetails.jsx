@@ -26,6 +26,7 @@ import DonutChart from "../../components/DonutChart";
 import logo from "../../assets/mutualFund/sbi.webp"
 import MFChart from "../../components/chart/MFChart";
 import MutualFundInvestPage from "./MutualFundInvestPage";
+import Riskometer from "../../components/Riskometer";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
@@ -1124,6 +1125,9 @@ const [activeInfo, setActiveInfo] = useState(null);
     </p>
   </div>
 </div>
+
+<Riskometer risk = "Low to Moderate" />
+
 
 
           {
