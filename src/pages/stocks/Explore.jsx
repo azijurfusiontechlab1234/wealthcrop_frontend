@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa6";
 import topInvest from "../../assets/top investment/topinvest.svg"
 import { motion, AnimatePresence } from "framer-motion";
@@ -132,9 +132,19 @@ const Explore = () => {
   navigate(`/stocks/${cleanName}`);
 };
 
+ const topTabs = [
+  { name: "Explore", link: "/user/stocks/explore" },
+  { name: "Holdings", link: "/user/stocks/holdings" },
+  { name: "Positions", link: "/user/stocks/positions" },
+  { name: "Orders", link: "/user/stocks/orders" },
+  { name: "Watchlist", link: "/user/stocks/watchlist" },
+];
+
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-(--app-bg) text-blue-950 hidden lg:block">
+
+       
      
         {/* PAGE CONTENT */}
         <div className="mt-10 px-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -825,6 +835,11 @@ const Explore = () => {
       {/* For mobile view */}
 
       <div className="p-5 space-y-8 lg:hidden">
+
+
+
+
+
         {/* ===== Market Indices ===== */}
         <div>
   <div className="flex items-center justify-between mb-3">
@@ -1284,7 +1299,7 @@ const Explore = () => {
           transition
 
           bg-[var(--card-bg)]
-          border border-[var(--card-border)]
+          dark:border border-[var(--border-color)]
         "
       >
         {/* TOP */}

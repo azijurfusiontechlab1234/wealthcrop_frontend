@@ -170,12 +170,12 @@ function App() {
       </div>
 
       {/* ✅ Mobile screens */}
-      <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
+      {/* <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
-      </div>
+      </div> */}
 
       {/* ✅ Page Content */}
-      <main className="mt-28 lg:mt-24 lg:pb-0 min-h-auto bg-white dark:bg-[var(--app-bg)] overflow-hidden">
+      <main className="lg:mt-24 lg:pb-0 min-h-auto bg-white dark:bg-[var(--app-bg)] overflow-hidden">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>

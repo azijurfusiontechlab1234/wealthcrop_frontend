@@ -103,93 +103,53 @@ const handleCreateWatchlist = () => {
 
 
       ):(
-    <div
-  className="
-    m-auto w-[1200px] mt-5 h-auto
-    bg-white border border-gray-400 rounded-lg
+<div className="mx-auto w-full lg:w-[1200px] mt-5 bg-white border border-gray-300 rounded-lg dark:bg-[var(--card-bg)] dark:border-[var(--border-color)]">
 
-    dark:bg-[var(--card-bg)]
-    dark:border-[var(--border-color)]
-  "
->
   {/* Watchlist Tabs */}
-  <div
-    className="
-      flex items-center px-5 py-4 gap-5
-      border-b border-gray-300
+<div className="flex flex-wrap items-center px-4 py-3 gap-4 border-b dark:border-[var(--border-color)]">
+  {Array.from({ length: 5 }).map((_, index) => {
+    const tab = index + 1;
+    const isSelected = selectedWatchlist === tab;
 
-      dark:border-[var(--border-color)]
-    "
+    return (
+      <span
+        key={index}
+        onClick={() => setSelectedWatchlist(tab)}
+        className={`cursor-pointer pb-1 font-semibold text-sm ${
+          isSelected
+            ? "text-blue-900 border-b-2 border-blue-500 dark:text-[var(--text-primary)]"
+            : "text-gray-500 dark:text-[var(--text-secondary)]"
+        }`}
+      >
+        WL {tab}
+      </span>
+    );
+  })}
+
+  <button
+    className="text-sm font-semibold text-emerald-500 dark:text-emerald-400"
+    onClick={() => setCreateWatchList(true)}
   >
-    {Array.from({ length: 5 }).map((_, index) => {
-      const tab = index + 1;
-      const isSelected = selectedWatchlist === tab;
-
-      return (
-        <span
-          key={index}
-          onClick={() => setSelectedWatchlist(tab)}
-          className={`
-            cursor-pointer pb-1 font-semibold
-
-            ${
-              isSelected
-                ? "text-blue-900 border-b-2 border-blue-350 dark:text-[var(--text-primary)]"
-                : "text-gray-500 hover:text-blue-900 dark:text-[var(--text-secondary)] dark:hover:text-[var(--text-primary)]"
-            }
-          `}
-        >
-          Watchlist {tab}
-        </span>
-      );
-    })}
-
-    <button
-      className="
-        text-lg font-semibold cursor-pointer
-        text-green-500
-
-        dark:text-emerald-400
-      "
-      onClick={() => setCreateWatchList(true)}
-    >
-      +Watchlist
-    </button>
-  </div>
+    + Watchlist
+  </button>
+</div>
 
   {/* Search Bar */}
-  <div className="px-5 py-6 w-84">
-    <div className="relative w-full">
-      <Search
-        className="
-          w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2
-          text-gray-400
-
-          dark:text-[var(--text-secondary)]
-        "
-      />
-
-      <input
-        type="text"
-        placeholder="Search your watchlist"
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="
-          w-full px-10 py-1.5 rounded-lg
-          border border-gray-300
-          text-gray-700 placeholder-gray-400
-          focus:outline-none focus:ring-2 focus:ring-blue-500
-
-          dark:bg-[var(--gray-800)]
-          dark:border-[var(--border-color)]
-          dark:text-[var(--text-primary)]
-          dark:placeholder:text-[var(--text-secondary)]
-        "
-      />
-    </div>
+<div className="px-4 py-4 w-full">
+  <div className="relative">
+    <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+    <input
+      type="text"
+      placeholder="Search your watchlist"
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="w-full px-10 py-2 rounded-lg border text-sm dark:bg-[var(--gray-800)]"
+    />
   </div>
+</div>
+
 
   {/* Table */}
-  <div className="w-full overflow-x-auto">
+  <div className="w-full overflow-x-auto hidden lg:block">
     <table className="w-full border-collapse">
       <thead>
         <tr
@@ -297,6 +257,62 @@ const handleCreateWatchlist = () => {
       </tbody>
     </table>
   </div>
+
+  {/* for mobile */}
+<div className="block lg:hidden px-4 space-y-4 pb-6">
+  {filteredList.map((item, index) => (
+    <div
+      key={index}
+      className="rounded-xl border p-4 bg-white dark:bg-[var(--card-bg)] dark:border-[var(--border-color)]"
+    >
+      {/* Top row */}
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold dark:text-[var(--text-primary)]">
+          {item.name}
+        </h3>
+
+        <div className="flex items-center gap-2">
+          <button className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-[var(--white-10)]">
+            <CandlestickChart size={18} />
+          </button>
+          <button className="w-8 h-8 rounded-lg bg-green-500 text-white">B</button>
+          <button className="w-8 h-8 rounded-lg bg-orange-600 text-white">S</button>
+        </div>
+      </div>
+
+      {/* Price + change */}
+      <div className="flex justify-between mt-3 text-sm">
+        <span className="flex items-center gap-1">
+          <IndianRupee size={14} />
+          {item.price}
+        </span>
+
+        <span
+          className={`font-medium ${
+            Math.random() > 0.5 ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {(Math.random() > 0.5 ? "+" : "-") +
+            (Math.random() * 2).toFixed(2)}
+          %
+        </span>
+      </div>
+
+      {/* Trend */}
+      <div className="mt-3">
+        <TrendChart data={item.trendData} />
+      </div>
+
+      {/* Volume */}
+      <p className="mt-2 text-xs text-gray-500">
+        1D Volume: {item.oneDvol}
+      </p>
+    </div>
+  ))}
+</div>
+
+
+
 </div>
 
       )

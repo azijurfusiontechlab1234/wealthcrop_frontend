@@ -98,7 +98,7 @@ const Dashboard = () => {
     {/* DESKTOP VIEW */}
     <div
   className="
-    min-h-screen hidden lg:block pb-2
+    min-h-screen  pb-2
     bg-white text-blue-950
 
     dark:bg-[var(--app-bg)]
@@ -109,7 +109,7 @@ const Dashboard = () => {
   <div
     className={`
       transition-top duration-300 ease-in-out
-      bg-white border-b
+      bg-white border-b hidden lg:block
 
       dark:bg-[var(--card-bg)]
       dark:border-[var(--border-color)]
@@ -201,22 +201,57 @@ const Dashboard = () => {
       </div>
     </div>
   </div>
+  
+           {/* Tabs + Search */}
+<div className="bg-slate-100 dark:bg-[#111827] p-2 rounded-xl lg:hidden block">
+  <nav className="flex gap-2 items-center overflow-x-auto scrollbar-hide ">
+    {topTabs.map((tab) => (
+      <NavLink
+        key={tab.name}
+        to={tab.link}
+        end
+        className={({ isActive }) =>
+          `
+          px-5 py-2 rounded-lg text-sm font-semibold
+          transition-all duration-300 whitespace-nowrap
+
+          ${
+            isActive
+              ? `
+                bg-gradient-to-r from-blue-500 to-blue-500
+                text-white
+                shadow-lg shadow-blue-600/30
+                ring-1 ring-blue-400/40
+                dark:from-blue-500 dark:to-indigo-500
+              `
+              : `
+                text-slate-600
+                hover:bg-red-50 hover:text-red-600
+                hover:ring-1 hover:ring-red-400/30
+
+                dark:text-slate-300
+                dark:hover:bg-red-500/10
+                dark:hover:text-red-400
+              `
+          }
+          `
+        }
+      >
+        {tab.name}
+      </NavLink>
+    ))}
+  </nav>
+</div>
 
   {/* DESKTOP OUTLET */}
-  <div className="mt-2">
+  <div className="mt-2 px-2 lg:px-0">
     <Outlet />
   </div>
 </div>
 
 
 
-    {/* MOBILE VIEW */}
-    <div className="lg:hidden px-3 py-2 mb-8">
-      {/* You can add mobile tabs or keep empty */}
 
-      {/* MOBILE OUTLET → REQUIRED */}
-      <Outlet />
-    </div>
   </>
 );
 

@@ -30,6 +30,7 @@ const DraggableQRCodeCard = ({ value, size }) => {
       {/* Close Button */}
       <button
         onClick={() => setVisible(false)}
+        className="dark:text-black"
         style={{
           position: "absolute",
           top: 5,       // slightly down from the top
