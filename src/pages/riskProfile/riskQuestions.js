@@ -74,7 +74,7 @@ export const riskQuestions = [
   },
    {
     id: 6,
-    question: "What return–risk tradeoff do you prefer?",
+    question: "What return-risk tradeoff do you prefe?",
     subText: "",
     options: [
       { label: "High return + high volatility", score: 5 },

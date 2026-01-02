@@ -118,56 +118,43 @@ export default function IndicesDetails() {
 <header
   className="
     bg-white/70 backdrop-blur-sm border border-white/40
-    rounded-2xl p-6 shadow-md
+    rounded-2xl p-4 sm:p-6 shadow-md
 
     dark:bg-[var(--white-10)]
     dark:border-[var(--border-color)]
   "
 >
-  <div className="flex justify-between items-center gap-6 flex-wrap">
+  <div className="flex flex-col lg:flex-row gap-6">
 
-    {/* Left Column */}
-    <div className="flex flex-col items-start gap-3">
+    {/* ================= LEFT ================= */}
+    <div className="flex flex-col gap-4 flex-shrink-0">
+
+      {/* Logo + Name */}
       <div className="flex items-center gap-4">
         <img
           src={logo}
           alt="logo"
-          className="w-16 h-16 rounded-xl shadow"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl shadow"
         />
 
         <div>
-          <h1
-            className="
-              text-2xl font-bold capitalize
-              text-slate-900 dark:text-[var(--text-primary)]
-            "
-          >
+          <h1 className="text-xl sm:text-2xl font-bold capitalize text-slate-900 dark:text-[var(--text-primary)]">
             {name}
           </h1>
-
-          <p
-            className="
-              text-sm
-              text-slate-500 dark:text-[var(--text-secondary)]
-            "
-          >
+          <p className="text-sm text-slate-500 dark:text-[var(--text-secondary)]">
             {baseStock.symbol}
           </p>
         </div>
       </div>
 
-      <div>
-        <h2
-          className="
-            text-4xl font-extrabold
-            text-slate-900 dark:text-[var(--text-primary)]
-          "
-        >
+      {/* Price */}
+      <div className="flex items-center gap-3 lg:flex-col lg:items-start">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-[var(--text-primary)]">
           ₹{livePrice.toFixed(2)}
         </h2>
 
         <span
-          className={`mt-1 inline-block px-3 py-1 rounded-md text-sm font-semibold ${
+          className={`px-3 py-1 rounded-md text-sm font-semibold ${
             pctChange >= 0
               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400"
               : "bg-red-100 text-red-600 dark:bg-rose-500/20 dark:text-rose-400"
@@ -179,80 +166,87 @@ export default function IndicesDetails() {
       </div>
     </div>
 
-    {/* Middle Column */}
-    <div className="grid grid-cols-3 grid-rows-2 gap-6 text-center flex-1">
+    {/* ================= MIDDLE (STATS) ================= */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center flex-1">
       {[
-        ["Previous Close", `₹${baseStock.prevClose}`],
+        ["Prev Close", `₹${baseStock.prevClose}`],
         ["Open", `₹${baseStock.open}`],
         ["1D Range", `₹${baseStock.low} - ₹${baseStock.high}`],
-        ["52 Week High", `₹${baseStock.week52High}`],
-        ["52 Week Low", `₹${baseStock.week52Low}`],
+        ["52W High", `₹${baseStock.week52High}`],
+        ["52W Low", `₹${baseStock.week52Low}`],
         ["Volume", baseStock.volume],
       ].map(([label, value]) => (
         <div
           key={label}
-          className="
-            text-sm
-            text-gray-600 dark:text-[var(--text-secondary)]
-          "
+          className="text-sm text-gray-600 dark:text-[var(--text-secondary)]"
         >
           <p className="font-semibold">{label}</p>
-          <p className="text-[var(--text-primary)] dark:text-[var(--text-primary)]">
+          <p className="text-slate-900 dark:text-[var(--text-primary)]">
             {value}
           </p>
         </div>
       ))}
     </div>
 
-    {/* Right Column */}
-    <div className="grid grid-cols-2 grid-rows-2 gap-3">
-      <button className="px-6 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">
-        Buy
-      </button>
+    {/* ================= RIGHT (ACTIONS) ================= */}
+    <div className="flex flex-col gap-3 w-full lg:w-auto">
 
-      <button className="px-6 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
-        Sell
-      </button>
+      {/* Buy / Sell */}
+      <div className="grid grid-cols-2 gap-3">
+        <button className="w-full px-6 py-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">
+          Buy
+        </button>
+        <button className="w-full px-6 py-2.5 rounded-xl bg-red-600 text-white hover:bg-red-700">
+          Sell
+        </button>
+      </div>
 
-      <button
-        className="
-          px-6 py-2 rounded-xl flex items-center justify-center gap-2
-          bg-white border border-slate-200 hover:shadow
+      {/* Share + Save */}
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          className="
+            px-6 py-2 rounded-xl flex items-center justify-center gap-2
+            bg-white border border-slate-200 hover:shadow
+            dark:bg-[var(--white-5)]
+            dark:border-[var(--border-color)]
+            dark:text-[var(--text-primary)]
+          "
+          onClick={() =>
+            window.open(
+              `https://wa.me/?text=${encodeURIComponent(
+                `Check ${baseStock.name} price: ₹${livePrice}`
+              )}`
+            )
+          }
+        >
+          <FiShare2 />
+          <span className="hidden sm:inline">Share</span>
+        </button>
 
-          dark:bg-[var(--white-5)]
-          dark:border-[var(--border-color)]
-          dark:text-[var(--text-primary)]
-        "
-        onClick={() =>
-          window.open(
-            `https://wa.me/?text=${encodeURIComponent(
-              `Check ${baseStock.name} price: ₹${livePrice}`
-            )}`
-          )
-        }
-      >
-        <FiShare2 />
-      </button>
-
-      <button
-        onClick={() => setSaved(!saved)}
-        className={`px-6 py-2 rounded-xl flex items-center justify-center gap-2 ${
-          saved
-            ? "bg-emerald-600 text-white"
-            : `
-              bg-white border border-slate-200
-              dark:bg-[var(--white-5)]
-              dark:border-[var(--border-color)]
-              dark:text-[var(--text-primary)]
-            `
-        }`}
-      >
-        <AiOutlineStar />
-      </button>
+        <button
+          onClick={() => setSaved(!saved)}
+          className={`px-6 py-2 rounded-xl flex items-center justify-center gap-2 ${
+            saved
+              ? "bg-emerald-600 text-white"
+              : `
+                bg-white border border-slate-200
+                dark:bg-[var(--white-5)]
+                dark:border-[var(--border-color)]
+                dark:text-[var(--text-primary)]
+              `
+          }`}
+        >
+          <AiOutlineStar />
+          <span className="hidden sm:inline">
+            {saved ? "Saved" : "Save"}
+          </span>
+        </button>
+      </div>
     </div>
 
   </div>
 </header>
+
 
 
 
@@ -423,36 +417,23 @@ export default function IndicesDetails() {
         </section>
 
         {/* PERFORMANCE TABLE */}
-        <section
+<section
   className="
     bg-white/70 backdrop-blur-sm border border-white/40
-    rounded-2xl p-6 shadow-md
-
+    rounded-2xl p-4 sm:p-6 shadow-md
     dark:bg-[var(--white-10)]
     dark:border-[var(--border-color)]
   "
 >
-  <h2
-    className="
-      text-lg font-bold mb-4
-      text-slate-900 dark:text-[var(--text-primary)]
-    "
-  >
+  <h2 className="text-lg font-bold mb-4 text-slate-900 dark:text-[var(--text-primary)]">
     Index Constituents
   </h2>
 
-  <div className="overflow-x-auto">
+  {/* ================= DESKTOP TABLE ================= */}
+  <div className="hidden md:block overflow-x-auto">
     <table className="w-full text-sm table-fixed">
       <thead>
-        <tr
-          className="
-            border-b text-left
-            text-white bg-slate-500
-
-            dark:bg-[var(--gray-800)]
-            dark:text-[var(--text-primary)]
-          "
-        >
+        <tr className="border-b text-left text-white bg-slate-500 dark:bg-[var(--gray-800)]">
           <th className="py-2 w-[40%] pl-5">Company</th>
           <th className="py-2 w-[15%]">Weight</th>
           <th className="py-2 w-[15%]">Change</th>
@@ -465,18 +446,10 @@ export default function IndicesDetails() {
         {paginated.map((c, idx) => (
           <tr
             key={idx}
-            className="
-              border-b last:border-none
-              text-slate-800 text-md font-medium
-
-              dark:text-[var(--text-primary)]
-              dark:border-[var(--border-color)]
-            "
+            className="border-b last:border-none text-slate-800 font-medium dark:text-[var(--text-primary)]"
           >
             <td className="py-3 truncate pl-5">{c.name}</td>
-
             <td className="py-3">{c.weight}</td>
-
             <td
               className={`py-3 font-semibold ${
                 c.change.includes("+")
@@ -486,9 +459,7 @@ export default function IndicesDetails() {
             >
               {c.change}
             </td>
-
             <td className="py-3">{c.mcap}</td>
-
             <td className="py-3">{c.sector}</td>
           </tr>
         ))}
@@ -496,7 +467,63 @@ export default function IndicesDetails() {
     </table>
   </div>
 
-  <div className="flex justify-center gap-3 mt-5">
+  {/* ================= MOBILE CARDS ================= */}
+  <div className="md:hidden space-y-3">
+    {paginated.map((c, idx) => (
+      <div
+        key={idx}
+        className="
+          rounded-xl border p-4
+          bg-white dark:bg-[var(--card-bg)]
+          dark:border-[var(--border-color)]
+        "
+      >
+        {/* Top */}
+        <div className="flex justify-between items-start gap-3">
+          <p className="font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+            {c.name}
+          </p>
+
+          <span
+            className={`text-sm font-semibold ${
+              c.change.includes("+")
+                ? "text-emerald-600 dark:text-emerald-400"
+                : "text-red-600 dark:text-rose-400"
+            }`}
+          >
+            {c.change}
+          </span>
+        </div>
+
+        {/* Details */}
+        <div className="grid grid-cols-2 gap-3 mt-3 text-sm">
+          <div>
+            <p className="text-slate-500 dark:text-[var(--text-secondary)]">
+              Weight
+            </p>
+            <p className="font-medium">{c.weight}</p>
+          </div>
+
+          <div>
+            <p className="text-slate-500 dark:text-[var(--text-secondary)]">
+              Market Cap
+            </p>
+            <p className="font-medium">{c.mcap}</p>
+          </div>
+
+          <div className="col-span-2">
+            <p className="text-slate-500 dark:text-[var(--text-secondary)]">
+              Sector
+            </p>
+            <p className="font-medium">{c.sector}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* ================= PAGINATION ================= */}
+  <div className="flex justify-center gap-3 mt-5 flex-wrap">
     {Array.from({ length: Math.ceil(companies.length / perPage) }).map((_, i) => (
       <button
         key={i}
@@ -504,12 +531,7 @@ export default function IndicesDetails() {
         className={`px-4 py-1 rounded-lg text-sm font-medium border transition ${
           page === i + 1
             ? "bg-slate-900 text-white dark:bg-[var(--text-primary)] dark:text-[var(--app-bg)]"
-            : `
-              bg-white text-slate-700
-              dark:bg-[var(--white-5)]
-              dark:text-[var(--text-primary)]
-              dark:border-[var(--border-color)]
-            `
+            : "bg-white text-slate-700 dark:bg-[var(--white-5)] dark:text-[var(--text-primary)] dark:border-[var(--border-color)]"
         }`}
       >
         {i + 1}
@@ -517,6 +539,7 @@ export default function IndicesDetails() {
     ))}
   </div>
 </section>
+
 
 
         {/* more section */}

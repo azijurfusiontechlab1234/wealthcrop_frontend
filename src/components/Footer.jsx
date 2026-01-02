@@ -260,7 +260,7 @@ const Section = ({ title, list, basePath }) => (
       {/* ---------------------------- */}
       <section
   className="
-    py-4 pb-20 lg:mb-0 lg:pb-2
+    py-4 pb-2 lg:mb-0 lg:pb-2
     bg-white text-blue-950
     dark:bg-gray-900 dark:text-gray-100
     border-gray-300 dark:border-white/10

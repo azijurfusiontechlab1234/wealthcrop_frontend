@@ -146,6 +146,8 @@ function App() {
     }
   }, []);
 
+
+
   // useEffect(() => {
   //   // Listen for token changes (manual refresh of state)
   //   const handleStorageChange = () => {
@@ -165,17 +167,21 @@ function App() {
       {/* ✅ Large screens (always show OldHeader) */}
       <ScrollToTopButton/>
       <DraggableQRCodeCard value="https://example.com" size={100} />
-      <div className="hidden lg:block sticky top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
-        <OldHeader />
-      </div>
+        {/* ================= TOP HEADER ================= */}
+{(!token || isLg) && <OldHeader />}
+
+
+      {/* Top spacer */}
+      {(!token || isLg) && <div className="h-[96px]" />}
 
       {/* ✅ Mobile screens */}
       {/* <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
       </div> */}
+      
 
       {/* ✅ Page Content */}
-      <main className="lg:mt-24 lg:pb-0 min-h-auto bg-white dark:bg-[var(--app-bg)] overflow-hidden">
+      <main className="min-h-screen bg-white dark:bg-[var(--app-bg)]">
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>
@@ -330,20 +336,20 @@ function App() {
         </Routes>
       </main>
 
-      {/* Footer only on large screens */}
-<div className="">
-  <Footer />
-</div>
+      {/* ================= FOOTER ================= */}
+      <Footer />
 
+           {/* 🔼 BOTTOM SPACER (mobile only, matches BottomHeader height) */}
+      {token && <div className="h-[72px] lg:hidden" />}
 
-      <div className="lg:hidden ">
-        {token && (
-          <BottomHeader
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-          />
-        )}
-      </div>
+       {/* ================= FIXED BOTTOM HEADER (MOBILE) ================= */}
+      {token && (
+        <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden">
+          <BottomHeader />
+        </div>
+      )}
+
+      
 
       <ToastContainer
         position="top-right"

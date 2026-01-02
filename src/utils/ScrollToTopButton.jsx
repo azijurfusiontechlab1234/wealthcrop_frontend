@@ -22,8 +22,8 @@ function ScrollToTopButton() {
       onClick={scrollToTop}
       style={{
         position: "fixed",
-        right: "45px",
-        bottom: "25px",
+        right: "40px",
+        bottom: "105px",
         width: "50px",
         height: "50px",
         borderRadius: "50%",
@@ -38,6 +38,7 @@ function ScrollToTopButton() {
         backdropFilter: "blur(4px)",
         transition: "transform 0.25s ease, box-shadow 0.25s ease",
         zIndex: 999,
+        transition: "transform 025s ease, box-shadow 0.25s ease"
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "scale(1.06)";
