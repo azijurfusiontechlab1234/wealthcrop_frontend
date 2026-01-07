@@ -28,7 +28,9 @@ const Profile = () => {
   const riskProfile = {
     isSet: true, // 🔁 change to false to test NOT SET state
     category: "Moderate",
-    equityLimit: "60%",
+    equityLimit: "50%",
+    debtLimit: "40%",
+    goldLimit: "10%",
     lastUpdated: "12 Jan 2025",
   };
 
@@ -83,12 +85,20 @@ const Profile = () => {
 
                   <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                     <p>
-                      <span className="font-medium">Category:</span>{" "}
+                      <span className="font-medium text-green-600 dark:text-green-400">Category:</span>{" "}
                       {riskProfile.category}
                     </p>
                     <p>
                       <span className="font-medium">Equity Exposure:</span>{" "}
                       {riskProfile.equityLimit}
+                    </p>
+                    <p>
+                      <span className="font-medium">Debt Exposure:</span>{" "}
+                      {riskProfile.debtLimit}
+                    </p>
+                    <p>
+                      <span className="font-medium">Gold Exposure:</span>{" "}
+                      {riskProfile.goldLimit}
                     </p>
                     <p className="text-xs text-gray-500">
                       Last updated: {riskProfile.lastUpdated}

@@ -5,15 +5,42 @@ import { FaAngleRight } from "react-icons/fa6";
 import { FiEdit2 } from "react-icons/fi";
 import { TfiAngleRight } from "react-icons/tfi";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import {
+  IndianRupee,
+  FileText,
+  Headphones,
+  BarChart3,
+  LogOut,
+  ShieldCheck,
+  AlertTriangle,
+  User,
+  KeyRound,
+  Activity,
+  Users,
+} from "lucide-react";  
 
 
 const BasicDetails = () => {
 
     const navigate = useNavigate()
 
+    const [openModal, setOpenModal] = useState(false);
+    const [editType, setEditType] = useState(null);
+
+
 const handleBack = () => {
   navigate(-1); // Go to previous route
 };
+
+    // ---------------- STATIC DATA ----------------
+  const riskProfile = {
+    isSet: true, // 🔁 change to false to test NOT SET state
+    category: "Moderate",
+    equityLimit: "50%",
+    debtLimit: "40%",
+    goldLimit: "10%",
+    lastUpdated: "12 Jan 2025",
+  };
 
 
   return (
@@ -52,7 +79,12 @@ const handleBack = () => {
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Mobile Number</p>
                         <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">*****47038</p>
                       </div>
-                      <button className="text-emerald-600 hover:text-emerald-800">
+                      <button 
+                        onClick={() => {
+          setEditType("mobile");
+          setOpenModal(true);
+        }}
+                      className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
                     </div>
@@ -122,6 +154,12 @@ const handleBack = () => {
                     </div>
                   </div>
                 </div>
+                    {openModal && (
+  <EditModal
+    type={editType}
+    onClose={() => setOpenModal(false)}
+  />
+)}
             </div>
 
 
@@ -235,7 +273,11 @@ const handleBack = () => {
           </p>
         </div>
 
-        <button
+        <button 
+        onClick={() => {
+          setEditType("mobile");
+          setOpenModal(true);
+        }}
           className="
             text-emerald-600 hover:text-emerald-800
             dark:text-emerald-400 dark:hover:text-emerald-300
@@ -358,13 +400,176 @@ const handleBack = () => {
           />
         </div>
       </div>
+
+       {/* RISK PROFILE CARD */}
+            <div className="px-4 pb-4">
+              {riskProfile.isSet ? (
+                <div className="border border-gray-300 dark:border-slate-700 rounded-xl p-4 bg-green-50 dark:bg-green-900/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ShieldCheck className="text-green-600" size={18} />
+                    <h4 className="font-semibold text-green-700 dark:text-green-400">
+                      Risk Profile Set
+                    </h4>
+                  </div>
+
+                  <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                    <p>
+                      <span className="font-medium text-green-600 dark:text-green-400">Category:</span>{" "}
+                      {riskProfile.category}
+                    </p>
+                    <p>
+                      <span className="font-medium">Equity Exposure:</span>{" "}
+                      {riskProfile.equityLimit}
+                    </p>
+                    <p>
+                      <span className="font-medium">Debt Exposure:</span>{" "}
+                      {riskProfile.debtLimit}
+                    </p>
+                    <p>
+                      <span className="font-medium">Gold Exposure:</span>{" "}
+                      {riskProfile.goldLimit}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Last updated: {riskProfile.lastUpdated}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => navigate("/risk")}
+                    className="mt-3 w-full text-sm py-2 rounded-lg
+                               border border-green-600 text-green-700
+                               hover:bg-green-100 dark:hover:bg-green-900/30"
+                  >
+                    Re-evaluate Risk Profile
+                  </button>
+                </div>
+              ) : (
+                <div className="border rounded-xl p-4 bg-yellow-50 dark:bg-yellow-900/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle className="text-yellow-600" size={18} />
+                    <h4 className="font-semibold text-yellow-700 dark:text-yellow-400">
+                      Risk Profile Not Set
+                    </h4>
+                  </div>
+
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Complete risk profiling to get suitable investment
+                    recommendations.
+                  </p>
+
+                  <button
+                    onClick={() => navigate("/risk")}
+                    className="mt-3 w-full text-sm py-2 rounded-lg
+                               bg-yellow-600 text-white hover:bg-yellow-700"
+                  >
+                    Start Risk Profiling
+                  </button>
+                </div>
+              )}
+            </div>
     </div>
+ 
+ 
+ 
   </div>
+  {openModal && (
+  <EditModal
+    type={editType}
+    onClose={() => setOpenModal(false)}
+  />
+)}
+
+
+ 
 </div>
 
 
       </>
   )
+}
+
+const EditModal = ({type, onClose}) => {
+  return(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+
+      <div className="bg-white dark:bg-[var(--card-bg)] w-full max-w-md rounded-2xl p-6 shadow-xl ">
+
+{/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">
+              {getTitle(type)}
+          </h2>
+          <button onClick={onClose}>✕</button>
+
+        </div>
+
+        {/* body */}
+        
+
+      </div>
+
+    </div>
+  )
+}
+
+const getTitle = (type) => {
+  switch(type) {
+    case "mobile" : return "Update mobile number"
+    case "email" : return "Update email address"
+    case "maritalStatus" : return "Update marital status"
+    case "father'sName" : return "Update your data"
+    case "income" : return "Update your data"
+  }
+}
+
+const EditForm = ({ type }) => {
+  
+  const [value, setValue] = useState("");
+
+}
+
+const getFieldConfig = (type) => {
+  switch(type){
+    case "mobile" :
+      return {
+        label: "Mobile Number",
+        inputType: "tel",
+        placeholder: "Enter new mobile number",
+        button: "Send OTP"
+      };
+
+     case "email" :
+      return {
+        label: "Email Address",
+        inputType: "email",
+        placeholder: "Enter new email address",
+        button: "Verify email"
+      } 
+
+     case "maritalStatus" :
+      return {
+        label: "Marital Status",
+        inputType: "text",
+        placeholder: "Enter your marital status",
+        button: "Update status"
+      }
+
+     case "father'sName" : 
+      return {
+        label: "Father's Name",
+        inputType: "text",
+        placeholder: "Enter your father's name",
+        button: "Update status"
+      }
+
+     case "income" :
+      return {
+        label: "Income",
+        inputType: "text",
+        placeholder: "Enter your income",
+        button: "Update income",
+      } 
+  }
 }
 
 export default BasicDetails

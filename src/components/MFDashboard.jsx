@@ -8,6 +8,7 @@ import { CandlestickChart, Bookmark } from "lucide-react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import axios from "axios";
 import { FaBasketballBall } from 'react-icons/fa'; // Import the basket icon
+import MobileSearchBox from "./MobileSearchBox";
 
 
 const MFDashboard = () => {
@@ -120,12 +121,21 @@ const MFDashboard = () => {
                   end
                   className={({ isActive }) =>
                     `relative pb-1 transition
-                    dark:text-[var(--text-secondary)] hover:text-sky-400
-                    after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5
-                    after:bg-sky-400
-                    after:scale-x-0 hover:after:scale-x-100
-                    after:origin-left after:transition-transform after:duration-300
-                    ${isActive ? "text-sky-400 after:scale-x-100" : ""}`
+              text-gray-600 hover:text-blue-800
+
+              dark:text-[var(--text-secondary)]
+              dark:hover:text-[var(--text-primary)]
+
+              after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px]
+              after:bg-blue-800 after:scale-x-0 hover:after:scale-x-100
+              after:origin-left after:transition-transform after:duration-300
+
+              ${
+                isActive
+                  ? "text-blue-800 after:scale-x-100 dark:text-[var(--text-primary)]"
+                  : ""
+              }
+              `
                   }
                 >
                   {tab.name}
@@ -157,8 +167,52 @@ const MFDashboard = () => {
 
 
     {/* MOBILE VIEW */}
-    <div className="lg:hidden px-3 py-2 mb-8">
+    <div className="lg:hidden mb-8 mt-2">
       {/* You can add mobile tabs or keep empty */}
+
+               {/* Tabs + Search */}
+           <div className="lg:hidden block">  
+           <MobileSearchBox/>
+<div className="bg-slate-100 dark:bg-[#111827] p-2 rounded-xl ">
+  <nav className="flex gap-2 items-center overflow-x-auto scrollbar-hide ">
+    {topTabs.map((tab) => (
+      <NavLink
+        key={tab.name}
+        to={tab.link}
+        end
+        className={({ isActive }) =>
+          `
+          px-5 py-2 rounded-lg text-sm font-semibold
+          transition-all duration-300 whitespace-nowrap
+
+          ${
+            isActive
+              ? `
+                bg-gradient-to-r from-blue-500 to-blue-500
+                text-white
+                shadow-lg shadow-blue-600/30
+                ring-1 ring-blue-400/40
+                dark:from-blue-500 dark:to-indigo-500
+              `
+              : `
+                text-slate-600
+                hover:bg-red-50 hover:text-red-600
+                hover:ring-1 hover:ring-red-400/30
+
+                dark:text-slate-300
+                dark:hover:bg-red-500/10
+                dark:hover:text-red-400
+              `
+          }
+          `
+        }
+      >
+        {tab.name}
+      </NavLink>
+    ))}
+  </nav>
+</div>
+ </div>
 
       {/* MOBILE OUTLET → REQUIRED */}
       <Outlet />

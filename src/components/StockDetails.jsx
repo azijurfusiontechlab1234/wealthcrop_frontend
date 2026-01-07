@@ -450,7 +450,7 @@ const [activeInfo, setActiveInfo] = useState(null);
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       {/* LEFT SIDE — Chart Section */}
-      <div className="lg:col-span-2 bg-white/60  backdrop-blur-sm border border-white/40 rounded-2xl p-6 shadow-md
+      <div className="lg:col-span-2 bg-white/60  backdrop-blur-sm border border-white/40 rounded-2xl p-2 lg:p-6 shadow-md
       dark:bg-(--white-10)
       ">
         

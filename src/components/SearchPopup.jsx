@@ -37,8 +37,8 @@ export default function SearchPopup({ onClose }) {
       w-full h-full
       sm:w-[600px] sm:h-[75vh] sm:rounded-2xl
       sm:animate-slideUp
-     dark:border
-    border-(--border-color)
+      dark:border
+      border-(--border-color)
       dark:bg-[var(--card-bg)]
     "
   >

@@ -115,6 +115,7 @@ const Blog = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  
   /** Highlight Function */
   const renderHighlighted = (text) => ({
     __html: highlightText(text, searchQuery),

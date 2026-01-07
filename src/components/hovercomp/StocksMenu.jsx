@@ -24,6 +24,9 @@ const StocksMenu = ({ token }) => {
     if (token) navigate("/user/stocks/explore");
   };
 
+const isStocksActive = location.pathname.startsWith("/user/stocks");
+
+
   return (
     <div
       className="relative group"
@@ -31,16 +34,20 @@ const StocksMenu = ({ token }) => {
       onMouseLeave={() => setOpenMenu(false)}
     >
       {/* NAV ITEM */}
-      <button
-        onClick={redirect}
-        className="
-          h-16 px-4 font-semibold cursor-pointer
-          text-blue-900 dark:text-white
-          hover:text-blue-600 dark:hover:text-blue-400
-        "
-      >
-        Stocks
-      </button>
+     <button
+  onClick={redirect}
+  className={`
+    h-16 px-4 font-semibold cursor-pointer transition
+    ${
+      isStocksActive
+        ? "text-blue-600 dark:text-blue-400"
+        : "text-blue-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+    }
+  `}
+>
+  Stocks
+</button>
+
 
       {/* MEGA MENU */}
       {openMenu && !token && (

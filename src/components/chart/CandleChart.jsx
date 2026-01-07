@@ -149,7 +149,8 @@ export default function CandleChart({ height = 320 }) {
 
 
 const chart = createChart(containerRef.current, {
-  width: containerRef.current.clientWidth,
+  // width: containerRef.current.clientWidth,
+  autoSize: true,
   height,
 
   layout: {
@@ -189,6 +190,7 @@ const chart = createChart(containerRef.current, {
 
 
 
+
     chartRef.current = chart;
 
     return () => {
@@ -202,6 +204,8 @@ const chart = createChart(containerRef.current, {
     };
     // intentionally empty deps -> create once
   }, []);
+
+  
 
   // -------- UPDATE SERIES when DATA, showVolume or chartType change --------
   useEffect(() => {
@@ -327,6 +331,21 @@ const chart = createChart(containerRef.current, {
 
     // cleanup for this effect run is handled by next run (we removed series at start)
   }, [DATA, showVolume, chartType]);
+
+    /* ---------------- RESIZE OBSERVER ---------------- */
+  useEffect(() => {
+    if (!chartRef.current || !containerRef.current) return;
+
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) {
+        chartRef.current.applyOptions({width, height})
+      }
+    });
+
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   const fmt = (v) =>
     typeof v === "number" ? v.toLocaleString("en-IN", { maximumFractionDigits: 2 }) : v;

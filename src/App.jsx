@@ -96,6 +96,9 @@ import VideoKYC from "./components/VideoKYC";
 import KYC from "./components/kyc/KYC";
 import RiskProfilingPage from "./pages/riskProfile/RiskProfilingPage";
 import MutualFundInvestPage from "./pages/mutual_fund/MutualFundInvestPage";
+import ExploreFO from "./pages/future_&_options/ExploreFO";
+import PositionsFO from "./pages/future_&_options/PositionsFO";
+import OrdersFO from "./pages/future_&_options/OrdersFO";
 
 
 const queryClient = new QueryClient();
@@ -203,6 +206,15 @@ function App() {
               <Route path="sip" element={<SIPs />} />
               <Route path="watchlist" element={<WatchlistMF />} />
             </Route>
+
+            {/* Future and Options */}
+            <Route path="/user/future_and_options" element={<FODashboard />}>
+              <Route index element={<Navigate to="explore" replace />} />
+              <Route path="explore" element={<ExploreFO />} />
+              <Route path="positions" element={<PositionsFO/>}  />
+              <Route path="orders" element={<OrdersFO/>} />
+            </Route>
+
             <Route path="/mutual_fund/manage-sip" element={<ManageSipPage/>} />
             <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} />
 

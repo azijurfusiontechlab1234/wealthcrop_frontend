@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { CandlestickChart, Bookmark } from "lucide-react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import axios from "axios";
+import MobileSearchBox from "./MobileSearchBox";
 
 
 const Dashboard = () => {
@@ -203,7 +204,9 @@ const Dashboard = () => {
   </div>
   
            {/* Tabs + Search */}
-<div className="bg-slate-100 dark:bg-[#111827] p-2 rounded-xl lg:hidden block">
+           <div className="mt-2 lg:hidden block">  
+           <MobileSearchBox/>
+<div className="bg-slate-100 dark:bg-[#111827] p-2 rounded-xl ">
   <nav className="flex gap-2 items-center overflow-x-auto scrollbar-hide ">
     {topTabs.map((tab) => (
       <NavLink
@@ -242,6 +245,7 @@ const Dashboard = () => {
     ))}
   </nav>
 </div>
+ </div>
 
   {/* DESKTOP OUTLET */}
   <div className="mt-2 px-2 lg:px-0">

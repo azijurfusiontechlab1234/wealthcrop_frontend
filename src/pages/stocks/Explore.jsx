@@ -832,13 +832,9 @@ const Explore = () => {
         </div>
       </div>
 
+
       {/* For mobile view */}
-
       <div className="p-5 space-y-8 lg:hidden">
-
-
-
-
 
         {/* ===== Market Indices ===== */}
         <div>
@@ -869,6 +865,7 @@ const Explore = () => {
     {marketIndices.map((item, i) => (
       <div
         key={i}
+        onClick={()=> navigate(`/indices/${item.name}`)}
         className="
           min-w-[130px] p-3 rounded-xl flex flex-col justify-between
           bg-white shadow border border-gray-100

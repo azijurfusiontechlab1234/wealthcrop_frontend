@@ -68,7 +68,7 @@ const BottomHeader = () => {
     },
   ];
 
-  return (
+  return (  
     <div
       className="
         fixed bottom-0 left-0 w-full z-50

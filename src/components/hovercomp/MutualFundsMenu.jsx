@@ -24,6 +24,10 @@ const MutualFundsMenu = ({ token }) => {
     if (token) navigate("/user/mutual_fund");
   };
 
+
+const isStocksActive = location.pathname.startsWith("/user/mutual_fund");
+
+
   return (
     <div
       className="relative group"
@@ -31,16 +35,20 @@ const MutualFundsMenu = ({ token }) => {
       onMouseLeave={() => setOpenMenu(false)}
     >
       {/* NAV ITEM */}
-      <button
-        onClick={redirect}
-        className="
-          h-16 px-4 font-semibold cursor-pointer
-          text-blue-900 dark:text-white
-          hover:text-blue-600 dark:hover:text-blue-400
-        "
-      >
-        Mutual Funds
-      </button>
+     <button
+  onClick={redirect}
+  className={`
+    h-16 px-4 font-semibold cursor-pointer transition
+    ${
+      isStocksActive
+        ? "text-blue-600 dark:text-blue-400"
+        : "text-blue-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+    }
+  `}
+>
+  Mutual Funds
+</button>
+
 
       {/* MEGA MENU */}
       {openMenu && !token && (

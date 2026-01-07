@@ -21,8 +21,11 @@ const FOMenu = ({ token }) => {
   }, [location.pathname]);
 
   const redirect = () => {
-    if (token) navigate("/user/fno/explore");
+    if (token) navigate("/user/future_and_options/explore");
   };
+
+const isStocksActive = location.pathname.startsWith("/user/future_and_options");
+
 
   return (
     <div
@@ -31,16 +34,20 @@ const FOMenu = ({ token }) => {
       onMouseLeave={() => setOpenMenu(false)}
     >
       {/* NAV ITEM */}
-      <button
-        onClick={redirect}
-        className="
-          h-16 px-4 font-semibold
-          text-blue-900 dark:text-white
-          hover:text-blue-600 dark:hover:text-blue-400
-        "
-      >
-        F&amp;O
-      </button>
+    <button
+  onClick={redirect}
+  className={`
+    h-16 px-4 font-semibold cursor-pointer transition
+    ${
+      isStocksActive
+        ? "text-blue-600 dark:text-blue-400"
+        : "text-blue-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+    }
+  `}
+>
+  F&amp;O
+</button>
+
 
       {/* MEGA MENU */}
       {openMenu && !token && (
