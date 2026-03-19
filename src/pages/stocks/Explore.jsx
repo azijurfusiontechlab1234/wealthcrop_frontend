@@ -84,6 +84,7 @@ const Explore = () => {
     { label: "NIFTY Total Market", link: "/nifty-total-market" },
   ];
 
+
     const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("NIFTY 100");
   const dropdownRef = useRef(null);
@@ -111,7 +112,7 @@ const Explore = () => {
   const handleSelect = (option) => {
     setSelected(option.label);
     setOpen(false);
-    window.location.href = option.link; // redirect
+    // window.location.href = option.link; // redirect
   };  
 
    const [bookmarked, setBookmarked] = useState({});
@@ -280,10 +281,10 @@ const Explore = () => {
         <button
           key={btn}
           onClick={() => setActiveTab(btn)}
-          className={`border rounded-full px-3 py-1 text-sm transition
+          className={`border rounded-full px-3 py-1 text-sm transition font-medium
             ${
               activeTab === btn
-                ? "bg-gray-200 text-gray-900 font-medium dark:bg-[var(--border-color)] dark:text-[var(--text-primary)]"
+                ? "bg-gray-200 text-gray-900 dark:bg-[var(--border-color)] dark:text-[var(--text-primary)]"
                 : "hover:bg-gray-100 text-gray-600 dark:text-[var(--text-secondary)] dark:hover:bg-[var(--border-color)]"
             }
             dark:border-[var(--border-color)]

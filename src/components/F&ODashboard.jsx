@@ -42,8 +42,6 @@ const FODashboard = () => {
   { name: "Explore", link: "explore" },
   { name: "Positions", link: "positions" },
   { name: "Orders", link: "orders" },
-  { name: "Holdings", link: "holdings"},
-  { name: "Terminal", link: "terminal"}
 ];
 
   const markets = [

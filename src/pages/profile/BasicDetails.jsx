@@ -97,7 +97,12 @@ const handleBack = () => {
                           fus***********1@gmail.com
                         </p>
                       </div>
-                      <button className="text-emerald-600 hover:text-emerald-800">
+                      <button 
+                      onClick={() => {
+                        setEditType("email")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
                     </div>
@@ -108,7 +113,12 @@ const handleBack = () => {
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Marital Status</p>
                         <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
                       </div>
-                      <button className="text-emerald-600 hover:text-emerald-800">
+                      <button 
+                      onClick={() => {
+                        setEditType("maritalStatus")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
                     </div>
@@ -125,7 +135,12 @@ const handleBack = () => {
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Income Range</p>
                         <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
                       </div>
-                      <button className="text-emerald-600 hover:text-emerald-800">
+                      <button 
+                      onClick={() => {
+                        setEditType("income")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
                     </div>
@@ -142,7 +157,12 @@ const handleBack = () => {
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Father's Name</p>
                         <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
                       </div>
-                      <button className="text-emerald-600 hover:text-emerald-800">
+                      <button 
+                      onClick={() => {
+                        setEditType("father'sName")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
                     </div>
@@ -499,12 +519,12 @@ const EditModal = ({type, onClose}) => {
           <h2 className="text-lg font-semibold">
               {getTitle(type)}
           </h2>
-          <button onClick={onClose}>✕</button>
+          <button className="cursor-pointer" onClick={onClose}>✕</button>
 
         </div>
 
         {/* body */}
-        
+        <EditForm type={type} />
 
       </div>
 
@@ -525,6 +545,31 @@ const getTitle = (type) => {
 const EditForm = ({ type }) => {
   
   const [value, setValue] = useState("");
+  const config = getFieldConfig(type);
+  console.log(config);
+  console.log(type);
+  
+
+  return(
+    <>
+    <label className="text-sm font-medium">
+      {config.label}
+    </label>
+
+    <input type={config.inputType}
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    placeholder={config.placeholder}
+    className="w-full mt-2 p-2 border rounded-lg dark:bg-white/5 dark:border-white/10"
+    />
+      <button
+        className="w-full mt-4 bg-blue-600 hover:bg-blue-700
+          text-white py-2 rounded-lg font-semibold"
+      >
+        {config.button}
+      </button>
+    </>
+  )
 
 }
 
@@ -569,6 +614,11 @@ const getFieldConfig = (type) => {
         placeholder: "Enter your income",
         button: "Update income",
       } 
+
+      case "nominee" :
+        return {
+          
+        }
   }
 }
 
