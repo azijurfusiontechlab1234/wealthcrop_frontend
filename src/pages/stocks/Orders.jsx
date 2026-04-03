@@ -33,7 +33,7 @@ const Orders = () => {
   }));
 
   // -----------------------------------------------------------
-  // 🔥 Filter + Search Logic (Core Fix)
+  //  Filter + Search Logic (Core Fix)
   // -----------------------------------------------------------
   const getFilteredOrders = () => {
     return ALL_ORDERS.filter((o) => {

@@ -57,7 +57,7 @@ html, body {
   .dark {
     /* DARK THEME */
     /* --app-bg: #121212;       */
-    --app-bg: #020617;         /* 🔥 your main dark color */
+    --app-bg: #020617;         /*  your main dark color */
     --card-bg: #020617;
     --border-color: rgba(255, 255, 255, 0.1);
     --gray-800: #1f2937;  /* same as tailwind gray-800 */

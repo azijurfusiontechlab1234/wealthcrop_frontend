@@ -2,7 +2,7 @@ import React from "react";
 import emptyDashboardImg from "../../assets/stocks/stockEmptyDashboard.svg";
 
 const Positions = () => {
-  // 🔥 Replace with API data later
+  //  Replace with API data later
   const hasStocks = true;
 
   const stocks = [
