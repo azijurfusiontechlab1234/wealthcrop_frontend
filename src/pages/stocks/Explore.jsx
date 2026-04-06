@@ -7,12 +7,63 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { CandlestickChart, Bookmark } from "lucide-react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { getApi } from "../../api/api";
+import socket from "../../utils/socket";
 
 
 const Explore = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeTab, setActiveTab] = useState("Gainers");
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [stockList, setStockList] = useState(null)
+
+      const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("NIFTY 100");
+  const dropdownRef = useRef(null);
+
+  const url= `${import.meta.env.VITE_FETCH_STOCK_LIST}?index=NIFTY%2050`
+  // const url= "https://jsonplaceholder.typicode.com/posts"
+
+// const { data } = useQuery({
+//   queryKey: ["stocks"],
+//   queryFn: () => getApi(url),
+//   retry: false,              // stop retry loop
+//   refetchOnWindowFocus: false,
+// });
+
+// useEffect(() => {
+
+//   const fetchStockList = ()=>{
+//     socket.emit("stockList")
+//   }
+
+
+//   // Listen
+//   socket.on("fetchList", (data) => {
+//     setStockList(data)
+//   })
+
+//   const interval = setInterval(() => {
+//     fetchStockList()
+//   }, 1000);
+
+//   fetchStockList()
+
+//   return () => {
+//     clearInterval(interval)
+//     socket.off("fetchList")
+//   }
+
+// },[])
+
+  // useEffect(() => {
+  //   console.log("Stock List", data);
+    
+  //   setStockList(data)
+  // },[data?.length])
+
+
 
   // const [stocks, setStocks] = useState([]);
 
@@ -85,9 +136,7 @@ const Explore = () => {
   ];
 
 
-    const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("NIFTY 100");
-  const dropdownRef = useRef(null);
+
 
   useEffect(() => {
   const handleScroll = () => {
@@ -331,7 +380,7 @@ const Explore = () => {
                 dark:bg-[var(--card-bg)]
                 dark:border-[var(--border-color)]
               "
-            >
+            > 
               {options.map((option) => (
                 <button
                   key={option.label}
