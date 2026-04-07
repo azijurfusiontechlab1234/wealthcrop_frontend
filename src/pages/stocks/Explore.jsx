@@ -32,36 +32,31 @@ const Explore = () => {
 //   refetchOnWindowFocus: false,
 // });
 
-// useEffect(() => {
+useEffect(() => {
 
-//   const fetchStockList = ()=>{
-//     socket.emit("stockList")
-//   }
+  const fetchStockList = ()=>{
+    socket.emit("get_stock_list")
+  }
 
+  // Listen
+  socket.on("stock_list", (data) => {
+    console.log("Stock List", data);
+    setStockList(data?.data)
+  })
 
-//   // Listen
-//   socket.on("fetchList", (data) => {
-//     setStockList(data)
-//   })
+  const interval = setInterval(() => {
+    fetchStockList()
+  }, 1000);
 
-//   const interval = setInterval(() => {
-//     fetchStockList()
-//   }, 1000);
+  fetchStockList()
 
-//   fetchStockList()
+  return () => {
+    clearInterval(interval)
+    socket.off("fetchList")
+  }
 
-//   return () => {
-//     clearInterval(interval)
-//     socket.off("fetchList")
-//   }
+},[])
 
-// },[])
-
-  // useEffect(() => {
-  //   console.log("Stock List", data);
-    
-  //   setStockList(data)
-  // },[data?.length])
 
 
 
@@ -210,9 +205,9 @@ const Explore = () => {
 
                 {/* Stock grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-  {stocks.map((stock, index) => (
+  {stockList?.slice(0,5).map((stock, index) => (
     <div
-      key={stock.name}
+      key={stock?.meta?.companyName}
       className="
         relative flex flex-col justify-between p-5 h-48 cursor-pointer
         bg-white border border-gray-200 rounded-xl shadow-sm
@@ -222,7 +217,7 @@ const Explore = () => {
       "
       onMouseEnter={() => setHoveredRow(index)}
       onMouseLeave={() => setHoveredRow(null)}
-      onClick={() => showStockPage(stock.name)}
+      onClick={() => showStockPage(stock?.meta?.symbol)}
     >
       {/* 🔖 Bookmark Icon (appears on hover) */}
       {hoveredRow === index && (
@@ -257,8 +252,8 @@ const Explore = () => {
           dark:border-[var(--border-color)]
         ">
           <img
-            src={stock.logo}
-            alt={stock.name}
+            src={stock?.chartTodayPath}
+            alt={stock?.meta?.companyName}
             className="w-full h-full object-cover"
           />
         </div>
@@ -268,7 +263,7 @@ const Explore = () => {
           text-blue-950
           dark:text-[var(--text-primary)]
         ">
-          {stock.name}
+          {stock?.meta?.companyName}
         </h3>
 
         <p className="
@@ -276,7 +271,7 @@ const Explore = () => {
           text-gray-500
           dark:text-[var(--text-secondary)]
         ">
-          NSE • Equity
+          NSE • {stock?.meta?.segment}
         </p>
       </div>
 
@@ -287,18 +282,21 @@ const Explore = () => {
           text-gray-800
           dark:text-[var(--text-primary)]
         ">
-          ₹{(Math.random() * 3000 + 500).toFixed(2)}
+          {/* ₹{(Math.random() * 3000 + 500).toFixed(2)} */}
+          ₹{stock?.lastPrice}
         </p>
 
         <p
           className={`text-sm font-medium ${
-            Math.random() > 0.5
+            stock?.pChange > 0
               ? "text-green-600"
               : "text-red-600"
           }`}
         >
-          {Math.random() > 0.5 ? "+" : "-"}
-          {(Math.random() * 2).toFixed(2)}%
+          {stock?.pChange > 0 ? "+" : ""}
+          {/* {Math.random() > 0.5 ? "+" : "-"} */}
+          {/* {(Math.random() * 2).toFixed(2)}% */}
+          {stock?.pChange}%
         </p>
       </div>
     </div>

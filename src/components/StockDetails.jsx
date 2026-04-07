@@ -30,6 +30,7 @@ import {
   data_All,
 } from "./chart/chartData";
 import OrderEntryPage from "../pages/stocks/OrderEntryPage";
+import socket from "../utils/socket";
 
 /**
  * NOTE: use your uploaded image path here (developer provided).
@@ -69,6 +70,34 @@ export default function StockDetailsPremiumFull() {
     }
     return arr;
   }, []);
+
+  const [stockDetails, setStockDetails] = useState()
+
+
+  useEffect(() => {
+  
+    const fetchStockList = ()=>{
+      socket.emit("get_details",{symbol: name})
+    }
+  
+    // Listen
+    socket.on("stock_details", (data) => {
+      console.log("Stock Details", data);
+      setStockDetails(data)
+    })
+  
+    const interval = setInterval(() => {
+      fetchStockList()
+    }, 1000);
+  
+    fetchStockList()
+  
+    return () => {
+      clearInterval(interval)
+      socket.off("fetchList")
+    }
+  
+  },[])
 
   // Financials: quarterly and yearly (mock)
   const financialsQuarterly = {
@@ -218,6 +247,18 @@ const [activeInfo, setActiveInfo] = useState(null);
   const dayHigh = latest.high;
   const dayLow = latest.low;
 
+const getDomainFromName = (name) => {
+  return name
+    ?.toLowerCase()
+    .replace(/limited|ltd|inc|corp/g, "")
+    .replace(/[^a-z]/g, "") + ".com";
+};
+
+const getLogoUrl = (stockDetails) => {
+  const domain = getDomainFromName(stockDetails?.info?.companyName);
+  return `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
+};
+
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-white py-10 px-4 dark:from-[var(--app-bg)] dark:to-[var(--app-bg)] ">
       <div className="max-w-6xl mx-auto space-y-6">
@@ -241,22 +282,25 @@ const [activeInfo, setActiveInfo] = useState(null);
     {/* LOGO + NAME */}
     <div className="flex items-center gap-4 flex-1 min-w-0">
       <img
-        src={logo}
-        alt="logo"
-        className="w-16 h-16 rounded-xl object-cover shadow"
-      />
+  src={getLogoUrl(stockDetails)}
+  alt="logo"
+  className="w-16 h-16 rounded-xl"
+  onError={(e) => {
+    e.target.src = "/default-stock.png";
+  }}
+/>
 
       <div className="flex-1 min-w-0">
         <h1 className="text-2xl font-bold text-slate-900 capitalize break-words whitespace-normal dark:text-[var(--text-primary)]">
-          {name}
+          {stockDetails?.info?.companyName}
         </h1>
 
         <div className="flex items-center gap-3 mt-1">
           <span className="text-sm text-slate-500 dark:text-[var(--text-secondary)]">
-            {baseStock.symbol}
+            {stockDetails?.info?.symbol}
           </span>
           <span className="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700 border border-amber-100">
-            Technology
+            {stockDetails?.industryInfo?.industry}
           </span>
         </div>
       </div>
@@ -308,19 +352,20 @@ const [activeInfo, setActiveInfo] = useState(null);
     <div>
       <div className="flex items-end gap-3">
         <h2 className="text-4xl font-extrabold text-slate-900 dark:text-[var(--text-primary)]">
-          ₹{livePrice.toFixed(2)}
+          {/* ₹{livePrice.toFixed(2)} */}
+          ₹{stockDetails?.priceInfo?.lastPrice?.toFixed(2)}
         </h2>
 
         <div
           className={`px-3 py-1 rounded-md text-sm font-semibold
             ${
-              pctChange >= 0
+              stockDetails?.priceInfo?.pChange >= 0
                 ? "bg-emerald-50 text-emerald-700"
                 : "bg-red-50 text-red-600"
             }`}
         >
-          {pctChange >= 0 ? "+" : ""}
-          {pctChange}%
+          {stockDetails?.priceInfo?.pChange >= 0 ? "+" : ""}
+          {stockDetails?.priceInfo?.pChange?.toFixed(2)}%
         </div>
       </div>
 
@@ -349,14 +394,22 @@ const [activeInfo, setActiveInfo] = useState(null);
           Vol:
           <span className="text-slate-900 font-medium dark:text-[var(--text-primary)]">
             {" "}
-            {baseStock.volume.toLocaleString()}
+            {stockDetails?.securityInfo?.issuedSize}
           </span>
         </div>
         <div>
           Mkt Cap:
           <span className="text-slate-900 font-medium dark:text-[var(--text-primary)]">
             {" "}
-            {baseStock.marketCap}
+{
+  stockDetails?.securityInfo?.issuedSize &&
+  stockDetails?.priceInfo?.basePrice
+    ? (
+        (stockDetails.securityInfo.issuedSize *
+          stockDetails.priceInfo.basePrice) / 1e7
+      ).toFixed(2) + " Cr"
+    : "N/A"
+}
           </span>
         </div>
       </div>
@@ -392,7 +445,7 @@ const [activeInfo, setActiveInfo] = useState(null);
         P/E Ratio
       </p>
       <p className="text-lg font-semibold dark:text-[var(--text-primary)]">
-        {baseStock.pe}
+        {stockDetails?.metadata?.pdSymbolPe}
       </p>
     </div>
 
@@ -410,7 +463,7 @@ const [activeInfo, setActiveInfo] = useState(null);
         52W Range
       </p>
       <p className="text-sm font-semibold dark:text-[var(--text-primary)]">
-        ₹{baseStock.week52Low} - ₹{baseStock.week52High}
+        ₹{stockDetails?.priceInfo?.weekHighLow?.min} - ₹{stockDetails?.priceInfo?.weekHighLow?.max}
       </p>
     </div>
 
@@ -470,7 +523,7 @@ const [activeInfo, setActiveInfo] = useState(null);
       Day High
     </p>
     <p className="font-semibold dark:text-[var(--text-primary)]">
-      ₹{dayHigh}
+      ₹{stockDetails?.priceInfo?.intraDayHighLow?.max}
     </p>
   </div>
 
@@ -486,7 +539,7 @@ const [activeInfo, setActiveInfo] = useState(null);
       Day Low
     </p>
     <p className="font-semibold dark:text-[var(--text-primary)]">
-      ₹{dayLow}
+      ₹{stockDetails?.priceInfo?.intraDayHighLow?.min}
     </p>
   </div>
 </div>

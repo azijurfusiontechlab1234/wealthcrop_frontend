@@ -3,7 +3,7 @@ import axios from "axios";
 const token = localStorage.getItem("token")
 
 export const getApi = async (url) => {
-  console.log(" Fetching from:", url);
+  // console.log(" Fetching from:", url);
   try {
     const response = await axios.get(url);
     console.log(" API success:", response);
