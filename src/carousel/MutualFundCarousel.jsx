@@ -25,7 +25,7 @@ function MutualFundCarousel() {
     queryFn: () => getApi(url1),
   });
 
-  const funds = data?.data?.["10 yr Government Bond"] || [];
+  const funds = data?.["10 yr Government Bond"] || [];
 
   const getColor = (isUp) =>
   isUp

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toastError } from "../utils/notifyCustom";
 
 const token = localStorage.getItem("token")
 
@@ -32,12 +33,36 @@ export const postApi = async (url, data) => {
   try {
     const res = await axios.post(url, data, {
       headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return res.data; 
+
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Something went wrong";
+
+    toastError(errorMessage);  
+
+    return null; 
+  }
+};
+
+export const postApiWithToken = async (url, data) => {
+  try {
+    const res = await axios.post(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type" : "application/json",
       },
     })
+console.log("From post");
 
-    return res;
+    return res?.data;
   } catch (error) {
+    const errorMessage = error.response?.data?.message || 'An unknown error occurred';
+        toastError(errorMessage);
     return error;
   }
 }

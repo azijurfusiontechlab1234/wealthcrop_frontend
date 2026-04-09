@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  username: z.string().min(1, "Name is required"),
   mobile: z
     .string()
     .min(10, "Please enter a valid number")
@@ -17,7 +17,7 @@ export const formSchema = z.object({
 
 
 export const passwordLoginSchema = z.object({
-  mobile: z
+  email_or_mobile: z
     .string()
     .min(10, "Please enter a valid number")
     .regex(/^\d+$/, "Only digits are allowed"),
@@ -34,7 +34,7 @@ export const passwordLoginSchema = z.object({
 });
 
 export const otpLoginSchema = z.object({
-  mobile: z
+  email_or_mobile: z
     .string()
     .min(10, "Please enter a valid number")
     .regex(/^\d+$/, "Only digits are allowed"),

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toastSuccess, toastError } from "../utils/notifyCustom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { postApi } from "../api/api";
+import { postApi, postApiWithToken } from "../api/api";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authenticationSlice";
 
@@ -22,23 +22,39 @@ export default function Register() {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       mobile: "",
       password: "",
     },
   });
 
-  const submitForm = async (data) => {
-    console.log("Form Data:", data);
+  const submitForm = async (formData) => {
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_REGISTER}`
+    console.log("Form Data:", formData);
     setLoading(true);
     try {
       // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      toastSuccess("Form submitted successfully! 🚀");
-      setPinOpen(true);
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
+      const res = await postApi(url, formData)
+      console.log("Response data:", res);
+        if(res?.status === 200 || res?.status === true){
+
+          localStorage.setItem("token", res?.token)
+          localStorage.setItem("username", res?.data?.name)
+          localStorage.setItem("phone", res?.data?.phone)
+          localStorage.setItem("email", res?.data?.email)
+          
+          // toastSuccess("Form submitted successfully! ");
+          toastSuccess(res?.message);
+          setPinOpen(true);
+        } else {
+      // toastError(res || "Registration failed");  
+    }
+      
     } catch (error) {
-      toastError("Something went wrong. Please try again.");
+      // toastError("Something went wrong. Please try again.");
+      toastError(error?.message);
     } finally {
       setLoading(false);
     }
@@ -78,15 +94,15 @@ export default function Register() {
                 Username
               </label>
               <input
-                {...register("name")}
+                {...register("username")}
                 type="text"
                 placeholder="Enter your username"
                 className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm 
                 focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
               />
-              {errors.name && (
+              {errors.username && (
                 <p className="text-red-600 text-sm mt-1">
-                  {errors.name.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -240,29 +256,30 @@ function SetPin() {
   };
 
   const handleSavePin = async () => {
-
     const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_SET_PIN}`
     const url2 = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CONFIRM_PIN}`
     const rawPin = pin.join("")
-    // try {
-    //   if (pin.join("") !== confirmPin.join("")) {
-    //     setError("Pins do not match. Please try again.");
-    //     return;
-    //   }
-    //   const res = postApi(url, {pin : Number(rawPin)})
-    //   if(res.status === 200 || res.data.success){
+    try {
+      if (pin.join("") !== confirmPin.join("")) {
+        setError("Pins do not match. Please try again.");
+        return;
+      }
+      const res = postApiWithToken(url, {pin : Number(rawPin)})
+      console.log("Pin Response", res);
+      
+      if(res?.status === 200 || res?.status){
 
-    //     setError("");
-    //     toastSuccess(res.data.message);
-    //     navigate("/")
-    //   }
-    // } catch (error) {
-    //   toastError(error.response.data.message)
-    // }
-    setError("");
-        toastSuccess("Pin set successfully!");
-        dispatch(login("temporary-token-pin-user"))
+        setError("");
+        toastSuccess(res?.message);
         navigate("/")
+      }
+    } catch (error) {
+      toastError(error.res?.data?.message)
+    }
+    // setError("");
+    //     toastSuccess("Pin set successfully!");
+    //     // dispatch(login("temporary-token-pin-user"))
+    //     navigate("/")
  
   };
 

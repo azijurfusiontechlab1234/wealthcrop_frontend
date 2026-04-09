@@ -25,7 +25,7 @@ function LoginPage() {
     resolver: loginMode === "password"
       ? zodResolver(passwordLoginSchema)
       : zodResolver(otpLoginSchema),
-    defaultValues: { mobile: "", password: "", otp: "" },
+    defaultValues: { email_or_mobile: "", password: "", otp: "" },
   });
 
   // Handle OTP input changes
@@ -48,10 +48,20 @@ function LoginPage() {
   // Submit handler
   const onSubmit = async (data) => {
   if (loginMode === "password") { 
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_LOGIN}`;
+    const res = await postApi(url, data)
+    console.log("Login response", res);
+    
+    if(res?.status === 200 || res?.status === true){
+          // localStorage.setItem("token", res?.token)
+          localStorage.setItem("username", res?.data?.name)
+          localStorage.setItem("phone", res?.data?.phone)
+          localStorage.setItem("email", res?.data?.email)
+          toastSuccess("Logged in successfully!");
+          dispatch(login(res?.token))
+    
     console.log("Password Login:", data);
-    toastSuccess("Logged in successfully!");
-    localStorage.setItem("token","123456kjhhikk111")
-    dispatch(login("123456kjhhikk111"))
+    // localStorage.setItem("token","123456kjhhikk111")
     // ✅ Dispatch event to update App state
     window.dispatchEvent(new Event("storage"));
 
@@ -59,24 +69,25 @@ function LoginPage() {
     navigate("/");
     window.location.reload()
 reset();
+    }
 
   } else {
 if (!otpSent) {
   const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_SEND_OTP}`;
-
   try {
     // 📨 Step 1: Send OTP API call
-    const res = await postApi(url, { mob_number: data.mobile }); // change payload key if API expects something else
+    const res = await postApi(url, { phone: data.email_or_mobile }); // change payload key if API expects something else
+console.log("Otp response", res);
 
-    if (res.status === 200 || res.data.success) {
-      setSaveOTP(res.data.otp)
-      console.log("otp",res.data.otp);
+    if (res.status === 200 || res.status === true) {
+      setSaveOTP(res?.otp)
+      console.log("otp",res?.otp);
       
       setOtpSent(true);
       setOtp(["", "", "", "", "", ""]);
-      toastSuccess(res.data.message);
+      toastSuccess(res?.message);
     } else {
-      toastError(res.data.message || "Failed to send OTP ❌");
+      // toastError(res.data.message || "Failed to send OTP ");
     }
   } catch (error) {
     console.error("OTP Send Error:", error);
@@ -162,15 +173,15 @@ if (!otpMatch) {
           Mobile Number
         </label>
         <input
-          {...register("mobile")}
+          {...register("email_or_mobile")}
           type="tel"
           placeholder="Enter your mobile number"
           className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
           required
         />
-        {errors.mobile && (
+        {errors.email_or_mobile && (
           <p className="text-red-600 text-sm mt-1">
-            {errors.mobile.message}
+            {errors.email_or_mobile.message}
           </p>
         )}
       </div>

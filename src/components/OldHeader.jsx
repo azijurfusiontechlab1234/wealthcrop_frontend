@@ -104,6 +104,7 @@ export default function OldHeader() {
   }, [token, dispatch]);
 
   const handleLogout = () => {
+    localStorage.clear();
     dispatch(logout());
     navigate("/"); // redirect to home
     window.location.reload()
@@ -133,6 +134,9 @@ const [fnoOpen, setFnoOpen] = useState(false);
 // // Mobile Search
 // const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+const userName = localStorage.getItem("username")
+const email = localStorage.getItem("email")
+const phone = localStorage.getItem("phone")
 
   return (
     <>
@@ -231,10 +235,10 @@ const [fnoOpen, setFnoOpen] = useState(false);
   >
     <div>
       <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-        Fusion Techlab
+        {userName}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        fusionbusiness001@gmail.com
+        {email}
       </p>
     </div>
     <Settings

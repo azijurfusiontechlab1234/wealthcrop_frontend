@@ -289,6 +289,7 @@ useEffect(() => {
         <p
           className={`text-sm font-medium ${
             stock?.pChange > 0
+            
               ? "text-green-600"
               : "text-red-600"
           }`}
