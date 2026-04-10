@@ -107,7 +107,7 @@ export default function OldHeader() {
     localStorage.clear();
     dispatch(logout());
     navigate("/"); // redirect to home
-    window.location.reload()
+    // window.location.reload()
   };
 
   const handleSetting = () => {

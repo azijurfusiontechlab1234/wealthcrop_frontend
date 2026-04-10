@@ -63,7 +63,7 @@ console.log("From post");
   } catch (error) {
     const errorMessage = error.response?.data?.message || 'An unknown error occurred';
         toastError(errorMessage);
-    return error;
+    return null;
   }
 }
 

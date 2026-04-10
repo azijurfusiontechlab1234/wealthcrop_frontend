@@ -247,11 +247,17 @@ function SetPin() {
     }
   };
 
-  const handleKeyDown = (e, index, type) => {
+  const handleKeyDown = (e, index, type) => { 
     const refArr = type === "pin" ? pin : confirmPin;
     const focusArr = type === "pin" ? pinRefs : confirmRefs;
     if (e.key === "Backspace" && !refArr[index] && index > 0) {
       focusArr.current[index - 1].focus();
+
+        //! optional: clear previous value
+  // const updated = [...refArr];
+  // updated[index - 1] = "";
+  // type === "pin" ? setPin(updated) : setConfirmPin(updated);
+
     }
   };
 
