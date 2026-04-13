@@ -17,10 +17,21 @@ export const formSchema = z.object({
 
 
 export const passwordLoginSchema = z.object({
+  // email_or_mobile: z
+  //   .string()
+  //   .min(10, "Please enter a valid number")
+  //   .regex(/^\d+$/, "Only digits are allowed"),
   email_or_mobile: z
     .string()
-    .min(10, "Please enter a valid number")
-    .regex(/^\d+$/, "Only digits are allowed"),
+    .min(1, "This field is required")
+    .refine((value) => {
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      const isPhone = /^\d{10,}$/.test(value);
+      return isEmail || isPhone;
+    }, {
+      message: "Enter a valid email or mobile number",
+    }),
+
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")

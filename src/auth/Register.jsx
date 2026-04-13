@@ -40,6 +40,8 @@ export default function Register() {
       console.log("Response data:", res);
         if(res?.status === 200 || res?.status === true){
 
+          const expiryTime = Date.now() + 30 * 60 * 1000;
+          localStorage.setItem("pin_expiry", expiryTime)
           localStorage.setItem("token", res?.token)
           localStorage.setItem("username", res?.data?.name)
           localStorage.setItem("phone", res?.data?.phone)
@@ -270,14 +272,15 @@ function SetPin() {
         setError("Pins do not match. Please try again.");
         return;
       }
-      const res = postApiWithToken(url, {pin : Number(rawPin)})
+      const res = await postApiWithToken(url, {pin : Number(rawPin)})
       console.log("Pin Response", res);
       
       if(res?.status === 200 || res?.status){
 
         setError("");
         toastSuccess(res?.message);
-        navigate("/")
+        navigate("/user/stocks/explore")
+        window.location.reload()
       }
     } catch (error) {
       toastError(error.res?.data?.message)

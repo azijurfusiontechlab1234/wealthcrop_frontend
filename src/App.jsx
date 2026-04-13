@@ -99,6 +99,8 @@ import MutualFundInvestPage from "./pages/mutual_fund/MutualFundInvestPage";
 import ExploreFO from "./pages/future_&_options/ExploreFO";
 import PositionsFO from "./pages/future_&_options/PositionsFO";
 import OrdersFO from "./pages/future_&_options/OrdersFO";
+import { isPinExpired } from "./utils/pinExpireChecker";
+import LoginPinModal from "./utils/LoginPinModal";
 
 
 const queryClient = new QueryClient();
@@ -110,6 +112,9 @@ function App() {
   // useEffect(() => {
   //   setToken(localStorage.getItem("token"));
   // }, []);
+
+  const [locked, setLocked] = useState(false);
+
 
   const { pathname } = useLocation();
     const [baskets] = useState(basketsData); // static for now
@@ -141,6 +146,20 @@ function App() {
 
   const location = useLocation();
 
+useEffect(() => {
+  const check = () => {
+    if (token && isPinExpired()) { // ADD token check
+      setLocked(true);
+    }
+  };
+
+  check();
+
+  const interval = setInterval(check, 5000);
+
+  return () => clearInterval(interval);
+}, [token]);
+
   useEffect(() => {
     if (window.innerWidth < 1024) {
       if (location.pathname === "/") {
@@ -162,6 +181,9 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+        {locked && (
+  <LoginPinModal onSuccess={() => setLocked(false)} />
+)}
       {/* ⭐ Always on top of everything */}
       {/* <div className="fixed top-0 left-0 w-full z-[60]">
       <MutualFundCarousel />

@@ -9,6 +9,8 @@ import { toastError, toastSuccess } from "../utils/notifyCustom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authenticationSlice";
 import { postApi } from "../api/api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import LoginPinModal from "../utils/LoginPinModal";
 
 function LoginPage() {
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
@@ -17,6 +19,8 @@ function LoginPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpRefs = useRef([]);
   const [pinOpen, setPinOpen] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [locked, setLocked] = useState(false);
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -55,6 +59,8 @@ function LoginPage() {
     
     if(res?.status === 200 || res?.status === true){
           // localStorage.setItem("token", res?.token)
+          const expiryTime = Date.now() +  5000 //30 mint
+          localStorage.setItem("pin_expiry", expiryTime) 
           localStorage.setItem("username", res?.data?.name)
           localStorage.setItem("phone", res?.data?.phone)
           localStorage.setItem("email", res?.data?.email)
@@ -68,7 +74,7 @@ function LoginPage() {
 
     // ✅ Instantly redirect without reload
     navigate("/");
-    window.location.reload()
+    // window.location.reload()
 reset();
     }
 
@@ -150,9 +156,7 @@ console.log("Otp response", res);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#020617]">
   <div className="w-full max-w-md bg-white dark:bg-[#020617] rounded-2xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-white/10">
-   {
-    !pinOpen ? (
-      <>
+
        {/* Header */}
     <div className="text-center mb-6">
       <h1 className="text-2xl font-semibold text-blue-950 dark:text-gray-100">
@@ -164,7 +168,7 @@ console.log("Otp response", res);
     </div>
 
     {/* Tabs */}
-    <div className="flex mb-6 border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
+    <div className="flex mb-6 border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden ">
       <button
         onClick={() => setLoginMode("password")}
         className={`w-1/2 py-2 text-sm font-medium transition ${
@@ -175,6 +179,7 @@ console.log("Otp response", res);
       >
         Login with Password
       </button>
+    
       <button
         onClick={() => setLoginMode("otp")}
         className={`w-1/2 py-2 text-sm font-medium transition ${
@@ -192,7 +197,7 @@ console.log("Otp response", res);
       {/* Mobile */}
       <div>
         <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
-          Mobile Number
+          Mobile or Email
         </label>
         <input
           {...register("email_or_mobile")}
@@ -215,13 +220,23 @@ console.log("Otp response", res);
             <label className="block text-sm font-medium text-blue-950 dark:text-gray-200 mb-1">
               Password
             </label>
-            <input
+            <div className="relative">
+        <input
               {...register("password")}
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-700 text-blue-950 dark:text-gray-100 placeholder:text-gray-400"
               required
             />
+              <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400"
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
+            </div>
+            
             {errors.password && (
               <p className="text-red-600 text-sm mt-1">
                 {errors.password.message}
@@ -302,11 +317,7 @@ console.log("Otp response", res);
         Sign up
       </Link>
     </div>
-    </>
-    ) : (
-      <LoginPin setPinOpen={setPinOpen}/>
-    )
-   }
+
    
 
   </div>
