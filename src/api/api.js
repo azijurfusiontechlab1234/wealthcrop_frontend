@@ -42,7 +42,7 @@ export const postApi = async (url, data) => {
       },
     });
 
-    return res.data;
+    return res?.data;
   } catch (error) {
     toastError(error.response?.data?.message || "Something went wrong");
     return null;
@@ -51,6 +51,8 @@ export const postApi = async (url, data) => {
 
 export const postApiWithToken = async (url, data) => {
   const token = localStorage.getItem("token");
+  console.log("Token", token);
+  
 
   if (!token) {
     toastError("User not authenticated");
@@ -65,7 +67,7 @@ export const postApiWithToken = async (url, data) => {
       },
     });
 
-    return res.data;
+    return res?.data;
   } catch (error) {
     toastError(error.response?.data?.message || "API Error");
     return null;

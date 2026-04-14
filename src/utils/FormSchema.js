@@ -44,6 +44,14 @@ export const passwordLoginSchema = z.object({
   //   ),
 });
 
+export const resetPasswordSchema = z.object({
+  newPassword: z.string()
+  .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+      "Password must be at least 6 characters long and include uppercase, lowercase, number, and special character"
+    ),
+})
+
 export const otpLoginSchema = z.object({
   email_or_mobile: z
     .string()
@@ -67,3 +75,6 @@ export const pinSetSchema = z.object({
     }),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});

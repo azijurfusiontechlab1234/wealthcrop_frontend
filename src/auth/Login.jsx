@@ -11,6 +11,7 @@ import { login } from "../redux/authenticationSlice";
 import { postApi } from "../api/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import LoginPinModal from "../utils/LoginPinModal";
+import ForgotPassword from "../components/ForgotPassword";
 
 function LoginPage() {
   const [loginMode, setLoginMode] = useState("password"); // "password" | "otp"
@@ -18,7 +19,7 @@ function LoginPage() {
   const [saveOTP, setSaveOTP] = useState("")
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpRefs = useRef([]);
-  const [pinOpen, setPinOpen] = useState(true);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [locked, setLocked] = useState(false);
 
@@ -61,11 +62,53 @@ function LoginPage() {
           // localStorage.setItem("token", res?.token)
           const expiryTime = Date.now() +  5000 //30 mint
           localStorage.setItem("pin_expiry", expiryTime) 
-          localStorage.setItem("username", res?.data?.name)
-          localStorage.setItem("phone", res?.data?.phone)
-          localStorage.setItem("email", res?.data?.email)
-          toastSuccess("Logged in successfully!");
-          dispatch(login(res?.token))
+          // localStorage.setItem("username", res?.data?.name)
+          // localStorage.setItem("phone", res?.data?.phone)
+          // localStorage.setItem("email", res?.data?.email)
+          // toastSuccess("Logged in successfully!");
+          // dispatch(login(res?.token))
+
+
+const newAccount = {
+  userId: res?.data?._id,
+  name: res?.data?.name,
+  phone: res?.data?.phone,
+  email: res?.data?.email,
+  token: res?.token,
+};
+
+// Get existing accounts
+let accounts = [];
+
+try {
+  accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+} catch (e) {
+  accounts = [];
+}
+
+// Check if account already exists
+const existingIndex = accounts.findIndex(
+  (acc) => acc.userId === newAccount.userId
+);
+
+if (existingIndex !== -1) {
+  // Update existing account
+  accounts[existingIndex] = newAccount;
+} else {
+  // Add new account
+  accounts.push(newAccount);
+}
+
+// Save all accounts
+localStorage.setItem("accounts", JSON.stringify(accounts));
+
+// Set current active account
+localStorage.setItem("currentAccount", JSON.stringify(newAccount));
+
+toastSuccess(res?.message);
+
+// Redux (store only current token)
+dispatch(login(newAccount.token));
     
     console.log("Password Login:", data);
     // localStorage.setItem("token","123456kjhhikk111")
@@ -76,6 +119,8 @@ function LoginPage() {
     navigate("/");
     // window.location.reload()
 reset();
+    }else{
+      toastError(res?.message)
     }
 
   } else {
@@ -154,10 +199,12 @@ console.log("Otp response", res);
   }, [loginMode, reset]);
 
   return (
+    
+  !forgotPassword ? (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#020617]">
   <div className="w-full max-w-md bg-white dark:bg-[#020617] rounded-2xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-white/10">
 
-       {/* Header */}
+        {/* Header */}
     <div className="text-center mb-6">
       <h1 className="text-2xl font-semibold text-blue-950 dark:text-gray-100">
         Welcome Back 👋
@@ -252,12 +299,13 @@ console.log("Otp response", res);
               />
               <span>Remember me</span>
             </label>
-            <Link
-              to="/forgot-password"
+            <button
+            type="button"
+              onClick={() => setForgotPassword(true)}
               className="text-blue-800 dark:text-blue-400 hover:text-blue-950 dark:hover:text-blue-300 font-medium"
             >
               Forgot Password?
-            </Link>
+            </button>
           </div>
         </>
       )}
@@ -317,11 +365,11 @@ console.log("Otp response", res);
         Sign up
       </Link>
     </div>
-
-   
-
-  </div>
+      </div>
 </div>
+  ) : (
+    <ForgotPassword/>
+  )
 
   );
 }

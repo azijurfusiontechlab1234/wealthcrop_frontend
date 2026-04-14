@@ -23,11 +23,18 @@ export default function ProfileSettingPopup({ onClose }) {
     const navigate = useNavigate()
     const location = useLocation()
 
-     const handleLogout = () => {
-      dispatch(logout());
-      navigate("/"); // redirect to home
-      window.location.reload()
-    };
+    //  const handleLogout = () => {
+    //   dispatch(logout());
+    //   navigate("/"); // redirect to home
+    //   window.location.reload()
+    // };
+
+    const handleLogout = () => {
+  localStorage.removeItem("currentAccount");
+
+  dispatch(logout());
+  navigate("/");
+};
   
     const handleSetting = () =>{
       navigate("/profile")

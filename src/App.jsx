@@ -101,6 +101,9 @@ import PositionsFO from "./pages/future_&_options/PositionsFO";
 import OrdersFO from "./pages/future_&_options/OrdersFO";
 import { isPinExpired } from "./utils/pinExpireChecker";
 import LoginPinModal from "./utils/LoginPinModal";
+import ResetPassword from "./pages/ResetPassword";
+import StockHandler from "./utils/socketHandler";
+import SocketHandler from "./utils/socketHandler";
 
 
 const queryClient = new QueryClient();
@@ -181,6 +184,7 @@ useEffect(() => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SocketHandler/>
         {locked && (
   <LoginPinModal onSuccess={() => setLocked(false)} />
 )}
@@ -324,6 +328,7 @@ useEffect(() => {
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
+          <Route path="/reset-password" element={<ResetPassword/>} />
           <Route path="/nfo" element={<NFO />} />
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />

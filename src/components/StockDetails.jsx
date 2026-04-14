@@ -41,6 +41,7 @@ import socket from "../utils/socket";
 export default function StockDetailsPremiumFull() {
   // ---------------- MOCK STOCK DATA ----------------
   const {name} = useParams()
+  
   const baseStock = {
     name: "AetherTech Solutions Ltd.",
     symbol: "AETHER",
@@ -74,30 +75,31 @@ export default function StockDetailsPremiumFull() {
   const [stockDetails, setStockDetails] = useState()
 
 
-  useEffect(() => {
-  
-    const fetchStockList = ()=>{
-      socket.emit("get_details",{symbol: name})
-    }
-  
-    // Listen
-    socket.on("stock_details", (data) => {
-      console.log("Stock Details", data);
-      setStockDetails(data)
-    })
-  
-    const interval = setInterval(() => {
-      fetchStockList()
-    }, 1000);
-  
-    fetchStockList()
-  
-    return () => {
-      clearInterval(interval)
-      socket.off("fetchList")
-    }
-  
-  },[])
+ useEffect(() => {
+   setStockDetails(null); 
+   
+  if (!name) return; 
+
+  const fetchStockDetails = () => {
+    socket.emit("get_details", { symbol: name });
+  };
+
+  const handleStockDetails = (data) => {
+    console.log("Stock Details", data);
+    setStockDetails(data);
+  };
+
+  socket.on("stock_details", handleStockDetails);
+
+  fetchStockDetails(); // initial call
+
+  const interval = setInterval(fetchStockDetails, 1000);
+
+  return () => {
+    clearInterval(interval);
+    socket.off("stock_details", handleStockDetails); //  correct cleanup
+  };
+}, [name]); //  VERY IMPORTANT
 
   // Financials: quarterly and yearly (mock)
   const financialsQuarterly = {

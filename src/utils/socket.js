@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = io('http://65.2.121.33:5500', {
+const socket = io('http://65.2.121.33.nip.io:5500', {
     transports: ['websocket'], // Force WebSocket transport
 });
 

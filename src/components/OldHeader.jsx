@@ -103,12 +103,19 @@ export default function OldHeader() {
     return () => window.removeEventListener("storage", checkToken);
   }, [token, dispatch]);
 
+  // const handleLogout = () => {
+  //   localStorage.clear();
+  //   dispatch(logout());
+  //   navigate("/"); // redirect to home
+  //   // window.location.reload()
+  // };
+
   const handleLogout = () => {
-    localStorage.clear();
-    dispatch(logout());
-    navigate("/"); // redirect to home
-    // window.location.reload()
-  };
+  localStorage.removeItem("currentAccount");
+
+  dispatch(logout());
+  navigate("/");
+};
 
   const handleSetting = () => {
     navigate("/profile")
@@ -133,10 +140,10 @@ const [fnoOpen, setFnoOpen] = useState(false);
 
 // // Mobile Search
 // const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-const userName = localStorage.getItem("username")
-const email = localStorage.getItem("email")
-const phone = localStorage.getItem("phone")
+ const current = JSON.parse(localStorage.getItem("currentAccount"))
+const userName = current?.name
+const email = current?.email
+const phone = current?.phone
 
   return (
     <>

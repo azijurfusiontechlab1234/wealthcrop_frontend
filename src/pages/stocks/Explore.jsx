@@ -10,13 +10,14 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { getApi } from "../../api/api";
 import socket from "../../utils/socket";
+import { useSelector } from "react-redux";
 
 
 const Explore = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeTab, setActiveTab] = useState("Gainers");
   const [hoveredRow, setHoveredRow] = useState(null);
-  const [stockList, setStockList] = useState(null)
+  // const [stockList, setStockList] = useState(null)
 
       const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("NIFTY 100");
@@ -32,32 +33,34 @@ const Explore = () => {
 //   refetchOnWindowFocus: false,
 // });
 
-useEffect(() => {
+//! socket 
+// useEffect(() => {
 
-  const fetchStockList = ()=>{
-    socket.emit("get_stock_list")
-  }
+//   const fetchStockList = ()=>{
+//     socket.emit("get_stock_list")
+//   }
 
-  // Listen
-  socket.on("stock_list", (data) => {
-    console.log("Stock List", data);
-    setStockList(data?.data)
-  })
+//   // Listen
+//   socket.on("stock_list", (data) => {
+//     console.log("Stock List", data);
+//     setStockList(data?.data)
+//   })
 
-  const interval = setInterval(() => {
-    fetchStockList()
-  }, 1000);
+//   const interval = setInterval(() => {
+//     fetchStockList()
+//   }, 1000);
 
-  fetchStockList()
+//   fetchStockList()
 
-  return () => {
-    clearInterval(interval)
-    socket.off("fetchList")
-  }
+//   return () => {
+//     clearInterval(interval)
+//     socket.off("stock_list")
+//   }
 
-},[])
+// },[])
 
-
+//! from redux
+const stockList =  useSelector((state) => state.stocks.stockList)
 
 
   // const [stocks, setStocks] = useState([]);

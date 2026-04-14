@@ -8,8 +8,10 @@ function LoginPinModal({ onSuccess }) {
   const [error, setError] = useState("");
   const pinRefs = useRef([]);
 
-     const username = localStorage.getItem("username")
-     const email = localStorage.getItem("email")
+    const current = JSON.parse(localStorage.getItem("currentAccount"))
+const username = current?.name
+const email = current?.email
+const phone = current?.phone
           
 
   const handlePinChange = (value, index) => {
@@ -39,7 +41,8 @@ function LoginPinModal({ onSuccess }) {
     const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_VERIFY_PIN}`
     const rawPin = pinArray.join("");
     console.log("Verify Pin", rawPin);
-    const phone = localStorage.getItem("phone")
+    const current = JSON.parse(localStorage.getItem("currentAccount"))
+    const phone = current?.phone
     try {
     //   if (pin.join("") !== confirmPin.join("")) {
     //     setError("Pins do not match. Please try again.");
@@ -68,10 +71,12 @@ function LoginPinModal({ onSuccess }) {
  
   };
 
-  const handleLogout = () => {
-    localStorage.clear()
-    window.location.reload()
-  }
+const handleLogout = () => {
+  localStorage.removeItem("currentAccount");
+
+  dispatch(logout());
+  navigate("/");
+};
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">

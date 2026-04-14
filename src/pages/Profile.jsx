@@ -46,11 +46,12 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-    window.location.reload();
-  };
+ const handleLogout = () => {
+  localStorage.removeItem("currentAccount");
+
+  dispatch(logout());
+  navigate("/");
+};
 
   const handleSetting = () => {
     navigate("/profile/basic");
