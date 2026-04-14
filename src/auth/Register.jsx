@@ -51,7 +51,7 @@ export default function Register() {
           toastSuccess(res?.message);
           setPinOpen(true);
         } else {
-      toastError(res?.message || "Registration failed");  
+      // toastError(res?.message || "Registration failed");  
     }
       
     } catch (error) {

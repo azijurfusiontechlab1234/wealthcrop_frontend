@@ -2,11 +2,17 @@ import { useState, useRef } from "react";
 import { postApiWithToken } from "../api/api";
 import { toastError, toastSuccess } from "../utils/notifyCustom";
 import { isPinExpired } from "../utils/pinExpireChecker";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/authenticationSlice";
 
 function LoginPinModal({ onSuccess }) {
   const [pin, setPin] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
   const pinRefs = useRef([]);
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
     const current = JSON.parse(localStorage.getItem("currentAccount"))
 const username = current?.name
@@ -72,10 +78,10 @@ const phone = current?.phone
   };
 
 const handleLogout = () => {
+  onSuccess()
   localStorage.removeItem("currentAccount");
-
   dispatch(logout());
-  navigate("/");
+  navigate("/login");
 };
 
   return (

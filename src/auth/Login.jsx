@@ -70,7 +70,7 @@ function LoginPage() {
 
 
 const newAccount = {
-  userId: res?.data?._id,
+  userId: res?.data?.id,
   name: res?.data?.name,
   phone: res?.data?.phone,
   email: res?.data?.email,
@@ -120,7 +120,7 @@ dispatch(login(newAccount.token));
     // window.location.reload()
 reset();
     }else{
-      toastError(res?.message)
+      // toastError(res?.message)
     }
 
   } else {
