@@ -17,7 +17,10 @@ import {
   KeyRound,
   Activity,
   Users,
+  Phone,
 } from "lucide-react";  
+import { postApiWithToken } from "../../api/api";
+import { toastError, toastSuccess } from "../../utils/notifyCustom";
 
 
 const BasicDetails = () => {
@@ -26,6 +29,8 @@ const BasicDetails = () => {
 
     const [openModal, setOpenModal] = useState(false);
     const [editType, setEditType] = useState(null);
+      const [mobileVerify, setMobileVerify] = useState(false)
+      const [emailVerify, setEmailVerify] = useState(false)
 
 
 const handleBack = () => {
@@ -41,6 +46,54 @@ const handleBack = () => {
     goldLimit: "10%",
     lastUpdated: "12 Jan 2025",
   };
+
+  const accounts = JSON.parse(localStorage.getItem("accounts")) || []
+// const visibleAcounts = showAll ? accounts : accounts.slice(0,2)
+const current = JSON.parse(localStorage.getItem("currentAccount"))
+const userName = current?.name
+const email = current?.email
+const phone = current?.phone
+
+  const handleVerify = async (type) => {
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_VERIFY}`
+
+    try {
+      const response = await postApiWithToken(url, {type} )
+      console.log("Verify", response);
+      
+      if(response?.status === 200 || response?.status){
+        setEditType(type === "email" ? "emailVerify" : "phoneVerify");
+        setOpenModal(true);
+        toastSuccess(response?.message);
+      }else{
+        // toastError(res?.message || "Something went wrong");  
+      }
+    } catch (error) {
+      toastError(error.message)
+    }
+
+  }
+  const handleVerifyOTP = async (type, value) => {
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_VERIFY_SEND_OTP}`
+    const id = type === "phoneVerify" ? "phone" : "email"
+    try {
+      const response = await postApiWithToken(url, {type: id, otp: value} )
+      console.log("Verify otp", response);
+      
+      if(response?.status === 200 || response?.status){
+        id === "email" ? setEmailVerify(true) : setMobileVerify(true)
+        setOpenModal(false);
+        toastSuccess(response?.message);
+      }else{
+        // toastError(res?.message || "Something went wrong");  
+      }
+    } catch (error) {
+      toastError(error.message)
+    }
+
+  }
 
 
   return (
@@ -75,15 +128,30 @@ const handleBack = () => {
     
                     {/* Mobile Number */}
                     <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Mobile Number</p>
-                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">*****47038</p>
+                     
+                        <div>
+                          <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Mobile Number</p>
+                           <div className="flex gap-2 items-center">
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{phone}</p>
+                        <button  
+                        onClick={() => {
+         handleVerify("phone")
+        }} 
+        className={mobileVerify ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { mobileVerify ? (
+<ShieldCheck className="fill-green-600" size={20} /> ) :
+"Verify"
+        } </button>
+                        </div>
+                        
+                        
                       </div>
+
                       <button 
                         onClick={() => {
-          setEditType("mobile");
+                          
+                           setEditType("mobile");
           setOpenModal(true);
-        }}
+                        }}
                       className="text-emerald-600 hover:text-emerald-800">
                         <FiEdit2 />
                       </button>
@@ -91,12 +159,25 @@ const handleBack = () => {
     
                     {/* Email Address */}
                     <div className="flex justify-between items-center">
-                      <div>
+
+                      
+                        <div>
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Email Address</p>
-                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">
-                          fus***********1@gmail.com
-                        </p>
-                      </div>
+
+
+                      <div className="flex gap-2 items-center">
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{email}</p>
+                        <button  
+                        onClick={() => {
+         handleVerify("email")
+        }} 
+        className={emailVerify ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { emailVerify ? (
+<ShieldCheck className="fill-green-600" size={20} /> ) :
+"Verify"
+        } </button>
+                        </div>
+        </div>
+
                       <button 
                       onClick={() => {
                         setEditType("email")
@@ -176,6 +257,7 @@ const handleBack = () => {
                 </div>
                     {openModal && (
   <EditModal
+  handleVerifyOTP={handleVerifyOTP}
     type={editType}
     onClose={() => setOpenModal(false)}
   />
@@ -494,6 +576,7 @@ const handleBack = () => {
   </div>
   {openModal && (
   <EditModal
+  handleVerifyOTP={handleVerifyOTP}
     type={editType}
     onClose={() => setOpenModal(false)}
   />
@@ -508,7 +591,7 @@ const handleBack = () => {
   )
 }
 
-const EditModal = ({type, onClose}) => {
+const EditModal = ({type, onClose, handleVerifyOTP}) => {
   return(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
 
@@ -524,7 +607,7 @@ const EditModal = ({type, onClose}) => {
         </div>
 
         {/* body */}
-        <EditForm type={type} />
+        <EditForm type={type} handleVerifyOTP={handleVerifyOTP} />
 
       </div>
 
@@ -539,10 +622,12 @@ const getTitle = (type) => {
     case "maritalStatus" : return "Update marital status"
     case "father'sName" : return "Update your data"
     case "income" : return "Update your data"
+    case "phoneVerify" : return "Verify your phone number"
+    case "emailVerify" : return "Verify your email"
   }
 }
 
-const EditForm = ({ type }) => {
+const EditForm = ({ type, handleVerifyOTP }) => {
   
   const [value, setValue] = useState("");
   const config = getFieldConfig(type);
@@ -563,6 +648,7 @@ const EditForm = ({ type }) => {
     className="w-full mt-2 p-2 border rounded-lg dark:bg-white/5 dark:border-white/10"
     />
       <button
+      onClick={() => handleVerifyOTP(type, value)}
         className="w-full mt-4 bg-blue-600 hover:bg-blue-700
           text-white py-2 rounded-lg font-semibold"
       >
@@ -580,7 +666,7 @@ const getFieldConfig = (type) => {
         label: "Mobile Number",
         inputType: "tel",
         placeholder: "Enter new mobile number",
-        button: "Send OTP"
+        button: "Update mobile"
       };
 
      case "email" :
@@ -588,7 +674,7 @@ const getFieldConfig = (type) => {
         label: "Email Address",
         inputType: "email",
         placeholder: "Enter new email address",
-        button: "Verify email"
+        button: "Update email"
       } 
 
      case "maritalStatus" :
@@ -614,6 +700,22 @@ const getFieldConfig = (type) => {
         placeholder: "Enter your income",
         button: "Update income",
       } 
+
+      case "phoneVerify" :
+        return {
+          label: "Enter OTP",
+          inputType: "text",
+          placeholder: "Enter OTP sent to your phone number",
+          button: "Verify"
+        }
+
+      case "emailVerify" :
+        return {
+          label: "Enter OTP",
+          inputType: "text",
+          placeholder: "Enter OTP sent to your email address",
+          button: "Verify"
+        }
 
       case "nominee" :
         return {

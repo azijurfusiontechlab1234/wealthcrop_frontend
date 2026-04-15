@@ -1,18 +1,35 @@
 import React, { useState } from 'react'
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { postApiWithToken } from '../../api/api';
+import { toastError, toastSuccess } from '../../utils/notifyCustom';
 
 const ChangePin = () => {
+  const [oldPin, setOldPin] = useState("")
   const [newPin, setNewPin] = useState("")
   const [confirmPin, setConfirmPin] = useState("")
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleUpdate = () => {
-    if (newPin !== confirmPin) {
-      alert("Pins do not match!");
-      return;
-    }
-    alert("Pin updated successfully!");
+  const handleUpdate = async () => {
+    // if (newPin !== confirmPin) {
+    //   alert("Pins do not match!");
+    //   return;
+    // }
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CHANGE_PIN}`;
+    try {
+             const res = await postApiWithToken(url, {old_pin:oldPin ,new_pin: newPin})
+        console.log("change pin response", res);
+        
+        if(res?.status === 200 || res?.status === true){
+    
+              toastSuccess(res?.message);
+        }else{
+            // toastSuccess(res?.message);
+        }
+    } catch (error) {
+        toastError(error.message || "Server error happened");
+        }
   };
 
   return (
@@ -38,6 +55,49 @@ const ChangePin = () => {
   >
     Change Wealthcrop PIN
   </h2>
+
+  <div className="mb-6 relative z-10">
+    <label
+      className="
+        block mb-2 font-semibold
+        text-gray-600
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Old Pin
+    </label>
+
+    <div className="relative">
+      <input
+        type={showConfirm ? "text" : "password"}
+        className="
+          w-full border-b rounded-lg px-4 py-2 outline-none
+          border-gray-300 bg-transparent text-gray-900
+          focus:border-blue-400
+
+          dark:border-[var(--border-color)]
+          dark:text-[var(--text-primary)]
+          dark:focus:border-blue-500
+        "
+        value={oldPin}
+        onChange={(e) => setOldPin(e.target.value)}
+        placeholder="Enter old Pin"
+      />
+
+      <button
+        type="button"
+        className="
+          absolute right-3 top-2.5
+          text-gray-500
+          dark:text-[var(--text-secondary)]
+        "
+        onClick={() => setShowConfirm(!showConfirm)}
+        aria-label="Toggle confirm Pin visibility"
+      >
+        {showConfirm ? <FiEyeOff /> : <FiEye />}
+      </button>
+    </div>
+  </div>
 
   {/* New Pin */}
   <div className="mb-4 relative z-10">
@@ -84,48 +144,7 @@ const ChangePin = () => {
   </div>
 
   {/* Confirm Pin */}
-  <div className="mb-6 relative z-10">
-    <label
-      className="
-        block mb-2 font-semibold
-        text-gray-600
-        dark:text-[var(--text-secondary)]
-      "
-    >
-      Confirm Pin
-    </label>
-
-    <div className="relative">
-      <input
-        type={showConfirm ? "text" : "password"}
-        className="
-          w-full border-b rounded-lg px-4 py-2 outline-none
-          border-gray-300 bg-transparent text-gray-900
-          focus:border-blue-400
-
-          dark:border-[var(--border-color)]
-          dark:text-[var(--text-primary)]
-          dark:focus:border-blue-500
-        "
-        value={confirmPin}
-        onChange={(e) => setConfirmPin(e.target.value)}
-        placeholder="Confirm new Pin"
-      />
-
-      <button
-        type="button"
-        className="
-          absolute right-3 top-2.5
-          text-gray-500
-          dark:text-[var(--text-secondary)]
-        "
-        onClick={() => setShowConfirm(!showConfirm)}
-        aria-label="Toggle confirm Pin visibility"
-      >
-        {showConfirm ? <FiEyeOff /> : <FiEye />}
-      </button>
-    </div>
-  </div>
+  
 
   <button
     onClick={handleUpdate}

@@ -60,7 +60,7 @@ const phone = current?.phone
       if(res?.status === 200 || res?.status){
 
         setError("");
-        const expiryTime = Date.now() + 10 * 60  * 1000
+        const expiryTime = Date.now() +   5000
         localStorage.setItem("pin_expiry", expiryTime)
         onSuccess()
         // toastSuccess(res?.message);

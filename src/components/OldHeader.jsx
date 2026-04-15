@@ -5,7 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import SearchPopup from "./SearchPopup";
-import { logout } from "../redux/authenticationSlice";
+import { login, logout } from "../redux/authenticationSlice";
 import StockImage from "../assets/mutualFund/stock.jpg";
 import StockImage2 from "../assets/mutualFund/stock1.jpg";
 import StockImage3 from "../assets/mutualFund/stock2.jpg";
@@ -47,12 +47,14 @@ import StocksMenu from "./hovercomp/StocksMenu";
 import FOMenu from "./hovercomp/FOMenu";
 import MoreMenu from "./hovercomp/MoreMenu";
 import ThemeToggle from "../utils/ThemeToggle";
+import socket from "../utils/socket";
 
 export default function OldHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [investOpen, setInvestOpen] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false)
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
@@ -121,6 +123,22 @@ export default function OldHeader() {
     navigate("/profile")
   }
 
+//! For switch account
+  const handleSwitch = (acc) => {
+  localStorage.setItem("currentAccount", JSON.stringify(acc));
+
+  dispatch(login(acc.token));
+
+  // socket?.disconnect();
+
+  // socket = io(BASE_URL, {
+  //   auth: { token: acc.token }
+  // });
+
+
+  window.location.reload(); // for now (later remove)
+};
+
   // ---------------- Mobile Menu States ----------------
 
 // Mutual Fund dropdown
@@ -140,7 +158,9 @@ const [fnoOpen, setFnoOpen] = useState(false);
 
 // // Mobile Search
 // const [isSearchOpen, setIsSearchOpen] = useState(false);
- const current = JSON.parse(localStorage.getItem("currentAccount"))
+const accounts = JSON.parse(localStorage.getItem("accounts")) || []
+const visibleAcounts = showAll ? accounts : accounts.slice(0,2)
+const current = JSON.parse(localStorage.getItem("currentAccount"))
 const userName = current?.name
 const email = current?.email
 const phone = current?.phone
@@ -254,6 +274,47 @@ const phone = current?.phone
       className="text-gray-500 dark:text-gray-400 mt-1 cursor-pointer"
     />
   </div>
+
+  {/* Switch Accounts */}
+  <div className="border-b border-gray-100 dark:border-gray-700">
+  <p className="px-4 py-2 text-xs text-gray-500">Switch Account</p>
+
+<div className="h-26 overflow-y-auto">
+  {visibleAcounts.map((acc) => (
+    <div
+      key={acc.userId}
+      onClick={() => handleSwitch(acc)}
+      className={`flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${
+        current?.userId === acc.userId ? "bg-blue-50 dark:bg-blue-900/20" : ""
+      }`}
+    >
+      <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
+        {acc.name.charAt(0)}
+      </div>
+
+      <div>
+        <p className="text-sm font-medium">{acc.name}</p>
+        <p className="text-xs text-gray-500">{acc.email}</p>
+      </div>
+    </div>
+  ))}
+</div>
+  {
+    accounts.length > 2 && (
+      <div onClick={() => setShowAll(!showAll)} className="px-4 py-2 text-blue-600 cursor-pointer hover:bg-gray-100 dark:hover:bg[var(--gray-800)] text-xs font-semibold flex items-center gap-1">
+        {showAll ? "Show less ↑" : "Show more ↓"}
+      </div>
+    )
+  }
+
+  {/* Add Account */}
+  <div
+    onClick={() => navigate("/login")}
+    className="px-4 py-2 text-blue-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm"
+  >
+    + Add Account
+  </div>
+</div>
 
   {/* Balance */}
   <Link
@@ -370,7 +431,6 @@ const phone = current?.phone
     </button>
   </div>
 
-  {/* Mobile Dropdown */}
  {/* Mobile Dropdown */}
 <div
   className={`md:hidden space-y-4
