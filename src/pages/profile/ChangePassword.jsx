@@ -1,18 +1,41 @@
 import React, { useState } from 'react'
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toastError, toastSuccess } from '../../utils/notifyCustom';
+import { postApiWithToken } from '../../api/api';
 
 const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
+   const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CHANGE_PASSWORD}`
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    alert("Password updated successfully!");
+     try {
+                 const res = await postApiWithToken(url, {old_password:oldPassword ,new_password: newPassword, confirm_password: confirmPassword})
+            console.log("change password response", res);
+            
+            if(res?.status === 200 || res?.status === true){
+              setOldPassword("")
+              setNewPassword("")
+              setConfirmPassword("")
+              setShowOld(false)
+              setShowNew(false)
+              setShowConfirm(false)
+        
+                  toastSuccess(res?.message);
+            }else{
+                // toastSuccess(res?.message);
+            }
+        } catch (error) {
+            toastError(error.message || "Something went wrong");
+            }
   };
 
   return (
@@ -37,6 +60,52 @@ const ChangePassword = () => {
   >
     Change Password
   </h2>
+
+  {/* Old Password */}
+  <div className="mb-4 relative z-10">
+    <label
+      className="
+        block mb-2 font-semibold
+        text-gray-600
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Old Password
+    </label>
+
+    <div className="relative">
+      <input
+        type={showOld ? "text" : "password"}
+        value={oldPassword}
+        onChange={(e) => setOldPassword(e.target.value)}
+        placeholder="Enter old password"
+        className="
+          w-full px-4 py-2 rounded-lg
+          border-b border-gray-300
+          focus:outline-none focus:border-blue-400
+
+          bg-transparent
+          text-blue-950
+          dark:text-[var(--text-primary)]
+          dark:border-[var(--border-color)]
+          dark:focus:border-blue-400
+        "
+      />
+
+      <button
+        type="button"
+        aria-label="Toggle new password visibility"
+        onClick={() => setShowOld(!showOld)}
+        className="
+          absolute right-3 top-2.5
+          text-gray-500
+          dark:text-[var(--text-secondary)]
+        "
+      >
+        {showOld ? <FiEyeOff /> : <FiEye />}
+      </button>
+    </div>
+  </div>
 
   {/* New Password */}
   <div className="mb-4 relative z-10">

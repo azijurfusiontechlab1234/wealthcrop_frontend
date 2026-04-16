@@ -30,7 +30,7 @@ export const getApiWithToken = async (url) => {
     return response.data;
   } catch (error) {
     toastError(error.response?.data?.message || "API Error");
-    throw error;
+    return null;
   }
 };
 

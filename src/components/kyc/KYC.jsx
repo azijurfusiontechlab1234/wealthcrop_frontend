@@ -21,7 +21,7 @@ export default function KYCFlow() {
   const [stepError, setStepError] = useState("");
 
 
-  // 🔐 CENTRAL KYC STATE
+  //  CENTRAL KYC STATE
   const [kycData, setKycData] = useState({
     pan: "",
     dob: "",
@@ -34,6 +34,12 @@ export default function KYCFlow() {
     document: null,
     video: null,
   });
+
+  // pan Image,
+  // add line 1, 2, 3
+  // pin code,
+  // marital status,
+  // fathers name
 
   const update = (key, value) =>
     setKycData((prev) => ({ ...prev, [key]: value }));

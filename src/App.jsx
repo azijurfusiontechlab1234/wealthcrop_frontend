@@ -104,6 +104,7 @@ import LoginPinModal from "./utils/LoginPinModal";
 import ResetPassword from "./pages/ResetPassword";
 import StockHandler from "./utils/socketHandler";
 import SocketHandler from "./utils/socketHandler";
+import ResetPin from "./pages/ResetPin";
 
 
 const queryClient = new QueryClient();
@@ -329,6 +330,7 @@ useEffect(() => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword/>} />
+          <Route path="/reset-pin" element={<ResetPin/>} />
           <Route path="/nfo" element={<NFO />} />
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
           <Route path="/stocks/:name" element={<StockDetails />} />

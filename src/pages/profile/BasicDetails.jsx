@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa6";
@@ -19,7 +19,7 @@ import {
   Users,
   Phone,
 } from "lucide-react";  
-import { postApiWithToken } from "../../api/api";
+import { getApiWithToken, postApiWithToken } from "../../api/api";
 import { toastError, toastSuccess } from "../../utils/notifyCustom";
 
 
@@ -31,6 +31,7 @@ const BasicDetails = () => {
     const [editType, setEditType] = useState(null);
       const [mobileVerify, setMobileVerify] = useState(false)
       const [emailVerify, setEmailVerify] = useState(false)
+      const [userData, setUserData] = useState(null)
 
 
 const handleBack = () => {
@@ -46,6 +47,30 @@ const handleBack = () => {
     goldLimit: "10%",
     lastUpdated: "12 Jan 2025",
   };
+
+  useEffect(() => {
+    // const token = localStorage.getItem("token")
+
+    // if(!token) return
+    const fetchUser = async () => {
+      const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_DATA}`
+      try {
+        const res = await getApiWithToken(url);
+        console.log("User Data", res);
+        
+        if(res?.status === 200 || res?.status === true){
+          setUserData(res?.data)
+          toastSuccess(res?.message)
+        }
+        
+      } catch (error) {
+        toastError(error?.message || "Something went wrong");
+      }
+    }
+
+    fetchUser()
+
+  },[])
 
   const accounts = JSON.parse(localStorage.getItem("accounts")) || []
 // const visibleAcounts = showAll ? accounts : accounts.slice(0,2)
@@ -82,8 +107,42 @@ const phone = current?.phone
       const response = await postApiWithToken(url, {type: id, otp: value} )
       console.log("Verify otp", response);
       
+        if(response?.status === 200 || response?.status){
+          id === "email" ? setEmailVerify(true) : setMobileVerify(true)
+          // fetchUser()
+          setOpenModal(false);
+          toastSuccess(response?.message);
+        }else{
+        // toastError(res?.message || "Something went wrong");  
+      }
+    } catch (error) {
+      toastError(error.message)
+    }
+
+  }
+
+  const handleChangeDetails = async (type, value) => {
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_UPDATE_MOB_EMAIL}`
+    const id = type === "mobile" ? "phone" : type
+    try {
+      const response = await postApiWithToken(url, {[id]: value} )
+      console.log("Verify otp", response);
+      
       if(response?.status === 200 || response?.status){
-        id === "email" ? setEmailVerify(true) : setMobileVerify(true)
+        // id === "email" ? setEmailVerify(true) : setMobileVerify(true)
+
+        if(id === "email"){
+          current.email = value
+        }else if(id === "phone"){
+          current.phone = value
+        }
+
+        const updatedAccounts = accounts.map( acc => acc.userId === current.userId ? current : acc)
+
+          localStorage.setItem("currentAccount", JSON.stringify(current));
+          localStorage.setItem("accounts", JSON.stringify(updatedAccounts));
+
         setOpenModal(false);
         toastSuccess(response?.message);
       }else{
@@ -117,7 +176,7 @@ const phone = current?.phone
                     {/* Full Name */}
                     <div>
                       <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Full Name</p>
-                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">Fusion Techlab</p>
+                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.name ?? "--"}</p>
                     </div>
     
                     {/* Date of Birth */}
@@ -132,12 +191,13 @@ const phone = current?.phone
                         <div>
                           <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Mobile Number</p>
                            <div className="flex gap-2 items-center">
-                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{phone}</p>
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.phone ?? "--"}</p>
                         <button  
                         onClick={() => {
          handleVerify("phone")
         }} 
-        className={mobileVerify ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { mobileVerify ? (
+        className={userData?.is_phone_verified
+ ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { userData?.is_phone_verified ? (
 <ShieldCheck className="fill-green-600" size={20} /> ) :
 "Verify"
         } </button>
@@ -148,7 +208,6 @@ const phone = current?.phone
 
                       <button 
                         onClick={() => {
-                          
                            setEditType("mobile");
           setOpenModal(true);
                         }}
@@ -166,12 +225,12 @@ const phone = current?.phone
 
 
                       <div className="flex gap-2 items-center">
-                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{email}</p>
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.email}</p>
                         <button  
                         onClick={() => {
          handleVerify("email")
         }} 
-        className={emailVerify ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { emailVerify ? (
+        className={userData?.is_email_verified ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { userData?.is_email_verified ? (
 <ShieldCheck className="fill-green-600" size={20} /> ) :
 "Verify"
         } </button>
@@ -258,6 +317,7 @@ const phone = current?.phone
                     {openModal && (
   <EditModal
   handleVerifyOTP={handleVerifyOTP}
+  handleChangeDetails={handleChangeDetails}
     type={editType}
     onClose={() => setOpenModal(false)}
   />
@@ -591,7 +651,7 @@ const phone = current?.phone
   )
 }
 
-const EditModal = ({type, onClose, handleVerifyOTP}) => {
+const EditModal = ({type, onClose, handleVerifyOTP, handleChangeDetails}) => {
   return(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
 
@@ -607,7 +667,20 @@ const EditModal = ({type, onClose, handleVerifyOTP}) => {
         </div>
 
         {/* body */}
-        <EditForm type={type} handleVerifyOTP={handleVerifyOTP} />
+        {
+  (type === "emailVerify" || type === "phoneVerify") ? 
+    <EditFormForVerify 
+      type={type} 
+      handleVerifyOTP={handleVerifyOTP} 
+      handleChangeDetails={handleChangeDetails} 
+    />
+  :
+    <EditForm 
+      type={type} 
+      handleVerifyOTP={handleVerifyOTP} 
+      handleChangeDetails={handleChangeDetails} 
+    />
+}
 
       </div>
 
@@ -627,7 +700,7 @@ const getTitle = (type) => {
   }
 }
 
-const EditForm = ({ type, handleVerifyOTP }) => {
+const EditFormForVerify = ({ type, handleVerifyOTP, handleChangeDetails }) => {
   
   const [value, setValue] = useState("");
   const config = getFieldConfig(type);
@@ -649,6 +722,37 @@ const EditForm = ({ type, handleVerifyOTP }) => {
     />
       <button
       onClick={() => handleVerifyOTP(type, value)}
+        className="w-full mt-4 bg-blue-600 hover:bg-blue-700
+          text-white py-2 rounded-lg font-semibold"
+      >
+        {config.button}
+      </button>
+    </>
+  )
+
+}
+const EditForm = ({ type, handleVerifyOTP, handleChangeDetails }) => {
+  
+  const [value, setValue] = useState("");
+  const config = getFieldConfig(type);
+  console.log(config);
+  console.log(type);
+  
+
+  return(
+    <>
+    <label className="text-sm font-medium">
+      {config.label}
+    </label>
+
+    <input type={config.inputType}
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    placeholder={config.placeholder}
+    className="w-full mt-2 p-2 border rounded-lg dark:bg-white/5 dark:border-white/10"
+    />
+      <button
+      onClick={() => handleChangeDetails(type, value)}
         className="w-full mt-4 bg-blue-600 hover:bg-blue-700
           text-white py-2 rounded-lg font-semibold"
       >

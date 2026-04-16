@@ -7,14 +7,15 @@ const ChangePin = () => {
   const [oldPin, setOldPin] = useState("")
   const [newPin, setNewPin] = useState("")
   const [confirmPin, setConfirmPin] = useState("")
+  const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleUpdate = async () => {
-    // if (newPin !== confirmPin) {
-    //   alert("Pins do not match!");
-    //   return;
-    // }
+    if (newPin !== confirmPin) {
+      alert("Pins do not match!");
+      return;
+    }
 
     const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CHANGE_PIN}`;
     try {
@@ -22,6 +23,13 @@ const ChangePin = () => {
         console.log("change pin response", res);
         
         if(res?.status === 200 || res?.status === true){
+
+          setOldPin("")
+          setNewPin("")
+          setConfirmPin("")
+          setShowOld(false)
+          setShowNew(false)
+          setShowConfirm(false)
     
               toastSuccess(res?.message);
         }else{
@@ -144,7 +152,48 @@ const ChangePin = () => {
   </div>
 
   {/* Confirm Pin */}
-  
+   <div className="mb-4 relative z-10">
+    <label
+      className="
+        block mb-2 font-semibold
+        text-gray-600
+        dark:text-[var(--text-secondary)]
+      "
+    >
+      Confirm New PIN
+    </label>
+
+    <div className="relative">
+      <input
+        type={showConfirm ? "text" : "password"}
+        className="
+          w-full border-b rounded-lg px-4 py-2 outline-none
+          border-gray-300 bg-transparent text-gray-900
+          focus:border-blue-400
+
+          dark:border-[var(--border-color)]
+          dark:text-[var(--text-primary)]
+          dark:focus:border-blue-500
+        "
+        value={confirmPin}
+        onChange={(e) => setConfirmPin(e.target.value)}
+        placeholder="Enter confirm Pin"
+      />
+
+      <button
+        type="button"
+        className="
+          absolute right-3 top-2.5
+          text-gray-500
+          dark:text-[var(--text-secondary)]
+        "
+        onClick={() => setShowConfirm(!showConfirm)}
+        aria-label="Toggle new Pin visibility"
+      >
+        {showConfirm ? <FiEyeOff /> : <FiEye />}
+      </button>
+    </div>
+  </div>
 
   <button
     onClick={handleUpdate}
