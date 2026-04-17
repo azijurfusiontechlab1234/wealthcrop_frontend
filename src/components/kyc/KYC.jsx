@@ -2,7 +2,7 @@
 // ✔ Compact steps + ✔ Left gradient illustration + ✔ Dark mode polish
 // ✔ State management for all steps + ✔ Final API submit
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle,
@@ -12,13 +12,22 @@ import {
   ShieldCheck,
   Lock,
 } from "lucide-react";
+import { postApiWithToken } from "../../api/api";
+import { toastSuccess } from "../../utils/notifyCustom";
 
-const steps = ["PAN", "Personal", "Bank", "Docs", "Video", "Review"];
+const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
+  const [completedSteps, setCompletedSteps] = useState({});
+const [loadingStep, setLoadingStep] = useState(false);
+
+const [docUploaded, setDocUploaded] = useState({
+  pan: false,
+  aadhaar: false,
+});
 
 
   //  CENTRAL KYC STATE
@@ -26,12 +35,24 @@ export default function KYCFlow() {
     pan: "",
     dob: "",
     name: "",
+    gender: "",
+    mStatus: "",
+    addrss1: "",
+    addrss2: "",
+    // addrss3: "",
     occupation: "",
     income: "",
     city: "",
+    state: "",
+    pin: "",
+    bankName: "",
     accountNo: "",
     ifsc: "",
-    document: null,
+    nomineeName: "",
+    nomineeRelation: "",
+    nomineePercentage: "",
+    documentA: null,
+    documentP: null,
     video: null,
   });
 
@@ -44,7 +65,23 @@ export default function KYCFlow() {
   const update = (key, value) =>
     setKycData((prev) => ({ ...prev, [key]: value }));
 
-  const handlePrimaryAction = () => {
+//   const handlePrimaryAction = () => {
+//   const error = validateStep(step, kycData);
+//   if (error) {
+//     setStepError(error);
+//     return;
+//   }
+
+//   setStepError("");
+
+//   if (step < 4) {
+//     setStep(step + 1);
+//   } else {
+//     submitKYC();
+//   }
+// };
+
+const handlePrimaryAction = async () => {
   const error = validateStep(step, kycData);
   if (error) {
     setStepError(error);
@@ -53,31 +90,70 @@ export default function KYCFlow() {
 
   setStepError("");
 
-  if (step < 4) {
-    setStep(step + 1);
-  } else {
-    submitKYC();
+  try {
+    setLoadingStep(true);
+
+    const res = await callStepApi(step, kycData); //  get response
+
+    //  check API success properly
+    if (res?.status === true || res?.status === 200) {
+      
+      //  mark step success (green)
+      setCompletedSteps((prev) => ({
+        ...prev,
+        [step]: true,
+      }));
+
+      //  move to next step
+      if (step < 6) {
+        setStep(step + 1);
+      } else {
+        submitKYC();
+      }
+
+    } else {
+      //  API responded but failed
+      setStepError(res?.message || "Something went wrong");
+    }
+
+  } catch (e) {
+    // network / server error
+    setStepError("API failed. Try again.");
+  } finally {
+    setLoadingStep(false);
   }
 };
 
 
   const validateStep = (step, data) => {
   switch (step) {
-    case 0: // PAN
+    // case 0: // PAN
+    //   if (!data.pan) return "PAN is required";
+    //   if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(data.pan))
+    //     return "Invalid PAN format";
+    //   if (!data.dob) return "Date of birth is required";
+    //   return null;
+
+    case 0: // Personal
+      if (!data.name.trim()) return "Name is required";
       if (!data.pan) return "PAN is required";
       if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(data.pan))
         return "Invalid PAN format";
       if (!data.dob) return "Date of birth is required";
-      return null;
-
-    case 1: // Personal
-      if (!data.name.trim()) return "Name is required";
       if (!data.occupation) return "Occupation is required";
       if (!data.income) return "Income is required";
+      if (!data.gender) return "Gender is required";
+      if (!data.addrss1) return "Address 1 is required";
+      if (!data.addrss2) return "Address 2 is required";
+      if (!data.mStatus) return "Marital status is required";
+      if (!data.fName) return "Father's name is required";
+      if (!data.state) return "State name is required";
+      if (!data.pin) return "Pin is required";
+      if (!data.aadhar) return "Income is required";
       if (!data.city) return "City is required";
       return null;
 
-    case 2: // Bank
+    case 1: // Bank
       if (!data.accountNo) return "Account number is required";
       if (!/^\d{9,18}$/.test(data.accountNo))
         return "Invalid account number";
@@ -86,18 +162,151 @@ export default function KYCFlow() {
         return "Invalid IFSC code";
       return null;
 
-    case 3: // Docs
-      if (!data.document) return "Please upload a document";
-      return null;
+ case 2: // Docs
+  if (!data.documentP || !data.documentA) {
+    return "Upload both PAN and Aadhaar";
+  }
+  return null;
 
-    case 4: // Video
-      if (!data.video) return "Please upload video KYC";
+    case 3: // Video
+      if (!data.nomineeName) return "Please enter nominee name";
+      if (!data.nomineeRelation) return "Please enter relation with nominee";
+      if (!data.nomineePercentage) return "Please enter percentage";
       return null;
 
     default:
       return null;
   }
 };
+
+
+//! api url
+const stepApiConfig = {
+  // 0: {
+  //   url: "/api/kyc/pan",
+  //   getPayload: (data) => ({
+  //     pan: data.pan,
+  //     dob: data.dob,
+  //   }),
+  // },
+  0: {
+    url: `${import.meta.env.VITE_URL}/kyc/profile`,
+    getPayload: (data) => ({
+      // name: data.name,
+      pan_number: data.pan,
+      aadhaar_number: data.aadhar,
+      dob: data.dob,
+      gender: data.gender,
+      occupation: data.occupation,
+      marital_status: data.mStatus,
+      fName: data.fName,
+      address_line1: data.addrss1,
+      address_line2: data.addrss2,
+      income: data.income,
+      city: data.city,
+      state: data.state,
+      pincode: data.pin,
+    }),
+  },
+  1: {
+     url: `${import.meta.env.VITE_URL}/kyc/bank`,
+    getPayload: (data) => ({
+      bank_name: data.bankName,
+      account_holder_name: data.name,
+      account_number: data.accountNo,
+      ifsc_code: data.ifsc,
+    }),
+  },
+  2: {
+     url: `${import.meta.env.VITE_URL}/kyc/document`,
+    getPayload: (data) => ({
+      type: "aadhaar",
+      file: data.document,
+    }),
+  },
+  3: {
+     url: `${import.meta.env.VITE_URL}/kyc/nominee`,
+    getPayload: (data) => ({
+      name: data.nomineeName,
+      relation: data.nomineeRelation,
+      percentage: data.nomineePercentage,
+    }),
+  },
+  4: {
+     url: `${import.meta.env.VITE_URL}/kyc/profile`,
+    getPayload: (data) => ({
+      video: data.video,
+    }),
+  },
+};
+
+const callStepApi = async (step, data) => {
+  const config = stepApiConfig[step];
+  if (!config) return true;
+
+  const payload = config.getPayload(data);
+
+  const res = await postApiWithToken(config.url, payload);
+
+  if (res?.status === 200 || res?.status === true) {
+    toastSuccess(res?.message);
+  }
+
+  return res;
+};
+
+//! For document only
+const uploadDocument = async (type, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("type", type);
+    formData.append("file", file);
+
+    const res = await fetch(`${import.meta.env.VITE_URL}/kyc/document`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("Upload failed");
+
+    const data = await res.json();
+
+    if (data?.status === true || data?.status === 200) {
+      toastSuccess(data?.message);
+
+      // mark individual doc uploaded
+      setDocUploaded((prev) => ({
+        ...prev,
+        [type]: true,
+      }));
+
+      return data;
+    } else {
+      throw new Error(data?.message || "Upload failed");
+    }
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+useEffect(() => {
+  //  replace 3 with your actual Docs step index
+  if (step === 2 && docUploaded.pan && docUploaded.aadhaar) {
+    
+    //  mark step green
+    setCompletedSteps((prev) => ({
+      ...prev,
+      [step]: true,
+    }));
+
+    //  move next
+    setStep((prev) => prev + 1);
+  }
+}, [docUploaded, step]);
 
 
   // 🚀 FINAL SUBMIT
@@ -128,9 +337,9 @@ export default function KYCFlow() {
       </div>
 
       {/* MAIN CARD */}
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-white dark:bg-[#0f172a] rounded-2xl shadow-xl overflow-hidden">
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 bg-white dark:bg-[#0f172a] rounded-2xl shadow-xl overflow-hidden">
         {/* LEFT PANEL */}
-        <div className="hidden md:flex flex-col justify-between p-8 bg-gradient-to-br from-blue-950 to-indigo-900 text-white">
+        <div className="hidden md:flex flex-col col-span-1 justify-between p-8 bg-gradient-to-br from-blue-950 to-indigo-900 text-white">
           <div>
             <h2 className="text-xl font-semibold mb-2">Why KYC?</h2>
             <p className="text-sm text-blue-100">
@@ -142,11 +351,19 @@ export default function KYCFlow() {
             {steps.map((s, i) => (
               <div key={s} className="flex items-center gap-3">
                 <div
+                  // className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                  //   i <= step ? "bg-white text-blue-950" : "bg-white/30"
+                  // }`}
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                    i <= step ? "bg-white text-blue-950" : "bg-white/30"
-                  }`}
+  completedSteps[i]
+    ? "bg-green-500 text-white"
+    : i === step
+    ? "bg-white text-blue-950"
+    : "bg-white/30"
+}`}
                 >
-                  {i < step ? "✓" : i + 1}
+                  {/* {i < step ? "✓" : i + 1} */}
+                  {completedSteps[i] ? "✓" : i + 1}
                 </div>
                 <span
                   className={`text-sm ${
@@ -170,7 +387,7 @@ export default function KYCFlow() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="p-6 md:p-8">
+        <div className="p-6 md:p-8 col-span-2">
           {/* Mobile step bar */}
           <div className="flex md:hidden mb-4">
             {steps.map((_, i) => (
@@ -191,16 +408,16 @@ export default function KYCFlow() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
             >
-              {step === 0 && <PANStep data={kycData} onChange={update} />}
-              {step === 1 && <PersonalStep data={kycData} onChange={update} />}
-              {step === 2 && <BankStep data={kycData} onChange={update} />}
-              {step === 3 && <DocsStep data={kycData} onChange={update} />}
+              {/* {step === 0 && <PANStep data={kycData} onChange={update} />} */}
+              {step === 0 && <PersonalStep data={kycData} onChange={update} />}
+              {step === 1 && <BankStep data={kycData} onChange={update} />}
+              {step === 2 && <DocsStep data={kycData} onChange={update} uploadDocument={uploadDocument} />}
+              {step === 3 && <NomineeStep data={kycData} onChange={update} />}
               {step === 4 && <VideoKYCStep data={kycData} onChange={update} />}
               {step === 5 && <ReviewStep />}
             </motion.div>
           </AnimatePresence>
 
-          {/* FOOTER */}
        {/* FOOTER */}
 {step < 5 && (
   <div className="mt-6">
@@ -230,13 +447,20 @@ export default function KYCFlow() {
         Back
       </button>
 
-      {step < 4 ? (
+      {step < 5 ? (
+        // <button
+        //   onClick={handlePrimaryAction}
+        //   className="text-sm px-5 py-2 rounded-lg bg-blue-950 text-white hover:bg-blue-900"
+        // >
+        //   Continue
+        // </button>
         <button
-          onClick={handlePrimaryAction}
-          className="text-sm px-5 py-2 rounded-lg bg-blue-950 text-white hover:bg-blue-900"
-        >
-          Continue
-        </button>
+  onClick={handlePrimaryAction}
+  disabled={loadingStep}
+  className="text-sm px-5 py-2 rounded-lg bg-blue-950 text-white hover:bg-blue-900"
+>
+  {loadingStep ? "Saving..." : "Continue"}
+</button>
       ) : (
         <button
           onClick={handlePrimaryAction}
@@ -287,6 +511,32 @@ function Field({ label, value, onChange, placeholder }) {
   );
 }
 
+function FieldSelect({label, value, onChange, options}) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1" >
+        {label}
+      </label>
+
+      <select 
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-[#0b1220]
+      text-sm text-gray-900 dark:text-white focus:ring-1 focus:ring-blue-800 outline-none"
+      >
+        <option value="" disabled>Select gender</option>
+        {
+          options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+  )
+}
+
 function PANStep({ data, onChange }) {
   return (
     <div className="space-y-4">
@@ -309,9 +559,37 @@ function PANStep({ data, onChange }) {
   );
 }
 
-function PersonalStep({ data, onChange }) {
+function NomineeStep({ data, onChange }) {
   return (
     <div className="space-y-4">
+      <h2 className="text-lg font-semibold dark:text-white">
+        Add Nominee
+      </h2>
+      <Field
+        label="Nominee Name"
+        value={data.nomineeName}
+        onChange={(v) => onChange("nomineeName", v.toUpperCase())}
+        placeholder="Nominee Name"
+      />
+      <Field
+        label="Relation with Nominee"
+        value={data.nomineeRelation}
+        onChange={(v) => onChange("nomineeRelation", v)}
+        placeholder="Relation with nominee"
+      />
+      <Field
+        label="Percentage you want to give"
+        value={data.nomineePercentage}
+        onChange={(v) => onChange("nomineePercentage", v)}
+        placeholder="50%"
+      />
+    </div>
+  );
+}
+
+function PersonalStep({ data, onChange }) {
+  return (
+    <div className="space-y-4 h-[400px] overflow-y-auto p-2">
       <h2 className="text-lg font-semibold dark:text-white">
         Personal Details
       </h2>
@@ -322,12 +600,66 @@ function PersonalStep({ data, onChange }) {
           onChange={(v) => onChange("name", v)}
           placeholder="As per PAN"
         />
+         <Field
+        label="PAN Number"
+        value={data.pan}
+        onChange={(v) => onChange("pan", v.toUpperCase())}
+        placeholder="ABCDE1234F"
+      />
+         <Field
+        label="Aadhar Number"
+        value={data.aadhar}
+        onChange={(v) => onChange("aadhar", v.toUpperCase())}
+        placeholder="9722 0589 0456"
+      />
+      <Field
+        label="Date of Birth"
+        value={data.dob}
+        onChange={(v) => onChange("dob", v)}
+        placeholder="DD/MM/YYYY"
+      />
+        <FieldSelect
+          label="Gender"
+          value={data.gender}
+          onChange={(v) => onChange("gender", v)}
+          options={["male", "Female", "Other"]}
+        />
         <Field
           label="Occupation"
           value={data.occupation}
           onChange={(v) => onChange("occupation", v)}
           placeholder="Salaried"
         />
+        <Field
+          label="Marital Status"
+          value={data.mStatus}
+          onChange={(v) => onChange("mStatus", v)}
+          placeholder="Married"
+        />
+        <Field
+          label="Father's Name"
+          value={data.fName}
+          onChange={(v) => onChange("fName", v)}
+          placeholder="As per documents"
+        />
+        <Field
+          label="Address Line 1"
+          value={data.addrss1}
+          onChange={(v) => onChange("addrss1", v)}
+          placeholder="Address Line 1"
+        />
+        <Field
+          label="Address Line 2"
+          value={data.addrss2}
+          onChange={(v) => onChange("addrss2", v)}
+          placeholder="Address Line 2"
+        />
+        {/* <Field
+          label="Address Line 3"
+          value={data.addrss3}
+          onChange={(v) => onChange("addrss3", v)}
+          placeholder="Address Line 3"
+        /> */}
         <Field
           label="Income"
           value={data.income}
@@ -340,6 +672,18 @@ function PersonalStep({ data, onChange }) {
           onChange={(v) => onChange("city", v)}
           placeholder="Mumbai"
         />
+        <Field
+          label="State"
+          value={data.state}
+          onChange={(v) => onChange("state", v)}
+          placeholder="West Bengal"
+        />
+        <Field
+          label="Pin"
+          value={data.pin}
+          onChange={(v) => onChange("pin", v)}
+          placeholder="123654"
+        />
       </div>
     </div>
   );
@@ -350,6 +694,12 @@ function BankStep({ data, onChange }) {
     <div className="space-y-4">
       <h2 className="text-lg font-semibold dark:text-white">Bank Details</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field
+          label="Bank name"
+          value={data.bankName}
+          onChange={(v) => onChange("bankName", v)}
+          placeholder="Bank of India"
+        />
         <Field
           label="Account No"
           value={data.accountNo}
@@ -367,7 +717,7 @@ function BankStep({ data, onChange }) {
   );
 }
 
-function DocsStep({ data, onChange }) {
+function DocsStep({ data, onChange, uploadDocument }) {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold dark:text-white">Documents</h2>
@@ -380,18 +730,54 @@ function DocsStep({ data, onChange }) {
         <div className="flex items-center gap-3 dark:text-white">
           <FileText size={20} />
           <div>
-            <p className="text-sm font-medium ">Upload PAN / Aadhaar</p>
-            {data.document && (
-              <p className="text-xs text-green-600">{data.document.name}</p>
+            <p className="text-sm font-medium ">Upload PAN</p>
+            {data.documentP && (
+              <p className="text-xs text-green-600">{data.documentP.name}</p>
             )}
           </div>
         </div>
         <Upload size={18} className="dark:text-white" />
-        <input
-          type="file"
-          className="hidden"
-          onChange={(e) => onChange("document", e.target.files[0])}
-        />
+<input
+  type="file"
+  className="hidden"
+  onChange={async (e) => {
+    const file = e.target.files[0];
+    onChange("documentP", file);
+
+    if (file) {
+      await uploadDocument("pan", file);
+    }
+  }}
+/>
+      </label>
+      <label
+        className="
+      flex items-center justify-between gap-3 border border-dashed rounded-xl p-4 cursor-pointer border-gray-300
+      dark:border-white/10 bg-gray-50 dark:bg-white/5 hove:bg-gray-100 dark:hover:bg-white/10 transition
+      "
+      >
+        <div className="flex items-center gap-3 dark:text-white">
+          <FileText size={20} />
+          <div>
+            <p className="text-sm font-medium ">Upload Aadhaar</p>
+            {data.documentA && (
+              <p className="text-xs text-green-600">{data.documentA.name}</p>
+            )}
+          </div>
+        </div>
+        <Upload size={18} className="dark:text-white" />
+<input
+  type="file"
+  className="hidden"
+  onChange={async (e) => {
+    const file = e.target.files[0];
+    onChange("documentA", file);
+
+    if (file) {
+      await uploadDocument("aadhaar", file);
+    }
+  }}
+/>
       </label>
     </div>
   );
