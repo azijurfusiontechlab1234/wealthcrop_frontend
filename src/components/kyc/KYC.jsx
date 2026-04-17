@@ -13,7 +13,7 @@ import {
   Lock,
 } from "lucide-react";
 import { postApiWithToken } from "../../api/api";
-import { toastSuccess } from "../../utils/notifyCustom";
+import { toastError, toastSuccess } from "../../utils/notifyCustom";
 
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
@@ -105,7 +105,7 @@ const handlePrimaryAction = async () => {
       }));
 
       //  move to next step
-      if (step < 6) {
+      if (step < 5) {
         setStep(step + 1);
       } else {
         submitKYC();
@@ -139,7 +139,10 @@ const handlePrimaryAction = async () => {
       if (!data.pan) return "PAN is required";
       if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(data.pan))
         return "Invalid PAN format";
-      if (!data.dob) return "Date of birth is required";
+     if (!data.dob) return "Date of birth is required";
+if (!/^\d{4}-\d{2}-\d{2}$/.test(data.dob)) {
+  return "Date must be in YYYY-MM-DD format (e.g. 2020-10-02)";
+}
       if (!data.occupation) return "Occupation is required";
       if (!data.income) return "Income is required";
       if (!data.gender) return "Gender is required";
@@ -309,7 +312,7 @@ useEffect(() => {
 }, [docUploaded, step]);
 
 
-  // 🚀 FINAL SUBMIT
+  //  FINAL SUBMIT
   const submitKYC = async () => {
     setSubmitting(true);
     try {
@@ -318,7 +321,7 @@ useEffect(() => {
       console.log("KYC SUBMITTED", kycData);
       setStep(5);
     } catch (e) {
-      alert("KYC submission failed");
+      toastError("KYC submission failed");
     } finally {
       setSubmitting(false);
     }
@@ -413,7 +416,7 @@ useEffect(() => {
               {step === 1 && <BankStep data={kycData} onChange={update} />}
               {step === 2 && <DocsStep data={kycData} onChange={update} uploadDocument={uploadDocument} />}
               {step === 3 && <NomineeStep data={kycData} onChange={update} />}
-              {step === 4 && <VideoKYCStep data={kycData} onChange={update} />}
+              {step === 4 && <VideoKYCStep data={kycData} onChange={update} uploadDocument={uploadDocument} />}
               {step === 5 && <ReviewStep />}
             </motion.div>
           </AnimatePresence>
@@ -616,7 +619,7 @@ function PersonalStep({ data, onChange }) {
         label="Date of Birth"
         value={data.dob}
         onChange={(v) => onChange("dob", v)}
-        placeholder="DD/MM/YYYY"
+        placeholder="YYYY/MM/DD"
       />
         <FieldSelect
           label="Gender"
@@ -783,7 +786,7 @@ function DocsStep({ data, onChange, uploadDocument }) {
   );
 }
 
-function VideoKYCStep({ data, onChange }) {
+function VideoKYCStep({ data, onChange, uploadDocument }) {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold dark:text-white">Video KYC</h2>
@@ -806,8 +809,16 @@ function VideoKYCStep({ data, onChange }) {
           type="file"
           accept="video/*"
           className="hidden"
-          onChange={(e) => onChange("video", e.target.files[0])}
+           onChange={async (e) => {
+    const file = e.target.files[0];
+    onChange("video", file);
+
+    if (file) {
+      await uploadDocument("video", file);
+    }
+  }}
         />
+
       </label>
     </div>
   );
