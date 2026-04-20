@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { FaAngleRight } from "react-icons/fa6";
 import { FiEdit2 } from "react-icons/fi";
 import { TfiAngleRight } from "react-icons/tfi";
@@ -31,7 +32,7 @@ const BasicDetails = () => {
     const [editType, setEditType] = useState(null);
       const [mobileVerify, setMobileVerify] = useState(false)
       const [emailVerify, setEmailVerify] = useState(false)
-      const [userData, setUserData] = useState(null)
+      // const [userData, setUserData] = useState(null)
 
 
 const handleBack = () => {
@@ -48,29 +49,22 @@ const handleBack = () => {
     lastUpdated: "12 Jan 2025",
   };
 
-  useEffect(() => {
-    // const token = localStorage.getItem("token")
+const fetchUser = async () => {
+  const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_DATA}`;
+  const res = await getApiWithToken(url);
 
-    // if(!token) return
-    const fetchUser = async () => {
-      const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_DATA}`
-      try {
-        const res = await getApiWithToken(url);
-        console.log("User Data", res);
-        
-        if(res?.status === 200 || res?.status === true){
-          setUserData(res?.data)
-          toastSuccess(res?.message)
-        }
-        
-      } catch (error) {
-        toastError(error?.message || "Something went wrong");
-      }
-    }
+  if (!(res?.status === 200 || res?.status === true)) {
+    throw new Error(res?.message || "Failed to fetch");
+  }
 
-    fetchUser()
+  return res.data;
+};
 
-  },[])
+
+const { data: userData, isLoading, error, refetch } = useQuery({
+  queryKey: ["userData"],
+  queryFn: fetchUser,
+});
 
   const accounts = JSON.parse(localStorage.getItem("accounts")) || []
 // const visibleAcounts = showAll ? accounts : accounts.slice(0,2)
@@ -109,7 +103,7 @@ const phone = current?.phone
       
         if(response?.status === 200 || response?.status){
           id === "email" ? setEmailVerify(true) : setMobileVerify(true)
-          // fetchUser()
+          refetch()
           setOpenModal(false);
           toastSuccess(response?.message);
         }else{
@@ -131,7 +125,7 @@ const phone = current?.phone
       
       if(response?.status === 200 || response?.status){
         // id === "email" ? setEmailVerify(true) : setMobileVerify(true)
-
+        refetch()
         if(id === "email"){
           current.email = value
         }else if(id === "phone"){
@@ -167,7 +161,7 @@ const phone = current?.phone
                       Personal Details
                     </h2>
                     <span className="text-sm text-gray-600 dark:text-[var(--text-secondary)] font-semibold">
-                      PAN - EMUZX1234G
+                      PAN - {userData?.pan || "EMUZX1234G" }
                     </span>
                   </div>
     
@@ -182,7 +176,7 @@ const phone = current?.phone
                     {/* Date of Birth */}
                     <div>
                       <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Date of Birth</p>
-                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
+                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.dob ?? "--"}</p>
                     </div>
     
                     {/* Mobile Number */}
@@ -217,9 +211,7 @@ const phone = current?.phone
                     </div>
     
                     {/* Email Address */}
-                    <div className="flex justify-between items-center">
-
-                      
+                    <div className="flex justify-between items-center">                      
                         <div>
                         <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Email Address</p>
 
@@ -268,6 +260,31 @@ const phone = current?.phone
                       <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Gender</p>
                       <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
                     </div>
+
+                    {/* Unique Client ID */}
+      <div
+        className="
+          flex justify-between items-center
+        "
+      >
+        <div>
+          <p className="text-gray-500 text-sm dark:text-[var(--text-secondary)]">
+            Unique Client Code
+          </p>
+          <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
+            1254789658
+          </p>
+        </div>
+
+        {/* <button
+          className="
+            text-emerald-600 hover:text-emerald-800
+            dark:text-emerald-400 dark:hover:text-emerald-300
+          "
+        >
+          <FiEdit2 />
+        </button> */}
+      </div>
     
                     {/* Income Range */}
                     <div className="flex justify-between items-center">
@@ -380,7 +397,7 @@ const phone = current?.phone
             dark:text-[var(--text-secondary)]
           "
         >
-          PAN - EMUZX1234G
+          PAN - {userData?.pan || "EMUZX1234G"} 
         </span>
       </div>
     </div>
@@ -399,7 +416,7 @@ const phone = current?.phone
           Name (as on PAN Card)
         </p>
         <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
-          Fusion Techlab
+          {userData?.name}
         </p>
       </div>
 
@@ -414,12 +431,12 @@ const phone = current?.phone
           Date of Birth
         </p>
         <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
-          -
+          {userData?.dob ?? "--"}
         </p>
       </div>
 
       {/* Mobile Number */}
-      <div
+      {/* <div
         className="
           flex justify-between items-center
           border-b border-gray-300
@@ -431,7 +448,7 @@ const phone = current?.phone
             Mobile Number
           </p>
           <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
-            *****47038
+            {userData?.phone ?? "--"}
           </p>
         </div>
 
@@ -447,10 +464,10 @@ const phone = current?.phone
         >
           <FiEdit2 />
         </button>
-      </div>
+      </div> */}
 
       {/* Email Address */}
-      <div
+      {/* <div
         className="
           flex justify-between items-center
           border-b border-gray-300
@@ -462,7 +479,7 @@ const phone = current?.phone
             Email Address
           </p>
           <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
-            fus***********1@gmail.com
+            {userData?.r}
           </p>
         </div>
 
@@ -474,7 +491,69 @@ const phone = current?.phone
         >
           <FiEdit2 />
         </button>
-      </div>
+      </div> */}
+
+        {/* Mobile Number */}
+                    <div className="flex justify-between items-center  border-b border-gray-300
+          dark:border-[var(--border-color)]">
+                     
+                        <div>
+                          <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Mobile Number</p>
+                           <div className="flex gap-2 items-center">
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.phone ?? "--"}</p>
+                        <button  
+                        onClick={() => {
+         handleVerify("phone")
+        }} 
+        className={userData?.is_phone_verified
+ ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { userData?.is_phone_verified ? (
+<ShieldCheck className="fill-green-600" size={20} /> ) :
+"Verify"
+        } </button>
+                        </div>
+                        
+                        
+                      </div>
+
+                      <button 
+                        onClick={() => {
+                           setEditType("mobile");
+          setOpenModal(true);
+                        }}
+                      className="text-emerald-600 hover:text-emerald-800">
+                        <FiEdit2 />
+                      </button>
+                    </div>
+    
+                    {/* Email Address */}
+                    <div className="flex justify-between items-center  border-b border-gray-300
+          dark:border-[var(--border-color)]">                      
+                        <div>
+                        <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Email Address</p>
+
+
+                      <div className="flex gap-2 items-center">
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">{userData?.email}</p>
+                        <button  
+                        onClick={() => {
+         handleVerify("email")
+        }} 
+        className={userData?.is_email_verified ? "text-xs font-semibold text-white rounded-md" : "text-xs flex  font-semibold bg-yellow-500 hover:bg-yellow-600 text-white px-2 rounded-md h-4.5"}> { userData?.is_email_verified ? (
+<ShieldCheck className="fill-green-600" size={20} /> ) :
+"Verify"
+        } </button>
+                        </div>
+        </div>
+
+                      <button 
+                      onClick={() => {
+                        setEditType("email")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
+                        <FiEdit2 />
+                      </button>
+                    </div>
 
       {/* Unique Client ID */}
       <div
@@ -517,6 +596,37 @@ const phone = current?.phone
           -
         </p>
       </div>
+
+      {/* Occupation */}
+                    <div className=" border-b border-gray-300
+          dark:border-[var(--border-color)]">
+                      <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Occupation</p>
+                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
+                    </div>
+    
+                    {/* Father’s Name */}
+                    <div className="flex justify-between items-center border-b border-gray-300
+          dark:border-[var(--border-color)]">
+                      <div>
+                        <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Father's Name</p>
+                        <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
+                      </div>
+                      <button 
+                      onClick={() => {
+                        setEditType("father'sName")
+                        setOpenModal(true)
+                      }}
+                      className="text-emerald-600 hover:text-emerald-800">
+                        <FiEdit2 />
+                      </button>
+                    </div>
+    
+                    {/* Address */}
+                    <div className=" border-b border-gray-300
+          dark:border-[var(--border-color)]">
+                      <p className="text-gray-500 text-sm dark:text-[var(--text-primary)]">Address</p>
+                      <p className="text-blue-950 font-semibold dark:text-[var(--text-secondary)]">-</p>
+                    </div>
 
       {/* Links */}
       <div className="flex flex-col space-y-8">

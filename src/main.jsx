@@ -10,13 +10,13 @@ import TradingViewChart from './components/charts/TradingViewChart.jsx'
 import MutualFundCarousel from './carousel/MutualFundCarousel.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+//  <StrictMode>
+  <Provider store={store}>
     <BrowserRouter>
-    <Provider store={store}>
-    <App />
-    </Provider>
-    {/* <Dashboard/> */}
+      <App />
+      {/* <Dashboard/> */}
     {/* <TradingViewChart/> */}
     </BrowserRouter>
-  </StrictMode>,
+  </Provider>
+// </StrictMode>
 )

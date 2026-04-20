@@ -14,11 +14,12 @@ import {
 } from "lucide-react";
 import { postApiWithToken } from "../../api/api";
 import { toastError, toastSuccess } from "../../utils/notifyCustom";
+import axios from "axios";
 
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(5);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
@@ -27,6 +28,7 @@ const [loadingStep, setLoadingStep] = useState(false);
 const [docUploaded, setDocUploaded] = useState({
   pan: false,
   aadhaar: false,
+  selfie: false
 });
 
 
@@ -177,6 +179,9 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(data.dob)) {
       if (!data.nomineePercentage) return "Please enter percentage";
       return null;
 
+   case 4:
+    if(!data.video) return "Please upload your selfie video"   
+
     default:
       return null;
   }
@@ -236,9 +241,10 @@ const stepApiConfig = {
     }),
   },
   4: {
-     url: `${import.meta.env.VITE_URL}/kyc/profile`,
+     url: `${import.meta.env.VITE_URL}/kyc/document`,
     getPayload: (data) => ({
-      video: data.video,
+      type: "video",
+      file: data.video,
     }),
   },
 };
@@ -288,9 +294,10 @@ const uploadDocument = async (type, file) => {
 
       return data;
     } else {
-      throw new Error(data?.message || "Upload failed");
+      toastError(data?.message || "Upload failed");
     }
   } catch (err) {
+    toastError(err?.message)
     console.error(err);
     return null;
   }
@@ -298,7 +305,7 @@ const uploadDocument = async (type, file) => {
 
 useEffect(() => {
   //  replace 3 with your actual Docs step index
-  if (step === 2 && docUploaded.pan && docUploaded.aadhaar) {
+  if ((step === 2 && docUploaded.pan && docUploaded.aadhaar) || (step === 4 && docUploaded.selfie)) {
     
     //  mark step green
     setCompletedSteps((prev) => ({
@@ -311,6 +318,15 @@ useEffect(() => {
   }
 }, [docUploaded, step]);
 
+//! to fetch first name and last name
+const getNameParts = (fullName = "") => {
+  const parts = fullName.trim().split(" ").filter(Boolean);
+
+  return {
+    first_name: parts[0] || "",
+    last_name: parts.slice(1).join(" ") || "", // handles middle names too
+  };
+};
 
   //  FINAL SUBMIT
   const submitKYC = async () => {
@@ -325,7 +341,106 @@ useEffect(() => {
     } finally {
       setSubmitting(false);
     }
+
+
   };
+
+  //! Generate Client Code
+  const generateClientCode = (name = "") => {
+
+    const prefix = name.replace(/\s+/g, "").toUpperCase().slice(0, 3) || "USR"
+    const timeStamp = Date.now().toString().slice(-5)
+    const random = Math.floor(100 + Math.random() * 900);
+    return `${prefix}${timeStamp}${random}`
+  }
+
+useEffect(() => {
+  if (step !== 5) return; // only run on step 5
+
+  const createUCC = async () => {
+    try {
+      const { first_name, last_name } = getNameParts(kycData.name);
+
+      // const payload = {
+      //   source: "demo",
+      //   // client_code: "ABC1002",
+      //   holders: [
+      //     {
+      //       first_name,
+      //       last_name,
+      //       dob: kycData.dob,
+      //       gender:
+      //         kycData.gender === "male"
+      //           ? "M"
+      //           : kycData.gender === "female"
+      //           ? "F"
+      //           : "O",
+      //       pan: kycData.pan,
+      //       email: kycData.email,
+      //       mobile: kycData.mobile,
+      //     },
+      //   ],
+
+      //   address: {
+      //     line1: kycData.addrss1,
+      //     pincode: kycData.pin,
+      //     city: kycData.city,
+      //     state: kycData.state,
+      //   },
+
+      //   bank: {
+      //     ifsc: kycData.ifsc,
+      //     acc_no: kycData.accountNo,
+      //     acc_type: "SB",
+      //   },
+      // };
+      
+        const payload = {
+    source: "demo",
+    client_code: "ABC1002",
+    holders: [
+      {
+        first_name: "Amit",
+        last_name: "Patel",
+        dob: "1992-05-20",
+        gender: "M",
+        pan: "ABCDE5678G",
+        email: "amit.patel@dummy.com",
+        mobile: "9898989898",
+      },
+    ],
+    address: {
+      line1: "Flat 202, Sunshine Apts",
+      pincode: "400053",
+      city: "Mumbai",
+      state: "Maharashtra",
+    },
+    bank: {
+      ifsc: "ICIC0000123",
+      acc_no: "0123456789",
+      acc_type: "SB",
+    },
+  };
+
+
+      const res = await axios.post(
+        "http://65.2.121.33:5500/v2/add_ucc",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+    }
+  };
+
+  createUCC();
+}, [step]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">
@@ -459,8 +574,14 @@ useEffect(() => {
         // </button>
         <button
   onClick={handlePrimaryAction}
-  disabled={loadingStep}
-  className="text-sm px-5 py-2 rounded-lg bg-blue-950 text-white hover:bg-blue-900"
+  disabled={loadingStep || step === 4}
+  className={`
+  text-sm px-5 py-2 rounded-lg
+  bg-blue-950 text-white
+  hover:bg-blue-900
+  disabled:bg-gray-400
+  disabled:cursor-not-allowed
+`}
 >
   {loadingStep ? "Saving..." : "Continue"}
 </button>
@@ -531,7 +652,7 @@ function FieldSelect({label, value, onChange, options}) {
         {
           options.map((opt) => (
             <option key={opt} value={opt}>
-              {opt}
+              {opt.toUpperCase()}
             </option>
           ))
         }
@@ -625,7 +746,7 @@ function PersonalStep({ data, onChange }) {
           label="Gender"
           value={data.gender}
           onChange={(v) => onChange("gender", v)}
-          options={["male", "Female", "Other"]}
+          options={["male", "female", "other"]}
         />
         <Field
           label="Occupation"
@@ -811,22 +932,31 @@ function VideoKYCStep({ data, onChange, uploadDocument }) {
           className="hidden"
            onChange={async (e) => {
     const file = e.target.files[0];
+      const MAX_SIZE = 45 * 1024 * 1024; // 5MB
+
+    if (file.size > MAX_SIZE) {
+      toastError("Video must be less than 5MB");
+      return;
+    }
     onChange("video", file);
 
     if (file) {
-      await uploadDocument("video", file);
+      await uploadDocument("selfie", file);
     }
   }}
         />
 
       </label>
+      {data.video && (
+              <p className="text-xs text-red-600">Please wait, your video is uploading...</p>
+            )}
     </div>
   );
 }
 
 function ReviewStep() {
   return (
-    <div className="text-center space-y-3">
+    <div className="text-center space-y-3 flex items-center flex-col justify-center h-80">
       <CheckCircle size={36} className="mx-auto text-green-600" />
       <h2 className="text-lg font-semibold dark:text-white">KYC Submitted</h2>
       <p className="text-sm text-gray-500 dark:text-gray-400">

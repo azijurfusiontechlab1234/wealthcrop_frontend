@@ -105,6 +105,7 @@ import ResetPassword from "./pages/ResetPassword";
 import StockHandler from "./utils/socketHandler";
 import SocketHandler from "./utils/socketHandler";
 import ResetPin from "./pages/ResetPin";
+import Notifications from "./pages/Notifications";
 
 
 const queryClient = new QueryClient();
@@ -189,12 +190,12 @@ useEffect(() => {
         {locked && (
   <LoginPinModal onSuccess={() => setLocked(false)} />
 )}
-      {/* ⭐ Always on top of everything */}
+      {/*  Always on top of everything */}
       {/* <div className="fixed top-0 left-0 w-full z-[60]">
       <MutualFundCarousel />
     </div> */}
-      {/* ✅ Fixed Header */}
-      {/* ✅ Large screens (always show OldHeader) */}
+      {/*  Fixed Header */}
+      {/*  Large screens (always show OldHeader) */}
       <ScrollToTopButton/>
       <DraggableQRCodeCard value="https://example.com" size={100} />
         {/* ================= TOP HEADER ================= */}
@@ -204,13 +205,13 @@ useEffect(() => {
       {/* Top spacer */}
       {(!token || isLg) && <div className="h-[96px]" />}
 
-      {/* ✅ Mobile screens */}
+      {/* Mobile screens */}
       {/* <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
       </div> */}
       
 
-      {/* ✅ Page Content */}
+      {/*  Page Content */}
       <main className="min-h-screen bg-white dark:bg-[var(--app-bg)]">
         <Routes>
           {/* Protected routes */}
@@ -338,6 +339,10 @@ useEffect(() => {
           <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/amc/:amcName" element={<AMCPage/>} />
+          <Route path="/notifications" element={<Notifications/>} />
+
+          {/* list */}
+          {/* <Route path="/stockList/:name"  /> */}
 
             {/* IPO */}
             <Route path="/ipo" element={<IpoDashboardPage/>} />
@@ -380,7 +385,7 @@ useEffect(() => {
       {/* ================= FOOTER ================= */}
       <Footer />
 
-           {/* 🔼 BOTTOM SPACER (mobile only, matches BottomHeader height) */}
+           {/*  BOTTOM SPACER (mobile only, matches BottomHeader height) */}
       {token && <div className="h-[72px] lg:hidden" />}
 
        {/* ================= FIXED BOTTOM HEADER (MOBILE) ================= */}

@@ -220,7 +220,10 @@ const phone = current?.phone
               <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
             </button>
 
-            <HiBell className="text-2xl text-gray-700 dark:text-gray-200" />
+           <Link to="/notifications" className="text-blue-900 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400 transition relative">
+            <HiBell className="text-2xl" />
+            <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
+          </Link>
           </div>
 
           {/* PROFILE HEADER */}

@@ -9,7 +9,7 @@ const SwpCalculator = () => {
   const [result, setResult] = useState(null);
   const [openFAQ, setOpenFAQ] = useState(null);
 
-  // ❗ Validation errors
+  //  Validation errors
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();

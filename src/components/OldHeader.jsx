@@ -232,10 +232,10 @@ const phone = current?.phone
     <div className="hidden md:flex items-center space-x-5">
       {token ? (
         <>
-          <button className="text-blue-900 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400 transition relative">
+          <Link to="/notifications" className="text-blue-900 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400 transition relative">
             <HiBell className="text-2xl" />
             <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-          </button>
+          </Link>
 
           <div className="relative group">
             <button className="text-blue-900 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400 transition cursor-pointer mt-1.5">
