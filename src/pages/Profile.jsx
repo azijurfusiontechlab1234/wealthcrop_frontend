@@ -21,6 +21,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login, logout } from "../redux/authenticationSlice";
 import { useDispatch } from "react-redux";
 import ThemeToggle from "../utils/ThemeToggle";
+import { useQuery } from "@tanstack/react-query";
+import { formatDate } from "../utils/format";
+import { toastWarn } from "../utils/notifyCustom";
 
 const Profile = () => {
 
@@ -33,6 +36,7 @@ const Profile = () => {
     goldLimit: "10%",
     lastUpdated: "12 Jan 2025",
   };
+  
 
   const options = [
     { name: "Basic Details", path: "basic" },
@@ -43,12 +47,42 @@ const Profile = () => {
     { name: "Account Related Forms", path: "account-forms" },
   ];
 
-  const [showAll, setShowAll] = useState(false)
+    const [showAll, setShowAll] = useState(false)
   const [mobileVerify, setMobileVerify] = useState(false)
   const [emailVerify, setEmailVerify] = useState(false)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+
+  const fetchUser = async () => {
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_DATA}`;
+    const res = await getApiWithToken(url);
+  
+    if (!(res?.status === 200 || res?.status === true)) {
+      throw new Error(res?.message || "Failed to fetch");
+    }
+  
+    console.log("User Data", res?.data);
+    
+    return res.data;
+  };
+  
+  
+  const { data: userData, isLoading, error, refetch } = useQuery({
+    queryKey: ["userData"],
+    queryFn: fetchUser,
+  });
+
+   const redirectRiskProfile = () => {
+  
+        const isReUpdate = userData?.risk_profile?.updated_at < Date.now() 
+        if(!isReUpdate) return toastWarn(`You can update after ${formatDate(userData?.risk_profile?.next_allowed_at)} `)
+  
+      navigate("/risk")
+    }
+
 
  const handleLogout = () => {
   localStorage.removeItem("currentAccount");
@@ -101,8 +135,8 @@ const phone = current?.phone
             </div>
 
             {/* RISK PROFILE CARD */}
-            <div className="px-4 pb-4">
-              {riskProfile.isSet ? (
+             <div className="px-4 pb-4">
+              {userData?.risk_profile ? (
                 <div className="border border-gray-300 dark:border-slate-700 rounded-xl p-4 bg-green-50 dark:bg-green-900/20">
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="text-green-600" size={18} />
@@ -114,7 +148,7 @@ const phone = current?.phone
                   <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                     <p>
                       <span className="font-medium text-green-600 dark:text-green-400">Category:</span>{" "}
-                      {riskProfile.category}
+                      {userData?.risk_profile?.profile}
                     </p>
                     <p>
                       <span className="font-medium">Equity Exposure:</span>{" "}
@@ -129,12 +163,12 @@ const phone = current?.phone
                       {riskProfile.goldLimit}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Last updated: {riskProfile.lastUpdated}
+                      Last updated: {formatDate(userData?.risk_profile?.updated_at)}
                     </p>
                   </div>
 
                   <button
-                    onClick={() => navigate("/risk")}
+                    onClick={() => redirectRiskProfile()}
                     className="mt-3 w-full text-sm py-2 rounded-lg
                                border border-green-600 text-green-700
                                hover:bg-green-100 dark:hover:bg-green-900/30"

@@ -16,7 +16,7 @@ import Register from "./auth/Register";
 import SipCalculator from "./pages/calculators/SipCalculator";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Dashboard from "./components/DashBoard";
 import HoverSection from "./components/hovercomp/HoverSection";
 import OldHeader from "./components/OldHeader";
@@ -106,11 +106,151 @@ import StockHandler from "./utils/socketHandler";
 import SocketHandler from "./utils/socketHandler";
 import ResetPin from "./pages/ResetPin";
 import Notifications from "./pages/Notifications";
+import StockList from "./pages/stocks/StockList";
+import PageLoader from "./components/PageLoader";
 
 
 const queryClient = new QueryClient();
 
 function App() {
+
+// Core pages
+// const Home = lazy(() => import("./pages/Home"));
+// const Portfolio = lazy(() => import("./pages/Portfolio"));
+// const Profile = lazy(() => import("./pages/Profile"));
+// const Support = lazy(() => import("./pages/Support"));
+// const Reports = lazy(() => import("./pages/Reports"));
+// const Balance = lazy(() => import("./pages/Balance"));
+// const AddMoney = lazy(() => import("./pages/AddMoney"));
+// const Blog = lazy(() => import("./pages/Blog"));
+// const BlogPost = lazy(() => import("./pages/BlogPost"));
+// const DematAccountPage = lazy(() => import("./pages/DematAccountPage"));
+// const LearningCenterPage = lazy(() => import("./pages/LearningCenterPage"));
+// const MarketNewsPage = lazy(() => import("./pages/MarketNewsPage"));
+
+
+// Dashboard
+// const Dashboard = lazy(() => import("./components/DashBoard"));
+// const FODashboard = lazy(() => import("./components/F&ODashboard"));
+// const MFDashboard = lazy(() => import("./components/MFDashboard"));
+
+// // Profile section
+// const BasicDetails = lazy(() => import("./pages/profile/BasicDetails"));
+// const ChangePassword = lazy(() => import("./pages/profile/ChangePassword"));
+// const ChangePin = lazy(() => import("./pages/profile/ChangePin"));
+// const ReportActivity = lazy(() => import("./pages/profile/ReportActivity"));
+// const AccountForm = lazy(() => import("./pages/profile/AccountForm"));
+// const NomineeDetails = lazy(() => import("./pages/profile/NomineeDetails"));
+
+// // Orders
+// const UserOrder = lazy(() => import("./pages/profile/order/UserOrder"));
+// const Stocks = lazy(() => import("./pages/profile/order/Stocks"));
+// const FutureandOptions = lazy(() =>
+//   import("./pages/profile/order/FutureandOptions")
+// );
+// const MutualFundOrder = lazy(() =>
+//   import("./pages/profile/order/MutualFundOrder")
+// );
+
+//! Stocks
+// const Explore = lazy(() => import("./pages/stocks/Explore"));
+// const Holdings = lazy(() => import("./pages/stocks/Holdings"));
+// const Positions = lazy(() => import("./pages/stocks/Positions"));
+// const Orders = lazy(() => import("./pages/stocks/Orders"));
+// const Watchlist = lazy(() => import("./pages/stocks/Watchlist"));
+// const StockList = lazy(() => import("./pages/stocks/StockList"));
+// const StockDetails = lazy(() => import("./components/StockDetails"));
+
+// // Mutual Funds
+// const ExploreMF = lazy(() => import("./pages/mutual_fund/ExploreMF"));
+// const WatchlistMF = lazy(() => import("./pages/mutual_fund/WatchlistMF"));
+// const DashBoardMF = lazy(() => import("./pages/mutual_fund/DashBoardMF"));
+// const SIPs = lazy(() => import("./pages/mutual_fund/SIPs"));
+// const FundDetails = lazy(() => import("./pages/mutual_fund/FundDetails"));
+// const FundCategorySection = lazy(() =>
+//   import("./pages/mutual_fund/FundCategorySection")
+// );
+// const MutualFundInvestPage = lazy(() =>
+//   import("./pages/mutual_fund/MutualFundInvestPage")
+// );
+
+// // Calculators
+// const SipCalculator = lazy(() =>
+//   import("./pages/calculators/SipCalculator")
+// );
+// const FDCalculator = lazy(() =>
+//   import("./pages/calculators/FDCalculator")
+// );
+// const RetirementCalculator = lazy(() =>
+//   import("./pages/calculators/RetirementCalculator")
+// );
+// const CalculatorsPage = lazy(() =>
+//   import("./pages/calculators/CalculatorsPage")
+// );
+
+// // IPO / Bonds / NFO
+// const IpoDashboardPage = lazy(() =>
+//   import("./components/ipo/IpoDashboardPage")
+// );
+// const IpoDetails = lazy(() => import("./components/ipo/IpoDetails"));
+// const BondPage = lazy(() => import("./components/BondPage"));
+// const NFO = lazy(() => import("./pages/NFO"));
+
+// // Basket
+// const BasketList = lazy(() => import("./pages/basket/BasketList"));
+// const CreateBasket = lazy(() => import("./pages/basket/CreateBasket"));
+// const BasketDetails = lazy(() => import("./pages/basket/BasketDetails"));
+// const Invest = lazy(() => import("./pages/basket/Invest"));
+// const Performance = lazy(() => import("./pages/basket/Performance"));
+
+// // Charts (heavy → MUST lazy)
+// const ChartPage = lazy(() => import("./components/chart/ChartPage"));
+// const TerminalChart = lazy(() =>
+//   import("./components/chart/TerminalChart")
+// );
+// const TradingViewWidget = lazy(() =>
+//   import("./components/chart/TradingViewWidget")
+// );
+// const GrowChart = lazy(() => import("./components/chart/GrowChart"));
+
+// // Misc
+// const HoverSection = lazy(() =>
+//   import("./components/hovercomp/HoverSection")
+// );
+// const MutualFundCarousel = lazy(() =>
+//   import("./carousel/MutualFundCarousel")
+// );
+// const DraggableQRCodeCard = lazy(() =>
+//   import("./components/DraggableQRCodeCard")
+// );
+// const IndicesDetails = lazy(() =>
+//   import("./pages/IndicesDetails")
+// );
+// const InvestmentOptions = lazy(() =>
+//   import("./pages/InvestmentOptions")
+// );
+// const ExploreFO = lazy(() =>
+//   import("./pages/future_&_options/ExploreFO")
+// );
+// const PositionsFO = lazy(() =>
+//   import("./pages/future_&_options/PositionsFO")
+// );
+// const OrdersFO = lazy(() =>
+//   import("./pages/future_&_options/OrdersFO")
+// );
+// const Notifications = lazy(() =>
+//   import("./pages/Notifications")
+// );
+
+// // Investment pages
+// const OneTimeInvestmentPage = lazy(() =>
+//   import("./components/OneTimeInvestmentPage")
+// );
+// const SIPInvestmentPage = lazy(() =>
+//   import("./components/SIPInvestmentPage")
+// );
+
+
   // const [token, setToken] = useState(localStorage.getItem("token"));
   //   const [token, setToken] = useState(localStorage.getItem("token"));
 
@@ -213,6 +353,7 @@ useEffect(() => {
 
       {/*  Page Content */}
       <main className="min-h-screen bg-white dark:bg-[var(--app-bg)]">
+       <Suspense fallback={<PageLoader/>}>
         <Routes>
           {/* Protected routes */}
           <Route element={<ProtectRoute user={token} />}>
@@ -292,6 +433,7 @@ useEffect(() => {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/risk" element={<RiskProfilingPage/>} />
             <Route path="/mutual_fund/:name/purchase_fund" element={<MutualFundInvestPage/>} />
+            <Route path="/stockList/:name" element={<StockList/>} />
           
             <Route path="/bond" element={<BondPage/>} />
 
@@ -340,9 +482,9 @@ useEffect(() => {
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/amc/:amcName" element={<AMCPage/>} />
           <Route path="/notifications" element={<Notifications/>} />
+          <Route path="/loader" element={<PageLoader/>} />
 
-          {/* list */}
-          {/* <Route path="/stockList/:name"  /> */}
+          
 
             {/* IPO */}
             <Route path="/ipo" element={<IpoDashboardPage/>} />
@@ -380,6 +522,7 @@ useEffect(() => {
             />
           ))}
         </Routes>
+        </Suspense>
       </main>
 
       {/* ================= FOOTER ================= */}

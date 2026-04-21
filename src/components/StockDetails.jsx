@@ -38,7 +38,7 @@ import socket from "../utils/socket";
  * /mnt/data/489847be-2715-4255-af96-6c64dad8bb92.png
  */
 
-export default function StockDetailsPremiumFull() {
+const StockDetails = () => {
   // ---------------- MOCK STOCK DATA ----------------
   const {name} = useParams()
   
@@ -1197,3 +1197,4 @@ const getLogoUrl = (stockDetails) => {
     </div>
   );
 }
+ export default StockDetails

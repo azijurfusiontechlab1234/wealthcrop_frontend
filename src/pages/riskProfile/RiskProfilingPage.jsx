@@ -2,6 +2,10 @@
 import { useState } from "react";
 import ProgressBar from "./ProgressBar";
 import { riskQuestions } from "./riskQuestions";
+import axios from "axios";
+import { postApiWithToken } from "../../api/api";
+import { toastSuccess } from "../../utils/notifyCustom";
+import { useNavigate } from "react-router-dom";
 
 const RiskProfilingPage = () => {
   const [currentQ, setCurrentQ] = useState(0);
@@ -9,12 +13,15 @@ const RiskProfilingPage = () => {
   // stores selected option index per question
   const [answers, setAnswers] = useState({});
 
+  const navigate = useNavigate()
+
   const question = riskQuestions[currentQ];
 
   const handleSelect = (score) => {
+    
     setAnswers({
       ...answers,
-      [question.id]: score, // 👈 ONLY SCORE STORED
+      [question.id]: score, //  ONLY SCORE STORED
     });
   };
 
@@ -35,24 +42,47 @@ const RiskProfilingPage = () => {
       (sum, val) => sum + val,
       0
     );
+    const keyMap = {
+  1: "q1_income_stability",
+  2: "q2_emergency_cushion",
+  3: "q3_investment_horizon",
+  4: "q4_loss_reaction",
+  5: "q5_volatility_comfort",
+  6: "q6_return_risk_tradeoff",
+  7: "q7_loss_tolerance",
+  8: "q8_crash_behavior",
+  9: "q9_herd_behavior",
+};
 
-    const payload = {
-      answers,        // {1:5, 2:4, 3:3...}
-      totalScore,     // 👈 user never sees this
-    };
+const formattedAnswers = Object.keys(answers).reduce((acc, key) => {
+  const newKey = keyMap[key];
+  if (newKey) {
+    acc[newKey] = answers[key];
+  }
+  return acc;
+}, {});
+
+const payload = {
+  answers: formattedAnswers,
+};
+
+    // const payload = {
+    //   answers,        // {1:5, 2:4, 3:3...}
+    //   totalScore,     //  user never sees this
+    // };
 
     console.log("Sending to backend:", payload);
 
     // Example API call
-    /*
-    await fetch("/api/risk-profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    */
+    
+  const res = await postApiWithToken(`${import.meta.env.VITE_URL}/risk/calculate`, formattedAnswers);
 
-    alert("Risk profile submitted successfully!");
+  if(res?.status === 200 || res?.status === true){
+    toastSuccess(res?.message)
+    navigate("/profile/basic")
+  }
+    
+
   };
 
   return (

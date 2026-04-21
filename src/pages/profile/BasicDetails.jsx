@@ -21,7 +21,8 @@ import {
   Phone,
 } from "lucide-react";  
 import { getApiWithToken, postApiWithToken } from "../../api/api";
-import { toastError, toastSuccess } from "../../utils/notifyCustom";
+import { toastError, toastSuccess, toastWarn } from "../../utils/notifyCustom";
+import { formatDate } from "../../utils/format";
 
 
 const BasicDetails = () => {
@@ -57,6 +58,8 @@ const fetchUser = async () => {
     throw new Error(res?.message || "Failed to fetch");
   }
 
+  console.log("User Data", res?.data);
+  
   return res.data;
 };
 
@@ -146,6 +149,14 @@ const phone = current?.phone
       toastError(error.message)
     }
 
+  }
+
+  const redirectRiskProfile = () => {
+
+      const isReUpdate = userData?.risk_profile?.updated_at < Date.now() 
+      if(!isReUpdate) return toastWarn(`You can update after ${formatDate(userData?.risk_profile?.next_allowed_at)} `)
+
+    navigate("/risk")
   }
 
 
@@ -675,7 +686,7 @@ const phone = current?.phone
 
        {/* RISK PROFILE CARD */}
             <div className="px-4 pb-4">
-              {riskProfile.isSet ? (
+              {userData?.risk_profile ? (
                 <div className="border border-gray-300 dark:border-slate-700 rounded-xl p-4 bg-green-50 dark:bg-green-900/20">
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="text-green-600" size={18} />
@@ -687,7 +698,7 @@ const phone = current?.phone
                   <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                     <p>
                       <span className="font-medium text-green-600 dark:text-green-400">Category:</span>{" "}
-                      {riskProfile.category}
+                      {userData?.risk_profile?.profile}
                     </p>
                     <p>
                       <span className="font-medium">Equity Exposure:</span>{" "}
@@ -702,12 +713,12 @@ const phone = current?.phone
                       {riskProfile.goldLimit}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Last updated: {riskProfile.lastUpdated}
+                      Last updated: {formatDate(userData?.risk_profile?.updated_at)}
                     </p>
                   </div>
 
                   <button
-                    onClick={() => navigate("/risk")}
+                    onClick={() => redirectRiskProfile()}
                     className="mt-3 w-full text-sm py-2 rounded-lg
                                border border-green-600 text-green-700
                                hover:bg-green-100 dark:hover:bg-green-900/30"
