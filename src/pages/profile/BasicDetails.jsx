@@ -36,6 +36,8 @@ const BasicDetails = () => {
       // const [userData, setUserData] = useState(null)
 
 
+
+
 const handleBack = () => {
   navigate(-1); // Go to previous route
 };
@@ -75,6 +77,9 @@ const current = JSON.parse(localStorage.getItem("currentAccount"))
 const userName = current?.name
 const email = current?.email
 const phone = current?.phone
+
+const isKycDone = userData?.kyc_status === "true"
+// const isKycDone = true
 
   const handleVerify = async (type) => {
 
@@ -167,13 +172,35 @@ const phone = current?.phone
               {/* Basic Details */}
                 <div className="w-full bg-white dark:bg-slate-900 rounded-md  ">
                   {/* Header */}
-                  <div className="w-full px-6 py-6 border-b border-gray-200 dark:border-slate-700 ">
-                    <h2 className="text-blue-950 dark:text-[var(--text-primary)] text-xl font-semibold">
+                  <div className="w-full flex items-center justify-between px-6 py-6 border-b border-gray-200 dark:border-slate-700 ">
+                   <div>
+                     <h2 className="text-blue-950 dark:text-[var(--text-primary)] text-xl font-semibold">
                       Personal Details
                     </h2>
                     <span className="text-sm text-gray-600 dark:text-[var(--text-secondary)] font-semibold">
                       PAN - {userData?.pan || "EMUZX1234G" }
                     </span>
+                   </div>
+
+                    <button
+      onClick={!isKycDone ? () => navigate("/kyc") : undefined}
+      className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition
+        ${
+          isKycDone
+            ? "bg-green-100 text-green-700 cursor-default"
+            : "bg-yellow-500 hover:bg-yellow-600 text-white"
+        }`}
+    >
+      {isKycDone ? (
+        <>
+          <ShieldCheck className="fill-green-600 text-white" size={18} />
+          KYC Verified
+        </>
+      ) : (
+        "Complete KYC"
+      )}
+    </button>
+
                   </div>
     
                   {/* Details */}
@@ -390,8 +417,9 @@ const phone = current?.phone
       </button>
 
       {/* Header */}
-      <div className="w-full px-6 py-6">
-        <h2
+      <div className="w-full px-6 py-6 flex justify-between items-center">
+      <div>
+          <h2
           className="
             text-xl font-semibold
             text-blue-950
@@ -410,6 +438,27 @@ const phone = current?.phone
         >
           PAN - {userData?.pan || "EMUZX1234G"} 
         </span>
+      </div>
+
+                 <button
+      onClick={!isKycDone ? () => navigate("/kyc") : undefined}
+      className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition
+        ${
+          isKycDone
+            ? "bg-green-100 text-green-700 cursor-default"
+            : "bg-yellow-500 hover:bg-yellow-600 text-white"
+        }`}
+    >
+      {isKycDone ? (
+        <>
+          <ShieldCheck className="fill-green-600 text-white" size={18} />
+          KYC Verified
+        </>
+      ) : (
+        "Complete KYC"
+      )}
+    </button>
+
       </div>
     </div>
 

@@ -50,7 +50,7 @@ import WatchlistMF from "./pages/mutual_fund/WatchlistMF";
 import DashBoardMF from "./pages/mutual_fund/DashBoardMF";
 import SIPs from "./pages/mutual_fund/SIPs";
 import FundDetails from "./pages/mutual_fund/FundDetails";
-import StockDetails from "./components/StockDetails";
+// import StockDetails from "./components/StockDetails";
 import MutualFundCarousel from "./carousel/MutualFundCarousel";
 import DraggableQRCodeCard from "./components/DraggableQRCodeCard";
 import NFO from "./pages/NFO";
@@ -159,7 +159,7 @@ function App() {
 // const Orders = lazy(() => import("./pages/stocks/Orders"));
 // const Watchlist = lazy(() => import("./pages/stocks/Watchlist"));
 // const StockList = lazy(() => import("./pages/stocks/StockList"));
-// const StockDetails = lazy(() => import("./components/StockDetails"));
+const StockDetails = lazy(() => import("./components/StockDetails"));
 
 // // Mutual Funds
 // const ExploreMF = lazy(() => import("./pages/mutual_fund/ExploreMF"));
@@ -476,7 +476,12 @@ useEffect(() => {
           <Route path="/reset-pin" element={<ResetPin/>} />
           <Route path="/nfo" element={<NFO />} />
           <Route path="/mutual_fund/:name" element={<FundDetails />} />
-          <Route path="/stocks/:name" element={<StockDetails />} />
+          {/* <Route path="/stocks/:name" element={<StockDetails />} /> */}
+          <Route path="/stocks/:name" element={
+      <Suspense fallback={<PageLoader/>}>
+        <StockDetails />
+      </Suspense>
+    } />
           <Route path="/indices/:name" element={<IndicesDetails />} />
           <Route path="/blogs" element={<Blog/>} />
           <Route path="/blog/:id" element={<BlogPost />} />

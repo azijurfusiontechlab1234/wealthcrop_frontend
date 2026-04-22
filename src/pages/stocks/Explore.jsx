@@ -311,7 +311,7 @@ const stockList =  useSelector((state) => state.stocks.stockList)
                 {/* See more link */}
                 <div className="mt-6 pl-2">
                   <Link
-                    to="/"
+                    to="/stockList/most-bought-stocks-on-wealthcrop"
                     className="text-green-600 font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all duration-200"
                   >
                     See more <FaAngleRight size={14} />
@@ -421,6 +421,17 @@ const stockList =  useSelector((state) => state.stocks.stockList)
   </div>
 
   <MarketTable />
+
+   {/* See more link */}
+                <div className="mt-6 pl-2">
+                  <Link
+                    to="/stockList/top-market-movers"
+                    className="text-green-600 font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all duration-200"
+                  >
+                    See more <FaAngleRight size={14} />
+                  </Link>
+                </div>
+
 </div>
 
 

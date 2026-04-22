@@ -12,14 +12,15 @@ import {
   ShieldCheck,
   Lock,
 } from "lucide-react";
-import { postApiWithToken } from "../../api/api";
+import { getApiWithToken, postApiWithToken } from "../../api/api";
 import { toastError, toastSuccess } from "../../utils/notifyCustom";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
@@ -30,6 +31,45 @@ const [docUploaded, setDocUploaded] = useState({
   aadhaar: false,
   selfie: false
 });
+
+  const fetchUser = async () => {
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_USER_DATA}`;
+    const res = await getApiWithToken(url);
+  
+    if (!(res?.status === 200 || res?.status === true)) {
+      throw new Error(res?.message || "Failed to fetch");
+    }
+  
+    console.log("User Data", res?.data);
+    
+    return res.data;
+  };
+  
+  
+  const { data: userData, isLoading, error, refetch } = useQuery({
+    queryKey: ["userData"],
+    queryFn: fetchUser,
+  });
+
+    useEffect(() => {
+
+      const currentStep = userData?.kyc_steps
+      if(!currentStep) return
+
+      setStep(currentStep < 5 ? currentStep + 1 : currentStep);
+
+      setCompletedSteps((prev) => {
+        const updated = {...prev}
+        
+        for (let i = 0; i <= (currentStep < 5 ? currentStep : currentStep - 1); i++) {
+         updated[i] = true;
+      }
+        return updated
+      })
+
+      console.log("KYC Step", userData?.kyc_steps);
+      
+    },[userData])
 
 
   //  CENTRAL KYC STATE
@@ -354,6 +394,8 @@ const getNameParts = (fullName = "") => {
     return `${prefix}${timeStamp}${random}`
   }
 
+
+
 useEffect(() => {
   if (step !== 5) return; // only run on step 5
 
@@ -440,6 +482,22 @@ useEffect(() => {
     }
   };
 
+    //! To send kyc step
+  const sendStep = async () => {
+    const url = `${import.meta.env.VITE_URL}/kyc/steps`
+    try {
+      const res = await postApiWithToken(url, {step})
+      if(res?.status === 200 || res?.status === true){
+        toastSuccess("Step send successfully")
+        console.log("Step", step);
+        
+      }
+    } catch (error) {
+      toastError(error?.message)
+    }
+  }
+
+  sendStep()
   createUCC();
 }, [step]);
 

@@ -75,11 +75,13 @@ const Profile = () => {
     queryFn: fetchUser,
   });
 
+
+
    const redirectRiskProfile = () => {
   
         const isReUpdate = userData?.risk_profile?.updated_at < Date.now() 
         if(!isReUpdate) return toastWarn(`You can update after ${formatDate(userData?.risk_profile?.next_allowed_at)} `)
-  
+      
       navigate("/risk")
     }
 
