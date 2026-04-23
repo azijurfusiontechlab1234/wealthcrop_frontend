@@ -69,7 +69,7 @@ const Support = () => {
         flex flex-col items-center text-center
         hover:shadow-lg transition
 
-        dark:bg-[var(--card-bg)]
+        dark:bg-[var(--card-bg)] dark:border-2 dark:border-[var(--border-color)]
       "
     >
       <div className="bg-blue-100 text-blue-600 p-3 rounded-full mb-3 dark:bg-blue-500/15 dark:text-blue-400">

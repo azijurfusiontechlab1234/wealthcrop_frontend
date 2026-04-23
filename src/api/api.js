@@ -27,7 +27,9 @@ export const getApiWithToken = async (url) => {
       },
     });
 
-    return response.data;
+    // console.log("from get api",response);
+    return response;
+    
   } catch (error) {
     toastError(error.response?.data?.message || "API Error");
     return null;

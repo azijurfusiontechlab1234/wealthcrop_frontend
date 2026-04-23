@@ -1,5 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toastError, toastSuccess } from "../../utils/notifyCustom";
+import { Clock10Icon } from "lucide-react";
+import { getApiWithToken, postApiWithToken } from "../../api/api";
+import axios from "axios";
 
 /* ===============================
    STATIC ASSET MASTER (MOCK DATA)
@@ -19,7 +23,7 @@ const ASSETS = {
   ],
 };
 
-export default function CreateBasket({ onSave }) {
+export default function CreateBasket() {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -30,6 +34,7 @@ export default function CreateBasket({ onSave }) {
   const [results, setResults] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [weight, setWeight] = useState("");
+  const [error, setError] = useState("")
 
   /* ===============================
      WEIGHT CALCULATIONS
@@ -43,7 +48,24 @@ export default function CreateBasket({ onSave }) {
   /* ===============================
      SEARCH LOGIC (STATIC)
      =============================== */
-  const searchAssets = (text) => {
+  // const searchAssets = (text) => {
+  //   setQuery(text);
+  //   setSelectedAsset(null);
+
+  //   if (text.length < 2) {
+  //     setResults([]);
+  //     return;
+  //   }
+
+  //   const matches = ASSETS[type]
+  //     .filter((a) =>
+  //       a.name.toLowerCase().includes(text.toLowerCase())
+  //     )
+  //     .slice(0, 4); // show max 4 results
+
+  //   setResults(matches);
+  // };
+  const searchAssets = async (text) => {
     setQuery(text);
     setSelectedAsset(null);
 
@@ -52,14 +74,29 @@ export default function CreateBasket({ onSave }) {
       return;
     }
 
-    const matches = ASSETS[type]
-      .filter((a) =>
-        a.name.toLowerCase().includes(text.toLowerCase())
-      )
-      .slice(0, 4); // show max 4 results
+    const url = `${import.meta.env.VITE_URL}/assets/search?query=${text}&type=${type}`
+    const res = await getApiWithToken(url)
 
-    setResults(matches);
+    if(res?.status === 200 || res?.status === true){
+
+      setResults(res?.data?.data)
+      console.log("basket search assests ", res);
+    }
+    
+
+    // const matches = ASSETS[type]
+    //   .filter((a) =>
+    //     a.name.toLowerCase().includes(text.toLowerCase())
+    //   )
+    //   .slice(0, 4); // show max 4 results
+
+    // setResults(matches);
   };
+
+  useEffect(() => {
+console.log("Search results", results);
+
+  },[results])
 
   /* ===============================
      ADD ASSET
@@ -71,17 +108,17 @@ export default function CreateBasket({ onSave }) {
 
     if (w <= 0) return;
     if (totalWeight + w > 100) {
-      alert("Total allocation cannot exceed 100%");
+      setError("Total allocation cannot exceed 100%");
       return;
     }
 
     setAssets([
       ...assets,
       {
-        id: Date.now(),
-        assetId: selectedAsset.id,
+        id: selectedAsset.id,
+        asset_id: selectedAsset.id,
         name: selectedAsset.name,
-        type,
+        asset_type: type,
         weight: w,
       },
     ]);
@@ -96,18 +133,46 @@ export default function CreateBasket({ onSave }) {
      REMOVE ASSET
      =============================== */
   const removeAsset = (id) => {
+    setError("")
     setAssets(assets.filter((a) => a.id !== id));
   };
 
   /* ===============================
      SAVE
      =============================== */
-  const saveBasket = () => {
-    if (totalWeight !== 100) return;
+  // const saveBasket = () => {
+  //   if (totalWeight !== 100) return;
 
-    onSave({ name, assets });
-    navigate("/baskets");
-  };
+  //   onSave();
+   
+  //   navigate("/baskets");
+  // };
+
+  const saveBasket = async () => {
+
+    const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_CREATE_BASKET}`
+    const payload = {
+      name,
+      holdings: assets.map((item) => ({
+        asset_id: item.asset_id,
+        asset_type: item.asset_type,
+        weight: item.weight,
+      }))
+    }
+    try{  
+
+      const res = await postApiWithToken(url, payload)
+      if(res?.status === 200 || res?.status === true || res?.success === 200 || res?.success === true){
+        navigate("/baskets");
+        setAssets([])
+        toastSuccess(res?.message)
+      }
+
+    }catch(err){
+      toastError(err?.message)
+    }
+
+  }
 
   return (
    <div
@@ -122,7 +187,7 @@ export default function CreateBasket({ onSave }) {
     <h1
       className="
         text-3xl font-bold
-        text-slate-800
+        text-blue-900
         dark:text-[var(--text-primary)]
       "
     >
@@ -248,8 +313,8 @@ export default function CreateBasket({ onSave }) {
         {results.length > 0 && (
           <div
             className="
-              absolute z-10 w-full mt-1 rounded-xl shadow overflow-hidden
-              bg-white border border-[#e0e7ef]
+              absolute z-10 w-full mt-1 rounded-xl shadow overflow-hidden md:w-[460px] overflow-y-auto
+              bg-white border border-[#e0e7ef] h-54
 
               dark:bg-[var(--card-bg)]
               dark:border-[var(--border-color)]
@@ -305,6 +370,11 @@ export default function CreateBasket({ onSave }) {
           onChange={(e) => setWeight(e.target.value)}
         />
       </div>
+      {
+        error && (
+          <span className="text-sm text-red-600 dark:text-red-500">{error}</span>
+        )
+      }
     </div>
 
     {/* ADD BUTTON */}
@@ -392,7 +462,7 @@ export default function CreateBasket({ onSave }) {
                 dark:text-[var(--text-secondary)]
               "
             >
-              ({a.type})
+              ({a.asset_type})
             </span>
           </div>
 

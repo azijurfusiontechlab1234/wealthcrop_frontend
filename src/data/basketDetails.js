@@ -131,7 +131,7 @@ export default {
         list: [
           {
             name: "SBI Corporate Bond Fund",
-            weight: 30,
+            weight: 40,
             returns1Y: 6.0,
             returns3Y: 7.1,
             returns5Y: 7.8,
@@ -144,7 +144,7 @@ export default {
         list: [
           {
             name: "Axis Gold Fund",
-            weight: 20,
+            weight: 10,
             returns1Y: 8.8,
             returns3Y: 10.6,
             returns5Y: 11.4,
