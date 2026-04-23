@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
@@ -537,6 +537,51 @@ useEffect(() => {
     acc_type: "CB",
   },
 };
+
+// const payload = {
+//   source: "demo",
+//   client_code: "IND12345",
+//   tax_code: "01",
+//   holding_nature: "SI",
+//   is_client_physical: true,
+
+//   holders: [
+//     {
+//       first_name: "Rahul",
+//       middle_name: "",
+//       last_name: "Sharma",
+//       dob: "1995-05-15",
+//       gender: "M",
+//       pan: "APZPP1234F",
+//       email: "rahul@example.com",
+//       mobile: "9876543210",
+//       occ_code: "01",
+//       tax_status: "Individual",
+//       place_of_birth: "Mumbai",
+//       country_of_birth: "IND",
+//       wealth_source: "1",
+//       income_slab: "31",
+//       net_worth: 500000,
+//       politically_exposed: "N",
+//     },
+//   ],
+
+//   address: {
+//     line1: "Flat 101, Sea View",
+//     line2: "Andheri West",
+//     line3: "Near Station",
+//     pincode: "400058",
+//     city: "Mumbai",
+//     state: "Maharashtra",
+//     country: "IND",
+//   },
+
+//   bank: {
+//     ifsc: "HDFC0001234",
+//     acc_no: "50100012345678",
+//     acc_type: "SB",
+//   },
+// };
 
       const res = await axios.post(
         "http://65.2.121.33:5500/v2/add_ucc",
