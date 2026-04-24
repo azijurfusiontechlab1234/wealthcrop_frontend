@@ -16,7 +16,7 @@ const Balance = () => {
   return (
     <div className="bg-white dark:bg-[var(--app-bg)] min-h-[400px] rounded-xl p-8 flex items-center justify-center">
       {isAccountSetup ? (
-        // ✅ After account setup — show balance in 2-column layout
+        //  After account setup — show balance in 2-column layout
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Image */}
           <div className="flex justify-center">
@@ -67,7 +67,7 @@ const Balance = () => {
           </div>
         </div>
       ) : (
-        // ❌ Not setup yet
+        //  Not setup yet
         <div className="flex flex-col items-center text-center gap-5 px-6 py-10">
           <img
             src={setupImg}

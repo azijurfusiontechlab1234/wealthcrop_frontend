@@ -11,12 +11,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getApi } from "../../api/api";
 import socket from "../../utils/socket";
 import { useSelector } from "react-redux";
+import WatchlistPopup from "../../components/WatchlistPopup";
 
 
 const Explore = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeTab, setActiveTab] = useState("Gainers");
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [isWatchlist, setIsWatchlist] = useState(false)
   // const [stockList, setStockList] = useState(null)
 
       const [open, setOpen] = useState(false);
@@ -165,6 +167,7 @@ const stockList =  useSelector((state) => state.stocks.stockList)
    const [bookmarked, setBookmarked] = useState({});
 
   const toggleBookmark = (index) => {
+    setIsWatchlist(true)
     setBookmarked((prev) => ({
       ...prev,
       [index]: !prev[index],
@@ -187,6 +190,7 @@ const stockList =  useSelector((state) => state.stocks.stockList)
   { name: "Orders", link: "/user/stocks/orders" },
   { name: "Watchlist", link: "/user/stocks/watchlist" },
 ];
+
 
   return (
     <>
@@ -1398,6 +1402,12 @@ const stockList =  useSelector((state) => state.stocks.stockList)
 
 
       </div>
+
+    {
+      isWatchlist && <WatchlistPopup onClose={() => setIsWatchlist(false)} />
+    }
+
+
     </>
   );
 };

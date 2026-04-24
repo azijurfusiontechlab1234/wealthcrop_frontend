@@ -605,7 +605,7 @@ const phone = current?.phone
 </nav>
 
 
-      {/* ✅ Global Search Popup */}
+      {/*  Global Search Popup */}
       {isSearchOpen && <SearchPopup onClose={() => setIsSearchOpen(false)} />}
     </>
   );

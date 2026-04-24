@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import BasketCard from "../../components/BasketCard";
 // import basket_dashboard from "../../assets/basket/basket_dashboard.png"
 import basket_dashboard from "../../assets/basket/basket_dashboard.png"
 import BasketCard from "./BasketCard";
+import { getApiWithToken } from "../../api/api";
 
 export default function BasketList({ baskets }) {
+  const [basket, setBaskets] = useState([])
   const [filter, setFilter] = useState("All");
 
   const categories = ["All", "Equity", "Hybrid", "Debt", "Commodity"];
@@ -15,6 +17,28 @@ export default function BasketList({ baskets }) {
     filtered = baskets.filter((b) => b.category === filter);
   }
 
+  useEffect(() => {
+
+    const fetchBasket = async () => {
+
+      const url =`${import.meta.env.VITE_URL}/baskets`
+
+      try {
+        
+        const res = await getApiWithToken(url)
+        console.log("All Baskets", res?.data);
+        setBaskets(res?.data?.data)
+
+      } catch (error) {
+        toas
+      }
+
+    }
+
+    fetchBasket()
+
+  },[])
+
   return (
     <div
   className="
@@ -23,7 +47,7 @@ export default function BasketList({ baskets }) {
     dark:bg-[var(--app-bg)]
   "
 >
-  {/* 🌤️ LIGHT / DARK BANNER */}
+  {/*  LIGHT / DARK BANNER */}
   <div
     className="
       bg-linear-to-r from-[#e8f2ff] to-[#f4faff]
@@ -38,7 +62,7 @@ export default function BasketList({ baskets }) {
       <h1
         className="
           text-3xl font-bold leading-tight
-          text-slate-800 dark:text-[var(--text-primary)]
+          text-blue-900 dark:text-[var(--text-primary)]
         "
       >
         Mutual Fund Baskets

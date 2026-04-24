@@ -62,7 +62,7 @@ const fetchUser = async () => {
 
   console.log("User Data", res?.data);
   
-  return res.data;
+  return res?.data?.data;
 };
 
 
@@ -476,7 +476,7 @@ const isKycDone = userData?.kyc_status === "true"
           Name (as on PAN Card)
         </p>
         <p className="text-blue-950 font-semibold dark:text-[var(--text-primary)]">
-          {userData?.name}
+          {userData?.name ?? "--"}
         </p>
       </div>
 
