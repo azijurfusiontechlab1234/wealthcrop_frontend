@@ -11,7 +11,7 @@ const ChangePin = () => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleUpdate = async () => {
+  const handleUpdate = async () => { 
     if (newPin !== confirmPin) {
       alert("Pins do not match!");
       return;

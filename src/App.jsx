@@ -108,6 +108,8 @@ import ResetPin from "./pages/ResetPin";
 import Notifications from "./pages/Notifications";
 import StockList from "./pages/stocks/StockList";
 import PageLoader from "./components/PageLoader";
+import { toastError } from "./utils/notifyCustom";
+import { getApiWithToken } from "./api/api";
 
 
 const queryClient = new QueryClient();
@@ -247,7 +249,7 @@ const StockDetails = lazy(() => import("./components/StockDetails"));
 //   import("./components/OneTimeInvestmentPage")
 // );
 // const SIPInvestmentPage = lazy(() =>
-//   import("./components/SIPInvestmentPage")
+//   import("./components/SIPInvestmentPage") 
 // );
 
 
@@ -262,8 +264,26 @@ const StockDetails = lazy(() => import("./components/StockDetails"));
 
 
   const { pathname } = useLocation();
-    const [baskets] = useState(basketsData); // static for now
+    // const [baskets] = useState(basketsData); // static for now
   const [basketDetails] = useState(basketDetailsData);
+  const [baskets, setBaskets] = useState([]);
+
+    useEffect(() => {
+      const fetchBasket = async () => {
+        const url = `${import.meta.env.VITE_URL}/baskets`;
+        // setLoading(true);
+
+        try {
+          const res = await getApiWithToken(url);
+          console.log("All Baskets", res?.data);
+          setBaskets(res?.data?.data);
+        } catch (error) {
+          toastError(error.message);
+        }
+      };
+
+      fetchBasket();
+    }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);

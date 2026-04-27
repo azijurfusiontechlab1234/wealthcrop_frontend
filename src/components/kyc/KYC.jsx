@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(5);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
@@ -438,105 +438,82 @@ useEffect(() => {
       // };
       
         const payload = {
-    // source: "demo",
-    // client_code: "ABC1002",
-    // holders: [
-    //   {
-    //     first_name: "Amit",
-    //     last_name: "Patel",
-    //     dob: "1992-05-20",
-    //     gender: "M",
-    //     // pan: "ABCDE5678G",
-    //     pan: "APZPP1234F",
-    //     email: "amit.patel@dummy.com",
-    //     mobile: "9898989898",
-    //   },
-    // ],
-    // address: {
-    //   line1: "Flat 202, Sunshine Apts",
-    //   pincode: "400053",
-    //   city: "Mumbai",
-    //   state: "Maharashtra",
-    // },
-    // bank: {
-    //   ifsc: "ICIC0000123",
-    //   acc_no: "0123456789",
-    //   acc_type: "SB",
-    // },
+          // source: "demo",
+          // client_code: "ABC1002",
+          // holders: [
+          //   {
+          //     first_name: "Amit",
+          //     last_name: "Patel",
+          //     dob: "1992-05-20",
+          //     gender: "M",
+          //     // pan: "ABCDE5678G",
+          //     pan: "APZPP1234F",
+          //     email: "amit.patel@dummy.com",
+          //     mobile: "9898989898",
+          //   },
+          // ],
+          // address: {
+          //   line1: "Flat 202, Sunshine Apts",
+          //   pincode: "400053",
+          //   city: "Mumbai",
+          //   state: "Maharashtra",
+          // },
+          // bank: {
+          //   ifsc: "ICIC0000123",
+          //   acc_no: "0123456789",
+          //   acc_type: "SB",
+          // },
 
+          //!
 
-    //!
-  source: "demo",
-  client_code: "CORP8899",
-  tax_code: "04",
-  holding_nature: "AS",
-  is_client_physical: true,
-
-  holders: [
-    {
-      first_name: "WealthCorp Solutions Pvt Ltd",
-      pan: "APZPP1234F",
-      dob: "2010-01-01",
-      email: "admin@wealthcorp.com",
-      mobile: "9988776655",
-      occ_code: "01",
-      tax_status: "Company",
-      place_of_birth: "Mumbai",
-      wealth_source: "1",
-      income_slab: "34",
-      net_worth: 5000000,
-
-      // Non-Individual Fields
-      ffi_drnfe: "FFI",
-      giin_no: "",
-      nfe_category: "A",
-      is_giin_avail: "AF",
-      nature_of_relation: "SU",
-      nfe_sub_category: "1",
-      nature_of_business: "Others",
-
-      // UBO Details
-      ubo: {
-        is_ubo_applicable: true,
-        ubo_count: 1,
-        ubo_detail: [
-          {
-            name: "John Doe",
-            father_name: "Richard Doe",
-            dob: "1980-01-01",
-            gender: "M",
-            pan: "APZPP1234F",
-            beneficiary_percent: "100",
-            ubo_type_code: "C01",
-            ubo_category: "SMO",
+          source: "demo",
+          client_code: "CLIENT101",
+          tax_code: "01",
+          holding_nature: "SI",
+          is_client_physical: true,
+          rdmp_idcw_pay_mode: "01",
+          is_nomination_opted: false,
+          nomination_auth_mode: "O",
+          comm_mode: "E",
+          onboarding: "Z",
+          holders: [
+            {
+              first_name: "Aakash",
+              middle_name: "",
+              last_name: "Sharma",
+              dob: "1995-05-20",
+              gender: "M",
+              pan: "APZPP1234F",
+              mobile: "9876543210",
+              email: "aakash@example.com",
+              occ_code: "01",
+              auth_mode: "M",
+              kyc_type: "K",
+              place_of_birth: "Mumbai",
+              country_of_birth: "IND",
+              income_slab: "31",
+              wealth_source: "1",
+              politically_exposed: "N",
+              net_worth: 500000,
+              date_of_net_worth: "2024-01-01",
+              nomination: [],
+            },
+          ],
+          address: {
+            line1: "Flat 402, Sunshine Tower",
+            line2: "Andheri West",
+            line3: "Mumbai",
+            pincode: "400053",
+            city: "Mumbai",
+            state: "Maharashtra",
+            country: "IND",
           },
-        ],
-      },
-
-      // NPO Details
-      npo: {
-        npo_form: false,
-        npo_dcl: false,
-        npo_rg_no: "",
-      },
-    },
-  ],
-
-  address: {
-    line1: "Office No 505",
-    line2: "Business Park",
-    line3: "BKC",
-    pincode: "400051",
-    city: "Mumbai",
-    state: "Maharashtra",
-  },
-
-  bank: {
-    ifsc: "ICIC0000001",
-    acc_no: "000105001234",
-    acc_type: "CB",
-  },
-};
+          bank: {
+            ifsc: "HDFC0001234",
+            acc_no: "50100012345678",
+            acc_type: "SB",
+          },
+        };
 
 // const payload = {
 //   source: "demo",
