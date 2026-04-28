@@ -346,21 +346,18 @@ useEffect(() => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SocketHandler/>
-        {locked && (
-  <LoginPinModal onSuccess={() => setLocked(false)} />
-)}
+      <SocketHandler />
+      {locked && <LoginPinModal onSuccess={() => setLocked(false)} />}
       {/*  Always on top of everything */}
       {/* <div className="fixed top-0 left-0 w-full z-[60]">
       <MutualFundCarousel />
     </div> */}
       {/*  Fixed Header */}
       {/*  Large screens (always show OldHeader) */}
-      <ScrollToTopButton/>
+      <ScrollToTopButton />
       <DraggableQRCodeCard value="https://example.com" size={100} />
-        {/* ================= TOP HEADER ================= */}
-{(!token || isLg) && <OldHeader />}
-
+      {/* ================= TOP HEADER ================= */}
+      {(!token || isLg) && <OldHeader />}
 
       {/* Top spacer */}
       {(!token || isLg) && <div className="h-[96px]" />}
@@ -369,201 +366,243 @@ useEffect(() => {
       {/* <div className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white dark:bg-[var(--app-bg)]">
         {token ? <Header2 activeCategory={activeCategory} /> : <OldHeader />}
       </div> */}
-      
 
       {/*  Page Content */}
       <main className="min-h-screen bg-white dark:bg-[var(--app-bg)]">
-       <Suspense fallback={<PageLoader/>}>
-        <Routes>
-          {/* Protected routes */}
-          <Route element={<ProtectRoute user={token} />}>
-            {/* Stocks */}
-            <Route path="/user/stocks" element={<Dashboard />}>
-              <Route index element={<Navigate to="explore" replace />} />
-              <Route path="explore" element={<Explore />} />
-              <Route path="holdings" element={<Holdings />} />
-              <Route path="positions" element={<Positions />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="watchlist" element={<Watchlist />} />
-            </Route>
-
-            {/* MutualFund */}
-            <Route path="/user/mutual_fund" element={<MFDashboard />}>
-              <Route index element={<Navigate to="explore" replace />} />
-              <Route path="explore" element={<ExploreMF />} />
-              <Route path="investments" element={<DashBoardMF />} />
-              <Route path="sip" element={<SIPs />} />
-              <Route path="watchlist" element={<WatchlistMF />} />
-            </Route>
-
-            {/* Future and Options */}
-            <Route path="/user/future_and_options" element={<FODashboard />}>
-              <Route index element={<Navigate to="explore" replace />} />
-              <Route path="explore" element={<ExploreFO />} />
-              <Route path="positions" element={<PositionsFO/>}  />
-              <Route path="orders" element={<OrdersFO/>} />
-            </Route>
-
-            <Route path="/mutual_fund/manage-sip" element={<ManageSipPage/>} />
-            <Route path="mutual_fund/collections/:categorySlug" element={<FundCategorySection/>} />
-
-            {/* F&O and Mutual Fund */}
-            <Route path="/user/f&o" element={<FODashboard />} />
-            {/* <Route path="/user/mutual_fund" element={<MFDashboard />} /> */}
-
-            {/* Profile Order */}
-            <Route path="/user/order" element={<UserOrder />}>
-              <Route index element={<Navigate to="stocks" replace />} />
-              <Route path="stocks" element={<Stocks />} />
-              <Route
-                path="futures-and-options"
-                element={<FutureandOptions />}
-              />
-              <Route path="mutual-funds" element={<MutualFundOrder />} />
-            </Route>
-
-            {/* Profile */}
-
-            {isLg ? (
-              <Route path="/profile" element={<Profile />}>
-                <Route index element={<Navigate to="basic" replace />} />
-                <Route path="basic" element={<BasicDetails />} />
-                <Route path="change-password" element={<ChangePassword />} />
-                <Route path="change-pin" element={<ChangePin />} />
-                <Route path="report-activity" element={<ReportActivity />} />
-                <Route path="nominee_details" element={<NomineeDetails />} />
-                <Route path="account-forms" element={<AccountForm />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Protected routes */}
+            <Route element={<ProtectRoute user={token} />}>
+              {/* Stocks */}
+              <Route path="/user/stocks" element={<Dashboard />}>
+                <Route index element={<Navigate to="explore" replace />} />
+                <Route path="explore" element={<Explore />} />
+                <Route path="holdings" element={<Holdings />} />
+                <Route path="positions" element={<Positions />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="watchlist" element={<Watchlist />} />
               </Route>
-            ) : (
-              <>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/profile/basic" element={<BasicDetails />} />
-                <Route path="/profile/change-password" element={<ChangePassword />} />
-                <Route path="/profile/change-pin" element={<ChangePin />} />
-                <Route path="/profile/report-activity" element={<ReportActivity />} />
-                <Route path="/profile/nominee_details" element={<NomineeDetails />} />
-                <Route path="/profile/account-forms" element={<AccountForm />} />
-              </>
-            )}
-            <Route path="/support" element={<Support />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/user/balance" element={<Balance />} />
-            <Route path="/user/balance/inr" element={<AddMoney />} />
-            <Route path="/investments" element={<InvestmentOptions />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/risk" element={<RiskProfilingPage/>} />
-            <Route path="/mutual_fund/:name/purchase_fund" element={<MutualFundInvestPage/>} />
-            <Route path="/stockList/:name" element={<StockList/>} />
-          
-            <Route path="/bond" element={<BondPage/>} />
 
-            {/* Baskets */}
-               <Route
-            path="/baskets"
-            element={<BasketList baskets={baskets} />}
-          />
+              {/* MutualFund */}
+              <Route path="/user/mutual_fund" element={<MFDashboard />}>
+                <Route index element={<Navigate to="explore" replace />} />
+                <Route path="explore" element={<ExploreMF />} />
+                <Route path="investments" element={<DashBoardMF />} />
+                <Route path="sip" element={<SIPs />} />
+                <Route path="watchlist" element={<WatchlistMF />} />
+              </Route>
 
-          <Route
-            path="/basket/:id"
-            element={
-              <BasketDetails baskets={baskets} basketDetails={basketDetails} />
-            }
-          />
+              {/* Future and Options */}
+              <Route path="/user/future_and_options" element={<FODashboard />}>
+                <Route index element={<Navigate to="explore" replace />} />
+                <Route path="explore" element={<ExploreFO />} />
+                <Route path="positions" element={<PositionsFO />} />
+                <Route path="orders" element={<OrdersFO />} />
+              </Route>
 
-          <Route
-            path="/invest/:id"
-            element={<Invest baskets={baskets} />}
-          />
+              <Route
+                path="/mutual_fund/manage-sip"
+                element={<ManageSipPage />}
+              />
+              <Route
+                path="mutual_fund/collections/:categorySlug"
+                element={<FundCategorySection />}
+              />
 
-          <Route
-            path="/performance/:id"
-            element={<Performance basketDetails={basketDetails} />}
-          />
-          <Route path="/create-basket" element={<CreateBasket/>} />
+              {/* F&O and Mutual Fund */}
+              <Route path="/user/f&o" element={<FODashboard />} />
+              {/* <Route path="/user/mutual_fund" element={<MFDashboard />} /> */}
 
-          </Route>
+              {/* Profile Order */}
+              <Route path="/user/order" element={<UserOrder />}>
+                <Route index element={<Navigate to="stocks" replace />} />
+                <Route path="stocks" element={<Stocks />} />
+                <Route
+                  path="futures-and-options"
+                  element={<FutureandOptions />}
+                />
+                <Route path="mutual-funds" element={<MutualFundOrder />} />
+              </Route>
 
-          {/* Public routes */}
-          <Route
-            path="/"
-            element={token ? <Navigate to="/user/stocks" /> : <Home />}
-          />
-          <Route path="*" element={<ErrorPage/>} />
+              {/* Profile */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword/>} />
-          <Route path="/reset-pin" element={<ResetPin/>} />
-          <Route path="/nfo" element={<NFO />} />
-          <Route path="/mutual_fund/:name" element={<FundDetails />} />
-          {/* <Route path="/stocks/:name" element={<StockDetails />} /> */}
-          <Route path="/stocks/:name" element={
-      <Suspense fallback={<PageLoader/>}>
-        <StockDetails />
-      </Suspense>
-    } />
-          <Route path="/indices/:name" element={<IndicesDetails />} />
-          <Route path="/blogs" element={<Blog/>} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/amc/:amcName" element={<AMCPage/>} />
-          <Route path="/notifications" element={<Notifications/>} />
-          <Route path="/loader" element={<PageLoader/>} />
+              {isLg ? (
+                <Route path="/profile" element={<Profile />}>
+                  <Route index element={<Navigate to="basic" replace />} />
+                  <Route path="basic" element={<BasicDetails />} />
+                  <Route path="change-password" element={<ChangePassword />} />
+                  <Route path="change-pin" element={<ChangePin />} />
+                  <Route path="report-activity" element={<ReportActivity />} />
+                  <Route path="nominee_details" element={<NomineeDetails />} />
+                  <Route path="account-forms" element={<AccountForm />} />
+                </Route>
+              ) : (
+                <>
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile/basic" element={<BasicDetails />} />
+                  <Route
+                    path="/profile/change-password"
+                    element={<ChangePassword />}
+                  />
+                  <Route path="/profile/change-pin" element={<ChangePin />} />
+                  <Route
+                    path="/profile/report-activity"
+                    element={<ReportActivity />}
+                  />
+                  <Route
+                    path="/profile/nominee_details"
+                    element={<NomineeDetails />}
+                  />
+                  <Route
+                    path="/profile/account-forms"
+                    element={<AccountForm />}
+                  />
+                </>
+              )}
+              <Route path="/support" element={<Support />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/user/balance" element={<Balance />} />
+              <Route path="/user/balance/inr" element={<AddMoney />} />
+              <Route path="/investments" element={<InvestmentOptions />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/risk" element={<RiskProfilingPage />} />
+              <Route
+                path="/mutual_fund/:name/purchase_fund"
+                element={<MutualFundInvestPage />}
+              />
+              <Route path="/stockList/:name" element={<StockList />} />
 
-          
+              <Route path="/bond" element={<BondPage />} />
+
+              {/* Baskets */}
+              <Route
+                path="/baskets"
+                element={<BasketList baskets={baskets} />}
+              />
+
+              <Route
+                path="/basket/:id"
+                element={
+                  <BasketDetails
+                    baskets={baskets}
+                    basketDetails={basketDetails}
+                  />
+                }
+              />
+
+              <Route
+                path="/invest/:id"
+                element={<Invest baskets={baskets} />}
+              />
+
+              <Route
+                path="/performance/:id"
+                element={<Performance basketDetails={basketDetails} />}
+              />
+              <Route path="/create-basket" element={<CreateBasket />} />
+            </Route>
+
+            {/* Public routes */}
+            <Route
+              path="/"
+              element={token ? <Navigate to="/user/stocks" /> : <Home />}
+            />
+            <Route path="*" element={<ErrorPage />} />
+
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-pin" element={<ResetPin />} />
+            <Route path="/nfo" element={<NFO />} />
+            <Route
+              path="/mutual_fund/:isin/:code"
+              element={
+                <Suspense fallback={<PageLoader/>} >
+                  <FundDetails />
+                </Suspense>
+              }
+            />
+            {/* <Route path="/stocks/:name" element={<StockDetails />} /> */}
+            <Route
+              path="/stocks/:name"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <StockDetails />
+                </Suspense>
+              }
+            />
+            <Route path="/indices/:name" element={<IndicesDetails />} />
+            <Route path="/blogs" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/amc/:amcName" element={<AMCPage />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/loader" element={<PageLoader />} />
 
             {/* IPO */}
-            <Route path="/ipo" element={<IpoDashboardPage/>} />
-            <Route path="/ipo/:ipoName" element={<IpoDetails/>} />
+            <Route path="/ipo" element={<IpoDashboardPage />} />
+            <Route path="/ipo/:ipoName" element={<IpoDetails />} />
 
-
-            <Route path="/one-time-investment" element={<OneTimeInvestmentPage/>} />
-            <Route path="/sip-investment" element={<SIPInvestmentPage/>} />
-            <Route path="/track" element={<TrackPage/>} />
-            <Route path="/demat-account" element={<DematAccountPage/>} />
-            <Route path="/learning-centre" element={<LearningCenterPage/>} />
-            <Route path="/market-news" element={<MarketNewsPage/>} />
+            <Route
+              path="/one-time-investment"
+              element={<OneTimeInvestmentPage />}
+            />
+            <Route path="/sip-investment" element={<SIPInvestmentPage />} />
+            <Route path="/track" element={<TrackPage />} />
+            <Route path="/demat-account" element={<DematAccountPage />} />
+            <Route path="/learning-centre" element={<LearningCenterPage />} />
+            <Route path="/market-news" element={<MarketNewsPage />} />
 
             {/* Learning Centre */}
-            <Route path="/learning-centre/mutual_fund" element={<MutualFundLearning/>} /> 
-            <Route path="/learning-centre/stock_market" element={<StockMarketLearning/>} /> 
-            <Route path="/learning-centre/sip_investment" element={<SIPWealthLearning/>} /> 
-            <Route path="/learning-centre/tax_planning" element={<TaxPlanningLearning/>} /> 
-
-          <Route path="/chart" element={<ChartPage/>}/>
-          {/* <Route path="/terminal" element={<TerminalChart/>} /> */}
-          <Route path="/terminal" element={<TradingViewWidget/>} />
-          {/* <Route path="/terminal" element={<GrowChart/>} /> */}
-
-          {/* Calculators */}
-          <Route path="/calculators" element={<CalculatorsPage />} />
-          {/* <Route path="/kyc" element={<VideoKYC />} /> */}
-          <Route path="/kyc" element={<KYC />} />
-
-          {calculatorRoutes.map((route, i) => (
             <Route
-              key={i}
-              path={`/calculator/${route.path}`}
-              element={route.element}
+              path="/learning-centre/mutual_fund"
+              element={<MutualFundLearning />}
             />
-          ))}
-        </Routes>
+            <Route
+              path="/learning-centre/stock_market"
+              element={<StockMarketLearning />}
+            />
+            <Route
+              path="/learning-centre/sip_investment"
+              element={<SIPWealthLearning />}
+            />
+            <Route
+              path="/learning-centre/tax_planning"
+              element={<TaxPlanningLearning />}
+            />
+
+            <Route path="/chart" element={<ChartPage />} />
+            {/* <Route path="/terminal" element={<TerminalChart/>} /> */}
+            <Route path="/terminal" element={<TradingViewWidget />} />
+            {/* <Route path="/terminal" element={<GrowChart/>} /> */}
+
+            {/* Calculators */}
+            <Route path="/calculators" element={<CalculatorsPage />} />
+            {/* <Route path="/kyc" element={<VideoKYC />} /> */}
+            <Route path="/kyc" element={<KYC />} />
+
+            {calculatorRoutes.map((route, i) => (
+              <Route
+                key={i}
+                path={`/calculator/${route.path}`}
+                element={route.element}
+              />
+            ))}
+          </Routes>
         </Suspense>
       </main>
 
       {/* ================= FOOTER ================= */}
       <Footer />
 
-           {/*  BOTTOM SPACER (mobile only, matches BottomHeader height) */}
+      {/*  BOTTOM SPACER (mobile only, matches BottomHeader height) */}
       {token && <div className="h-[72px] lg:hidden" />}
 
-       {/* ================= FIXED BOTTOM HEADER (MOBILE) ================= */}
+      {/* ================= FIXED BOTTOM HEADER (MOBILE) ================= */}
       {token && (
         <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden">
           <BottomHeader />
         </div>
       )}
-
-      
 
       <ToastContainer
         position="top-right"

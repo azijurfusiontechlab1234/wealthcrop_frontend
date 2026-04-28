@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -27,11 +27,15 @@ import logo from "../../assets/mutualFund/sbi.webp"
 import MFChart from "../../components/chart/MFChart";
 import MutualFundInvestPage from "./MutualFundInvestPage";
 import Riskometer from "../../components/Riskometer";
+import { postApi } from "../../api/api";
+import { useQuery } from "@tanstack/react-query";
+import PageLoader from "../../components/PageLoader";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
 const FundDetails = () => {
-  const { name } = useParams();
+  const { isin } = useParams();
+  const { code } = useParams();
   const [hideChart, setHideChart] = useState(false);
 
   const fund = {
@@ -55,8 +59,44 @@ const FundDetails = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("30D");
   const [hoverIndex, setHoverIndex] = useState(null);
   const [hoverIndex2, setHoverIndex2] = useState(null);
-   const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(false);
+  
+   const [fundsList, setFundsList] = useState([])
+    const [page, setPage] = useState(0)
+    const limit = 10;
+  
+    const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
+    const url2 = `${import.meta.env.VITE_NODE_URL}/nav-master-list`;
+  
+  const { data: details, isLoading } = useQuery({
+    queryKey: ["FUND_FULL_DETAILS", isin, code],
+    queryFn: async () => {
+      const [res1, res2] = await Promise.all([
+        postApi(url, { source: "demo", scheme_isin: isin }),
+        postApi(url2, { source: "demo", bse_scheme_code: code }),
+      ]);
 
+      return {
+        details: res1,
+        meta: res2,
+      };
+    },
+    enabled: !!isin && !!code,
+    staleTime: 1000 * 60 * 2, // 2 min
+  });
+  
+    useEffect(() => {
+      console.log("Fund Details", details);
+      // console.log("Fund Details2", details2);
+      const mergedLists = [
+        ...(details?.details?.data?.lists || []),
+        ...(details?.meta?.data?.lists || []),
+      ];
+
+      setFundsList(mergedLists);
+
+    }, [details]);
+    
   function futureValueSIP(P, annualR, years) {
     const i = annualR / 12;
     const n = years * 12;
@@ -164,6 +204,7 @@ const advancedDefinitions = {
 
 const [activeInfo, setActiveInfo] = useState(null); 
 
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="w-full bg-gray-50 dark:bg-[var(--app-bg)] text-[#1A1A1A] py-10 px-5 lg:px-24 space-y-10">
@@ -194,7 +235,7 @@ const [activeInfo, setActiveInfo] = useState(null);
 
         {/* FUND NAME */}
         <h1 className="text-2xl font-bold text-[var(--text-primary)] capitalize break-words whitespace-normal">
-          {name}
+          {fundsList[0]?.name}
         </h1>
 
         {/* CATEGORY + RISK */}
