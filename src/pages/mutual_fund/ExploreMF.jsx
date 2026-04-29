@@ -48,9 +48,9 @@ const ExploreMF = () => {
   ];
 
   const collections = [
-    { name: "High Return", link:"/mutual_fund/collections/high-return", icon: <FaChartLine size={32} className="text-green-600" /> },
-    { name: "Gold Funds", link:"/mutual_fund/collections/gold-funds", icon: <FaCoins size={32} className="text-yellow-500" /> },
-    { name: "5 Star Funds", link:"/mutual_fund/collections/5-star-funds", icon: <FaLandmark size={32} className="text-blue-500" /> },
+    { name: "High Return", link:"/mutual_fund/collections/high_return", icon: <FaChartLine size={32} className="text-green-600" /> },
+    { name: "Gold Funds", link:"/mutual_fund/collections/gold_funds", icon: <FaCoins size={32} className="text-yellow-500" /> },
+    { name: "5 Star Funds", link:"/mutual_fund/collections/5_star_funds", icon: <FaLandmark size={32} className="text-blue-500" /> },
     { name: "Large Cap", link:"/mutual_fund/collections/large_cap", icon: <FaChartPie size={32} className="text-indigo-600" /> },
     { name: "Mid Cap", link:"/mutual_fund/collections/mid_cap", icon: <FaChartLine size={32} className="text-cyan-600" /> },
     { name: "Small Cap", link:"/mutual_fund/collections/small_cap", icon: <FaChartPie size={32} className="text-pink-600" /> },
@@ -102,7 +102,9 @@ const ExploreMF = () => {
               <div
                 key={index}
                 className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 dark:hover:bg-[var(--white-10)] hover:shadow  transition"
-                onClick={() => showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)}
+                onClick={() =>
+                  showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)
+                }
               >
                 <div className="flex gap-3 flex-col text-left">
                   <img
@@ -151,19 +153,29 @@ const ExploreMF = () => {
           <h2 className="text-xl font-semibold mt-10">High Returns Funds</h2>
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
-            {growwFunds.map((fund, index) => (
+            {fundsList?.slice(4, 10).map((fund, index) => (
               <div
                 key={index}
-                onClick={() => showFundPage(fund.name)}
+                onClick={() =>
+                  showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)
+                }
                 className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 hover:shadow  transition"
               >
                 <div className="flex flex-col text-left gap-3">
-                  <img src={fund.img} className="w-10 h-10 rounded-md" />
-                  <p className="text-sm font-medium">{fund.name}</p>
+                  <img
+                    src={fund.img}
+                    alt="fund"
+                    className="w-10 h-10 rounded-md"
+                  />
+                  <p className="text-sm font-medium">
+                    {fund.name || "No Name"}
+                  </p>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <p className="text-green-600 font-semibold">{fund.return}</p>
-                  <p className="text-gray-500 text-sm">{fund.years}</p>
+                  <p className="text-green-600 font-semibold">
+                    {fund.return || "--"}
+                  </p>
+                  <p className="text-gray-500 text-sm">{fund.years || "--"}</p>
                 </div>
               </div>
             ))}
@@ -173,19 +185,19 @@ const ExploreMF = () => {
           <h2 className="text-xl font-semibold mt-10">Trending Funds</h2>
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
-            {trending.map((fund, index) => (
+            {fundsList?.slice(0,5).map((fund, index) => (
               <div
                 key={index}
-                onClick={() => showFundPage(fund.name)}
+                onClick={() => showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)}
                 className="rounded-xl p-4 bg-white dark:border-[var(--border-color)] dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)]  hover:bg-gray-50 hover:shadow border border-gray-200 transition"
               >
                 <div className="flex flex-col text-left gap-3">
-                  <img src={fund.img} className="w-10 h-10 rounded-md" />
-                  <p className="text-sm font-medium">{fund.name}</p>
+                  <img src={fund.img} alt="fund" className="w-10 h-10 rounded-md" />
+                  <p className="text-sm font-medium">{fund.name || "No Name"}</p>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <p className="text-green-600 font-semibold">{fund.return}</p>
-                  <p className="text-gray-500 text-sm">{fund.years}</p>
+                  <p className="text-green-600 font-semibold">{fund.return || "--"}</p>
+                  <p className="text-gray-500 text-sm">{fund.years || "--"}</p>
                 </div>
               </div>
             ))}

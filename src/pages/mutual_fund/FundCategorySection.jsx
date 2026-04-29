@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { X, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 /* ---------------------------------------------
    DEMO FUND DATA FOR ALL COLLECTIONS
 --------------------------------------------- */
 const FUND_DATA_BY_CATEGORY = {
-  "high-return": [
+  "high_return": [
     {
       id: 1,
       name: "HDFC Silver ETF FoF Direct Growth",
@@ -39,7 +40,7 @@ const FUND_DATA_BY_CATEGORY = {
     },
   ],
 
-  "gold-funds": [
+  "gold_funds": [
     {
       id: 4,
       name: "Nippon India Gold Savings Fund Direct",
@@ -62,7 +63,7 @@ const FUND_DATA_BY_CATEGORY = {
     },
   ],
 
-  "5-star-funds": [
+  "5_star_funds": [
     {
       id: 6,
       name: "Parag Parikh Flexi Cap Fund Direct",
@@ -212,9 +213,47 @@ const FundCategorySection = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [sort, setSort] = useState(null);
   const [activeTab, setActiveTab] = useState("Category");
-  const [activeCategory, setActiveCategory] = useState()
+  const [activeCategory, setActiveCategory] = useState();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [fundsList, setFundsList] = useState([]);
+  const [page, setPage] = useState(0);
+  const limit = 10;
+
+  const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["FUNDS"],
+    queryFn: () => postApi(url, { source: "demo", start: page, length: limit }),
+  });
+
+  useEffect(() => {
+    console.log("All funds", data);
+    setFundsList(data?.data?.lists);
+  }, [data]);
+
+  // ✅ 1. current page state
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // ✅ 2. config
+  const itemsPerPage = 5;
+
+  // ✅ 3. dummy data (replace with API later)
+  const data2 = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
+
+  // ✅ 4. total pages
+  const totalPages = Math.ceil(data2.length / itemsPerPage);
+
+  // ✅ 5. page change handler
+  const onPageChange = (page) => {
+    if (page < 1 || page > totalPages) return; // safety
+    setCurrentPage(page);
+  };
+
+  // ✅ 6. slice data based on page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data2.slice(startIndex, startIndex + itemsPerPage);
 
   const [filters, setFilters] = useState({
     Category: [],
@@ -231,8 +270,7 @@ const FundCategorySection = () => {
 
     Object.entries(filters).forEach(([key, values]) => {
       if (!values.length) return;
-      const map =
-        key === "Sub Category" ? "subCategory" : key.toLowerCase();
+      const map = key === "Sub Category" ? "subCategory" : key.toLowerCase();
       list = list.filter((f) => values.includes(f[map]));
     });
 
@@ -263,52 +301,55 @@ const FundCategorySection = () => {
   }, [baseFunds, filters, sort]);
 
   const slugify = (text = "") =>
-  text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-
+    text
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "");
 
   return (
-   <div className="w-full max-w-4xl mx-auto px-4 py-6">
-  {/* TITLE */}
-  <h2 className="text-xl font-semibold text-slate-900 dark:text-[var(--text-primary)]">
-    {title}
-  </h2>
+    <div className="w-full max-w-4xl mx-auto px-4 py-6">
+      {/* TITLE */}
+      <h2 className="text-xl font-semibold text-slate-900 dark:text-[var(--text-primary)]">
+        {title}
+      </h2>
 
-  {subtitle && (
-    <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)] mt-1">
-      {subtitle}
-    </p>
-  )}
-
-  {/* FILTER + SORT */}
-  <div className="flex gap-3 mt-4">
-    <button
-      onClick={() => setShowFilter(true)}
-      className="
-        flex items-center gap-2
-        text-gray-700 dark:text-[var(--text-primary)]
-        border border-gray-300 dark:border-[var(--border-color)]
-        rounded-full px-4 py-2 text-sm font-medium
-        bg-white dark:bg-[var(--card-bg)]
-        hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
-        transition
-      "
-    >
-      <SlidersHorizontal size={16} className="text-blue-500" strokeWidth={2.5} />
-      Filters
-      {filterCount > 0 && (
-        <span className="bg-blue-600 text-white text-xs px-2 rounded-full">
-          {filterCount}
-        </span>
+      {subtitle && (
+        <p className="text-xs text-slate-500 dark:text-[var(--text-secondary)] mt-1">
+          {subtitle}
+        </p>
       )}
-    </button>
 
-    <button
-      onClick={() => setShowSort(true)}
-      className="
+      {/* FILTER + SORT */}
+      <div className="flex gap-3 mt-4">
+        <button
+          onClick={() => setShowFilter(true)}
+          className="
+        flex items-center gap-2
+        text-gray-700 dark:text-[var(--text-primary)]
+        border border-gray-300 dark:border-[var(--border-color)]
+        rounded-full px-4 py-2 text-sm font-medium
+        bg-white dark:bg-[var(--card-bg)]
+        hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
+        transition
+      "
+        >
+          <SlidersHorizontal
+            size={16}
+            className="text-blue-500"
+            strokeWidth={2.5}
+          />
+          Filters
+          {filterCount > 0 && (
+            <span className="bg-blue-600 text-white text-xs px-2 rounded-full">
+              {filterCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          onClick={() => setShowSort(true)}
+          className="
         flex items-center gap-2
         border border-gray-300 dark:border-[var(--border-color)]
         text-gray-700 dark:text-[var(--text-primary)]
@@ -317,18 +358,18 @@ const FundCategorySection = () => {
         hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
         transition
       "
-    >
-      Sort By
-      <ChevronDown size={14} strokeWidth={2.5} className="text-blue-500" />
-    </button>
-  </div>
+        >
+          Sort By
+          <ChevronDown size={14} strokeWidth={2.5} className="text-blue-500" />
+        </button>
+      </div>
 
-  {/* LIST */}
-  <div className="space-y-2 mt-4">
-    {funds.map((f) => (
-      <div
-        key={f.id}
-        className="
+      {/* LIST */}
+      <div className="space-y-2 mt-4">
+        {funds.map((f) => (
+          <div
+            key={f.id}
+            className="
           bg-white dark:bg-[var(--card-bg)]
           border border-gray-400 dark:border-[var(--border-color)]
           rounded-xl px-4 py-3
@@ -336,115 +377,194 @@ const FundCategorySection = () => {
           hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
           transition
         "
-      >
-        {/* LEFT */}
-        <div className="flex gap-3 flex-1">
-          <div
-            className={`
+          >
+            {/* LEFT */}
+            <div className="flex gap-3 flex-1">
+              <div
+                className={`
               h-9 w-9 rounded-lg flex items-center justify-center font-bold
               ${f.logoBg}
               dark:bg-[var(--white-10)]
               dark:text-[var(--text-primary)]
             `}
-          >
-            {f.logoText}
-          </div>
+              >
+                {f.logoText}
+              </div>
 
-          <div>
-            <p
-              onClick={() => navigate(`/mutual_fund/${slugify(f.name)}`)}
-              className="
+              <div>
+                <p
+                  onClick={() => navigate(`/mutual_fund/${slugify(f.name)}`)}
+                  className="
                 text-sm font-semibold cursor-pointer
                 text-slate-900 dark:text-[var(--text-primary)]
                 hover:underline
               "
-            >
-              {f.name}
-            </p>
+                >
+                  {f.name}
+                </p>
 
-            <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
-              {f.subType}
-            </p>
+                <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+                  {f.subType}
+                </p>
 
-            <div className="mt-1 flex gap-2 text-[11px]">
-              <Stars rating={f.rating} />
-              <span
-                className="
+                <div className="mt-1 flex gap-2 text-[11px]">
+                  <Stars rating={f.rating} />
+                  <span
+                    className="
                   bg-slate-100 dark:bg-[var(--white-10)]
                   text-slate-600 dark:text-[var(--text-secondary)]
                   px-2 rounded
                 "
-              >
-                Risk : {f.risk}
-              </span>
+                  >
+                    Risk : {f.risk}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* RETURNS */}
-        <div className="flex gap-6 text-right">
-          {periods.map((p) => (
-            <div key={p}>
-              <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
-                {p}
-              </p>
+            {/* RETURNS */}
+            <div className="flex gap-6 text-right">
+              {periods.map((p) => (
+                <div key={p}>
+                  <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+                    {p}
+                  </p>
 
-              {f.returns[p] == null ? (
-                <p className="text-slate-400 dark:text-[var(--text-secondary)]">
-                  --
-                </p>
-              ) : (
-                <p className="font-medium text-emerald-600 dark:text-[var(--chart-up)]">
-                  +{f.returns[p].toFixed(2)}%
-                </p>
-              )}
+                  {f.returns[p] == null ? (
+                    <p className="text-slate-400 dark:text-[var(--text-secondary)]">
+                      --
+                    </p>
+                  ) : (
+                    <p className="font-medium text-emerald-600 dark:text-[var(--chart-up)]">
+                      +{f.returns[p].toFixed(2)}%
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* BUY */}
-        <button
-        onClick={() => navigate(`/mutual_fund/${slugify(f.name)}/purchase_fund`)}
-          className="
+            {/* BUY */}
+            <button
+              onClick={() =>
+                navigate(`/mutual_fund/${slugify(f.name)}/purchase_fund`)
+              }
+              className="
             ml-6 px-4 py-2 rounded-lg text-sm
             bg-blue-500 hover:bg-blue-600
             text-white
             shadow-sm transition
           "
+            >
+              Buy
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+
+      <div className="flex items-center justify-center gap-2 mt-6">
+        {/* Prev Button */}
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="
+          px-3 py-1.5 rounded-md text-sm font-medium
+          border
+          border-[var(--border-color)]
+          bg-white text-blue-900
+          hover:bg-blue-800 hover:text-white
+          disabled:opacity-40 disabled:cursor-not-allowed
+
+          dark:bg-[var(--white-5)]
+          dark:text-[var(--text-primary)]
+          dark:hover:bg-[var(--white-10)]
+        "
         >
-          Buy
+          Prev
+        </button>
+
+        {/* Page Numbers */}
+        {[1,2,3,4].map((page) => (
+          <button
+            key={page}
+            onClick={() => onPageChange(page)}
+            className={`
+            px-3 py-1.5 rounded-md text-sm font-medium border
+            transition-all
+
+            ${
+              currentPage === page
+                ? `
+                  bg-blue-900 text-white border-blue-900
+                  dark:bg-[var(--text-primary)] 
+                  dark:text-black
+                `
+                : `
+                  border-[var(--border-color)]
+                  text-blue-900 bg-white
+                  hover:bg-blue-800 hover:text-white
+
+                  dark:bg-[var(--white-5)]
+                  dark:text-[var(--text-secondary)]
+                  dark:hover:bg-[var(--white-10)]
+                  dark:hover:text-[var(--text-primary)]
+                `
+            }
+          `}
+          >
+            {page}
+          </button>
+        ))}
+
+        {/* Next Button */}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="
+          px-3 py-1.5 rounded-md text-sm font-medium
+          border
+          border-[var(--border-color)]
+          bg-white text-blue-900
+          hover:bg-blue-800 hover:text-white
+          disabled:opacity-40 disabled:cursor-not-allowed
+
+          dark:bg-[var(--white-5)]
+          dark:text-[var(--text-primary)]
+          dark:hover:bg-[var(--white-10)]
+        "
+        >
+          Next
         </button>
       </div>
-    ))}
-  </div>
 
-  {/* SORT MODAL */}
-  {showSort && (
-    <Modal title="Sort By" onClose={() => setShowSort(false)}>
-      {SORT_OPTIONS.map((o) => (
-        <Option
-          key={o.key}
-          label={o.label}
-          active={sort === o.key}
-          onClick={() => {
-            setSort(o.key);
-            setShowSort(false);
-          }}
-        />
-      ))}
-    </Modal>
-  )}
+      {/* SORT MODAL */}
+      {showSort && (
+        <Modal title="Sort By" onClose={() => setShowSort(false)}>
+          {SORT_OPTIONS.map((o) => (
+            <Option
+              key={o.key}
+              label={o.label}
+              active={sort === o.key}
+              onClick={() => {
+                setSort(o.key);
+                setShowSort(false);
+              }}
+            />
+          ))}
+        </Modal>
+      )}
 
-  {/* FILTER MODAL */}
-  {showFilter && (
-    <Modal title="Filter" wide onClose={() => setShowFilter(false)}>
-      <div className="flex h-80 border-t border-gray-400 dark:border-[var(--border-color)]">
-        <div className="w-[50%] border-r border-gray-400 dark:border-[var(--border-color)]">
-          {Object.keys(FILTERS).map((k) => (
-            <button
-              key={k}
-              onClick={() => setActiveTab(k)}
-              className={`
+      {/* FILTER MODAL */}
+      {showFilter && (
+        <Modal title="Filter" wide onClose={() => setShowFilter(false)}>
+          <div className="flex h-80 border-t border-gray-400 dark:border-[var(--border-color)]">
+            <div className="w-[50%] border-r border-gray-400 dark:border-[var(--border-color)]">
+              {Object.keys(FILTERS).map((k) => (
+                <button
+                  key={k}
+                  onClick={() => setActiveTab(k)}
+                  className={`
                 w-full text-left px-4 py-3 text-md
                 ${
                   activeTab === k
@@ -452,72 +572,71 @@ const FundCategorySection = () => {
                     : "text-slate-700 dark:text-[var(--text-secondary)]"
                 }
               `}
-            >
-              {k}
-            </button>
-          ))}
-        </div>
+                >
+                  {k}
+                </button>
+              ))}
+            </div>
 
-        <div className="flex-1 p-4 space-y-3 overflow-auto">
-          {FILTERS[activeTab].map((opt) => (
-            <label
-              key={opt}
-              className="flex gap-2 text-sm text-slate-700 dark:text-[var(--text-secondary)]"
-            >
-              <input
-                type="checkbox"
-                checked={filters[activeTab].includes(opt)}
-                onChange={() =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    [activeTab]: prev[activeTab].includes(opt)
-                      ? prev[activeTab].filter((x) => x !== opt)
-                      : [...prev[activeTab], opt],
-                  }))
-                }
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
-      </div>
+            <div className="flex-1 p-4 space-y-3 overflow-auto">
+              {FILTERS[activeTab].map((opt) => (
+                <label
+                  key={opt}
+                  className="flex gap-2 text-sm text-slate-700 dark:text-[var(--text-secondary)]"
+                >
+                  <input
+                    type="checkbox"
+                    checked={filters[activeTab].includes(opt)}
+                    onChange={() =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        [activeTab]: prev[activeTab].includes(opt)
+                          ? prev[activeTab].filter((x) => x !== opt)
+                          : [...prev[activeTab], opt],
+                      }))
+                    }
+                  />
+                  {opt}
+                </label>
+              ))}
+            </div>
+          </div>
 
-      <div className="flex gap-3 mt-4">
-        <button
-          onClick={() =>
-            setFilters({
-              Category: [],
-              "Sub Category": [],
-              Risk: [],
-              AMC: [],
-              Nature: [],
-            })
-          }
-          className="
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={() =>
+                setFilters({
+                  Category: [],
+                  "Sub Category": [],
+                  Risk: [],
+                  AMC: [],
+                  Nature: [],
+                })
+              }
+              className="
             flex-1 border rounded-lg py-3 font-semibold
             border-blue-400 text-blue-600
             hover:bg-sky-100 dark:hover:bg-sky-500/10
           "
-        >
-          Clear
-        </button>
+            >
+              Clear
+            </button>
 
-        <button
-          onClick={() => setShowFilter(false)}
-          className="
+            <button
+              onClick={() => setShowFilter(false)}
+              className="
             flex-1 bg-blue-600 hover:bg-blue-700
             text-white rounded-lg py-3 font-semibold
           "
-        >
-          Apply
-        </button>
-      </div>
-    </Modal>
-  )}
-</div>
-
+            >
+              Apply
+            </button>
+          </div>
+        </Modal>
+      )}
+    </div>
   );
-};
+};;
 
 export default FundCategorySection;
 
