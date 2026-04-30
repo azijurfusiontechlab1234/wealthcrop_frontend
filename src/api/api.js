@@ -29,7 +29,6 @@ export const getApiWithToken = async (url) => {
 
     // console.log("from get api",response);
     return response;
-    
   } catch (error) {
     toastError(error.response?.data?.message || "API Error");
     return null;
@@ -54,7 +53,6 @@ export const postApi = async (url, data) => {
 export const postApiWithToken = async (url, data) => {
   const token = localStorage.getItem("token");
   // console.log("Token", token);
-  
 
   if (!token) {
     toastError("User not authenticated");
@@ -70,6 +68,30 @@ export const postApiWithToken = async (url, data) => {
     });
 
     return res?.data;
+  } catch (error) {
+    toastError(error.response?.data?.message || "API Error");
+    return null;
+  }
+};
+
+export const deleteApiWithToken = async (url) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toastError("User not authenticated");
+    return null;
+  }
+
+  try {
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // console.log("from get api",response);
+    return response;
   } catch (error) {
     toastError(error.response?.data?.message || "API Error");
     return null;

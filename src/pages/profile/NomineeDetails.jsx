@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { deleteApiWithToken, getApiWithToken, postApiWithToken } from "../../api/api";
+import { toastError, toastSuccess } from "../../utils/notifyCustom";
 
 const NomineeSection = () => {
   // nominee data stored in object (easy to send to backend)
@@ -6,15 +8,40 @@ const NomineeSection = () => {
     name: "",
     relation: "",
     dob: "",
-    mobile: "",
-    email: "",
+    // mobile: "",
+    // email: "",
     percentage: "",
-    address: "",
-    pincode: "",
-    isMinor: "no",
-    guardianName: "",
-    guardianRelation: "",
+    id: "",
+    // address: "",
+    // pincode: "",
+    // isMinor: "no",
+    // guardianName: "",
+    // guardianRelation: "",
   });
+
+  const [nominees, setNomineese] = useState([])
+  const [editNominee, setEditNominee] = useState([])
+
+  useEffect(() => {
+    const fetchNominee = async () => {
+      const url = `${import.meta.env.VITE_URL}/kyc/get-nominees`
+
+      try{
+        const res = await getApiWithToken(url)
+        console.log("Nominees", res);
+        if (res?.status === 200) {
+          setNomineese(res?.data?.data)
+        }
+        
+      }catch(err){
+        console.log(err?.message);
+        
+      }
+      
+    }
+
+    fetchNominee()
+  },[])
 
   // check if nominee already added
   const [nomineeAdded, setNomineeAdded] = useState(true);
@@ -47,19 +74,63 @@ const NomineeSection = () => {
     setNominee((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (id) => {
     // you can send "nominee" object to backend directly
-    console.log("Final Nominee Data Sent to Backend:", nominee);
+    // console.log("Final Nominee Data Sent to Backend:", nominee);
 
-    setNomineeAdded(true);
-    setShowForm(false);
-    alert("Nominee details saved!");
+      const url = `${import.meta.env.VITE_URL}/kyc/update-nominee/${id}`
+
+      try{
+        const res = await postApiWithToken(url, nominee)
+        console.log("Nominee update", res);
+        if (res?.status === 200) {
+          setNomineeAdded(true);
+          setShowForm(false);
+          toastSuccess(res?.message)
+        }
+        
+      }catch(err){
+        toastError(err?.message);
+        
+      }
+
+  };
+
+  const handleDeleteNominee = async (id) => {
+    const url = `${import.meta.env.VITE_URL}/kyc/delete-nominee/${id}`
+
+      try{
+        const res = await deleteApiWithToken(url)
+        console.log("Nominee delete", res);
+        if (res?.status === 200) {
+          toastSuccess(res?.data?.message)
+        }
+        
+      }catch(err){
+        toastError(err?.message);
+        
+      }
+  }
+  const fetchNomineeById = async (id) => {
+    const url = `${import.meta.env.VITE_URL}/kyc/get-nominee/${id}`;
+
+    try {
+      const res = await getApiWithToken(url);
+      console.log("Edit Nominee", res);
+      if (res?.status === 200) {
+        setNominee(prev => ({
+  ...prev,
+  ...res?.data?.data,
+}));
+      }
+    } catch (err) {
+      toastError(err?.message);
+    }
   };
 
   return (
     <div className="p-6 max-w-4xl mx-auto relative overflow-hidden">
-
-         {/* Decorative blobs */}
+      {/* Decorative blobs */}
       {/* <div className="absolute -top-16 -left-16 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply opacity-50"></div>
       <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-red-200 rounded-full mix-blend-multiply opacity-40"></div>
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-24 h-24 bg-emerald-200 rounded-full mix-blend-multiply opacity-30"></div>
@@ -73,370 +144,407 @@ const NomineeSection = () => {
 
 <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-28 h-28 bg-orange-200 rounded-full mix-blend-multiply opacity-25"></div> */}
 
-      {/* 🔵 CASE 1 — Nominee Already Added */}
+      {/*  CASE 1 — Nominee Already Added */}
       {nomineeAdded && !showForm && (
         <div className="bg-white dark:bg-[var(--app-bg)] shadow-lg rounded-2xl p-6 border border-gray-300 mb-10 dark:border-[var(--border-color)]">
-          <h2 className="text-2xl font-bold text-blue-900 dark:text-[var(--text-primary)] mb-4">Nominee Details</h2>
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-blue-900 dark:text-[var(--text-primary)]">
+              Nominee Details
+            </h2>
 
-          <div className="space-y-3 text-gray-700 dark:text-[var(--text-secondary)]">
-            <p><strong>Name:</strong> {nominee.name}</p>
-            <p><strong>Relationship:</strong> {nominee.relation}</p>
-            <p><strong>Allocation:</strong> {nominee.percentage}%</p>
-            <p><strong>Mobile:</strong> {nominee.mobile}</p>
-            <p><strong>DOB:</strong> {nominee.dob}</p>
-
-            {nominee.isMinor === "yes" && (
-              <>
-                <p className="mt-2 text-red-600 font-bold">Minor Nominee</p>
-                <p><strong>Guardian:</strong> {nominee.guardianName}</p>
-                <p><strong>Guardian Relation:</strong> {nominee.guardianRelation}</p>
-              </>
-            )}
+            <span className="text-sm font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+              Total: {nominees?.length || 0}
+            </span>
           </div>
 
-         <div className="flex flex-col lg:flex-row gap-4 mt-5">
-  <button
-    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-    onClick={() => setShowForm(true)}
-  >
-    Edit Nominee
-  </button>
+          {/* Nominee List */}
+          <div className="space-y-6">
+            {nominees?.map((nominee, index) => (
+              <div
+                key={nominee?.user_id || index}
+                className="p-4 rounded-xl border border-gray-200 dark:border-[var(--border-color)] bg-gray-50 dark:bg-[var(--card-bg)]"
+              >
+                <div className="space-y-2 text-gray-700 dark:text-[var(--text-secondary)]">
+                  <p>
+                    <strong>Name:</strong> {nominee?.name}
+                  </p>
+                  <p>
+                    <strong>Relationship:</strong> {nominee?.relation}
+                  </p>
+                  <p>
+                    <strong>Allocation:</strong> {nominee?.percentage}%
+                  </p>
+                  <p>
+                    <strong>DOB:</strong> {nominee?.dob}
+                  </p>
+                </div>
 
-  <button
-    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-    onClick={() => {
-      setShowForm(true);
-      setNominee({
-        name: "",
-        relation: "",
-        dob: "",
-        mobile: "",
-        email: "",
-        percentage: "",
-        address: "",
-        pincode: "",
-        isMinor: "no",
-        guardianName: "",
-        guardianRelation: "",
-      });
-      setNomineeAdded(false);
-    }}
-  >
-    Add New Nominee
-  </button>
-</div>
+                {/* Actions */}
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {/* Edit */}
+                  <button
+                    onClick={() => {
+                      fetchNomineeById(nominee.id)
+                      // setNominee(nominee);
+                      setShowForm(true);
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    Edit
+                  </button>
 
+                  {/* Delete */}
+                  <button
+                    onClick={() => handleDeleteNominee(nominee.id)}
+                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Add New */}
+          <div className="mt-6">
+            <button
+              className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700"
+              onClick={() => {
+                setShowForm(true);
+                setNominee({
+                  name: "",
+                  relation: "",
+                  dob: "",
+                  mobile: "",
+                  email: "",
+                  percentage: "",
+                  address: "",
+                  pincode: "",
+                  isMinor: "no",
+                  guardianName: "",
+                  guardianRelation: "",
+                });
+              }}
+            >
+              + Add New Nominee
+            </button>
+          </div>
         </div>
       )}
 
-      {/* 🔵 CASE 2 — FORM (For Add or Edit) */}
+      {/*  CASE 2 — FORM (For Add or Edit) */}
       {showForm || !nomineeAdded ? (
-        <div className='bg-white dark:bg-[var(--card-bg)] shadow-lg rounded-2xl p-6 border border-gray-300 dark:border-slate-700  mb-10'>
+        <div className="bg-white dark:bg-[var(--card-bg)] shadow-lg rounded-2xl p-6 border border-gray-300 dark:border-slate-700  mb-10">
           <div className="flex items-center justify-between">
-          <h2 className='text-2xl mb-6 font-bold text-blue-900 dark:text-[var(--text-primary)]'>
-            {nomineeAdded ? "Edit Nominee" : "Add Nominee"}
-          </h2>
-        <span onClick={() => {setShowForm(false); setNomineeAdded(true)}} className="mb-6 text-blue-900 font-semibold bg-sky-300 px-2 rounded hover:bg-sky-400 dark:bg-sky-400 px-2 rounded dark:hover:bg-sky-500 cursor-pointer">
-          Back
-        </span>
+            <h2 className="text-2xl mb-6 font-bold text-blue-900 dark:text-[var(--text-primary)]">
+              {nomineeAdded ? "Edit Nominee" : "Add Nominee"}
+            </h2>
+            <span
+              onClick={() => {
+                setShowForm(false);
+                setNomineeAdded(true);
+              }}
+              className="mb-6 text-blue-900 font-semibold bg-sky-300 px-2 rounded hover:bg-sky-400 dark:bg-sky-400 px-2 rounded dark:hover:bg-sky-500 cursor-pointer"
+            >
+              Back
+            </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-  {/* NAME */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Full Name
-    </label>
-    <input
-      type="text"
-      className="
+            {/* NAME */}
+            <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Full Name
+              </label>
+              <input
+                type="text"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      placeholder="Ex: Rahul Sharma"
-      value={nominee.name}
-      onChange={(e) => handleChange("name", e.target.value)}
-    />
-  </div>
+                placeholder="Ex: Rahul Sharma"
+                value={nominee.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+            </div>
 
-  {/* RELATION */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Relationship
-    </label>
-    <select
-      className="
+            {/* RELATION */}
+            <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Relationship
+              </label>
+              <select
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      value={nominee.relation}
-      onChange={(e) => handleChange("relation", e.target.value)}
-    >
-      <option value="">Select Relation</option>
-      <option value="Spouse">Spouse</option>
-      <option value="Father">Father</option>
-      <option value="Mother">Mother</option>
-      <option value="Son">Son</option>
-      <option value="Daughter">Daughter</option>
-      <option value="Brother">Brother</option>
-      <option value="Sister">Sister</option>
-      <option value="Other">Other</option>
-    </select>
-  </div>
+                value={nominee.relation}
+                onChange={(e) => handleChange("relation", e.target.value)}
+              >
+                <option value="">Select Relation</option>
+                <option value="Spouse">Spouse</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Son">Son</option>
+                <option value="Daughter">Daughter</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
 
-  {/* DOB */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Date of Birth
-    </label>
-    <input
-      type="date"
-      className="
+            {/* DOB */}
+            <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      value={nominee.dob}
-      onChange={(e) => handleChange("dob", e.target.value)}
-    />
-  </div>
+                value={nominee.dob}
+                onChange={(e) => handleChange("dob", e.target.value)}
+              />
+            </div>
 
-  {/* MOBILE */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Mobile Number
-    </label>
-    <input
-      type="number"
-      className="
+            {/* MOBILE */}
+            {/* <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Mobile Number
+              </label>
+              <input
+                type="number"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      placeholder="9876543210"
-      value={nominee.mobile}
-      onChange={(e) => handleChange("mobile", e.target.value)}
-    />
-  </div>
+                placeholder="9876543210"
+                value={nominee.mobile}
+                onChange={(e) => handleChange("mobile", e.target.value)}
+              />
+            </div> */}
 
-  {/* EMAIL */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Email (Optional)
-    </label>
-    <input
-      type="email"
-      className="
+            {/* EMAIL */}
+            {/* <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Email (Optional)
+              </label>
+              <input
+                type="email"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      placeholder="example@gmail.com"
-      value={nominee.email}
-      onChange={(e) => handleChange("email", e.target.value)}
-    />
-  </div>
+                placeholder="example@gmail.com"
+                value={nominee.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+              />
+            </div> */}
 
-  {/* ALLOCATION */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Allocation (%)
-    </label>
-    <input
-      type="number"
-      className="
+            {/* ALLOCATION */}
+            <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Allocation (%)
+              </label>
+              <input
+                type="number"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      value={nominee.percentage}
-      onChange={(e) => handleChange("percentage", e.target.value)}
-    />
-  </div>
+                value={nominee.percentage}
+                onChange={(e) => handleChange("percentage", e.target.value)}
+              />
+            </div>
 
-  {/* ADDRESS */}
-  <div className="md:col-span-2">
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Address
-    </label>
-    <textarea
-      rows="2"
-      className="
+            {/* ADDRESS */}
+            {/* <div className="md:col-span-2">
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Address
+              </label>
+              <textarea
+                rows="2"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      placeholder="Enter full address"
-      value={nominee.address}
-      onChange={(e) => handleChange("address", e.target.value)}
-    />
-  </div>
+                placeholder="Enter full address"
+                value={nominee.address}
+                onChange={(e) => handleChange("address", e.target.value)}
+              />
+            </div> */}
 
-  {/* PINCODE */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Pincode
-    </label>
-    <input
-      type="number"
-      className="
+            {/* PINCODE */}
+            {/* <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Pincode
+              </label>
+              <input
+                type="number"
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      placeholder="400001"
-      value={nominee.pincode}
-      onChange={(e) => handleChange("pincode", e.target.value)}
-    />
-  </div>
+                placeholder="400001"
+                value={nominee.pincode}
+                onChange={(e) => handleChange("pincode", e.target.value)}
+              />
+            </div> */}
 
-  {/* MINOR */}
-  <div>
-    <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-      Is Nominee a Minor?
-    </label>
-    <select
-      className="
+            {/* MINOR */}
+            {/* <div>
+              <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                Is Nominee a Minor?
+              </label>
+              <select
+                className="
         w-full border p-2 rounded-lg mt-1
         bg-white text-gray-900
         dark:bg-[var(--white-5)]
         dark:text-[var(--text-primary)]
         dark:border-[var(--border-color)]
       "
-      value={nominee.isMinor}
-      onChange={(e) => handleChange("isMinor", e.target.value)}
-    >
-      <option value="no">No</option>
-      <option value="yes">Yes</option>
-    </select>
-  </div>
+                value={nominee.isMinor}
+                onChange={(e) => handleChange("isMinor", e.target.value)}
+              >
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div> */}
 
-  {/* GUARDIAN */}
-  {nominee.isMinor === "yes" && (
-    <>
-      <div>
-        <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-          Guardian Name
-        </label>
-        <input
-          className="
+            {/* GUARDIAN */}
+            {/* {nominee.isMinor === "yes" && (
+              <>
+                <div>
+                  <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                    Guardian Name
+                  </label>
+                  <input
+                    className="
             w-full border p-2 rounded-lg mt-1
             bg-white text-gray-900
             dark:bg-[var(--white-5)]
             dark:text-[var(--text-primary)]
             dark:border-[var(--border-color)]
           "
-          placeholder="Ex: Suresh Kumar"
-          value={nominee.guardianName}
-          onChange={(e) => handleChange("guardianName", e.target.value)}
-        />
-      </div>
+                    placeholder="Ex: Suresh Kumar"
+                    value={nominee.guardianName}
+                    onChange={(e) =>
+                      handleChange("guardianName", e.target.value)
+                    }
+                  />
+                </div>
 
-      <div>
-        <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
-          Guardian Relationship
-        </label>
-        <input
-          className="
+                <div>
+                  <label className="text-sm text-gray-700 dark:text-[var(--text-secondary)]">
+                    Guardian Relationship
+                  </label>
+                  <input
+                    className="
             w-full border p-2 rounded-lg mt-1
             bg-white text-gray-900
             dark:bg-[var(--white-5)]
             dark:text-[var(--text-primary)]
             dark:border-[var(--border-color)]
           "
-          placeholder="Father / Mother"
-          value={nominee.guardianRelation}
-          onChange={(e) => handleChange("guardianRelation", e.target.value)}
-        />
-      </div>
-    </>
-  )}
-
-</div>
-
+                    placeholder="Father / Mother"
+                    value={nominee.guardianRelation}
+                    onChange={(e) =>
+                      handleChange("guardianRelation", e.target.value)
+                    }
+                  />
+                </div>
+              </>
+            )} */}
+          </div>
 
           {/* SAVE BUTTON */}
           <button
-            onClick={handleSubmit}
+            onClick={() => handleSubmit(nominee?.id)}
             className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700"
           >
             Save Nominee
           </button>
 
           {/* FAQ */}
-         <div className="mt-10">
-  <h2
-    className="
+          <div className="mt-10">
+            <h2
+              className="
       text-xl font-bold mb-4
       text-blue-950
       dark:text-[var(--text-primary)]
     "
-  >
-    FAQs
-  </h2>
+            >
+              FAQs
+            </h2>
 
-  <div className="space-y-3">
-    {faqs.map((item, index) => (
-      <div
-        key={index}
-        className="
+            <div className="space-y-3">
+              {faqs.map((item, index) => (
+                <div
+                  key={index}
+                  className="
           rounded-xl p-4 border
           bg-white border-gray-200
           dark:bg-[var(--card-bg)]
           dark:border-[var(--border-color)]
         "
-      >
-        <button
-          className="
+                >
+                  <button
+                    className="
             w-full flex justify-between font-medium
             text-gray-800
             dark:text-[var(--text-primary)]
           "
-          onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-        >
-          {item.q}
-          <span>{openFAQ === index ? "-" : "+"}</span>
-        </button>
+                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                  >
+                    {item.q}
+                    <span>{openFAQ === index ? "-" : "+"}</span>
+                  </button>
 
-        {openFAQ === index && (
-          <p
-            className="
+                  {openFAQ === index && (
+                    <p
+                      className="
               mt-2
               text-gray-600
               dark:text-[var(--text-secondary)]
             "
-          >
-            {item.a}
-          </p>
-        )}
-      </div>
-    ))}
-  </div>
-</div>
-
-
+                    >
+                      {item.a}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       ) : null}
-
     </div>
   );
 };
