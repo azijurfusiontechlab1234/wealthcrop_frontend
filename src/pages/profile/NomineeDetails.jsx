@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { deleteApiWithToken, getApiWithToken, postApiWithToken } from "../../api/api";
 import { toastError, toastSuccess } from "../../utils/notifyCustom";
+import { useQuery } from "@tanstack/react-query";
+
 
 const NomineeSection = () => {
   // nominee data stored in object (easy to send to backend)
@@ -19,29 +21,25 @@ const NomineeSection = () => {
     // guardianRelation: "",
   });
 
-  const [nominees, setNomineese] = useState([])
+  // const [nominees, setNomineese] = useState([])
   const [editNominee, setEditNominee] = useState([])
 
-  useEffect(() => {
-    const fetchNominee = async () => {
-      const url = `${import.meta.env.VITE_URL}/kyc/get-nominees`
 
-      try{
-        const res = await getApiWithToken(url)
-        console.log("Nominees", res);
-        if (res?.status === 200) {
-          setNomineese(res?.data?.data)
-        }
-        
-      }catch(err){
-        console.log(err?.message);
-        
-      }
-      
-    }
+const fetchNominee = async () => {
+  const url = `${import.meta.env.VITE_URL}/kyc/get-nominees`;
+  const res = await getApiWithToken(url);
 
-    fetchNominee()
-  },[])
+  if (res?.status !== 200) {
+    throw new Error('Failed to fetch nominees');
+  }
+
+  return res?.data?.data;
+};
+
+const { data: nominees, error, isLoading, refetch } = useQuery({
+  queryKey: ['nominees'],
+  queryFn: fetchNominee,
+});
 
   // check if nominee already added
   const [nomineeAdded, setNomineeAdded] = useState(true);
@@ -78,15 +76,19 @@ const NomineeSection = () => {
     // you can send "nominee" object to backend directly
     // console.log("Final Nominee Data Sent to Backend:", nominee);
 
-      const url = `${import.meta.env.VITE_URL}/kyc/update-nominee/${id}`
+      const editUrl = `${import.meta.env.VITE_URL}/kyc/update-nominee/${id}`
+    const addUrl = `${import.meta.env.VITE_URL}/kyc/nominee`
+    
+    const url = nomineeAdded ? editUrl : addUrl
 
       try{
         const res = await postApiWithToken(url, nominee)
         console.log("Nominee update", res);
-        if (res?.status === 200) {
+        if (res?.status === 200 || res?.status === true) {
           setNomineeAdded(true);
           setShowForm(false);
           toastSuccess(res?.message)
+          refetch()
         }
         
       }catch(err){
@@ -104,6 +106,7 @@ const NomineeSection = () => {
         console.log("Nominee delete", res);
         if (res?.status === 200) {
           toastSuccess(res?.data?.message)
+          refetch()
         }
         
       }catch(err){
@@ -225,6 +228,7 @@ const NomineeSection = () => {
                   guardianName: "",
                   guardianRelation: "",
                 });
+                setNomineeAdded(false)
               }}
             >
               + Add New Nominee

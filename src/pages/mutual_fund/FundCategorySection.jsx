@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { postApi } from "../../api/api";
 
 /* ---------------------------------------------
    DEMO FUND DATA FOR ALL COLLECTIONS
@@ -221,11 +222,11 @@ const FundCategorySection = () => {
   const [page, setPage] = useState(0);
   const limit = 10;
 
-  const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
+  const url = `${import.meta.env.VITE_NODE_URL}/getSchemeMasterList`;
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["FUNDS"],
-    queryFn: () => postApi(url, { source: "demo", start: page, length: limit }),
+    queryFn: () => postApi(url, { category: categorySlug, start: page, length: limit }),
   });
 
   useEffect(() => {
@@ -233,25 +234,25 @@ const FundCategorySection = () => {
     setFundsList(data?.data?.lists);
   }, [data]);
 
-  // ✅ 1. current page state
+  //  1. current page state
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ 2. config
+  //  2. config
   const itemsPerPage = 5;
 
-  // ✅ 3. dummy data (replace with API later)
+  //  3. dummy data (replace with API later)
   const data2 = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
 
-  // ✅ 4. total pages
+  //  4. total pages
   const totalPages = Math.ceil(data2.length / itemsPerPage);
 
-  // ✅ 5. page change handler
+  //  5. page change handler
   const onPageChange = (page) => {
     if (page < 1 || page > totalPages) return; // safety
     setCurrentPage(page);
   };
 
-  // ✅ 6. slice data based on page
+  //  6. slice data based on page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = data2.slice(startIndex, startIndex + itemsPerPage);
 
