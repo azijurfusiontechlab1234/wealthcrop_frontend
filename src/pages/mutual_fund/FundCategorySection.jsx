@@ -222,7 +222,7 @@ const FundCategorySection = () => {
   const [page, setPage] = useState(0);
   const limit = 10;
 
-  const url = `${import.meta.env.VITE_NODE_URL}/getSchemeMasterList`;
+  const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["FUNDS"],
@@ -309,7 +309,7 @@ const FundCategorySection = () => {
       .replace(/[^\w-]/g, "");
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6">
+    <div className="w-full max-w-6xl mx-auto px-4 lg:px-8 py-8 rounded-lg dark:bg-[var(--white-10)]">
       {/* TITLE */}
       <h2 className="text-xl font-semibold text-slate-900 dark:text-[var(--text-primary)]">
         {title}
@@ -367,100 +367,124 @@ const FundCategorySection = () => {
 
       {/* LIST */}
       <div className="space-y-2 mt-4">
-        {funds.map((f) => (
-          <div
-            key={f.id}
+  {funds.map((f) => (
+    <div
+      key={f.id}
+      className="
+        bg-white dark:bg-[var(--card-bg)]
+        border border-gray-400 dark:border-[var(--border-color)]
+        rounded-xl px-4 py-3
+
+        flex flex-col sm:flex-row
+        sm:justify-between
+
+        gap-3 sm:gap-0
+
+        hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
+        transition
+      "
+    >
+      {/* LEFT */}
+      <div className="flex gap-3 flex-1 min-w-0">
+        <div
+          className={`
+            h-9 w-9 rounded-lg flex items-center justify-center font-bold
+            ${f.logoBg}
+            dark:bg-[var(--white-10)]
+            dark:text-[var(--text-primary)]
+            flex-shrink-0
+          `}
+        >
+          {f.logoText}
+        </div>
+
+        <div className="min-w-0">
+          <p
+            onClick={() =>
+              navigate(`/mutual_fund/${slugify(f.name)}`)
+            }
             className="
-          bg-white dark:bg-[var(--card-bg)]
-          border border-gray-400 dark:border-[var(--border-color)]
-          rounded-xl px-4 py-3
-          flex justify-between
-          hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
-          transition
-        "
+              text-sm font-semibold cursor-pointer
+              text-slate-900 dark:text-[var(--text-primary)]
+              hover:underline
+              break-words
+            "
           >
-            {/* LEFT */}
-            <div className="flex gap-3 flex-1">
-              <div
-                className={`
-              h-9 w-9 rounded-lg flex items-center justify-center font-bold
-              ${f.logoBg}
-              dark:bg-[var(--white-10)]
-              dark:text-[var(--text-primary)]
-            `}
-              >
-                {f.logoText}
-              </div>
+            {f.name}
+          </p>
 
-              <div>
-                <p
-                  onClick={() => navigate(`/mutual_fund/${slugify(f.name)}`)}
-                  className="
-                text-sm font-semibold cursor-pointer
-                text-slate-900 dark:text-[var(--text-primary)]
-                hover:underline
-              "
-                >
-                  {f.name}
-                </p>
+          <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+            {f.subType}
+          </p>
 
-                <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
-                  {f.subType}
-                </p>
+          <div className="mt-1 flex gap-2 text-[11px] flex-wrap">
+            <Stars rating={f.rating} />
 
-                <div className="mt-1 flex gap-2 text-[11px]">
-                  <Stars rating={f.rating} />
-                  <span
-                    className="
-                  bg-slate-100 dark:bg-[var(--white-10)]
-                  text-slate-600 dark:text-[var(--text-secondary)]
-                  px-2 rounded
-                "
-                  >
-                    Risk : {f.risk}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* RETURNS */}
-            <div className="flex gap-6 text-right">
-              {periods.map((p) => (
-                <div key={p}>
-                  <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
-                    {p}
-                  </p>
-
-                  {f.returns[p] == null ? (
-                    <p className="text-slate-400 dark:text-[var(--text-secondary)]">
-                      --
-                    </p>
-                  ) : (
-                    <p className="font-medium text-emerald-600 dark:text-[var(--chart-up)]">
-                      +{f.returns[p].toFixed(2)}%
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* BUY */}
-            <button
-              onClick={() =>
-                navigate(`/mutual_fund/${slugify(f.name)}/purchase_fund`)
-              }
+            <span
               className="
-            ml-6 px-4 py-2 rounded-lg text-sm
-            bg-blue-500 hover:bg-blue-600
-            text-white
-            shadow-sm transition
-          "
+                bg-slate-100 dark:bg-[var(--white-10)]
+                text-slate-600 dark:text-[var(--text-secondary)]
+                px-2 rounded
+              "
             >
-              Buy
-            </button>
+              Risk : {f.risk}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* RETURNS */}
+      <div
+        className="
+          flex gap-4 sm:gap-6
+          text-left sm:text-right
+          flex-wrap sm:flex-nowrap
+          w-full sm:w-auto justify-between px-4
+        "
+      >
+        {periods.map((p) => (
+          <div key={p} className="min-w-[60px]">
+            <p className="text-[11px] text-slate-500 dark:text-[var(--text-secondary)]">
+              {p}
+            </p>
+
+            {f.returns[p] == null ? (
+              <p className="text-slate-400 dark:text-[var(--text-secondary)]">
+                --
+              </p>
+            ) : (
+              <p className="font-medium text-emerald-600 dark:text-[var(--chart-up)]">
+                +{f.returns[p].toFixed(2)}%
+              </p>
+            )}
           </div>
         ))}
       </div>
+
+      {/* BUY */}
+      <button
+        onClick={() =>
+          navigate(
+            `/mutual_fund/${slugify(f.name)}/purchase_fund`
+          )
+        }
+        className="
+          mt-2 sm:mt-0
+          ml-0 sm:ml-6
+
+          w-full sm:w-auto
+
+          px-4 py-2 rounded-lg text-sm
+          bg-blue-500 hover:bg-blue-600
+          text-white
+          shadow-sm transition
+        "
+      >
+        Buy
+      </button>
+    </div>
+  ))}
+</div>
 
       {/* Pagination */}
 

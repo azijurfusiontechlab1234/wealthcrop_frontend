@@ -22,7 +22,7 @@ const ExploreMF = () => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["FUNDS"],
-    queryFn: () => postApi(url, {source: "demo", start: page, length: limit})
+    queryFn: () => postApi(url, {start: page, length: limit})
   })
 
   useEffect(() => {
@@ -119,10 +119,10 @@ const ExploreMF = () => {
 
                 <div className="flex justify-between mt-4">
                   <p className="text-green-600 font-semibold">
-                    {fund.return || "--"}
+                      {fund.returns["3Y"] ?? "--"}
                   </p>
                   <p className="text-gray-500 dark:text-[var(--text-secondary)] text-sm">
-                    {fund.years || "--"}
+                    {fund.years || "3Y"}
                   </p>
                 </div>
               </div>
@@ -173,9 +173,9 @@ const ExploreMF = () => {
                 </div>
                 <div className="flex justify-between mt-4">
                   <p className="text-green-600 font-semibold">
-                    {fund.return || "--"}
+                   {fund.returns["3Y"] ?? "--"}
                   </p>
-                  <p className="text-gray-500 text-sm">{fund.years || "--"}</p>
+                  <p className="text-gray-500 text-sm">{fund.years || "3Y"}</p>
                 </div>
               </div>
             ))}
@@ -196,8 +196,8 @@ const ExploreMF = () => {
                   <p className="text-sm font-medium">{fund.name || "No Name"}</p>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <p className="text-green-600 font-semibold">{fund.return || "--"}</p>
-                  <p className="text-gray-500 text-sm">{fund.years || "--"}</p>
+                  <p className="text-green-600 font-semibold">{fund.returns["3Y"] ?? "--"}</p>
+                  <p className="text-gray-500 text-sm">{fund.years || "3Y"}</p>
                 </div>
               </div>
             ))}
