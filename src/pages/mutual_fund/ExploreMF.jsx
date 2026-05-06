@@ -75,7 +75,7 @@ const ExploreMF = () => {
       {/* GRID — RIGHT SIDE FIRST ON MOBILE */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* RIGHT SECTION SHOWS FIRST IN MOBILE */}
-        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 dark:border-[var(--border-color)] text-center bg-white dark:bg-[var(--card-bg)] h-full lg:h-[70%]">
+        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 dark:border-[var(--border-color)] text-center bg-white dark:bg-[var(--card-bg)] h-110">
           <img
             src={account_setup}
             alt="setup"
@@ -106,7 +106,7 @@ const ExploreMF = () => {
                   showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)
                 }
               >
-                <div className="flex gap-3 flex-col text-left">
+                <div className="flex gap-3 flex-col text-left h-38">
                   <img
                     src={fund.img}
                     alt="fund"
@@ -153,7 +153,7 @@ const ExploreMF = () => {
           <h2 className="text-xl font-semibold mt-10">High Returns Funds</h2>
 
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
-            {fundsList?.slice(4, 10).map((fund, index) => (
+            {fundsList?.slice(4, 8).map((fund, index) => (
               <div
                 key={index}
                 onClick={() =>
@@ -161,7 +161,7 @@ const ExploreMF = () => {
                 }
                 className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 hover:shadow  transition"
               >
-                <div className="flex flex-col text-left gap-3">
+                <div className="flex flex-col text-left gap-3 h-38">
                   <img
                     src={fund.img}
                     alt="fund"
@@ -191,7 +191,7 @@ const ExploreMF = () => {
                 onClick={() => showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)}
                 className="rounded-xl p-4 bg-white dark:border-[var(--border-color)] dark:bg-[var(--card-bg)] dark:hover:bg-[var(--white-10)]  hover:bg-gray-50 hover:shadow border border-gray-200 transition"
               >
-                <div className="flex flex-col text-left gap-3">
+                <div className="flex flex-col text-left gap-3 h-38">
                   <img src={fund.img} alt="fund" className="w-10 h-10 rounded-md" />
                   <p className="text-sm font-medium">{fund.name || "No Name"}</p>
                 </div>

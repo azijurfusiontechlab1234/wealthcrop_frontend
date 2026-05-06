@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { postApi } from "../../api/api";
+import PageLoader from "../../components/PageLoader";
+import SmallLoader from "../../components/SmallLoader";
 
 /* ---------------------------------------------
    DEMO FUND DATA FOR ALL COLLECTIONS
@@ -215,8 +217,12 @@ const FundCategorySection = () => {
   const [sort, setSort] = useState(null);
   const [activeTab, setActiveTab] = useState("Category");
   const [activeCategory, setActiveCategory] = useState();
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const navigate = useNavigate();
+  const observer = useRef(null)
 
   const [fundsList, setFundsList] = useState([]);
   const [page, setPage] = useState(0);
@@ -224,18 +230,28 @@ const FundCategorySection = () => {
 
   const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["FUNDS"],
-    queryFn: () => postApi(url, { category: categorySlug, start: page, length: limit }),
-  });
+ const { data, isLoading, error, isFetching } = useQuery({
+  queryKey: ["FUNDS", categorySlug, currentPage, limit],
+  queryFn: () =>
+    postApi(url, {
+      category: categorySlug,
+      start: (currentPage - 1) * limit,
+      length: limit,
+    }),
+  // keepPreviousData: true,
+  placeholderData: (prev) => prev
+});
 
   useEffect(() => {
     console.log("All funds", data);
-    setFundsList(data?.data?.lists);
+    if(data?.data?.lists?.length){
+      setFundsList((prev) => [...prev, ...data?.data?.lists]);
+    } else {
+        setHasMore(false);
+      }
   }, [data]);
 
   //  1. current page state
-  const [currentPage, setCurrentPage] = useState(1);
 
   //  2. config
   const itemsPerPage = 5;
@@ -308,6 +324,34 @@ const FundCategorySection = () => {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]/g, "");
 
+      // ! for automatic set curret page when scroll
+const containerRef = useRef(null);
+
+const lastElementRef = useCallback(
+  (node) => {
+    if (!node || !hasMore) return;
+
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log("NEXT PAGE");
+
+          setCurrentPage((prev) => prev + 1);
+        }
+      },
+      {
+        root: containerRef.current,
+        threshold: 0.1,
+      }
+    );
+
+    observer.current.observe(node);
+  },
+  [hasMore]
+);
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4 lg:px-8 py-8 rounded-lg dark:bg-[var(--white-10)]">
       {/* TITLE */}
@@ -366,20 +410,20 @@ const FundCategorySection = () => {
       </div>
 
       {/* LIST */}
-      <div className="space-y-2 mt-4">
-  {funds.map((f) => (
+<div
+  ref={containerRef}
+  className="space-y-2 mt-4 h-[80vh] overflow-y-auto"
+>
+  {fundsList?.map((f) => (
     <div
       key={f.id}
       className="
         bg-white dark:bg-[var(--card-bg)]
         border border-gray-400 dark:border-[var(--border-color)]
         rounded-xl px-4 py-3
-
         flex flex-col sm:flex-row
         sm:justify-between
-
         gap-3 sm:gap-0
-
         hover:bg-slate-50 dark:hover:bg-[var(--white-5)]
         transition
       "
@@ -471,9 +515,7 @@ const FundCategorySection = () => {
         className="
           mt-2 sm:mt-0
           ml-0 sm:ml-6
-
           w-full sm:w-auto
-
           px-4 py-2 rounded-lg text-sm
           bg-blue-500 hover:bg-blue-600
           text-white
@@ -484,84 +526,18 @@ const FundCategorySection = () => {
       </button>
     </div>
   ))}
+
+   {isFetching && (
+    <div className="flex justify-center py-4">
+      <SmallLoader />
+    </div>
+  )}
+
+  {/* SENTINEL */}
+  <div ref={lastElementRef} className="h-10" />
 </div>
 
-      {/* Pagination */}
-
-      <div className="flex items-center justify-center gap-2 mt-6">
-        {/* Prev Button */}
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="
-          px-3 py-1.5 rounded-md text-sm font-medium
-          border
-          border-[var(--border-color)]
-          bg-white text-blue-900
-          hover:bg-blue-800 hover:text-white
-          disabled:opacity-40 disabled:cursor-not-allowed
-
-          dark:bg-[var(--white-5)]
-          dark:text-[var(--text-primary)]
-          dark:hover:bg-[var(--white-10)]
-        "
-        >
-          Prev
-        </button>
-
-        {/* Page Numbers */}
-        {[1,2,3,4].map((page) => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`
-            px-3 py-1.5 rounded-md text-sm font-medium border
-            transition-all
-
-            ${
-              currentPage === page
-                ? `
-                  bg-blue-900 text-white border-blue-900
-                  dark:bg-[var(--text-primary)] 
-                  dark:text-black
-                `
-                : `
-                  border-[var(--border-color)]
-                  text-blue-900 bg-white
-                  hover:bg-blue-800 hover:text-white
-
-                  dark:bg-[var(--white-5)]
-                  dark:text-[var(--text-secondary)]
-                  dark:hover:bg-[var(--white-10)]
-                  dark:hover:text-[var(--text-primary)]
-                `
-            }
-          `}
-          >
-            {page}
-          </button>
-        ))}
-
-        {/* Next Button */}
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="
-          px-3 py-1.5 rounded-md text-sm font-medium
-          border
-          border-[var(--border-color)]
-          bg-white text-blue-900
-          hover:bg-blue-800 hover:text-white
-          disabled:opacity-40 disabled:cursor-not-allowed
-
-          dark:bg-[var(--white-5)]
-          dark:text-[var(--text-primary)]
-          dark:hover:bg-[var(--white-10)]
-        "
-        >
-          Next
-        </button>
-      </div>
+ 
 
       {/* SORT MODAL */}
       {showSort && (
