@@ -75,7 +75,7 @@ const ExploreMF = () => {
       {/* GRID — RIGHT SIDE FIRST ON MOBILE */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* RIGHT SECTION SHOWS FIRST IN MOBILE */}
-        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 dark:border-[var(--border-color)] text-center bg-white dark:bg-[var(--card-bg)] h-110">
+        <div className="order-1 lg:order-2 rounded-xl py-4 px-6 shadow-sm border border-gray-200 dark:border-[var(--border-color)] text-center bg-white dark:bg-[var(--card-bg)] h-full lg:h-110">
           <img
             src={account_setup}
             alt="setup"
@@ -101,7 +101,7 @@ const ExploreMF = () => {
             {fundsList?.slice(0, 5).map((fund, index) => (
               <div
                 key={index}
-                className="rounded-xl p-4 bg-white dark:bg-[var(--card-bg)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 dark:hover:bg-[var(--white-10)] hover:shadow  transition"
+                className="rounded-xl p-4 gap-4 bg-white dark:bg-[var(--card-bg)] dark:border-[var(--border-color)] border border-gray-200 hover:bg-gray-50 dark:hover:bg-[var(--white-10)] hover:shadow  transition"
                 onClick={() =>
                   showFundPage(fund?.scheme_isin, fund?.scheme_bse_code)
                 }

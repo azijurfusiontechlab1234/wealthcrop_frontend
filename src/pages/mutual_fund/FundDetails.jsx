@@ -66,34 +66,41 @@ const FundDetails = () => {
     const limit = 10;
   
     const url = `${import.meta.env.VITE_NODE_URL}${import.meta.env.VITE_GET_ALL_FUNDS}`;
-    const url2 = `${import.meta.env.VITE_NODE_URL}/nav-master-list`;
+    // const url2 = `${import.meta.env.VITE_NODE_URL}/nav-master-list`;
   
   const { data: details, isLoading } = useQuery({
     queryKey: ["FUND_FULL_DETAILS", isin, code],
-    queryFn: async () => {
-      const [res1, res2] = await Promise.all([
-        postApi(url, { source: "demo", scheme_isin: isin }),
-        postApi(url2, { source: "demo", bse_scheme_code: code }),
-      ]);
-
-      return {
-        details: res1,
-        meta: res2,
-      };
-    },
+    queryFn: async () => 
+        postApi(url, {isin: isin }),
     enabled: !!isin && !!code,
     staleTime: 1000 * 60 * 2, // 2 min
   });
+  // const { data: details, isLoading } = useQuery({
+  //   queryKey: ["FUND_FULL_DETAILS", isin, code],
+  //   queryFn: async () => {
+  //     const [res1, res2] = await Promise.all([
+  //       postApi(url, { source: "demo", scheme_isin: isin }),
+  //       postApi(url2, { source: "demo", bse_scheme_code: code }),
+  //     ]);
+
+  //     return {
+  //       details: res1,
+  //       meta: res2,
+  //     };
+  //   },
+  //   enabled: !!isin && !!code,
+  //   staleTime: 1000 * 60 * 2, // 2 min
+  // });
   
     useEffect(() => {
       console.log("Fund Details", details);
       // console.log("Fund Details2", details2);
-      const mergedLists = [
-        ...(details?.details?.data?.lists || []),
-        ...(details?.meta?.data?.lists || []),
-      ];
+      // const mergedLists = [
+      //   ...(details?.details?.data?.lists || []),
+      //   ...(details?.meta?.data?.lists || []),
+      // ];
 
-      setFundsList(mergedLists);
+      setFundsList(details?.data?.lists?.[0] || []);
 
     }, [details]);
     
@@ -138,7 +145,7 @@ const FundDetails = () => {
     { label: "Others", value: 5.9, color: "#FFB44C" },
     { label: "Healthcare", value: 4.2, color: "#C45A8C" },
     { label: "Financial", value: 3.0, color: "#FF5C73" },
-    { label: "Real Estate", value: 2.3, color: "#B8C4FF" },
+    { label: "Real Estate ", value: 2.3, color: "#B8C4FF" },
     { label: "Materials", value: 2.2, color: "#FFE863" },
   ];
 
@@ -167,7 +174,7 @@ const FundDetails = () => {
   };
 
    const shareWhatsApp = () => {
-    const msg = `Check ${baseStock.name} (${baseStock.symbol}) price ₹${livePrice} (${pctChange}%).`;
+    const msg = `Check ${baseStock.name } (${baseStock.symbol}) price ₹${livePrice} (${pctChange}%).`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
   };
   const [livePrice, setLivePrice] = useState(baseStock.price);
@@ -235,7 +242,7 @@ const [activeInfo, setActiveInfo] = useState(null);
 
         {/* FUND NAME */}
         <h1 className="text-2xl font-bold text-[var(--text-primary)] capitalize break-words whitespace-normal">
-          {fundsList[0]?.name}
+          {fundsList?.name}
         </h1>
 
         {/* CATEGORY + RISK */}
@@ -249,7 +256,7 @@ const [activeInfo, setActiveInfo] = useState(null);
             bg-amber-500/10 text-amber-400
             border border-amber-500/20
           ">
-            {fund.risk}
+            {fundsList?.risk}
           </span>
         </div>
 
@@ -323,7 +330,7 @@ const [activeInfo, setActiveInfo] = useState(null);
     <div>
       <div className="flex items-end gap-3">
         <h2 className="text-4xl font-extrabold text-emerald-500">
-          +31.29%
+          {fundsList?.returns?.["3Y"]}%
           <span className="text-[var(--text-secondary)] text-sm font-medium ml-1">
             3Y annualized
           </span>
@@ -359,13 +366,13 @@ const [activeInfo, setActiveInfo] = useState(null);
         <div>
           Nav:
           <span className="text-[var(--text-primary)] font-medium ml-1">
-            {fund.nav}
+            {fundsList?.nav}
           </span>
         </div>
         <div>
           Fund size:
           <span className="text-[var(--text-primary)] font-medium ml-1">
-            {fund.fundSize}
+            {fundsList?.fundSize}
           </span>
         </div>
       </div>
@@ -393,7 +400,7 @@ const [activeInfo, setActiveInfo] = useState(null);
         Expense Ratio
       </p>
       <p className="text-lg font-semibold text-[var(--text-primary)]">
-        {fund.expense}
+        {fundsList?.expense ?? "--"}
       </p>
     </div>
 
@@ -403,7 +410,7 @@ const [activeInfo, setActiveInfo] = useState(null);
         52W Range
       </p>
       <p className="text-sm font-semibold text-[var(--text-primary)]">
-        ₹{fund.week52Low} - ₹{fund.week52High}
+        ₹{fundsList?.week52Low ?? "--"} - ₹{fundsList?.week52High ?? "--"}
       </p>
     </div>
 
@@ -419,7 +426,7 @@ const [activeInfo, setActiveInfo] = useState(null);
           bg-emerald-500 text-white
           flex items-center justify-center font-bold
         ">
-          {fund.rating}
+          {fundsList?.rating}
         </div>
 
         <div className="text-sm text-[var(--text-primary)]">
@@ -532,7 +539,7 @@ const [activeInfo, setActiveInfo] = useState(null);
           text-gray-900 dark:text-[var(--text-primary)]
         "
       >
-        ₹{fund.minSip}
+        ₹{fundsList?.minSip}
       </p>
     </div>
   </div>
@@ -731,7 +738,7 @@ const [activeInfo, setActiveInfo] = useState(null);
             </div>
             <div className="flex justify-between py-2">
               <span className="text-gray-600 dark:text-[var(--text-secondary)]">Min. for SIP</span>
-              <span className="font-semibold dark:text-[var(--text-primary)]">₹500</span>
+              <span className="font-semibold dark:text-[var(--text-primary)]">₹{fundsList?.minSip}</span>
             </div>
           </div>
         </div>
@@ -780,7 +787,7 @@ const [activeInfo, setActiveInfo] = useState(null);
 
       {/* TABLE BODY */}
       <tbody>
-        {fund.holdings.map((h, i) => (
+        {fundsList?.holdings?.map((h, i) => (
           <tr
             key={i}
             className="
@@ -1167,7 +1174,7 @@ const [activeInfo, setActiveInfo] = useState(null);
   </div>
 </div>
 
-<Riskometer risk = "Low to Moderate" />
+<Riskometer risk = {fundsList?.risk} />
 
 
 
