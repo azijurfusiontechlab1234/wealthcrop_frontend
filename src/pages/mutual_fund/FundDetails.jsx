@@ -211,7 +211,7 @@ const advancedDefinitions = {
 
 const [activeInfo, setActiveInfo] = useState(null); 
 
-  if (isLoading) return <FundDetailsPageSkeleton />;
+  if (isLoading) return <FundDetailsPageSkeleton />; 
 
   return (
 
