@@ -1,4 +1,4 @@
- export const bank =[
+ export const banks =[
   {
     "id": 1,
     "name": "State Bank of India",

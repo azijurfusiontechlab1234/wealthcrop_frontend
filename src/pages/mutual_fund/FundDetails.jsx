@@ -211,13 +211,13 @@ const advancedDefinitions = {
 
 const [activeInfo, setActiveInfo] = useState(null); 
 
-  if (isLoading) return <FundDetailsPageSkeleton />; 
+  if (isLoading) return <FundDetailsPageSkeleton />;  
 
   return (
 
     <div className="w-full bg-gray-50 dark:bg-[var(--app-bg)] text-[#1A1A1A] py-10 px-5 lg:px-24 space-y-10">
       {/* HEADER */}
- <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+ <header className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"> 
 
   {/* LEFT MAIN SECTION */}
   <div className="

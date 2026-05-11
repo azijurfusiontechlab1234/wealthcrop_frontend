@@ -25,6 +25,13 @@ export default function KYCFlow() {
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
 const [loadingStep, setLoadingStep] = useState(false);
+const [isUccCreated, setIsUccCreated] = useState(false)
+
+
+const current = JSON.parse(localStorage.getItem("currentAccount"))
+const userName = current?.name
+const email = current?.email
+const phone = current?.phone
 
 const [docUploaded, setDocUploaded] = useState({
   pan: false,
@@ -42,7 +49,7 @@ const [docUploaded, setDocUploaded] = useState({
   
     console.log("User Data", res?.data);
     
-    return res.data;
+    return res.data?.data;
   };
   
   
@@ -399,183 +406,6 @@ const getNameParts = (fullName = "") => {
 useEffect(() => {
   if (step !== 5) return; // only run on step 5
 
-  const createUCC = async () => {
-    try {
-      const { first_name, last_name } = getNameParts(kycData.name);
-
-      // const payload = {
-      //   source: "demo",
-      //   // client_code: "ABC1002",
-      //   holders: [
-      //     {
-      //       first_name,
-      //       last_name,
-      //       dob: kycData.dob,
-      //       gender:
-      //         kycData.gender === "male"
-      //           ? "M"
-      //           : kycData.gender === "female"
-      //           ? "F"
-      //           : "O",
-      //       pan: kycData.pan,
-      //       email: kycData.email,
-      //       mobile: kycData.mobile,
-      //     },
-      //   ],
-
-      //   address: {
-      //     line1: kycData.addrss1,
-      //     pincode: kycData.pin,
-      //     city: kycData.city,
-      //     state: kycData.state,
-      //   },
-
-      //   bank: {
-      //     ifsc: kycData.ifsc,
-      //     acc_no: kycData.accountNo,
-      //     acc_type: "SB",
-      //   },
-      // };
-      
-        const payload = {
-          // source: "demo",
-          // client_code: "ABC1002",
-          // holders: [
-          //   {
-          //     first_name: "Amit",
-          //     last_name: "Patel",
-          //     dob: "1992-05-20",
-          //     gender: "M",
-          //     // pan: "ABCDE5678G",
-          //     pan: "APZPP1234F",
-          //     email: "amit.patel@dummy.com",
-          //     mobile: "9898989898",
-          //   },
-          // ],
-          // address: {
-          //   line1: "Flat 202, Sunshine Apts",
-          //   pincode: "400053",
-          //   city: "Mumbai",
-          //   state: "Maharashtra",
-          // },
-          // bank: {
-          //   ifsc: "ICIC0000123",
-          //   acc_no: "0123456789",
-          //   acc_type: "SB",
-          // },
-
-          //!
-
-          source: "demo",
-          client_code: "CLIENT101",
-          tax_code: "01",
-          holding_nature: "SI",
-          is_client_physical: true,
-          rdmp_idcw_pay_mode: "01",
-          is_nomination_opted: false,
-          nomination_auth_mode: "O",
-          comm_mode: "E",
-          onboarding: "Z",
-          holders: [
-            {
-              first_name: "Aakash",
-              middle_name: "",
-              last_name: "Sharma",
-              dob: "1995-05-20",
-              gender: "M",
-              pan: "APZPP1234F",
-              mobile: "9876543210",
-              email: "aakash@example.com",
-              occ_code: "01",
-              auth_mode: "M",
-              kyc_type: "K",
-              place_of_birth: "Mumbai",
-              country_of_birth: "IND",
-              income_slab: "31",
-              wealth_source: "1",
-              politically_exposed: "N",
-              net_worth: 500000,
-              date_of_net_worth: "2024-01-01",
-              nomination: [],
-            },
-          ],
-          address: {
-            line1: "Flat 402, Sunshine Tower",
-            line2: "Andheri West",
-            line3: "Mumbai",
-            pincode: "400053",
-            city: "Mumbai",
-            state: "Maharashtra",
-            country: "IND",
-          },
-          bank: {
-            ifsc: "HDFC0001234",
-            acc_no: "50100012345678",
-            acc_type: "SB",
-          },
-        };
-
-// const payload = {
-//   source: "demo",
-//   client_code: "IND12345",
-//   tax_code: "01",
-//   holding_nature: "SI",
-//   is_client_physical: true,
-
-//   holders: [
-//     {
-//       first_name: "Rahul",
-//       middle_name: "",
-//       last_name: "Sharma",
-//       dob: "1995-05-15",
-//       gender: "M",
-//       pan: "APZPP1234F",
-//       email: "rahul@example.com",
-//       mobile: "9876543210",
-//       occ_code: "01",
-//       tax_status: "Individual",
-//       place_of_birth: "Mumbai",
-//       country_of_birth: "IND",
-//       wealth_source: "1",
-//       income_slab: "31",
-//       net_worth: 500000,
-//       politically_exposed: "N",
-//     },
-//   ],
-
-//   address: {
-//     line1: "Flat 101, Sea View",
-//     line2: "Andheri West",
-//     line3: "Near Station",
-//     pincode: "400058",
-//     city: "Mumbai",
-//     state: "Maharashtra",
-//     country: "IND",
-//   },
-
-//   bank: {
-//     ifsc: "HDFC0001234",
-//     acc_no: "50100012345678",
-//     acc_type: "SB",
-//   },
-// };
-
-      const res = await axios.post(
-        "http://65.2.121.33:5500/v2/add_ucc",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log(res.data);
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-    }
-  };
-
     //! To send kyc step
   const sendStep = async () => {
     const url = `${import.meta.env.VITE_URL}/kyc/steps`
@@ -592,8 +422,62 @@ useEffect(() => {
   }
 
   sendStep()
-  createUCC();
+
 }, [step]);
+
+// useEffect(() => {
+//   if (step !== 5 || !userData) return;
+
+//   const createUCC = async () => {
+//     try {
+//       console.log("userData", userData);
+
+//       const payload = {
+//         client_code: generateClientCode(userData?.name),
+//         first_name: userData?.name,
+//         middle_name: "",
+//         last_name: "",
+//         dob: userData?.profile?.dob,
+//         mobile: phone,
+//         email: email,
+//         pan: userData?.profile?.pan_number,
+
+//         address: {
+//           line1: userData?.profile?.address_line1,
+//           line2: userData?.profile?.address_line2,
+//           line3: "",
+//           pincode: userData?.profile?.pincode,
+//           city: userData?.profile?.city,
+//           state: userData?.profile?.state,
+//         },
+
+//         bank: {
+//           ifsc: userData?.bank_accounts?.[0]?.ifsc_code,
+//           acc_no: userData?.bank_accounts?.[0]?.account_number,
+//           acc_type: "CB",
+//         },
+//       };
+
+//       console.log("Payload", payload);
+
+//       const res = await axios.post(
+//         "http://65.2.121.33:3000/v2/add_ucc",
+//         payload,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       console.log(res.data);
+//     } catch (error) {
+//       console.error(error.response?.data || error.message);
+//     }
+//   };
+
+//   createUCC();
+// }, [step, userData]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">
