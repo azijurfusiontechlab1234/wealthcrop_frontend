@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Select from "react-select";
 import {
   CheckCircle,
   Upload,
@@ -12,20 +13,26 @@ import {
   ShieldCheck,
   Lock,
 } from "lucide-react";
+import { BarChart3, Loader2 } from "lucide-react";
 import { getApiWithToken, postApiWithToken } from "../../api/api";
 import { toastError, toastSuccess } from "../../utils/notifyCustom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import {banks} from "../../utils/bank"
 
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
+  const [userStep, setUserStep] = useState()
 const [loadingStep, setLoadingStep] = useState(false);
 const [isUccCreated, setIsUccCreated] = useState(false)
+const [uccResponseData, setUccResponseData] = useState()
+const [customBank, setCustomBank] = useState("");
+
 
 
 const current = JSON.parse(localStorage.getItem("currentAccount"))
@@ -58,25 +65,32 @@ const [docUploaded, setDocUploaded] = useState({
     queryFn: fetchUser,
   });
 
-    useEffect(() => {
 
-      const currentStep = userData?.kyc_steps
-      if(!currentStep) return
+    // useEffect(() => {
 
-      setStep(currentStep < 5 ? currentStep + 1 : currentStep);
+    //   const currentStep = userData?.kyc_steps
+    //   if(!currentStep) return
 
-      setCompletedSteps((prev) => {
-        const updated = {...prev}
+    //   setStep(currentStep < 5 ? currentStep + 1 : currentStep);
+    //   setUserStep(currentStep +1 )
+
+    //   setCompletedSteps((prev) => {
+    //     const updated = {...prev}
         
-        for (let i = 0; i <= (currentStep < 5 ? currentStep : currentStep - 1); i++) {
-         updated[i] = true;
-      }
-        return updated
-      })
+    //     for (let i = 0; i <= (currentStep < 5 ? currentStep : currentStep - 1); i++) {
+    //      updated[i] = true;
+    //   }
+    //     return updated
+    //   })
 
-      console.log("KYC Step", userData?.kyc_steps);
+    //   console.log("KYC Step", userData?.kyc_steps);
       
-    },[userData])
+    // },[userData])
+
+    const {data} = useQuery({
+      queryKey: ["ucc"],
+      queryFn: fetchUser
+    })
 
 
   //  CENTRAL KYC STATE
@@ -425,59 +439,63 @@ useEffect(() => {
 
 }, [step]);
 
-// useEffect(() => {
-//   if (step !== 5 || !userData) return;
+useEffect(() => {
+  if (step !== 5 || !userData) return;
 
-//   const createUCC = async () => {
-//     try {
-//       console.log("userData", userData);
+  const createUCC = async () => {
+    try {
+      console.log("userData", userData);
 
-//       const payload = {
-//         client_code: generateClientCode(userData?.name),
-//         first_name: userData?.name,
-//         middle_name: "",
-//         last_name: "",
-//         dob: userData?.profile?.dob,
-//         mobile: phone,
-//         email: email,
-//         pan: userData?.profile?.pan_number,
+      const payload = {
+        client_code: generateClientCode(userData?.name),
+        first_name: userData?.name,
+        middle_name: "",
+        last_name: "",
+        dob: userData?.profile?.dob,
+        mobile: phone,
+        email: email,
+        pan: userData?.profile?.pan_number,
 
-//         address: {
-//           line1: userData?.profile?.address_line1,
-//           line2: userData?.profile?.address_line2,
-//           line3: "",
-//           pincode: userData?.profile?.pincode,
-//           city: userData?.profile?.city,
-//           state: userData?.profile?.state,
-//         },
+        address: {
+          line1: userData?.profile?.address_line1,
+          line2: userData?.profile?.address_line2,
+          line3: "",
+          pincode: userData?.profile?.pincode,
+          city: userData?.profile?.city,
+          state: userData?.profile?.state,
+        },
 
-//         bank: {
-//           ifsc: userData?.bank_accounts?.[0]?.ifsc_code,
-//           acc_no: userData?.bank_accounts?.[0]?.account_number,
-//           acc_type: "CB",
-//         },
-//       };
+        bank: {
+          ifsc: userData?.bank_accounts?.[0]?.ifsc_code,
+          acc_no: userData?.bank_accounts?.[0]?.account_number,
+          acc_type: "CB",
+        },
+      };
+      console.log("Payload", payload);
 
-//       console.log("Payload", payload);
 
-//       const res = await axios.post(
-//         "http://65.2.121.33:3000/v2/add_ucc",
-//         payload,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
+      const res = await axios.post(
+        "http://65.2.121.33:3000/v2/add_ucc",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-//       console.log(res.data);
-//     } catch (error) {
-//       console.error(error.response?.data || error.message);
-//     }
-//   };
+      console.log("UCC response",res);
+      if(res.status === "success"){
+        setIsUccCreated(true) 
+        setUccResponseData(res?.data)
+      }
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+    }
+  };
 
-//   createUCC();
-// }, [step, userData]);
+  createUCC();
+}, [step, userData]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">
@@ -565,11 +583,11 @@ useEffect(() => {
             >
               {/* {step === 0 && <PANStep data={kycData} onChange={update} />} */}
               {step === 0 && <PersonalStep data={kycData} onChange={update} />}
-              {step === 1 && <BankStep data={kycData} onChange={update} />}
+              {step === 1 && <BankStep data={kycData} onChange={update} customBank={customBank} setCustomBank={setCustomBank} setKycData={setKycData} />}
               {step === 2 && <DocsStep data={kycData} onChange={update} uploadDocument={uploadDocument} />}
               {step === 3 && <NomineeStep data={kycData} onChange={update} />}
               {step === 4 && <VideoKYCStep data={kycData} onChange={update} uploadDocument={uploadDocument} />}
-              {step === 5 && <ReviewStep />}
+              {step === 5 && <ReviewStep isUccCreated={isUccCreated} />}
             </motion.div>
           </AnimatePresence>
 
@@ -584,7 +602,7 @@ useEffect(() => {
 
     <div className="flex justify-between">
       <button
-        disabled={step === 0}
+        disabled={step === 0 || step <= userStep}
         onClick={() => {
           setStepError("");
           setStep(step - 1);
@@ -685,7 +703,7 @@ function FieldSelect({label, value, onChange, options}) {
       className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-[#0b1220]
       text-sm text-gray-900 dark:text-white focus:ring-1 focus:ring-blue-800 outline-none"
       >
-        <option value="" disabled>Select gender</option>
+        <option value="" disabled>Select {label}</option>
         {
           options.map((opt) => (
             <option key={opt} value={opt}>
@@ -697,6 +715,123 @@ function FieldSelect({label, value, onChange, options}) {
     </div>
   )
 }
+
+
+export const BankSelect = ({
+  label = "Bank Name",
+  options = [],
+  value,
+  onChange,
+}) => {
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      minHeight: "42px",
+      borderRadius: "8px",
+      border: "1px solid #d1d5db",
+      backgroundColor: "#ffffff",
+      boxShadow: state.isFocused
+        ? "0 0 0 1px #1e40af"
+        : "none",
+      outline: "none",
+      fontSize: "14px",
+      cursor: "pointer",
+
+      "&:hover": {
+        border: "1px solid #d1d5db",
+      },
+    }),
+
+    valueContainer: (provided) => ({
+      ...provided,
+      padding: "0 12px",
+    }),
+
+    placeholder: (provided) => ({
+      ...provided,
+      color: "#9ca3af",
+      fontSize: "14px",
+    }),
+
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#111827",
+      fontSize: "14px",
+    }),
+
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "10px",
+      overflow: "hidden",
+      marginTop: "4px",
+      border: "1px solid #e5e7eb",
+      boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
+      zIndex: 9999,
+    }),
+
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: "220px",
+      padding: "4px",
+      backgroundColor: "#ffffff",
+    }),
+
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? "#1e40af"
+        : state.isFocused
+        ? "#eff6ff"
+        : "#ffffff",
+
+      color: state.isSelected ? "#ffffff" : "#111827",
+      padding: "10px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "14px",
+    }),
+
+    indicatorSeparator: () => ({
+      display: "none",
+    }),
+
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: "#6b7280",
+
+      "&:hover": {
+        color: "#111827",
+      },
+    }),
+  };
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">
+        {label}
+      </label>
+
+      <Select
+        options={options.map((bank) => ({
+          value: bank.name,
+          label: bank.name.toUpperCase(),
+        }))}
+        value={
+          value
+            ? {
+                value,
+                label: value.toUpperCase(),
+              }
+            : null
+        }
+        onChange={(selected) => onChange(selected?.value)}
+        placeholder={`Select ${label}`}
+        styles={customStyles}
+        isSearchable
+      />
+    </div>
+  );
+};
 
 function PANStep({ data, onChange }) {
   return (
@@ -785,17 +920,30 @@ function PersonalStep({ data, onChange }) {
           onChange={(v) => onChange("gender", v)}
           options={["male", "female", "other"]}
         />
-        <Field
+        <FieldSelect
           label="Occupation"
           value={data.occupation}
           onChange={(v) => onChange("occupation", v)}
           placeholder="Salaried"
+          options={[  "student",
+  "employed",
+  "self-employed",
+  "freelancer",
+  "unemployed",
+  "business owner",
+  "government employee",
+  "private sector employee",
+  "homemaker",
+  "retired",
+  "intern",
+  "other"]}
         />
-        <Field
+        <FieldSelect
           label="Marital Status"
           value={data.mStatus}
           onChange={(v) => onChange("mStatus", v)}
           placeholder="Married"
+          options={["Married", "Unmarried"]}
         />
         <Field
           label="Father's Name"
@@ -821,11 +969,18 @@ function PersonalStep({ data, onChange }) {
           onChange={(v) => onChange("addrss3", v)}
           placeholder="Address Line 3"
         /> */}
-        <Field
+        <FieldSelect
           label="Income"
           value={data.income}
           onChange={(v) => onChange("income", v)}
           placeholder="₹5–10 L"
+          options={["below 10,000",
+  "10,000 - 25,000",
+  "25,000 - 50,000",
+  "50,000 - 1,00,000",
+  "1,00,000 - 2,00,000",
+  "2,00,000 - 5,00,000",
+  "above 5,00,000"]}
         />
         <Field
           label="City"
@@ -850,17 +1005,53 @@ function PersonalStep({ data, onChange }) {
   );
 }
 
-function BankStep({ data, onChange }) {
+function BankStep({ data, onChange, customBank, setCustomBank, setKycData }) {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold dark:text-white">Bank Details</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Field
+        <BankSelect
           label="Bank name"
           value={data.bankName}
-          onChange={(v) => onChange("bankName", v)}
+          onChange={(value) =>
+    setKycData((prev) => ({
+      ...prev,
+      bankName: value,
+    }))
+  }
           placeholder="Bank of India"
+          options={banks}
         />
+
+        {
+  data.bankName === "OTHER" && (
+    <div className="mt-5">
+      <input
+        type="text"
+        placeholder="Enter Your Bank Name"
+        value={customBank}
+        onChange={(e) => {
+          const value = e.target.value;
+
+          setCustomBank(value);
+
+          setKycData((prev) => ({
+            ...prev,
+            bankName: value,
+          }));
+        }}
+        className="
+          w-full px-3 py-2 rounded-lg
+          border border-gray-300
+          bg-white text-sm
+          outline-none
+          focus:ring-1 focus:ring-blue-800
+        "
+      />
+    </div>
+  )
+}
+
         <Field
           label="Account No"
           value={data.accountNo}
@@ -991,15 +1182,82 @@ function VideoKYCStep({ data, onChange, uploadDocument }) {
   );
 }
 
-function ReviewStep() {
+function ReviewStep({isUccCreated}) {
   return (
-    <div className="text-center space-y-3 flex items-center flex-col justify-center h-80">
+    <>
+
+          {!isUccCreated ? (
+       <div className="flex flex-col items-center justify-center animate-pulse h-80">
+  <div
+    className="
+      bg-blue-100 text-blue-600 p-4 rounded-full mb-4
+      dark:bg-blue-500/15 dark:text-blue-400
+    "
+  >
+    <Loader2 className="animate-spin" size={40} />
+  </div>
+
+  <h2
+    className="
+      text-xl md:text-2xl font-semibold mb-2
+      text-blue-950
+      dark:text-[var(--text-primary)]
+    "
+  >
+    Your KYC is being submitted.
+  </h2>
+
+  <p
+    className="
+      text-gray-600 text-sm md:text-base text-center
+      dark:text-[var(--text-secondary)]
+    "
+  >
+    Please do not leave this page while your KYC is being submitted.
+  </p>
+
+  {/* Fake progress bar */}
+  <div
+    className="
+      w-64 h-2 rounded-full mt-6 overflow-hidden
+      bg-gray-200
+      dark:bg-[var(--white-5)]
+    "
+  >
+    <div
+      className="
+        h-full bg-blue-600
+        dark:bg-blue-500
+        animate-[progress_3s_ease-in-out_infinite]
+      "
+    />
+  </div>
+
+  {/* Keyframes */}
+  <style>
+    {`
+      @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 90%; }
+        100% { width: 0%; }
+      }
+    `}
+  </style>
+</div>
+
+      ) : (
+     <div className="text-center space-y-3 flex items-center flex-col justify-center h-80">
       <CheckCircle size={36} className="mx-auto text-green-600" />
       <h2 className="text-lg font-semibold dark:text-white">KYC Submitted</h2>
       <p className="text-sm text-gray-500 dark:text-gray-400">
         We’ll notify you once approved.
       </p>
     </div>
+
+      )}
+
+  
+    </>
   );
 }
 
@@ -1010,4 +1268,114 @@ function TrustCard({ title, desc }) {
       <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{desc}</p>
     </div>
   );
+}
+
+function KYCVerificationLoder() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[80vh] bg-gray-50 dark:bg-[var(--app-bg)] p-6">
+      {loading ? (
+       <div className="flex flex-col items-center justify-center animate-pulse">
+  <div
+    className="
+      bg-blue-100 text-blue-600 p-4 rounded-full mb-4
+      dark:bg-blue-500/15 dark:text-blue-400
+    "
+  >
+    <Loader2 className="animate-spin" size={40} />
+  </div>
+
+  <h2
+    className="
+      text-xl md:text-2xl font-semibold mb-2
+      text-blue-950
+      dark:text-[var(--text-primary)]
+    "
+  >
+    Generating Reports
+  </h2>
+
+  <p
+    className="
+      text-gray-600 text-sm md:text-base text-center
+      dark:text-[var(--text-secondary)]
+    "
+  >
+    Please wait while we fetch your investment insights...
+  </p>
+
+  {/* Fake progress bar */}
+  <div
+    className="
+      w-64 h-2 rounded-full mt-6 overflow-hidden
+      bg-gray-200
+      dark:bg-[var(--white-5)]
+    "
+  >
+    <div
+      className="
+        h-full bg-blue-600
+        dark:bg-blue-500
+        animate-[progress_3s_ease-in-out_infinite]
+      "
+    />
+  </div>
+
+  {/* Keyframes */}
+  <style>
+    {`
+      @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 90%; }
+        100% { width: 0%; }
+      }
+    `}
+  </style>
+</div>
+
+      ) : (
+      <div className="flex flex-col items-center justify-center text-center">
+  <div
+    className="
+      bg-blue-100 text-blue-600 p-4 rounded-full mb-4
+      dark:bg-blue-500/15 dark:text-blue-400
+    "
+  >
+    <BarChart3 size={40} />
+  </div>
+
+  <h2
+    className="
+      text-2xl font-semibold mb-2
+      text-blue-950
+      dark:text-[var(--text-primary)]
+    "
+  >
+    No Reports Available
+  </h2>
+
+  <p
+    className="
+      text-gray-600 text-sm md:text-base mb-5 max-w-md
+      dark:text-[var(--text-secondary)]
+    "
+  >
+    You haven’t generated any reports yet. Once you start investing,
+    detailed performance insights will appear here.
+  </p>
+
+  <button
+    onClick={() => navigate("/user/stocks/explore")}
+    className="
+      bg-blue-600 hover:bg-blue-700 text-white
+      dark:bg-blue-500 dark:hover:bg-blue-600
+      px-5 py-2 rounded-lg text-sm font-medium transition
+    "
+  >
+    Explore Investments
+  </button>
+</div>
+
+      )}
+    </div>
+  )
 }

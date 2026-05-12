@@ -148,5 +148,10 @@
     "id": 30,
     "name": "Airtel Payments Bank",
     "logo": "/banks/airtel.png"
-  }
+  },
+  {
+  id: 31,
+  name: "OTHER",
+  logo: "/banks/other.png"
+}
 ]

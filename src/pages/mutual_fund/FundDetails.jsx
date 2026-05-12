@@ -30,6 +30,7 @@ import Riskometer from "../../components/Riskometer";
 import { postApi } from "../../api/api";
 import { useQuery } from "@tanstack/react-query";
 import PageLoader from "../../components/PageLoader";
+import FundDetailsPageSkeleton from "../../components/ui/skeleton/main/FundDetailsPageSkeleton";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
@@ -75,6 +76,16 @@ const FundDetails = () => {
     enabled: !!isin && !!code,
     staleTime: 1000 * 60 * 2, // 2 min
   });
+
+
+    const { data: chartData, isLoading: loading2 } = useQuery({
+    queryKey: ["CHART_DETAILS", isin, code],
+    queryFn: async () => 
+        postApi("http://65.2.121.33:3000/api/scheme-details", {isin: isin }),
+    enabled: !!isin && !!code,
+    // staleTime: 1000 * 60 * 2, // 2 min
+  });
+
   // const { data: details, isLoading } = useQuery({
   //   queryKey: ["FUND_FULL_DETAILS", isin, code],
   //   queryFn: async () => {
@@ -94,6 +105,7 @@ const FundDetails = () => {
   
     useEffect(() => {
       console.log("Fund Details", details);
+      console.log("Chart Details", chartData);
       // console.log("Fund Details2", details2);
       // const mergedLists = [
       //   ...(details?.details?.data?.lists || []),
@@ -102,7 +114,7 @@ const FundDetails = () => {
 
       setFundsList(details?.data?.lists?.[0] || []);
 
-    }, [details]);
+    }, [details,chartData]);
     
   function futureValueSIP(P, annualR, years) {
     const i = annualR / 12;
@@ -493,7 +505,8 @@ const [activeInfo, setActiveInfo] = useState(null);
     </div>
   </div>
 
-  <MFChart data={MF_DATA[selectedTimeframe]} height={320} />
+  <MFChart data={chartData?.data?.chartData
+[selectedTimeframe]} height={320} />
 
   <div className="mt-4 grid grid-cols-2 gap-3">
     <div
