@@ -198,16 +198,29 @@ const FundDetails = () => {
 
 
 
-  const fundamentals = [
-  { label: "Top 5", value: "45%" },
-  { label: "Top 20", value: "87%" },
-  { label: "P/E Ratio", value: "66.22" },
-  { label: "P/B Ratio", value: "9.00" },
+//   const fundamentals = [
+//   { label: "Top 5", value: "45%" },
+//   { label: "Top 20", value: "87%" },
+//   { label: "P/E Ratio", value: "66.22" },
+//   { label: "P/B Ratio", value: "9.00" },
 
-  { label: "Alpha", value: "4.56" },
-  { label: "Beta", value: "0.92" },
-  { label: "Sharpe", value: "1.10" },
-  { label: "Sortino", value: "1.37" },
+//   { label: "Alpha", value: "4.56" },
+//   { label: "Beta", value: "0.92" },
+//   { label: "Sharpe", value: "1.10" },
+//   { label: "Sortino", value: "1.37" },
+// ];
+
+const ratios = fundsList?.advancedRatios;
+
+const fundamentals = [
+  { label: "Top 5", value: ratios?.top5 },
+  { label: "Top 20", value: ratios?.top20 },
+  { label: "P/E Ratio", value: ratios?.peRatio },
+  { label: "P/B Ratio", value: ratios?.pbRatio },
+  { label: "Alpha", value: ratios?.alpha },
+  { label: "Beta", value: ratios?.beta },
+  { label: "Sharpe", value: ratios?.sharpe },
+  { label: "Sortino", value: ratios?.sortino },
 ];
 
 const advancedDefinitions = {
