@@ -7,7 +7,7 @@ const FundHeaderSkeleton = () => {
         col-span-2
         bg-[var(--white-10)]
         backdrop-blur-sm
-        border border-[var(--border-color)]
+        
         rounded-2xl
         p-6
         shadow-md

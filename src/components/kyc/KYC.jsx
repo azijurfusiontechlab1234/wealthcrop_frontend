@@ -416,7 +416,6 @@ const getNameParts = (fullName = "") => {
   }
 
 
-
 useEffect(() => {
   if (step !== 5) return; // only run on step 5
 
@@ -514,6 +513,28 @@ useEffect(() => {
   useEffect(() => {
     sendUcc()
   },[])
+
+const sendUcc = async () => {
+  const url= `${import.meta.env.VITE_URL}/kyc/ucc_add`
+  try {
+
+    const res = await postApiWithToken(url,  {
+        "ucc_code" : "FOFTest201"
+    },)
+
+    if(res?.status === 200 || res?.status === true){
+      toastSuccess(res?.message)
+    }
+    
+  } catch (error) {
+    console.log(error?.message);
+    
+  }
+}
+
+useEffect(() => {
+// sendUcc()
+},[])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">

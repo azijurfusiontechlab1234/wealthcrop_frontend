@@ -771,7 +771,6 @@ const [activeInfo, setActiveInfo] = useState(null);
         </div>
       </div>
 
-      {/* Remaining sections like Fund Information, Holdings, Donut Charts, Ratios, Minimum Investments, Returns & Rankings, and Expense Ratio remain the same but with better spacing and shadows */}
 
       {/* Holdings */}
      <div
@@ -1210,16 +1209,16 @@ const [activeInfo, setActiveInfo] = useState(null);
              <div
   onClick={closeModal}
   className="
-    fixed inset-0 z-50
-    flex items-center justify-center
-    bg-black/50
-    p-4
+   fixed inset-0 z-50 
+flex items-start lg:items-center justify-center
+bg-black/50
+pt-5 p-4
   "
 >
   <div
     onClick={(e) => e.stopPropagation()}
     className="
-      w-full max-w-2xl h-[90vh]
+      w-full max-w-2xl h-[86vh] lg:h-[90vh]
       bg-white
       dark:bg-[var(--card-bg)]
       backdrop-blur-lg

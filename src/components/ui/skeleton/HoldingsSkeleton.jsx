@@ -17,7 +17,7 @@ const HoldingsSkeleton = () => {
       {[1,2,3,4].map((row) => (
         <div
           key={row}
-          className="grid grid-cols-4 gap-4 py-4 border-t border-[var(--border-color)]"
+          className="grid grid-cols-4 gap-4 py-4 "
         >
           {[1,2,3,4].map((i) => (
             <Skeleton key={i} className="h-4 w-3/4" />

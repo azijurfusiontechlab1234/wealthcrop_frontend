@@ -294,33 +294,28 @@ const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_FUND_ORDER_PLACE}
                 className="
             text-sm font-semibold
             text-slate-900 dark:text-[var(--text-primary)]
-          "
-              >
-                {name}
-              </p>
-              <p
-                className="
+          ">
+            {name}
+          </p>
+          <p className="
             text-[11px]
             text-slate-500 dark:text-[var(--text-secondary)]
-          "
-              >
-                {fundCategory}
-              </p>
+          ">
+            {fundCategory}
+          </p>
 
-              <div className="flex items-center gap-2 mt-1 text-[11px]">
-                <Stars rating={rating} />
-                <span
-                  className="
+          <div className="flex items-center gap-2 mt-1 text-[11px]">
+            <Stars rating={rating} />
+            <span className="
               px-2 py-0.5 rounded-full
               bg-slate-100 text-slate-600
               dark:bg-[var(--white-5)] dark:text-[var(--text-secondary)]
-            "
-                >
-                  {risk} risk
-                </span>
-              </div>
-            </div>
+            ">
+              {risk} risk
+            </span>
           </div>
+        </div>
+      </div>
 
           {/* NAV + returns */}
           <div className="flex items-end gap-6 text-xs">
@@ -337,12 +332,10 @@ const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_FUND_ORDER_PLACE}
                 className="
             text-sm font-semibold
             text-slate-900 dark:text-[var(--text-primary)]
-          "
-              >
-                ₹{nav.toFixed(2)}
-              </p>
-              <p
-                className="
+          ">
+            ₹{nav.toFixed(2)}
+          </p>
+          <p className="
             text-[11px] mt-0.5
             text-slate-500 dark:text-[var(--text-secondary)]
           "
@@ -364,14 +357,14 @@ const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_FUND_ORDER_PLACE}
                 className="
             text-[11px] font-medium
             text-emerald-600 dark:text-emerald-400
-          "
-              >
-                {formatReturn(returns["1Y"])} • {formatReturn(returns["3Y"])} •{" "}
-                {formatReturn(returns["5Y"])}
-              </p>
-            </div>
-          </div>
+          ">
+            {formatReturn(returns["1Y"])} •{" "}
+            {formatReturn(returns["3Y"])} •{" "}
+            {formatReturn(returns["5Y"])}
+          </p>
         </div>
+      </div>
+    </div>
 
         {/* Main content */}
         <div className="grid md:grid-cols-[1.5fr,1fr] gap-4 items-start">
