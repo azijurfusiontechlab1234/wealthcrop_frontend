@@ -16,7 +16,7 @@ export default function BasketList({ baskets }) {
   const categories = ["All", "Equity", "Hybrid", "Debt", "Commodity"];
   // const allBaskets = [...baskets,...basket]
 
-  let filtered = [...baskets];
+ let filtered = Array.isArray(baskets) ? [...baskets] : [];
   if (filter !== "All") {
     filtered = baskets.filter((b) => b.category === filter);
   }
