@@ -1,13 +1,17 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { postApiWithToken } from "../../api/api";
+import { useSelector } from "react-redux";
 
-const MutualFundInvestPage = () => {
+const MutualFundInvestPage = ({fundsList}) => {
   // Dummy values — replace with actual data later
+  console.log("funddeatils from mfinvest", fundsList);
+  
   const schemeCode = "123456";
-  const { name } = useParams();
+  const  name  = fundsList?.name;
   const fundCategory = "Equity • Flexi Cap";
-  const risk = "Moderate";
-  const rating = 5;
+  const risk = fundsList?.name;
+  const rating = fundsList?.name;
   const nav = 72.45;
   const returns = { "1Y": 32.1, "3Y": 22.8, "5Y": 20.4 };
   const minLumpsum = 1000;
@@ -24,6 +28,13 @@ const MutualFundInvestPage = () => {
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(true);
   const [confirmNoAdvisor, setConfirmNoAdvisor] = useState(true);
   const [confirmTerms, setConfirmTerms] = useState(true);
+  // const [estimatedUnits, setEstimatedUnits] = useState(0);
+
+  const {data, loading} = useSelector((state) => state.investorData)
+
+  useEffect(() => {
+console.log("Investor Data from mutualfundinvest page", data);
+  },[data])
 
   const estimatedUnits = useMemo(() => {
     if (!amount || nav <= 0) return 0;
@@ -42,40 +53,174 @@ const MutualFundInvestPage = () => {
     </span>
   );
 
-  const handleInvest = () => {
+  //! for nominee name
+  const getNameParts = (fullName = "") => {
+  const parts = fullName.trim().split(/\s+/); // split by spaces
+
+  return {
+    first_name: parts[0] || "",
+    middle_name: parts.length > 2 ? parts.slice(1, -1).join(" ") : "",
+    last_name: parts.length > 1 ? parts[parts.length - 1] : "",
+  };
+};
+
+  const handleInvest = async () => {
+    // const payload = {
+    //   schemeCode,
+    //   schemeName: name,
+    //   investType,
+    //   planType,
+    //   amount: Number(amount),
+    //   nav,
+    //   mode: "ONLINE",
+    //   orderSource: "WEB_APP",
+
+    //   sipDetails:
+    //     investType === "SIP"
+    //       ? {
+    //           sipDay,
+    //           sipFrequency: "MONTHLY",
+    //         }
+    //       : null,
+
+    //   recurringDetails:
+    //     investType === "RECURRING"
+    //       ? {
+    //           frequency: recurringFrequency,
+    //           startDate: new Date().toISOString(),
+    //           autoDebitConfirmed: confirmAutoDebit,
+    //           termsAccepted: confirmTerms,
+    //         }
+    //       : null,
+    // };
+
     const payload = {
-      schemeCode,
-      schemeName: name,
-      investType,
-      planType,
-      amount: Number(amount),
-      nav,
-      mode: "ONLINE",
-      orderSource: "WEB_APP",
+      data: {
+        orders: [
+          {
+            type: "p",
+            mem_ord_ref_id: "ORD20260518001",
+            investor: {
+              ucc: "UCC00001",
+            },
+            member: "91010",
+            mem_details: {
+              euin: "E999999",
+              euin_flag: true,
+              sub_br_code: "SUB001",
+              sub_br_arn: "ARN-123456",
+              partner_id: "PART001",
+            },
+            scheme: "ABC1234-GR",
+            amount: 5000,
+            cur: "INR",
+            is_units: false,
+            all_units: false,
+            min_redeem_flag: false,
+            dest_scheme: "",
+            folio: "",
+            dest_folio: "",
+            bank_ref_id: "",
+            payment_ref_id: "",
+            parent_client_code: "",
+            is_fresh: true,
+            phys_or_demat: "P",
+            src: "lumpsum",
+            reg_no: "",
+            holder: [
+              {
+                holder_rank: "1",
+                email: "investor1@example.com",
+                mobnum: "9999999999",
+                is_nomination_opted: false,
+                nomination_auth_mode: "UNKNOWN",
+              },
+            ],
+            email: data?.email,
+            mobnum: data?.phone,
+            kyc_passed: true,
+            depository_acct: {},
+            bank_acct: {
+              ifsc: data?.bank_accounts?.[0]?.ifsc_code,
+              no: data?.bank_accounts?.[0]?.bank_accounts,
+              type: "SB",
+              name: data?.bank_accounts?.[0]?.bank_name,
+            },
+            dpc: true,
+            is_nomination_opted: true,
+            nomination_auth_mode: 0,
+            // nomination: [
 
-      sipDetails:
-        investType === "SIP"
-          ? {
-              sipDay,
-              sipFrequency: "MONTHLY",
-            }
-          : null,
+            //   {
+            //     first_name: "NomineeOne",
+            //     middle_name: "",
+            //     last_name: "Test",
+            //     dob: "01-Jan-2000",
+            //     nomination_percent: 100,
+            //     nomination_relation: "18",
+            //     is_pan_exempt: true,
+            //     pan_exempt_category: "01",
+            //     is_minor: false,
+            //     identifier: [
+            //       {
+            //         identifier_type: "pan_exempt_ref_no",
+            //         identifier_number: "EXEMPT1234"
+            //       }
+            //     ]
+            //   }
+            // ],
+            nomination: data?.nominees?.length
+              ? data?.nominees?.map((nominee) => {
 
-      recurringDetails:
-        investType === "RECURRING"
-          ? {
-              frequency: recurringFrequency,
-              startDate: new Date().toISOString(),
-              autoDebitConfirmed: confirmAutoDebit,
-              termsAccepted: confirmTerms,
-            }
-          : null,
+                const nameParts = getNameParts(nominee?.name);
+                return {
+                  ...nameParts,
+                  dob: "01-Jan-2000",
+                  nomination_percent: nominee?.percentage,
+                  nomination_relation: nominee?.relation,
+                  is_pan_exempt: true,
+                  pan_exempt_category: "01",
+                  is_minor: false,
+                  identifier: [
+                    {
+                      identifier_type: "pan_exempt_ref_no",
+                      identifier_number: "EXEMPT1234",
+                    },
+                  ],
+                };
+              })
+            : [],
+            special_product: {
+              special_prod_type: "",
+              special_prod_name: "",
+              target_scheme: "",
+              target_amt: 0,
+              goal_type: "",
+              goal_amt: 0,
+              sip_tenure: 0,
+            },
+          },
+        ],
+      },
     };
-
+const url = `${import.meta.env.VITE_URL}${import.meta.env.VITE_FUND_ORDER_PLACE}`
+    try {
+      const res = await postApiWithToken(url, payload)
+      console.log("Order", res);
+      if(res?.status === 200 || res?.status === true){
+        toastSuccess(res?.message)
+        
+      }
+    } catch (error) {
+      toastError(error?.message)
+    }
+    
     console.log("MF Invest Payload:", payload);
 
     alert(`${investType} order placed for ₹${amount} in ${name} (${planType})`);
   };
+
+  
 
   return (
     <div

@@ -1247,7 +1247,7 @@ const [activeInfo, setActiveInfo] = useState(null);
       ×
     </button>
 
-    <MutualFundInvestPage />
+    <MutualFundInvestPage fundsList={fundsList} />
   </div>
 </div>
 

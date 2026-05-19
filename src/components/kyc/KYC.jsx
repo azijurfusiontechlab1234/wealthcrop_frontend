@@ -23,7 +23,7 @@ import {banks} from "../../utils/bank"
 const steps = ["Personal", "Bank", "Docs", "Nominee", "Video", "Review"];
 
 export default function KYCFlow() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(5);
   const [submitting, setSubmitting] = useState(false);
   const [stepError, setStepError] = useState("");
   const [completedSteps, setCompletedSteps] = useState({});
@@ -496,6 +496,24 @@ useEffect(() => {
 
   createUCC();
 }, [step, userData]);
+  
+  const sendUcc = async () => {
+  const url = `${import.meta.env.VITE_URL}/kyc/ucc_add`
+    try {
+      const res = await postApiWithToken(url, {
+    "ucc_code" : "FOFTest201"
+})
+      if(res?.status === 200 || res?.status === true){
+        toastSuccess(res?.message)
+      }
+    } catch (error) {
+      toastError(error?.message)
+    }
+  }
+  
+  useEffect(() => {
+    sendUcc()
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex flex-col items-center px-4 py-10">

@@ -24,7 +24,7 @@ import ProtectRoute from "./components/ProtectRoute";
 import FODashboard from "./components/F&ODashboard";
 import MFDashboard from "./components/MFDashboard";
 import Header2 from "./components/Header2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BasicDetails from "./pages/profile/BasicDetails";
 import ChangePassword from "./pages/profile/ChangePassword";
 import ChangePin from "./pages/profile/ChangePin";
@@ -110,6 +110,7 @@ import StockList from "./pages/stocks/StockList";
 import PageLoader from "./components/PageLoader";
 import { toastError } from "./utils/notifyCustom";
 import { getApiWithToken } from "./api/api";
+import { fetchInvestorData } from "./redux/investorDataSlice";
 
 
 const queryClient = new QueryClient();
@@ -332,6 +333,12 @@ useEffect(() => {
       }
     }
   }, []);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(fetchInvestorData());
+    }, [dispatch]);
 
 
 
